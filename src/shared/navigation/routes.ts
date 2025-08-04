@@ -5,4 +5,5 @@ export const routes = {
   AppointmentsMain: 'appointments-main',
   Notifications: 'notifications',
   Profile: 'profile',
+  CreateAppointment: 'create-appointment',
 } as const;

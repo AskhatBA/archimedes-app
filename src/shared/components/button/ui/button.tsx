@@ -1,30 +1,67 @@
 import { FC } from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ButtonProps as NativeButtonProps,
+} from 'react-native';
 
 import { useTheme } from '@/shared/theme';
 
-import { ButtonVariant } from '../types';
+import { ButtonVariant, ButtonSize } from '../types';
 
-interface ButtonProps {
+interface ButtonProps extends NativeButtonProps {
   children: string;
   variant?: ButtonVariant;
+  size?: ButtonSize;
 }
 
-export const Button: FC<ButtonProps> = ({ children, variant = 'primary' }) => {
+export const Button: FC<ButtonProps> = ({
+  children,
+  variant = 'primary',
+  size = 'md',
+  ...props
+}) => {
   const { colors } = useTheme();
 
   const background = {
     primary: colors.blue['400'],
+    secondary: colors.blue['150'],
+  };
+
+  const fontColor = {
+    primary: colors.blue['100'],
+    secondary: colors.blue['400'],
+  };
+
+  const fontSize = {
+    sm: 14,
+    md: 18,
+  };
+
+  const fontWeight = {
+    sm: 600,
+    md: 700,
   };
 
   return (
     <TouchableOpacity
+      {...props}
       style={[
         styles.containerPrimary,
         { backgroundColor: background[variant] },
       ]}
     >
-      <Text style={[styles.primaryText, { color: colors.blue['100'] }]}>
+      <Text
+        style={[
+          styles.primaryText,
+          {
+            color: fontColor[variant],
+            fontSize: fontSize[size],
+            fontWeight: fontWeight[size],
+          },
+        ]}
+      >
         {children}
       </Text>
     </TouchableOpacity>
@@ -38,7 +75,6 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     fontWeight: 700,
-    fontSize: 18,
     lineHeight: 22,
     textAlign: 'center',
   },

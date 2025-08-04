@@ -1,26 +1,26 @@
 import { FC } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
+import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner';
 import { UserWelcomeContainer } from '@/shared/components/user-welcome-container';
 import { MainLayout } from '@/shared/layout/main-layout';
 
-import { BannerSection } from '../components/banner-section';
 import { CurrentAppointments } from '../components/current-appointments';
 import { SearchField } from '../components/search-field';
 
 export const HomeScreen: FC = () => {
   return (
     <SafeAreaView style={styles.wrapper}>
-      <MainLayout>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <MainLayout>
           <View style={styles.content}>
             <UserWelcomeContainer />
             <SearchField />
-            <BannerSection />
+            <FindSpecialistBanner />
             <CurrentAppointments />
           </View>
-        </ScrollView>
-      </MainLayout>
+        </MainLayout>
+      </ScrollView>
     </SafeAreaView>
   );
 };

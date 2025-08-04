@@ -6,7 +6,7 @@ import { useTheme } from '@/shared/theme';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const image = require('@/assets/images/home-banner-doctor.png');
 
-export const BannerSection: FC = () => {
+export const FindSpecialistBanner: FC = () => {
   const { colors } = useTheme();
 
   return (
