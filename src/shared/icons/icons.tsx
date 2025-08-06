@@ -1,5 +1,6 @@
 import ArrowBackIcon from '@/assets/icons/arrow-back.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
+import ClockIcon from '@/assets/icons/clock.svg';
 import SearchIcon from '@/assets/icons/search.svg';
 import TabBarAppointmentsIcon from '@/assets/icons/tab-bar-appointments.svg';
 import TabBarHomeIcon from '@/assets/icons/tab-bar-home.svg';
@@ -16,4 +17,5 @@ export {
   CalendarIcon,
   ThreeDotsIcon,
   ArrowBackIcon,
+  ClockIcon,
 };

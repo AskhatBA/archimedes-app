@@ -1,7 +1,11 @@
 import { FC } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 
 import { MainLayout } from '@/shared/layout/main-layout';
+
+import { NotificationStack } from '../components/notification-stack';
+import { Topbar } from '../components/topbar';
+import { notifications } from '../data';
 
 export const NotificationsScreen: FC = () => {
   return (
@@ -9,7 +13,8 @@ export const NotificationsScreen: FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MainLayout>
           <View>
-            <Text>Notifications</Text>
+            <Topbar />
+            <NotificationStack notifications={notifications} />
           </View>
         </MainLayout>
       </ScrollView>
