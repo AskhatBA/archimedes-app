@@ -15,6 +15,7 @@ const palette = {
     700: '#373737',
   },
   orange: {
+    50: '#FDF8F1',
     100: '#F2E9DB',
     200: '#FCF1E2',
     300: '#F4DBBA',

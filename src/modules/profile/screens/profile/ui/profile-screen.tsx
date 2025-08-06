@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 
 import { UserWelcomeContainer } from '@/shared/components/user-welcome-container';
 import { MainLayout } from '@/shared/layout/main-layout';
 
 import { Insurance } from '../components/insurance';
+import { MyTests } from '../components/my-tests';
 
 export const ProfileScreen: FC = () => {
   return (
@@ -12,7 +13,10 @@ export const ProfileScreen: FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MainLayout>
           <UserWelcomeContainer />
-          <Insurance />
+          <View style={styles.main}>
+            <Insurance />
+            <MyTests />
+          </View>
         </MainLayout>
       </ScrollView>
     </SafeAreaView>
@@ -25,5 +29,9 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
+  },
+  main: {
+    marginTop: 48,
+    gap: 32,
   },
 });
