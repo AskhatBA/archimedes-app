@@ -10,7 +10,7 @@ import { notifications } from '../data';
 export const NotificationsScreen: FC = () => {
   return (
     <SafeAreaView style={styles.wrapper}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView>
         <MainLayout>
           <View>
             <Topbar />
