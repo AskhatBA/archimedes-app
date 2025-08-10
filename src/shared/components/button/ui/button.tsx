@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacityProps as NativeButtonProps,
+  StyleProp,
+  ViewStyle,
 } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
@@ -14,12 +16,14 @@ interface ButtonProps extends NativeButtonProps {
   children: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const Button: FC<ButtonProps> = ({
   children,
   variant = 'primary',
   size = 'md',
+  style,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -50,6 +54,7 @@ export const Button: FC<ButtonProps> = ({
       style={[
         styles.containerPrimary,
         { backgroundColor: background[variant] },
+        style,
       ]}
     >
       <Text
