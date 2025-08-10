@@ -5,7 +5,7 @@ import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useTheme } from '@/shared/theme';
 
-import { ChooseBranch } from '../components/choose-branch';
+import { CreateAppointmentForm } from '../forms/create-appointment-form';
 
 export const CreateAppointmentScreen: FC = () => {
   const { colors } = useTheme();
@@ -18,7 +18,7 @@ export const CreateAppointmentScreen: FC = () => {
           <Text style={[styles.title, { color: colors.textMain }]}>
             Запись на прием
           </Text>
-          <ChooseBranch />
+          <CreateAppointmentForm />
         </MainLayout>
       </ScrollView>
     </SafeAreaView>
@@ -29,9 +29,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-  scrollContainer: {
-    flex: 1,
-  },
+  scrollContainer: {},
   title: {
     marginTop: 40,
     fontSize: 24,

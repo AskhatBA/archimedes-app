@@ -17,8 +17,11 @@ export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 16 }]}>
-      <TouchableOpacity style={{ flex: 1 }} onPress={goBack}>
+      <TouchableOpacity style={styles.backButton} onPress={goBack}>
         <ArrowBackIcon width={18} height={18} color={colors.primary} />
+        <Text style={[styles.backButtonLabel, { color: colors.blue['400'] }]}>
+          Назад
+        </Text>
       </TouchableOpacity>
       <Text
         numberOfLines={1}
@@ -36,8 +39,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: 16,
     paddingBottom: 16,
+  },
+  backButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  backButtonLabel: {
+    fontSize: 14,
+    fontWeight: 500,
   },
   title: {
     fontWeight: 600,

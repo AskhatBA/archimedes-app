@@ -3,8 +3,13 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
 
+import {
+  CardRadioGroup,
+  RadioCard,
+} from '../../../components/card-radio-group';
 import { clinicBranches } from '../../../data';
-import { CardRadioGroup, RadioCard } from '../../card-radio-group';
+
+import { createAppointmentFormStyles } from './styles';
 
 export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
@@ -12,7 +17,12 @@ export const ChooseBranch: FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: colors.gray['500'] }]}>
+      <Text
+        style={[
+          createAppointmentFormStyles.title,
+          { color: colors.gray['500'] },
+        ]}
+      >
         Выберите филиал
       </Text>
       <CardRadioGroup value={branch} onChange={setBranch}>
@@ -31,12 +41,5 @@ export const ChooseBranch: FC = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 22,
-  },
-  title: {
-    fontWeight: 600,
-    fontSize: 18,
-    lineHeight: 22,
-    letterSpacing: 0,
-    marginBottom: 11,
   },
 });

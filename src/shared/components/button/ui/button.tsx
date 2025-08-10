@@ -3,7 +3,7 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  ButtonProps as NativeButtonProps,
+  TouchableOpacityProps as NativeButtonProps,
 } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
