@@ -64,6 +64,14 @@ export const CreateAppointmentForm: FC = () => {
         />
       </View>
       <View>
+        <Text
+          style={[
+            createAppointmentFormStyles.title,
+            { color: colors.gray['500'] },
+          ]}
+        >
+          Выберите дату
+        </Text>
         <Calendar />
       </View>
       <View>

@@ -12,7 +12,7 @@ const RootStack = createStackNavigator();
 
 export const RootNavigator: FC = () => {
   return (
-    <RootStack.Navigator id={undefined} initialRouteName={routes.TabNavigation}>
+    <RootStack.Navigator id={undefined} initialRouteName={routes.SignIn}>
       <RootStack.Screen
         name={routes.SignIn}
         component={SignInScreen}
