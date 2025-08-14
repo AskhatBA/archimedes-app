@@ -3,6 +3,8 @@ import { type FC } from 'react';
 
 import { CreateAppointmentScreen } from '@/modules/appointment/screens/create-appointment';
 import { SignInScreen } from '@/modules/auth/screens/sign-in';
+import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
+import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { routes } from '@/shared/navigation';
 
@@ -27,6 +29,11 @@ export const RootNavigator: FC = () => {
         name={routes.CreateAppointment}
         component={CreateAppointmentScreen}
         options={{ header: () => <SecondaryTopbar title="Запись на прием" /> }}
+      />
+      <RootStack.Screen
+        name={routes.MedBotChat}
+        component={MedBotChatScreen}
+        options={{ header: () => <MedBotTopbar /> }}
       />
     </RootStack.Navigator>
   );

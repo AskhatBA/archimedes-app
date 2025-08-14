@@ -1,5 +1,14 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Image,
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+} from 'react-native';
 
 import { SCREEN_WIDTH } from '@/shared/constants';
 import { useTheme } from '@/shared/theme';
@@ -14,15 +23,26 @@ export const SignInScreen: FC = () => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={[styles.container, { width: SCREEN_WIDTH }]}>
-        <Image source={logoImage} style={styles.logo} resizeMode="contain" />
-        <Text style={[styles.title, { color: colors.blue['400'] }]}>
-          Войти в приложение
-        </Text>
-        <View style={styles.formContainer}>
-          <SignInForm />
-        </View>
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.wrapper}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={[styles.container, { width: SCREEN_WIDTH }]}>
+            <Image
+              source={logoImage}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <Text style={[styles.title, { color: colors.blue['400'] }]}>
+              Войти в приложение
+            </Text>
+            <View style={styles.formContainer}>
+              <SignInForm />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -49,5 +69,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 180,
     height: 75,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
 });

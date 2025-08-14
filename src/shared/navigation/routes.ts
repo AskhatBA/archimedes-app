@@ -6,4 +6,5 @@ export const routes = {
   Notifications: 'notifications',
   Profile: 'profile',
   CreateAppointment: 'create-appointment',
+  MedBotChat: 'med-bot-chat',
 } as const;

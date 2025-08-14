@@ -3,6 +3,7 @@ const palette = {
     100: '#F0F6FC',
     150: '#D7E9F8',
     200: '#CEE2F1',
+    300: '#D4E3EF',
     400: '#19647F',
     500: '#295D87',
   },
@@ -25,8 +26,13 @@ const palette = {
   },
   green: {
     100: '#F4F9E9',
+    200: '#E8EED7',
     300: '#DBECCF',
     600: '#69914F',
+  },
+  red: {
+    100: '#F8E2E1',
+    300: '#EAB1AE',
   },
   white: '#FFFFFF',
 };
