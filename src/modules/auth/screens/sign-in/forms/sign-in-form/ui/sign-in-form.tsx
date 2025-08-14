@@ -26,7 +26,7 @@ export const SignInForm: FC = () => {
       <Button
         style={{ marginTop: 50 }}
         onPress={() => {
-          navigate(routes.TabNavigation);
+          navigate(routes.OtpVerification);
         }}
       >
         Войти

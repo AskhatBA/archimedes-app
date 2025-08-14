@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { type FC } from 'react';
 
 import { CreateAppointmentScreen } from '@/modules/appointment/screens/create-appointment';
+import { OtpVerificationScreen } from '@/modules/auth/screens/otp-verification';
 import { SignInScreen } from '@/modules/auth/screens/sign-in';
 import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
@@ -34,6 +35,11 @@ export const RootNavigator: FC = () => {
         name={routes.MedBotChat}
         component={MedBotChatScreen}
         options={{ header: () => <MedBotTopbar /> }}
+      />
+      <RootStack.Screen
+        name={routes.OtpVerification}
+        component={OtpVerificationScreen}
+        options={{ header: () => <SecondaryTopbar title="" /> }}
       />
     </RootStack.Navigator>
   );

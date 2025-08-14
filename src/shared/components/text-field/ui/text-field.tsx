@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 15,
+  },
+  field: {
     padding: 16,
   },
-  field: {},
   label: {
     fontSize: 14,
     fontWeight: 600,

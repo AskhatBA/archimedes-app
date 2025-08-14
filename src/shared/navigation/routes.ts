@@ -7,4 +7,5 @@ export const routes = {
   Profile: 'profile',
   CreateAppointment: 'create-appointment',
   MedBotChat: 'med-bot-chat',
+  OtpVerification: 'otp-verification',
 } as const;
