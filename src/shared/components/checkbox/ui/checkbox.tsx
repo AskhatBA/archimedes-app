@@ -6,7 +6,7 @@ import { useTheme } from '@/shared/theme';
 
 interface CheckboxProps {
   checked?: boolean;
-  onCheck?: () => void;
+  onCheck?: (checked: boolean) => void;
 }
 
 export const Checkbox: FC<CheckboxProps> = ({ checked, onCheck }) => {

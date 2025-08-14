@@ -13,13 +13,21 @@ import { doctors, specializations } from '../../../data';
 import { ChooseBranch } from './choose-branch';
 import { createAppointmentFormStyles } from './styles';
 
-export const CreateAppointmentForm: FC = () => {
-  const { values, handleChange } = useFormik({
+interface CreateAppointmentFormProps {
+  onSubmit: () => void;
+}
+
+export const CreateAppointmentForm: FC<CreateAppointmentFormProps> = ({
+  onSubmit,
+}) => {
+  const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
       doctor: '',
       specialization: '',
     },
-    onSubmit: () => {},
+    onSubmit: () => {
+      onSubmit();
+    },
   });
 
   return (
@@ -104,7 +112,7 @@ export const CreateAppointmentForm: FC = () => {
           }))}
         />
       </View>
-      <Button>Записаться на прием</Button>
+      <Button onPress={() => handleSubmit()}>Записаться на прием</Button>
     </View>
   );
 };

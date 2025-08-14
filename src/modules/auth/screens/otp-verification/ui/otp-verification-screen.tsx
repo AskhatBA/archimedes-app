@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { MaskedTextInput } from 'react-native-mask-text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
@@ -14,6 +15,7 @@ import { useTheme } from '@/shared/theme';
 
 export const OtpVerificationScreen: FC = () => {
   const { colors } = useTheme();
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [otpCode, setOtpCode] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
@@ -40,14 +42,11 @@ export const OtpVerificationScreen: FC = () => {
   const handleOtpChange = useCallback(
     (value: string, index: number) => {
       const newOtp = [...otpCode];
-      console.log('ne', newOtp, value, index);
       newOtp[index] = value;
       setOtpCode(newOtp);
 
-      if (value && index < 3) {
+      if (value && index < 3 && !otpCode[index]) {
         inputRefs.current[index + 1]?.focus();
-      } else if (!value && index > 0) {
-        inputRefs.current[index - 1]?.focus();
       }
     },
     [otpCode],
@@ -73,16 +72,22 @@ export const OtpVerificationScreen: FC = () => {
 
         <View style={styles.otpContainer}>
           {otpCode.map((digit, index) => (
-            <TextInput
+            <MaskedTextInput
+              mask="9"
               ref={ref => {
                 inputRefs.current[index] = ref;
               }}
+              onFocus={() => setFocusedIndex(index)}
+              onBlur={() => setFocusedIndex(null)}
               style={[styles.otpInput, { borderColor: colors.gray[300] }]}
               value={digit}
               onChangeText={value => {
                 handleOtpChange(value, index);
               }}
               onKeyPress={({ nativeEvent }) => {
+                if (otpCode[index] && /^[0-9]$/.test(nativeEvent.key)) {
+                  handleOtpChange(nativeEvent.key, index);
+                }
                 if (nativeEvent.key === 'Backspace' && !digit && index > 0) {
                   inputRefs.current[index - 1]?.focus();
                 }

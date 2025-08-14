@@ -6,14 +6,21 @@ import {
   StyleSheet,
   TextInputProps,
 } from 'react-native';
+import { MaskedTextInput, MaskedTextInputProps } from 'react-native-mask-text';
 
 import { useTheme } from '@/shared/theme';
 
 interface TextFieldProps extends TextInputProps {
   label?: string;
+  mask?: string;
 }
 
-export const TextField: FC<TextFieldProps> = ({ style, label, ...props }) => {
+export const TextField: FC<TextFieldProps> = ({
+  style,
+  label,
+  mask,
+  ...props
+}) => {
   const { colors } = useTheme();
 
   return (
@@ -22,15 +29,27 @@ export const TextField: FC<TextFieldProps> = ({ style, label, ...props }) => {
         <Text style={[styles.label, { color: colors.textMain }]}>{label}</Text>
       )}
       <View style={[styles.container, { borderColor: colors.gray['250'] }]}>
-        <TextInput
-          {...props}
-          placeholderTextColor={colors.gray['250']}
-          style={[
-            styles.field,
-            style,
-            { color: colors.textMain, fontWeight: 600 },
-          ]}
-        />
+        {mask ? (
+          <MaskedTextInput
+            {...(props as MaskedTextInputProps)}
+            mask={mask}
+            style={[
+              styles.field,
+              style,
+              { color: colors.textMain, fontWeight: 600 },
+            ]}
+          />
+        ) : (
+          <TextInput
+            {...props}
+            placeholderTextColor={colors.gray['250']}
+            style={[
+              styles.field,
+              style,
+              { color: colors.textMain, fontWeight: 600 },
+            ]}
+          />
+        )}
       </View>
     </View>
   );

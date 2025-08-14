@@ -7,9 +7,25 @@ import { AppointmentCard } from './appointment-card';
 
 export const CurrentAppointments: FC = () => {
   return (
-    <View>
-      <Text style={globalStyles.sectionHeading}>Текущие записи</Text>
-      <ScrollView horizontal contentContainerStyle={styles.carouselContainer}>
+    <View style={{ marginLeft: -32, marginRight: -32 }}>
+      <Text style={[globalStyles.sectionHeading, { marginLeft: 32 }]}>
+        Текущие записи
+      </Text>
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.carouselContainer}
+        showsHorizontalScrollIndicator={false}
+      >
+        <AppointmentCard
+          doctorName="Тастанбекова Л. "
+          specialization="Терапевт"
+          date="2025-07-31T10:30"
+        />
+        <AppointmentCard
+          doctorName="Тастанбекова Л. "
+          specialization="Терапевт"
+          date="2025-07-31T10:30"
+        />
         <AppointmentCard
           doctorName="Тастанбекова Л. "
           specialization="Терапевт"
@@ -23,5 +39,8 @@ export const CurrentAppointments: FC = () => {
 const styles = StyleSheet.create({
   carouselContainer: {
     marginTop: 18,
+    gap: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
   },
 });
