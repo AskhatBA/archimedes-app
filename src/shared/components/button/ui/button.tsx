@@ -6,6 +6,7 @@ import {
   TouchableOpacityProps as NativeButtonProps,
   StyleProp,
   ViewStyle,
+  ActivityIndicator,
 } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
@@ -17,6 +18,7 @@ interface ButtonProps extends NativeButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   style?: StyleProp<ViewStyle>;
+  isLoading?: boolean;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -24,6 +26,7 @@ export const Button: FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
   style,
+  isLoading,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -50,6 +53,7 @@ export const Button: FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
+      disabled={isLoading}
       {...props}
       style={[
         styles.containerPrimary,
@@ -57,6 +61,9 @@ export const Button: FC<ButtonProps> = ({
         style,
       ]}
     >
+      {isLoading && (
+        <ActivityIndicator color={fontColor[variant]} size="small" />
+      )}
       <Text
         style={[
           styles.primaryText,
@@ -77,6 +84,10 @@ const styles = StyleSheet.create({
   containerPrimary: {
     borderRadius: 100,
     paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    justifyContent: 'center',
   },
   primaryText: {
     fontWeight: 700,

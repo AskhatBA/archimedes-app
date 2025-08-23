@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
@@ -10,10 +11,18 @@ import { MaskedTextInput } from 'react-native-mask-text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
+import { useAuth } from '@/shared/lib/auth';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
+interface RouteParams {
+  phone: string;
+}
+
 export const OtpVerificationScreen: FC = () => {
+  const route = useRoute();
+  const { phone } = route.params as RouteParams;
+  const { verifyOtpMutation } = useAuth();
   const { colors } = useTheme();
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [otpCode, setOtpCode] = useState(['', '', '', '']);
@@ -116,8 +125,9 @@ export const OtpVerificationScreen: FC = () => {
         </TouchableOpacity>
 
         <Button
+          isLoading={verifyOtpMutation.isPending}
           onPress={() => {
-            navigate(routes.TabNavigation);
+            verifyOtpMutation.mutate({ otp: otpCode.join(''), phone });
           }}
         >
           Подтвердить
