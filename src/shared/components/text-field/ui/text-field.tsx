@@ -13,12 +13,14 @@ import { useTheme } from '@/shared/theme';
 interface TextFieldProps extends TextInputProps {
   label?: string;
   mask?: string;
+  error?: string;
 }
 
 export const TextField: FC<TextFieldProps> = ({
   style,
   label,
   mask,
+  error,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -28,7 +30,12 @@ export const TextField: FC<TextFieldProps> = ({
       {label && (
         <Text style={[styles.label, { color: colors.textMain }]}>{label}</Text>
       )}
-      <View style={[styles.container, { borderColor: colors.gray['250'] }]}>
+      <View
+        style={[
+          styles.container,
+          { borderColor: error ? colors.error : colors.gray['250'] },
+        ]}
+      >
         {mask ? (
           <MaskedTextInput
             {...(props as MaskedTextInputProps)}
@@ -36,7 +43,10 @@ export const TextField: FC<TextFieldProps> = ({
             style={[
               styles.field,
               style,
-              { color: colors.textMain, fontWeight: 600 },
+              {
+                color: colors.textMain,
+                fontWeight: 600,
+              },
             ]}
           />
         ) : (
@@ -46,11 +56,17 @@ export const TextField: FC<TextFieldProps> = ({
             style={[
               styles.field,
               style,
-              { color: colors.textMain, fontWeight: 600 },
+              {
+                color: colors.textMain,
+                fontWeight: 600,
+              },
             ]}
           />
         )}
       </View>
+      {error && (
+        <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+      )}
     </View>
   );
 };
@@ -68,5 +84,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 600,
     marginBottom: 9,
+  },
+  error: {
+    fontSize: 12,
+    fontWeight: 500,
+    marginTop: 4,
+    paddingHorizontal: 16,
   },
 });

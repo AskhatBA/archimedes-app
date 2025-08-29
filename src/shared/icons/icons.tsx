@@ -2,6 +2,7 @@ import ArrowBackIcon from '@/assets/icons/arrow-back.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
 import ClockIcon from '@/assets/icons/clock.svg';
 import CloseIcon from '@/assets/icons/close.svg';
+import LogoutIcon from '@/assets/icons/logout.svg';
 import SearchIcon from '@/assets/icons/search.svg';
 import SelectCaretIcon from '@/assets/icons/select-caret.svg';
 import SelectIndicator from '@/assets/icons/select-indicator.svg';
@@ -24,4 +25,5 @@ export {
   CloseIcon,
   SelectCaretIcon,
   SelectIndicator,
+  LogoutIcon,
 };

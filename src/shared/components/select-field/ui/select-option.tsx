@@ -20,11 +20,16 @@ export const SelectOption: FC<SelectOptionProps> = ({
   const { colors } = useTheme();
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onSelect(value)}>
+    <TouchableOpacity
+      style={[styles.container, { borderBottomColor: colors.gray['250'] }]}
+      onPress={() => onSelect(value)}
+    >
       <Text
         style={[
           styles.label,
-          { color: isSelected ? colors.blue['400'] : colors.textMain },
+          {
+            color: isSelected ? colors.blue['400'] : colors.textMain,
+          },
         ]}
       >
         {label}
@@ -41,11 +46,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    paddingVertical: 16,
   },
   label: {
     fontSize: 18,
     lineHeight: 22,
     fontWeight: 500,
-    paddingVertical: 8,
   },
 });

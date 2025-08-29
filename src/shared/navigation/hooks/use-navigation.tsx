@@ -14,7 +14,7 @@ export const useNavigation = () => {
     routeName: Routes,
     params?: Record<string, string | number>,
   ) => {
-    nativeNavigate(routeName as never, params as never);
+    nativeNavigate(routeName as unknown as never, params as unknown as never);
   };
 
   const goBack = () => {

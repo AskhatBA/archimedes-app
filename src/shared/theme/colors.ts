@@ -33,6 +33,7 @@ const palette = {
   red: {
     100: '#F8E2E1',
     300: '#EAB1AE',
+    500: '#e25853',
   },
   white: '#FFFFFF',
 };
@@ -40,6 +41,7 @@ const palette = {
 export const lightThemeColors = {
   primary: palette.blue[500],
   textMain: palette.gray[700],
+  error: palette.red[500],
   backgroundMain: palette.white,
   ...palette,
 };

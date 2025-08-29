@@ -20,6 +20,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @name RequestOtpCreate
    * @summary Request OTP code for phone verification
    * @request POST:/auth/request-otp
+   * @secure
    * @response `200` `RequestOTPResponse` OTP code generated successfully
    * @response `400` `void` Invalid phone number format
    */
@@ -28,6 +29,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
       path: `/auth/request-otp`,
       method: 'POST',
       body: data,
+      secure: true,
       type: ContentType.Json,
       format: 'json',
       ...params,
@@ -39,6 +41,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @name VerifyOtpCreate
    * @summary Verify OTP code and get authentication tokens
    * @request POST:/auth/verify-otp
+   * @secure
    * @response `200` `VerifyOTPResponse` OTP verified successfully
    * @response `400` `void` Invalid or expired OTP
    * @response `404` `void` User not found
@@ -48,6 +51,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
       path: `/auth/verify-otp`,
       method: 'POST',
       body: data,
+      secure: true,
       type: ContentType.Json,
       format: 'json',
       ...params,

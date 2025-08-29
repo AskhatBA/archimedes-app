@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthContextProvider } from '@/shared/lib/auth';
 import { ToastProvider } from '@/shared/lib/toast';
+import { UserContextProvider } from '@/shared/lib/user';
 import { NavigationProvider } from '@/shared/navigation';
 import { ThemeProvider } from '@/shared/theme';
 
@@ -20,7 +21,9 @@ function App() {
             <ToastProvider>
               <ThemeProvider>
                 <AuthContextProvider>
-                  <RootNavigator />
+                  <UserContextProvider>
+                    <RootNavigator />
+                  </UserContextProvider>
                 </AuthContextProvider>
               </ThemeProvider>
             </ToastProvider>

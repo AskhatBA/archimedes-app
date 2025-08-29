@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import NotificationIcon from '@/assets/icons/tab-bar-notifications.svg';
 import UserIcon from '@/assets/icons/user-filled.svg';
+import { useUser } from '@/shared/lib/user';
 import { colors } from '@/shared/theme';
 
 export const UserWelcomeContainer: FC = () => {
+  const { user } = useUser();
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
@@ -14,7 +17,9 @@ export const UserWelcomeContainer: FC = () => {
         </View>
         <View>
           <Text style={styles.text1}>Добрый день,</Text>
-          <Text style={styles.text2}>Аружан Утежанова</Text>
+          <Text style={styles.text2}>
+            {user?.firstName} {user?.lastName}
+          </Text>
         </View>
       </View>
       <TouchableOpacity>

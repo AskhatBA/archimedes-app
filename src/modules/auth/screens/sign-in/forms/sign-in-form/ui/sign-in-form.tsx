@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { FC } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { Button } from '@/shared/components/button';
 import { TextField } from '@/shared/components/text-field';
@@ -40,12 +40,12 @@ export const SignInForm: FC = () => {
         placeholder="Введите номер телефона"
         mask="+7 (999) 999-99-99"
         value={values.phone}
+        error={errors.phone}
         onChangeText={value => {
           setFieldError('phone', undefined);
           handleChange('phone')(value);
         }}
       />
-      {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
       <View style={{ marginTop: 35 }}>
         <TermsConsent />
       </View>
@@ -59,12 +59,3 @@ export const SignInForm: FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  errorText: {
-    color: 'red',
-    marginTop: 6,
-    fontSize: 12,
-    paddingLeft: 4,
-  },
-});

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-underscore-dangle */
 import { AxiosError } from 'axios';
 
 import { getAuthToken } from '@/shared/lib/auth';
 
 import { errorMap } from './constants';
-import { Auth } from './generated/Auth';
+import { HttpClient } from './generated/http-client';
 
-type Api = Auth;
+type Api = HttpClient;
 
 let isRefreshing = false;
 let failedQueue: any = [];
@@ -51,10 +52,8 @@ export class AuthUtils {
     this.api.instance.interceptors.response.use(
       response => response,
       async (error: any) => {
-        console.log('error: ', JSON.stringify(error, null, 2));
         const isUnauthorized = error.response?.status === 401;
 
-        // eslint-disable-next-line no-underscore-dangle
         if (isUnauthorized && !error.response.config._retry) {
           if (isRefreshing) {
             return new Promise((resolve, reject) => {
@@ -67,7 +66,6 @@ export class AuthUtils {
               .catch(err => Promise.reject(err));
           }
 
-          // eslint-disable-next-line no-underscore-dangle
           error.response.config._retry = true;
           isRefreshing = true;
 

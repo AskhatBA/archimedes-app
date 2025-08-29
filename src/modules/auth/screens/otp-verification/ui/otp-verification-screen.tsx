@@ -82,6 +82,7 @@ export const OtpVerificationScreen: FC = () => {
         <View style={styles.otpContainer}>
           {otpCode.map((digit, index) => (
             <MaskedTextInput
+              key={`${index + digit}`}
               mask="9"
               ref={ref => {
                 inputRefs.current[index] = ref;

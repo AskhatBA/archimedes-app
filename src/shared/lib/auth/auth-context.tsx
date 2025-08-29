@@ -11,13 +11,13 @@ import {
 } from 'react';
 
 import {
-  api,
+  authApi,
   resolveErrorMessage,
   RequestOTPBody,
   VerifyOTPBody,
   RequestOTPResponse,
   VerifyOTPResponse,
-  authUtils,
+  setApiErrorHandler,
 } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { useToast } from '@/shared/lib/toast';
@@ -71,7 +71,6 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     setIsAuthenticated(true);
     setIsLoading(false);
     resetNavigation(routes.TabNavigation);
-    navigate(routes.TabNavigation);
   };
 
   const initializeAuth = async () => {
@@ -83,7 +82,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
 
   const requestOtpMutation = useMutation({
     mutationFn: async (credentials: RequestOTPBody) =>
-      (await api.requestOtpCreate(credentials)).data,
+      (await authApi.requestOtpCreate(credentials)).data,
     onSuccess: async data => {
       console.log('otp: ', data.otp);
       navigate(routes.OtpVerification, { phone: data.phone });
@@ -98,7 +97,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
 
   const verifyOtpMutation = useMutation({
     mutationFn: async (body: VerifyOTPBody) =>
-      (await api.verifyOtpCreate(body)).data,
+      (await authApi.verifyOtpCreate(body)).data,
     onSuccess: async data => {
       await authenticate(data);
     },
@@ -113,12 +112,12 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
   const logout = async () => {
     await removeAuthToken();
     setIsAuthenticated(false);
-    navigate(routes.SignIn);
+    resetNavigation(routes.SignIn);
   };
 
   useEffect(() => {
     initializeAuth();
-    authUtils.setUnauthorizedErrorHandler(logout);
+    setApiErrorHandler(logout);
   }, []);
 
   const value = useMemo(

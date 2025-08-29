@@ -22,6 +22,7 @@ interface SelectFieldProps {
   selectButtonText?: string;
   onChange?: (value: string) => void;
   value?: string;
+  error?: string;
 }
 
 export const SelectField: FC<SelectFieldProps> = ({
@@ -30,6 +31,7 @@ export const SelectField: FC<SelectFieldProps> = ({
   selectButtonText = 'Выбрать',
   onChange,
   value,
+  error,
 }) => {
   const [selected, setSelected] = useState<string>();
   const [optionsOpened, setOptionsOpened] = useState(false);
@@ -52,33 +54,48 @@ export const SelectField: FC<SelectFieldProps> = ({
     if (value) setSelected(value);
   };
 
+  const fieldContainerBackground = () => {
+    if (error) return colors.red['100'];
+    if (isValueSelected) return colors.blue['100'];
+    return colors.gray['200'];
+  };
+
+  const valueFontColor = () => {
+    if (error) return colors.error;
+    if (isValueSelected) return colors.blue['400'];
+    return colors.gray['500'];
+  };
+
   return (
     <>
-      <TouchableOpacity
-        onPress={onOpen}
-        style={[
-          styles.fieldContainer,
-          {
-            backgroundColor: isValueSelected
-              ? colors.blue['100']
-              : colors.gray['200'],
-          },
-        ]}
-      >
-        <Text
+      <View>
+        <TouchableOpacity
+          onPress={onOpen}
           style={[
-            styles.value,
+            styles.fieldContainer,
             {
-              color: isValueSelected ? colors.blue['400'] : colors.gray['500'],
+              backgroundColor: fieldContainerBackground(),
             },
           ]}
         >
-          {selectedOption?.label || placeholder}
-        </Text>
-        <SelectCaretIcon
-          color={isValueSelected ? colors.blue['400'] : colors.gray['500']}
-        />
-      </TouchableOpacity>
+          <Text
+            style={[
+              styles.value,
+              {
+                color: valueFontColor(),
+              },
+            ]}
+          >
+            {selectedOption?.label || placeholder}
+          </Text>
+          <SelectCaretIcon
+            color={isValueSelected ? colors.blue['400'] : colors.gray['500']}
+          />
+        </TouchableOpacity>
+        {error && (
+          <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+        )}
+      </View>
       <BottomDrawer visible={optionsOpened} onClose={onClose}>
         <View>
           <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
@@ -87,7 +104,7 @@ export const SelectField: FC<SelectFieldProps> = ({
                 key={option.value}
                 isSelected={option.value === selected}
                 {...option}
-                onSelect={value => setSelected(value)}
+                onSelect={selectedValue => setSelected(selectedValue)}
               />
             ))}
           </ScrollView>
@@ -115,5 +132,11 @@ const styles = StyleSheet.create({
   },
   selectButton: {
     marginTop: 16,
+  },
+  error: {
+    fontSize: 12,
+    fontWeight: 500,
+    marginTop: 4,
+    paddingHorizontal: 16,
   },
 });
