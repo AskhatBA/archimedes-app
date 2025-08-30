@@ -124,7 +124,6 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
 
       {initialValues.birthDate ? (
         <FieldPlaceholder
-          key={initialValues.birthDate}
           label="День рождения"
           value={formatDate(initialValues.birthDate, 'DD.MM.YYYY')}
         />
@@ -136,16 +135,25 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
           onChange={value => onChangeField('birthDate', value)}
         />
       )}
-      <SelectField
-        value={values.gender}
-        error={errors.gender}
-        placeholder="Пол"
-        onChange={value => onChangeField('gender', value)}
-        options={[
-          { value: 'M', label: 'Мужской' },
-          { value: 'F', label: 'Женский' },
-        ]}
-      />
+
+      {initialValues.gender ? (
+        <FieldPlaceholder
+          label="Пол"
+          value={initialValues.gender === 'M' ? 'Мужской' : 'Женский'}
+        />
+      ) : (
+        <SelectField
+          value={values.gender}
+          error={errors.gender}
+          placeholder="Пол"
+          onChange={value => onChangeField('gender', value)}
+          options={[
+            { value: 'M', label: 'Мужской' },
+            { value: 'F', label: 'Женский' },
+          ]}
+        />
+      )}
+
       <Button
         isLoading={isLoading}
         onPress={() => handleSubmit()}

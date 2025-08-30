@@ -30,7 +30,6 @@ export const RadioCard: FC<RadioCardProps> = ({ value, label }) => {
           styles.label,
           { color: isActive ? colors.blue['400'] : colors.gray['500'] },
         ]}
-        numberOfLines={1}
       >
         {label}
       </Text>

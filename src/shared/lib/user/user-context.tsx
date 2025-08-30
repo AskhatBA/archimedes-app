@@ -26,12 +26,14 @@ interface UserContextProps {
   user?: User & { phone: string };
   loadingUser: boolean;
   updateUserProfile: (userData: User) => void;
+  refreshUserData: () => void;
 }
 
 const initialValues: UserContextProps = {
   user: {} as User & { phone: string },
   loadingUser: false,
   updateUserProfile: () => {},
+  refreshUserData: () => {},
 };
 
 const UserContext = createContext<UserContextProps>(initialValues);
@@ -43,7 +45,11 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
   const { resetNavigation } = useNavigation();
   const { showToast } = useToast();
 
-  const { data: user, isLoading: loadingUser } = useQuery({
+  const {
+    data: user,
+    isLoading: loadingUser,
+    refetch: refreshUserData,
+  } = useQuery({
     queryKey: ['user', isAuthenticated],
     queryFn: async () => (await patientApi.profileList()).data,
     enabled: isAuthenticated,
@@ -79,6 +85,7 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
       user: { ...user?.patient, phone: user?.user?.phone },
       loadingUser: loadingUser || userProfileMutation.isPending,
       updateUserProfile: userProfileMutation.mutate,
+      refreshUserData,
     }),
     [user, loadingUser, userProfileMutation.isPending],
   );

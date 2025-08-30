@@ -16,6 +16,7 @@ import { patientApi, misApi } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { useAuth } from '@/shared/lib/auth';
 import { useUser } from '@/shared/lib/user';
+import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 import { CreateUserForm, CreateUserPayload } from '../forms/create-user-form';
@@ -24,8 +25,15 @@ import { useMisPatient } from '../hooks/use-mis-patient';
 export const CreateUserScreen: FC = () => {
   const { colors } = useTheme();
   const { misPatient, loadingMisPatient } = useMisPatient();
-  const { user } = useUser();
+  const { resetNavigation } = useNavigation();
+  const { user, refreshUserData } = useUser();
   const { logout } = useAuth();
+
+  const isUserExistsInMis =
+    !!misPatient?.patient?.lastName &&
+    !!misPatient?.patient?.firstName &&
+    !!misPatient?.patient?.patronymic &&
+    !!misPatient?.patient?.iin;
 
   const saveUserProfileMutation = useMutation({
     mutationFn: (values: CreateUserPayload) =>
@@ -37,6 +45,10 @@ export const CreateUserScreen: FC = () => {
         gender: values.gender,
         iin: values.iin,
       }),
+    onSuccess: () => {
+      refreshUserData();
+      resetNavigation(routes.TabNavigation);
+    },
   });
 
   const misProfileMutation = useMutation({
@@ -93,9 +105,11 @@ export const CreateUserScreen: FC = () => {
                 iin: misPatient?.patient?.iin,
                 gender: misPatient?.patient?.gender,
               }}
-              onSubmit={formValues => {
-                saveUserProfileMutation.mutate(formValues);
-                misProfileMutation.mutate(formValues);
+              onSubmit={async formValues => {
+                if (!isUserExistsInMis) {
+                  await misProfileMutation.mutateAsync(formValues);
+                }
+                await saveUserProfileMutation.mutateAsync(formValues);
               }}
             />
             <TouchableOpacity style={styles.logoutContainer} onPress={onLogout}>

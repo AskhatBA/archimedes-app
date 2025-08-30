@@ -71,6 +71,7 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
               {
                 transform: [{ translateY }],
                 paddingBottom: insets.bottom + 16,
+                height: SCREEN_HEIGHT * 0.8,
               },
             ]}
           >
@@ -95,10 +96,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingHorizontal: 16,
   },
   handle: {
     alignItems: 'center',
@@ -109,5 +109,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginBottom: 10,
     marginTop: 10,
+    marginRight: 8,
   },
 });

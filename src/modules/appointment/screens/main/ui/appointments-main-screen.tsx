@@ -17,7 +17,6 @@ export const AppointmentsMainScreen: FC = () => {
           <Button
             title="Create appointment"
             onPress={() => {
-              console.log('fwfewfwe');
               navigate(routes.CreateAppointment);
             }}
           >

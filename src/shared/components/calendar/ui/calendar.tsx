@@ -7,18 +7,24 @@ import { useTheme } from '@/shared/theme';
 
 import { CalendarHeader } from './calendar-header';
 
-export const Calendar: FC = () => {
+interface CalendarProps {
+  value: string;
+  onChange?: (value: string) => void;
+}
+
+export const Calendar: FC<CalendarProps> = ({ value, onChange }) => {
   const INITIAL_DATE = formatDate(new Date(), 'YYYY-MM-DD');
   const { colors } = useTheme();
-  const [selected, setSelected] = useState('');
   const [currentMonth, setCurrentMonth] = useState(INITIAL_DATE);
 
   return (
     <View style={styles.container}>
       <RNCalendar
-        onDayPress={day => setSelected(day.dateString)}
+        onDayPress={day => {
+          if (onChange) onChange(day.dateString);
+        }}
         markedDates={{
-          [selected]: {
+          [value]: {
             selected: true,
             disableTouchEvent: true,
           },

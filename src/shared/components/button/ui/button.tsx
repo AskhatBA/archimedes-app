@@ -58,6 +58,7 @@ export const Button: FC<ButtonProps> = ({
       style={[
         styles.containerPrimary,
         { backgroundColor: background[variant] },
+        props.disabled && styles.disabled,
         style,
       ]}
     >
@@ -93,5 +94,8 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 22,
     textAlign: 'center',
+  },
+  disabled: {
+    opacity: 0.5,
   },
 });

@@ -12,7 +12,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
 import { useAuth } from '@/shared/lib/auth';
-import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
@@ -29,7 +28,6 @@ export const OtpVerificationScreen: FC = () => {
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
-  const { navigate } = useNavigation();
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -65,7 +63,7 @@ export const OtpVerificationScreen: FC = () => {
     if (canResend) {
       setTimer(60);
       setCanResend(false);
-      // Add resend logic here
+      verifyOtpMutation.mutate({ otp: otpCode.join(''), phone });
     }
   }, [canResend]);
 

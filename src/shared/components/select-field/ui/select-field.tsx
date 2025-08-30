@@ -79,6 +79,7 @@ export const SelectField: FC<SelectFieldProps> = ({
           ]}
         >
           <Text
+            numberOfLines={1}
             style={[
               styles.value,
               {
@@ -97,8 +98,10 @@ export const SelectField: FC<SelectFieldProps> = ({
         )}
       </View>
       <BottomDrawer visible={optionsOpened} onClose={onClose}>
-        <View>
-          <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: 16 }}
+          >
             {options.map(option => (
               <SelectOption
                 key={option.value}
@@ -132,6 +135,7 @@ const styles = StyleSheet.create({
   },
   selectButton: {
     marginTop: 16,
+    marginHorizontal: 16,
   },
   error: {
     fontSize: 12,

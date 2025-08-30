@@ -7,4 +7,5 @@ export interface CreateUserPayload {
   iin: string;
   birthDate: string;
   gender: UserGender;
+  misPatientId?: string;
 }

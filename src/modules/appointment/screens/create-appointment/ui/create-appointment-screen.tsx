@@ -6,32 +6,26 @@ import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useTheme } from '@/shared/theme';
 
+import { CreateAppointmentContextProvider } from '../context/create-appointment-context';
 import { CreateAppointmentForm } from '../forms/create-appointment-form';
 
 export const CreateAppointmentScreen: FC = () => {
   const { colors } = useTheme();
-  const [success, setSuccess] = useState(false);
 
   return (
-    <>
-      <SafeAreaView style={styles.wrapper}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <MainLayout>
-            <FindSpecialistBanner />
-            <Text style={[styles.title, { color: colors.textMain }]}>
-              Запись на прием
-            </Text>
-            <CreateAppointmentForm
-              onSubmit={() => {
-                console.log('success');
-                setSuccess(true);
-              }}
-            />
-          </MainLayout>
-        </ScrollView>
-      </SafeAreaView>
-      <BookingSuccessPopup isOpen={success} onClose={() => setSuccess(false)} />
-    </>
+    <SafeAreaView style={styles.wrapper}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <MainLayout>
+          <FindSpecialistBanner />
+          <Text style={[styles.title, { color: colors.textMain }]}>
+            Запись на прием
+          </Text>
+          <CreateAppointmentContextProvider>
+            <CreateAppointmentForm />
+          </CreateAppointmentContextProvider>
+        </MainLayout>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

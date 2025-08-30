@@ -25,8 +25,6 @@ export interface RequestOTPResponse {
   id?: string;
   /** Phone number */
   phone?: string;
-  /** Generated OTP code */
-  otp?: string;
 }
 
 export interface VerifyOTPBody {
@@ -80,6 +78,67 @@ export interface CreateMISPatientBody {
   birthDate: string;
   /** @example "123456789012" */
   iin: string;
+}
+
+export interface MISBranch {
+  id?: string;
+  name?: string;
+  address?: string;
+}
+
+export interface MISSpecialization {
+  id?: string;
+  name?: string;
+}
+
+export interface MISDoctor {
+  id?: string;
+  name?: string;
+  position?: string;
+  specialtyName?: string;
+  branchName?: string;
+  appointmentDurationMinutes?: number;
+}
+
+export interface MISAvailableTime {
+  /**
+   * The start time of the slot
+   * @example "09:00"
+   */
+  startTime: string;
+  /**
+   * The end time of the slot
+   * @example "09:30"
+   */
+  endTime: string;
+  /**
+   * Whether the time slot is available
+   * @example true
+   */
+  available: boolean;
+}
+
+export interface MISAvailableDay {
+  /**
+   * The date for this set of time slots
+   * @example "2023-12-01"
+   */
+  date: string;
+  /** Array of time slots for this date */
+  timeSlots: MISAvailableTime[];
+}
+
+export type MISAvailableSlots = Record<string, MISAvailableDay>;
+
+export interface CreateMISAppointmentBody {
+  /** @example "f47ac10b-58cc-4372-a567-0e02b2c3d479" */
+  doctorId: string;
+  /** @example "2025-09-10" */
+  startTime: string;
+  /** @example "2025-09-10" */
+  endTime: string;
+  /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
+  branchId: string;
 }
 
 export interface GetPatientProfileResponse {

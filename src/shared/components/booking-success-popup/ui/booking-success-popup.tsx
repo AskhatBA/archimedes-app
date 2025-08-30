@@ -16,11 +16,15 @@ import { useTheme } from '@/shared/theme';
 interface BookingSuccessPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  doctorName?: string;
+  appointmentDate?: string;
 }
 
 export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
   isOpen,
   onClose,
+  doctorName,
+  appointmentDate,
 }) => {
   const sheetHeight = SCREEN_HEIGHT * 0.7;
   const translateY = useRef(new Animated.Value(sheetHeight - 20)).current;
@@ -41,7 +45,7 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
-      onClose?.();
+      // onClose?.();
     });
   };
 
@@ -58,7 +62,7 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
       visible={isOpen}
       animationType="fade"
       transparent
-      onRequestClose={onClose}
+      // onRequestClose={onClose}
       statusBarTranslucent
     >
       <View style={styles.backdrop}>
@@ -79,12 +83,11 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
                 <UserIcon color={colors.primary} />
               </View>
               <Text style={styles.title}>
-                Запись на прием к{' '}
-                <Text style={styles.bold}>Тастанбекова Л.</Text>
+                Запись на прием к <Text style={styles.bold}>{doctorName}</Text>
               </Text>
 
               <Text style={styles.subtitle}>
-                Успешная запись{'\n'}на 17 июня в 2025
+                Успешная запись{'\n'}на {appointmentDate}
               </Text>
             </View>
             <TouchableOpacity
