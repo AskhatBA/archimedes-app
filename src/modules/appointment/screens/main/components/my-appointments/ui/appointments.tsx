@@ -1,15 +1,16 @@
 import dayjs from 'dayjs';
 import { FC } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
+import { MISAppointment } from '@/api';
+import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
 import { useTheme } from '@/shared/theme';
-
-import { data } from '../data';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 
 export const Appointments: FC = () => {
   const { colors } = useTheme();
+  const { appointments, loadingAppointments } = useAppointments();
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -19,23 +20,39 @@ export const Appointments: FC = () => {
 
   const separatorTypes = Object.keys(separatorColors);
 
-  const groupedAppointments = data.reduce(
+  if (loadingAppointments)
+    return (
+      <View style={{ marginTop: 64 }}>
+        <ActivityIndicator color={colors.primary} size="large" />
+      </View>
+    );
+
+  if (!appointments?.length)
+    return (
+      <View style={styles.noAppointmentsContainer}>
+        <Text style={styles.noAppointmentsText}>
+          Записи на прием отсутствуют
+        </Text>
+      </View>
+    );
+
+  const groupedAppointments = appointments.reduce(
     (acc, appointment) => {
-      const hour = dayjs(appointment.date).format('HH:00');
+      const hour = dayjs(appointment.start_time).format('HH:00');
       if (!acc[hour]) {
         acc[hour] = [];
       }
       acc[hour].push(appointment);
       return acc;
     },
-    {} as Record<string, typeof data>,
+    {} as Record<string, MISAppointment[]>,
   );
 
   return (
     <View style={styles.container}>
       {Object.entries(groupedAppointments)
         .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
-        .map(([time, appointments], index) => {
+        .map(([time, appointmentList], index) => {
           const currentSeparatorType =
             separatorTypes[index % separatorTypes.length];
           const currentSeparatorColor = separatorColors[currentSeparatorType];
@@ -62,13 +79,13 @@ export const Appointments: FC = () => {
                 />
               </View>
               <View style={styles.appointments}>
-                {appointments.map(appointment => (
+                {appointmentList.map(appointment => (
                   <AppointmentCard
                     color={currentSeparatorType as AppointmentCardColors}
                     key={appointment.id}
-                    date={appointment.date}
-                    doctorName={`${appointment.doctor.lastName} ${appointment.doctor.firstName[0]}.`}
-                    specialization={appointment.specialization.name}
+                    date={appointment.start_time}
+                    doctorName={appointment.doctor_name}
+                    specialization={appointment.branch_name}
                   />
                 ))}
               </View>
@@ -88,6 +105,16 @@ const styles = StyleSheet.create({
   },
   timeSection: {
     marginBottom: 16,
+  },
+  noAppointmentsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  noAppointmentsText: {
+    fontSize: 16,
+    color: '#666',
   },
   timeHeader: {
     fontSize: 15,

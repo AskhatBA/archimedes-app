@@ -12,6 +12,8 @@
 import {
   CreateMISAppointmentBody,
   CreateMISPatientBody,
+  CreateMISPatientResponse,
+  MISAppointment,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
@@ -59,6 +61,7 @@ export namespace Mis {
     success?: boolean,
   \** @example "Patient created" *\
     description?: string,
+    patient?: CreateMISPatientResponse,
 
 }` Patient created successfully
  * @response `401` `void` User not found or unauthorized
@@ -73,6 +76,7 @@ export namespace Mis {
       success?: boolean;
       /** @example "Patient created" */
       description?: string;
+      patient?: CreateMISPatientResponse;
     };
   }
 
@@ -226,6 +230,33 @@ export namespace Mis {
       success?: boolean;
       /** @example "Appointment created" */
       description?: string;
+    };
+  }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name AppointmentsList
+ * @summary Get patient appointments from MIS
+ * @request GET:/mis/appointments
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointments?: (MISAppointment)[],
+
+}` Appointments fetched successfully
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace AppointmentsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      appointments?: MISAppointment[];
     };
   }
 }

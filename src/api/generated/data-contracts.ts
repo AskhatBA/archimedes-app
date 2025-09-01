@@ -80,6 +80,23 @@ export interface CreateMISPatientBody {
   iin: string;
 }
 
+export interface CreateMISPatientResponse {
+  /** @example "7f5a8b13-74e8-4c25-9ac5-bc2df1cf9f64" */
+  id?: string;
+  /** @example "John Doe" */
+  name?: string;
+  /** @example 0 */
+  gender: number;
+  /** @example "999999999999" */
+  iin: string;
+  /** @example "87771112233" */
+  phone_number?: string;
+  /** @example "Street, something" */
+  address?: string;
+  /** @example "Street, something" */
+  address_details?: string;
+}
+
 export interface MISBranch {
   id?: string;
   name?: string;
@@ -139,6 +156,22 @@ export interface CreateMISAppointmentBody {
   endTime: string;
   /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
   branchId: string;
+}
+
+export interface MISAppointment {
+  id?: string;
+  doctor_name?: string;
+  beneficiary_name?: string;
+  branch_name?: string;
+  start_time?: string;
+  end_time?: string;
+  status?: string;
+  status_display?: string;
+  record_type?: string;
+  record_type_display?: string;
+  appointment_type?: string;
+  appointment_type_display?: string;
+  notes?: string;
 }
 
 export interface GetPatientProfileResponse {

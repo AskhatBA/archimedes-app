@@ -54,7 +54,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
         <ThreeDotsIcon color={moreButtonColor[color]} />
       </TouchableOpacity>
       <View style={[styles.square, { backgroundColor: squareColor[color] }]} />
-      <View>
+      <View style={{ flex: 1 }}>
         <View style={styles.dateContainer}>
           <Text style={[styles.timeOfDay, { color: fontColor[color] }]}>
             {getTimeOfDay(date)}

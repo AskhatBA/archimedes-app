@@ -52,6 +52,7 @@ export class AuthUtils {
     this.api.instance.interceptors.response.use(
       response => response,
       async (error: any) => {
+        console.log('err: ', JSON.stringify(error));
         const isUnauthorized = error.response?.status === 401;
 
         if (isUnauthorized && !error.response.config._retry) {

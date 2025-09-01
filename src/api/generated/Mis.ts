@@ -12,6 +12,8 @@
 import {
   CreateMISAppointmentBody,
   CreateMISPatientBody,
+  CreateMISPatientResponse,
+  MISAppointment,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
@@ -65,6 +67,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     success?: boolean,
   \** @example "Patient created" *\
     description?: string,
+    patient?: CreateMISPatientResponse,
 
 }` Patient created successfully
  * @response `401` `void` User not found or unauthorized
@@ -76,6 +79,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
         success?: boolean;
         /** @example "Patient created" */
         description?: string;
+        patient?: CreateMISPatientResponse;
       },
       void
     >({
@@ -269,6 +273,37 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name AppointmentsList
+ * @summary Get patient appointments from MIS
+ * @request GET:/mis/appointments
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointments?: (MISAppointment)[],
+
+}` Appointments fetched successfully
+ * @response `401` `void` User not found or unauthorized
+ */
+  appointmentsList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        appointments?: MISAppointment[];
+      },
+      void
+    >({
+      path: `/mis/appointments`,
+      method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });

@@ -174,10 +174,6 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     ],
   );
 
-  useEffect(() => {
-    console.log(`${selectedDate}, ${timeSlot}`);
-  }, [selectedDate, timeSlot]);
-
   return (
     <CreateAppointmentContext.Provider value={value}>
       {children}

@@ -15,6 +15,7 @@ import {
 import { patientApi, misApi } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { useAuth } from '@/shared/lib/auth';
+import { useToast } from '@/shared/lib/toast';
 import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
@@ -28,6 +29,7 @@ export const CreateUserScreen: FC = () => {
   const { resetNavigation } = useNavigation();
   const { user, refreshUserData } = useUser();
   const { logout } = useAuth();
+  const { showToast } = useToast();
 
   const isUserExistsInMis =
     !!misPatient?.patient?.lastName &&
@@ -62,6 +64,12 @@ export const CreateUserScreen: FC = () => {
         patronymic: values.patronymic,
         phoneNumber: user.phone,
       }),
+    onError: (error: any) => {
+      showToast({
+        type: 'error',
+        message: error?.response?.data?.message,
+      });
+    },
   });
 
   const onLogout = () => {
