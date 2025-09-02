@@ -13,7 +13,11 @@ const Tab = createBottomTabNavigator();
 
 export const TabNavigator: FC = () => {
   return (
-    <Tab.Navigator initialRouteName={routes.Home} tabBar={BottomTabBar}>
+    <Tab.Navigator
+      id={undefined}
+      initialRouteName={routes.Home}
+      tabBar={props => <BottomTabBar {...props} />}
+    >
       <Tab.Screen
         name={routes.Home}
         component={HomeScreen}

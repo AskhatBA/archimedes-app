@@ -25,7 +25,7 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
   children,
 }) => {
   const { colors } = useTheme();
-  const sheetHeight = SCREEN_HEIGHT * 0.7;
+  const sheetHeight = SCREEN_HEIGHT * 0.8;
   const translateY = useRef(new Animated.Value(sheetHeight)).current;
   const insets = useSafeAreaInsets();
 
@@ -71,7 +71,7 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
               {
                 transform: [{ translateY }],
                 paddingBottom: insets.bottom + 16,
-                height: SCREEN_HEIGHT * 0.8,
+                maxHeight: sheetHeight,
               },
             ]}
           >

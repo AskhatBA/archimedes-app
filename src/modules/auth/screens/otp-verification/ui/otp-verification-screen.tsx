@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { MaskedTextInput } from 'react-native-mask-text';
+import { OtpInput } from 'react-native-otp-entry';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
@@ -21,10 +22,9 @@ interface RouteParams {
 export const OtpVerificationScreen: FC = () => {
   const route = useRoute();
   const { phone } = route.params as RouteParams;
-  const { verifyOtpMutation } = useAuth();
+  const { verifyOtpMutation, requestOtpMutation } = useAuth();
   const { colors } = useTheme();
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
-  const [otpCode, setOtpCode] = useState(['', '', '', '']);
+  const [otpCode, setOtpCode] = useState<string>();
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
@@ -46,24 +46,11 @@ export const OtpVerificationScreen: FC = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  const handleOtpChange = useCallback(
-    (value: string, index: number) => {
-      const newOtp = [...otpCode];
-      newOtp[index] = value;
-      setOtpCode(newOtp);
-
-      if (value && index < 3 && !otpCode[index]) {
-        inputRefs.current[index + 1]?.focus();
-      }
-    },
-    [otpCode],
-  );
-
   const handleResend = useCallback(() => {
     if (canResend) {
       setTimer(60);
       setCanResend(false);
-      verifyOtpMutation.mutate({ otp: otpCode.join(''), phone });
+      requestOtpMutation.mutate({ phone });
     }
   }, [canResend]);
 
@@ -78,32 +65,27 @@ export const OtpVerificationScreen: FC = () => {
         </Text>
 
         <View style={styles.otpContainer}>
-          {otpCode.map((digit, index) => (
-            <MaskedTextInput
-              key={`${index + digit}`}
-              mask="9"
-              ref={ref => {
-                inputRefs.current[index] = ref;
-              }}
-              onFocus={() => setFocusedIndex(index)}
-              onBlur={() => setFocusedIndex(null)}
-              style={[styles.otpInput, { borderColor: colors.gray[300] }]}
-              value={digit}
-              onChangeText={value => {
-                handleOtpChange(value, index);
-              }}
-              onKeyPress={({ nativeEvent }) => {
-                if (otpCode[index] && /^[0-9]$/.test(nativeEvent.key)) {
-                  handleOtpChange(nativeEvent.key, index);
-                }
-                if (nativeEvent.key === 'Backspace' && !digit && index > 0) {
-                  inputRefs.current[index - 1]?.focus();
-                }
-              }}
-              keyboardType="numeric"
-              maxLength={1}
-            />
-          ))}
+          <OtpInput
+            numberOfDigits={4}
+            onTextChange={setOtpCode}
+            theme={{
+              pinCodeContainerStyle: {
+                borderWidth: 2,
+                borderColor: colors.gray['300'],
+                width: 65,
+                height: 65,
+              },
+              focusedPinCodeContainerStyle: {
+                borderColor: colors.primary,
+              },
+              focusStickStyle: {
+                backgroundColor: colors.primary,
+              },
+              pinCodeTextStyle: {
+                color: colors.textMain,
+              },
+            }}
+          />
         </View>
 
         <TouchableOpacity
@@ -126,7 +108,9 @@ export const OtpVerificationScreen: FC = () => {
         <Button
           isLoading={verifyOtpMutation.isPending}
           onPress={() => {
-            verifyOtpMutation.mutate({ otp: otpCode.join(''), phone });
+            if (otpCode.length === 4) {
+              verifyOtpMutation.mutate({ otp: otpCode, phone });
+            }
           }}
         >
           Подтвердить

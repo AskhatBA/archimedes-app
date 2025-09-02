@@ -31,7 +31,7 @@ export const ProfileScreen: FC = () => {
             <TouchableOpacity style={styles.logoutContainer} onPress={logout}>
               <LogoutIcon width={16} height={16} color={colors.textMain} />
               <Text style={[styles.logoutText, { color: colors.textMain }]}>
-                Logout
+                Выйти
               </Text>
             </TouchableOpacity>
           </View>

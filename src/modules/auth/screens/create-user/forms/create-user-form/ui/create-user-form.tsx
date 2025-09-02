@@ -23,6 +23,7 @@ interface CreateUserFormProps {
   };
   isLoading?: boolean;
   onSubmit: (payload: CreateUserPayload) => void;
+  submitButtonText: string;
 }
 
 const FieldPlaceholder: FC<{ label: string; value: string }> = ({
@@ -45,6 +46,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
   initialValues,
   isLoading,
   onSubmit,
+  submitButtonText,
 }) => {
   const { values, handleChange, errors, handleSubmit, setFieldError } =
     useFormik<CreateUserPayload>({
@@ -159,7 +161,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
         onPress={() => handleSubmit()}
         style={{ marginTop: 16 }}
       >
-        Сохранить
+        {submitButtonText}
       </Button>
     </View>
   );

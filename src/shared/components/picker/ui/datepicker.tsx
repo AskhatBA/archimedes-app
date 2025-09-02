@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     alignItems: 'center',
+    paddingHorizontal: 16,
   },
   submitButton: {
     width: '100%',

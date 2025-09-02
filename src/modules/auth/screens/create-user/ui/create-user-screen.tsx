@@ -98,9 +98,10 @@ export const CreateUserScreen: FC = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={styles.container}>
             <Text style={[styles.title, { color: colors.blue['400'] }]}>
-              Заполните данные о себе
+              Данные пациента
             </Text>
             <CreateUserForm
+              submitButtonText={isUserExistsInMis ? 'Продолжить' : 'Сохранить'}
               isLoading={
                 saveUserProfileMutation.isPending ||
                 misProfileMutation.isPending

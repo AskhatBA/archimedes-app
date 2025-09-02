@@ -98,23 +98,21 @@ export const SelectField: FC<SelectFieldProps> = ({
         )}
       </View>
       <BottomDrawer visible={optionsOpened} onClose={onClose}>
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: 16 }}
-          >
-            {options.map(option => (
-              <SelectOption
-                key={option.value}
-                isSelected={option.value === selected}
-                {...option}
-                onSelect={selectedValue => setSelected(selectedValue)}
-              />
-            ))}
-          </ScrollView>
-          <Button onPress={handleChange} style={styles.selectButton}>
-            {selectButtonText}
-          </Button>
-        </View>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: 16 }}
+        >
+          {options.map(option => (
+            <SelectOption
+              key={option.value}
+              isSelected={option.value === selected}
+              {...option}
+              onSelect={selectedValue => setSelected(selectedValue)}
+            />
+          ))}
+        </ScrollView>
+        <Button onPress={handleChange} style={styles.selectButton}>
+          {selectButtonText}
+        </Button>
       </BottomDrawer>
     </>
   );
