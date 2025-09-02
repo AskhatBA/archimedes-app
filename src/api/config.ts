@@ -1,6 +1,6 @@
 import { config } from '@/shared/config';
 
-const URL = config.env.API_URL;
+const URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
 
 const securityWorker = (token: string | null | undefined): Promise<any> => {
   const securityConfig = {

@@ -1,4 +1,8 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import {
   createContext,
@@ -69,6 +73,7 @@ const CreateAppointmentContext =
 export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }): ReactElement | null => {
+  const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { goBack } = useNavigation();
   const [branch, setBranch] = useState<MISBranch['id']>();
@@ -114,6 +119,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
       setSuccess(true);
     },
     onError: (error: any) => {

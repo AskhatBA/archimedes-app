@@ -1,4 +1,5 @@
-import { FC } from 'react';
+import dayjs from 'dayjs';
+import { FC, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { CalendarIcon } from '@/shared/icons';
@@ -8,6 +9,7 @@ import { Appointments } from './appointments';
 import { DaySelector } from './day-selector';
 
 export const MyAppointments: FC = () => {
+  const [date, setDate] = useState(dayjs());
   const { colors } = useTheme();
 
   return (
@@ -18,8 +20,8 @@ export const MyAppointments: FC = () => {
         </Text>
         <CalendarIcon />
       </View>
-      <DaySelector />
-      <Appointments />
+      <DaySelector value={date} onChange={setDate} />
+      <Appointments startDate={date.format('YYYY-MM-DD')} />
     </View>
   );
 };
@@ -27,11 +29,13 @@ export const MyAppointments: FC = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
+    marginHorizontal: -32,
   },
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: 24,
   },
   title: {
     fontWeight: '700',

@@ -15,7 +15,6 @@ export const AppointmentsMainScreen: FC = () => {
       <ScrollView style={styles.wrapper}>
         <MainLayout>
           <Button
-            title="Create appointment"
             onPress={() => {
               navigate(routes.CreateAppointment);
             }}

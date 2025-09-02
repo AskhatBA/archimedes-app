@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,9 +12,13 @@ import { useTheme } from '@/shared/theme';
 
 const NUM_OF_DAYS = 11;
 
-export const DaySelector: FC = () => {
+interface DaySelectorProps {
+  value: dayjs.Dayjs;
+  onChange: (value: dayjs.Dayjs) => void;
+}
+
+export const DaySelector: FC<DaySelectorProps> = ({ value, onChange }) => {
   const { colors } = useTheme();
-  const [selectedDay, setSelectedDay] = useState(dayjs());
 
   const days = Array.from({ length: NUM_OF_DAYS }, (_, index) => {
     const date = dayjs().add(index, 'day');
@@ -39,20 +43,20 @@ export const DaySelector: FC = () => {
               styles.dayContainer,
               {
                 backgroundColor:
-                  selectedDay.format('YYYY-MM-DD') ===
+                  value.format('YYYY-MM-DD') ===
                   day.fullDate.format('YYYY-MM-DD')
                     ? colors.blue['150']
                     : colors.gray['200'],
               },
             ]}
-            onPress={() => setSelectedDay(day.fullDate)}
+            onPress={() => onChange(day.fullDate)}
           >
             <Text
               style={[
                 styles.date,
                 {
                   color:
-                    selectedDay.format('YYYY-MM-DD') ===
+                    value.format('YYYY-MM-DD') ===
                     day.fullDate.format('YYYY-MM-DD')
                       ? colors.blue['400']
                       : colors.gray['250'],
@@ -66,7 +70,7 @@ export const DaySelector: FC = () => {
                 styles.dayOfWeek,
                 {
                   color:
-                    selectedDay.format('YYYY-MM-DD') ===
+                    value.format('YYYY-MM-DD') ===
                     day.fullDate.format('YYYY-MM-DD')
                       ? colors.blue['400']
                       : colors.gray['250'],
@@ -87,6 +91,7 @@ const styles = StyleSheet.create({
   daysWrapper: {
     marginTop: 20,
     gap: 15,
+    paddingHorizontal: 24,
   },
   date: {
     fontSize: 24,

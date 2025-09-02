@@ -87,10 +87,10 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
       console.log('otp: ', data.otp);
       navigate(routes.OtpVerification, { phone: data.phone });
     },
-    onError: error => {
+    onError: () => {
       showToast({
         type: 'error',
-        message: resolveErrorMessage(error),
+        message: 'Не удалось отправить код. Попробуйте снова',
       });
     },
   });
@@ -101,10 +101,10 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     onSuccess: async data => {
       await authenticate(data);
     },
-    onError: error => {
+    onError: () => {
       showToast({
         type: 'error',
-        message: resolveErrorMessage(error),
+        message: 'Похоже вы ввели неверный код. Попробуйте снова',
       });
     },
   });
