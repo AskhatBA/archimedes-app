@@ -23,12 +23,12 @@ export const FieldTrigger: FC<FieldTriggerProps> = ({
           styles.trigger,
           {
             backgroundColor: colors.white,
-            borderColor: error ? colors.error : colors.gray['250'],
+            borderColor: error ? colors.error : colors.blue['350'],
           },
         ]}
         onPress={onOpen}
       >
-        <Text style={[styles.value, { color: colors.textMain }]}>{value}</Text>
+        <Text style={[styles.value, { color: colors.primary }]}>{value}</Text>
       </TouchableOpacity>
       {error && (
         <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
@@ -42,19 +42,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderRadius: 15,
-    padding: 18,
-    borderWidth: 1,
+    paddingVertical: 18,
+    borderBottomWidth: 1,
     borderStyle: 'solid',
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 600,
     marginBottom: 9,
   },
   value: {
-    fontSize: 14,
-    fontWeight: 500,
+    fontSize: 16,
+    fontWeight: 600,
   },
   error: {
     fontSize: 12,

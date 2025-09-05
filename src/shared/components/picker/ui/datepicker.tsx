@@ -40,7 +40,9 @@ export const Datepicker: FC<DateTimePickerProps> = ({
   return (
     <View>
       {label && (
-        <Text style={[styles.label, { color: colors.textMain }]}>{label}</Text>
+        <Text style={[styles.label, { color: colors.blue['370'] }]}>
+          {label}
+        </Text>
       )}
       <FieldTrigger
         error={error}
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 600,
     marginBottom: 9,
   },

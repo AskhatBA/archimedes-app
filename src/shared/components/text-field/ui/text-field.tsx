@@ -28,23 +28,36 @@ export const TextField: FC<TextFieldProps> = ({
   return (
     <View>
       {label && (
-        <Text style={[styles.label, { color: colors.textMain }]}>{label}</Text>
+        <Text style={[styles.label, { color: colors.blue['370'] }]}>
+          {label}
+        </Text>
       )}
       <View
         style={[
           styles.container,
-          { borderColor: error ? colors.error : colors.gray['250'] },
+          { borderColor: error ? colors.error : colors.blue['350'] },
         ]}
       >
         {mask ? (
           <MaskedTextInput
             {...(props as MaskedTextInputProps)}
-            mask={mask}
+            placeholderTextColor={colors.blue['350']}
+            mask={mask === 'currency' ? undefined : mask}
+            type={mask === 'currency' ? mask : undefined}
+            options={
+              mask === 'currency'
+                ? {
+                    suffix: '₸',
+                    decimalSeparator: '.',
+                    precision: 0,
+                  }
+                : undefined
+            }
             style={[
               styles.field,
               style,
               {
-                color: colors.textMain,
+                color: colors.primary,
                 fontWeight: 600,
               },
             ]}
@@ -52,7 +65,7 @@ export const TextField: FC<TextFieldProps> = ({
         ) : (
           <TextInput
             {...props}
-            placeholderTextColor={colors.gray['250']}
+            placeholderTextColor={colors.blue['350']}
             style={[
               styles.field,
               style,
@@ -73,17 +86,17 @@ export const TextField: FC<TextFieldProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
+    borderBottomWidth: 2,
     borderStyle: 'solid',
-    borderRadius: 15,
   },
   field: {
-    padding: 16,
+    paddingVertical: 16,
+    fontSize: 16,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 600,
-    marginBottom: 9,
+    marginBottom: 8,
   },
   error: {
     fontSize: 12,

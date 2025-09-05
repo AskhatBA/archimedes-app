@@ -14,6 +14,7 @@ import { MainLayout } from '@/shared/layout/main-layout';
 import { useAuth } from '@/shared/lib/auth';
 import { colors } from '@/shared/theme';
 
+import { Compensation } from '../components/compensation';
 import { Insurance } from '../components/insurance';
 import { MyTests } from '../components/my-tests';
 
@@ -22,11 +23,12 @@ export const ProfileScreen: FC = () => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView>
         <MainLayout>
           <UserWelcomeContainer />
           <View style={styles.main}>
             <Insurance />
+            <Compensation />
             <MyTests />
             <TouchableOpacity style={styles.logoutContainer} onPress={logout}>
               <LogoutIcon width={16} height={16} color={colors.textMain} />
