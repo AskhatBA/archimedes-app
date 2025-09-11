@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
-    width: Dimensions.get('window').width,
+    left: 20,
+    width: Dimensions.get('window').width - 40,
     alignItems: 'center',
     zIndex: 9999,
   },

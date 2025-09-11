@@ -49,6 +49,119 @@ export interface VerifyOTPResponse {
   refreshToken?: string;
 }
 
+export interface InsuranceVerifyOtpBody {
+  otp?: string;
+}
+
+export interface FileItem {
+  /** @example "Кассовый чек" */
+  fileType: string;
+  /**
+   * File name with extension
+   * @example "cheque.pdf"
+   */
+  fileName: string;
+  /**
+   * Base64-encoded content; can be empty if not provided yet
+   * @format byte
+   * @minLength 0
+   * @example ""
+   */
+  content: string;
+}
+
+/** @minItems 1 */
+export type Files = FileItem[];
+
+export interface RefundRequestBody {
+  /** @example "2025-09-01" */
+  date?: string;
+  /** @example 1000 */
+  amount?: number;
+  /** @example "a2f6c7d8-3b1e-4f0a-9c3d-7e5a1b2c3d4e" */
+  personId?: string;
+  /** @example "a2f6c7d8-3b1e-4f0a-9c3d-7e5a1b2c3d4e" */
+  programId?: string;
+  files?: Files;
+}
+
+export interface CheckUserAuthorizationResponse {
+  success?: boolean;
+  isUserAuthorized?: boolean;
+}
+
+export interface InsuranceProgram {
+  /** @example "1234" */
+  id: string;
+  /** @example "PRG001" */
+  code: string;
+  /** @example "Basic Insurance" */
+  title: string;
+  /** @example "active" */
+  status: string;
+  /** @example "4111111111111111" */
+  cardNo: string;
+  /**
+   * @format date
+   * @example "2025-01-01"
+   */
+  dateStart: string;
+  /**
+   * @format date
+   * @example "2025-12-31"
+   */
+  dateEnd: string;
+}
+
+export interface InsuranceProgramsResponse {
+  success?: boolean;
+  programs?: InsuranceProgram[];
+}
+
+export interface InsuranceFamily {
+  /** @example "1234" */
+  id: string;
+  /** @example "John Doe" */
+  fullName: string;
+  /** @example "spouse" */
+  relationship: string;
+  /**
+   * @format date
+   * @example "1990-01-01"
+   */
+  dateBirth: string;
+}
+
+export interface InsuranceFamilyResponse {
+  success?: boolean;
+  family?: InsuranceFamily[];
+}
+
+export interface InsuranceRefundRequest {
+  /** @example 1234 */
+  id: number;
+  /** @example "John Doe" */
+  sender: string;
+  /** @example "Jane Doe" */
+  person: string;
+  /** @example "+77071234567" */
+  phoneNo: string;
+  /**
+   * @format date
+   * @example "2025-09-01"
+   */
+  date: string;
+  /** @example 1000 */
+  amount: number;
+  /** @example "pending" */
+  status: string;
+}
+
+export interface InsuranceRefundRequestsResponse {
+  success?: boolean;
+  refundRequests?: InsuranceRefundRequest[];
+}
+
 export interface MISPatient {
   id: string;
   firstName: string;

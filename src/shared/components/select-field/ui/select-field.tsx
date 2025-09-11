@@ -1,20 +1,12 @@
 import { FC, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { BottomDrawer } from '@/shared/components/bottom-drawer';
-import { Button } from '@/shared/components/button';
 import { SelectCaretIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
 import { SelectFieldOption } from '../types';
 
-import { SelectOption } from './select-option';
+import { SelectDrawer } from './select-drawer';
 
 interface SelectFieldProps {
   options: SelectFieldOption[];
@@ -97,23 +89,15 @@ export const SelectField: FC<SelectFieldProps> = ({
           <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
         )}
       </View>
-      <BottomDrawer visible={optionsOpened} onClose={onClose}>
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: 16 }}
-        >
-          {options.map(option => (
-            <SelectOption
-              key={option.value}
-              isSelected={option.value === selected}
-              {...option}
-              onSelect={selectedValue => setSelected(selectedValue)}
-            />
-          ))}
-        </ScrollView>
-        <Button onPress={handleChange} style={styles.selectButton}>
-          {selectButtonText}
-        </Button>
-      </BottomDrawer>
+      <SelectDrawer
+        isOpen={optionsOpened}
+        onClose={onClose}
+        options={options}
+        selected={selected}
+        setSelected={setSelected}
+        buttonText={selectButtonText}
+        onChange={handleChange}
+      />
     </>
   );
 };
@@ -130,10 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 22,
     fontWeight: 600,
-  },
-  selectButton: {
-    marginTop: 16,
-    marginHorizontal: 16,
   },
   error: {
     fontSize: 12,

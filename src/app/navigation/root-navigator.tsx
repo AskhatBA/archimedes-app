@@ -6,7 +6,10 @@ import { CreateUserScreen } from '@/modules/auth/screens/create-user';
 import { OtpVerificationScreen } from '@/modules/auth/screens/otp-verification';
 import { SignInScreen } from '@/modules/auth/screens/sign-in';
 import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
-import { CompensationScreen } from '@/modules/profile/screens/compensation';
+import {
+  CompensationScreen,
+  CompensationsHistoryScreen,
+} from '@/modules/profile/screens/compensation';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { useAuth } from '@/shared/lib/auth';
@@ -62,6 +65,11 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.Compensation}
         component={CompensationScreen}
+        options={{ header: () => <SecondaryTopbar title="" /> }}
+      />
+      <RootStack.Screen
+        name={routes.CompensationsHistory}
+        component={CompensationsHistoryScreen}
         options={{ header: () => <SecondaryTopbar title="" /> }}
       />
     </RootStack.Navigator>

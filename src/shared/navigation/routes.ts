@@ -10,4 +10,6 @@ export const routes = {
   OtpVerification: 'otp-verification',
   CreateUser: 'create-user',
   Compensation: 'compensation',
+  CompensationOtpVerification: 'compensation-otp-verification',
+  CompensationsHistory: 'compensations-history',
 } as const;
