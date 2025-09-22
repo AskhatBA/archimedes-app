@@ -2,6 +2,8 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { colors } from '@/shared/theme';
+
 import { NavigationRoute } from '../types';
 
 import { TabBarItem } from './tab-bar-item';
@@ -30,7 +32,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingTop: 24,
+    paddingTop: 16,
     paddingHorizontal: 16,
+    borderTopColor: colors.gray['200'],
+    borderTopWidth: 1,
+    borderStyle: 'solid',
   },
 });

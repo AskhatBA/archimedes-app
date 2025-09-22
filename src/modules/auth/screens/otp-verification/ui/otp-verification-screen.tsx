@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
 import { useAuth } from '@/shared/lib/auth';
@@ -54,7 +53,7 @@ export const OtpVerificationScreen: FC = () => {
   }, [canResend]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
         <Text style={[styles.title, { color: colors.textMain }]}>
           Подтверждение
@@ -115,7 +114,7 @@ export const OtpVerificationScreen: FC = () => {
           Подтвердить
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

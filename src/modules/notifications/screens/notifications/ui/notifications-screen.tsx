@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { MainLayout } from '@/shared/layout/main-layout';
 
@@ -9,28 +9,13 @@ import { notifications } from '../data';
 
 export const NotificationsScreen: FC = () => {
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView>
-        <MainLayout>
-          <View>
-            <Topbar />
-            <NotificationStack notifications={notifications} />
-          </View>
-        </MainLayout>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView>
+      <MainLayout>
+        <View>
+          <Topbar />
+          <NotificationStack notifications={notifications} />
+        </View>
+      </MainLayout>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    gap: 24,
-  },
-});

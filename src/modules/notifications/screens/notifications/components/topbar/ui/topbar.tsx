@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { formatDate } from '@/shared/adapters/date';
 import { useTheme } from '@/shared/theme';
 
 export const Topbar: FC = () => {
@@ -9,7 +10,7 @@ export const Topbar: FC = () => {
   return (
     <View style={styles.container}>
       <Text style={[styles.dateText, { color: colors.gray['600'] }]}>
-        Вторник, 10 июня
+        {formatDate(new Date(), 'dddd, DD MMMM')}
       </Text>
       <Text style={[styles.title, { color: colors.gray['600'] }]}>
         Уведомления
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    right: -16,
+    right: 24,
     top: 28,
     width: 8,
     height: 8,

@@ -13,6 +13,7 @@ import { insuranceApi, RefundRequestBody } from '@/api';
 import { Button } from '@/shared/components/button';
 import { OtpContainer } from '@/shared/components/otp-container';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
+import { MainLayout } from '@/shared/layout/main-layout';
 import { useInsuranceServiceAuth } from '@/shared/lib/insurance';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
@@ -114,7 +115,7 @@ export const CompensationScreen: FC = () => {
   if (isSuccess) return <SuccessRefundRequest />;
 
   return (
-    <>
+    <MainLayout>
       <ScrollView
         contentContainerStyle={[
           styles.container,
@@ -152,7 +153,7 @@ export const CompensationScreen: FC = () => {
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
-    </>
+    </MainLayout>
   );
 };
 

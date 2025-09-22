@@ -22,24 +22,22 @@ export const ProfileScreen: FC = () => {
   const { logout } = useAuth();
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView>
-        <MainLayout>
-          <UserWelcomeContainer />
-          <View style={styles.main}>
-            <Insurance />
-            <Compensation />
-            <MyTests />
-            <TouchableOpacity style={styles.logoutContainer} onPress={logout}>
-              <LogoutIcon width={16} height={16} color={colors.textMain} />
-              <Text style={[styles.logoutText, { color: colors.textMain }]}>
-                Выйти
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </MainLayout>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView>
+      <MainLayout>
+        <UserWelcomeContainer />
+        <View style={styles.main}>
+          <Insurance />
+          <Compensation />
+          <MyTests />
+          <TouchableOpacity style={styles.logoutContainer} onPress={logout}>
+            <LogoutIcon width={16} height={16} color={colors.textMain} />
+            <Text style={[styles.logoutText, { color: colors.textMain }]}>
+              Выйти
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </MainLayout>
+    </ScrollView>
   );
 };
 
@@ -47,9 +45,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-  scrollContainer: {
-    flex: 1,
-  },
+
   main: {
     marginTop: 48,
     gap: 32,

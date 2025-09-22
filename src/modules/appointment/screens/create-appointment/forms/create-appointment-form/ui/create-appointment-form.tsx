@@ -1,5 +1,4 @@
-import { useFormik } from 'formik';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { useCreateAppointment } from '@/modules/appointment/screens/create-appointment/context/create-appointment-context';

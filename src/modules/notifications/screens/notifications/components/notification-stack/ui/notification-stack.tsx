@@ -59,6 +59,16 @@ export const NotificationStack: FC<NotificationStackProps> = ({
 
   const groupedNotifications = groupNotificationsByDate(notifications);
 
+  if (notifications?.length !== 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[styles.emptyText, { color: colors.gray['500'] }]}>
+          У вас пока нет уведомлений
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {groupedNotifications.map(group => (
@@ -94,5 +104,12 @@ const styles = StyleSheet.create({
   },
   notificationGroup: {
     gap: 19,
+  },
+  emptyContainer: {
+    paddingTop: 64,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
   },
 });

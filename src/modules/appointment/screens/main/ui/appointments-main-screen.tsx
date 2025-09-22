@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
 import { Button } from '@/shared/components/button';
 import { MainLayout } from '@/shared/layout/main-layout';
@@ -11,28 +11,23 @@ export const AppointmentsMainScreen: FC = () => {
   const { navigate } = useNavigation();
 
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <ScrollView style={styles.wrapper}>
-        <MainLayout>
-          <Button
-            onPress={() => {
-              navigate(routes.CreateAppointment);
-            }}
-          >
-            Записаться на прием
-          </Button>
-          <MyAppointments />
-        </MainLayout>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView style={styles.wrapper}>
+      <MainLayout>
+        <Button
+          onPress={() => {
+            navigate(routes.CreateAppointment);
+          }}
+        >
+          Записаться на прием
+        </Button>
+        <MyAppointments />
+      </MainLayout>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-  },
-  scrollContainer: {
     flex: 1,
   },
   content: {

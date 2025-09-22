@@ -14,6 +14,7 @@ import {
 
 import { patientApi, misApi } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
+import { MainLayout } from '@/shared/layout/main-layout';
 import { useAuth } from '@/shared/lib/auth';
 import { useToast } from '@/shared/lib/toast';
 import { useUser } from '@/shared/lib/user';
@@ -94,7 +95,7 @@ export const CreateUserScreen: FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
     >
-      <SafeAreaView style={{ flex: 1 }}>
+      <MainLayout>
         <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={styles.container}>
             <Text style={[styles.title, { color: colors.blue['400'] }]}>
@@ -126,7 +127,7 @@ export const CreateUserScreen: FC = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </MainLayout>
     </KeyboardAvoidingView>
   );
 };
