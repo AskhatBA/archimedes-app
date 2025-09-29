@@ -13,3 +13,17 @@ export const usePrograms = () => {
     loadingPrograms,
   };
 };
+
+export const useProgramById = (programId: string) => {
+  const { data: program, isLoading: loadingProgram } = useQuery({
+    queryKey: ['program', programId],
+    queryFn: async () =>
+      (await insuranceApi.programsDetail(programId)).data?.program,
+    enabled: !!programId,
+  });
+
+  return {
+    program,
+    loadingProgram,
+  };
+};

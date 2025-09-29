@@ -159,7 +159,6 @@ export const CompensationScreen: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
     gap: 32,
   },
   heading: {

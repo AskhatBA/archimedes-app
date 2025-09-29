@@ -10,6 +10,7 @@ import {
   CompensationScreen,
   CompensationsHistoryScreen,
 } from '@/modules/profile/screens/compensation';
+import { InsuranceDetailsScreen } from '@/modules/profile/screens/insurance-details';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { useAuth } from '@/shared/lib/auth';
@@ -70,6 +71,11 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.CompensationsHistory}
         component={CompensationsHistoryScreen}
+        options={{ header: () => <SecondaryTopbar title="" /> }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceDetails}
+        component={InsuranceDetailsScreen}
         options={{ header: () => <SecondaryTopbar title="" /> }}
       />
     </RootStack.Navigator>

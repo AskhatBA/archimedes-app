@@ -12,4 +12,5 @@ export const routes = {
   Compensation: 'compensation',
   CompensationOtpVerification: 'compensation-otp-verification',
   CompensationsHistory: 'compensations-history',
+  InsuranceDetails: 'insurance-details',
 } as const;

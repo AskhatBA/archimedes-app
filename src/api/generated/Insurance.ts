@@ -12,6 +12,7 @@
 import {
   CheckUserAuthorizationResponse,
   InsuranceFamilyResponse,
+  InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
@@ -156,6 +157,25 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
   programsList = (params: RequestParams = {}) =>
     this.request<InsuranceProgramsResponse, void>({
       path: `/insurance/programs`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Insurance
+   * @name ProgramsDetail
+   * @summary Get insurance program by id
+   * @request GET:/insurance/programs/{programId}
+   * @secure
+   * @response `200` `InsuranceProgramResponse` Response
+   * @response `401` `void` Unauthorized
+   */
+  programsDetail = (programId: string, params: RequestParams = {}) =>
+    this.request<InsuranceProgramResponse, void>({
+      path: `/insurance/programs/${programId}`,
       method: 'GET',
       secure: true,
       format: 'json',

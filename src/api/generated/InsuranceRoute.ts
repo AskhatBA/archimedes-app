@@ -12,6 +12,7 @@
 import {
   CheckUserAuthorizationResponse,
   InsuranceFamilyResponse,
+  InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
@@ -140,6 +141,27 @@ export namespace Insurance {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = InsuranceProgramsResponse;
+  }
+
+  /**
+   * No description
+   * @tags Insurance
+   * @name ProgramsDetail
+   * @summary Get insurance program by id
+   * @request GET:/insurance/programs/{programId}
+   * @secure
+   * @response `200` `InsuranceProgramResponse` Response
+   * @response `401` `void` Unauthorized
+   */
+  export namespace ProgramsDetail {
+    export type RequestParams = {
+      /** Program ID */
+      programId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = InsuranceProgramResponse;
   }
 
   /**

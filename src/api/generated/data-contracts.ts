@@ -118,6 +118,40 @@ export interface InsuranceProgramsResponse {
   programs?: InsuranceProgram[];
 }
 
+export interface InsuranceProgramExtended {
+  id?: string;
+  code?: string;
+  title?: string;
+  status?: string;
+  cardNo?: string;
+  insurer?: string;
+  insuranceCompany?: string;
+  /** @format date */
+  dateStart?: string;
+  /** @format date */
+  dateEnd?: string;
+  information?: string;
+  programUrl?: string;
+  stdexclusions?: string;
+  exclusions?: string;
+  inclusions?: string;
+  limit?: number;
+  currentLimit?: number;
+  logo?: string;
+  subLimits?: {
+    name?: string;
+    limit?: number;
+    currentLimit?: number;
+    incidentLimit?: number;
+    currentIncidentLimit?: number;
+  }[];
+}
+
+export interface InsuranceProgramResponse {
+  success?: boolean;
+  program?: InsuranceProgramExtended;
+}
+
 export interface InsuranceFamily {
   /** @example "1234" */
   id: string;

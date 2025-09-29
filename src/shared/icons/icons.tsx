@@ -1,7 +1,9 @@
 import ArrowBackIcon from '@/assets/icons/arrow-back.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
+import ClipIcon from '@/assets/icons/clip.svg';
 import ClockIcon from '@/assets/icons/clock.svg';
 import CloseIcon from '@/assets/icons/close.svg';
+import FamilyIcon from '@/assets/icons/family.svg';
 import FileIcon from '@/assets/icons/file.svg';
 import LogoutIcon from '@/assets/icons/logout.svg';
 import SearchIcon from '@/assets/icons/search.svg';
@@ -32,4 +34,6 @@ export {
   FileIcon,
   UploadFileIcon,
   SuccessCheckIcon,
+  ClipIcon,
+  FamilyIcon,
 };
