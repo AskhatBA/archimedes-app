@@ -10,7 +10,10 @@ import {
   CompensationScreen,
   CompensationsHistoryScreen,
 } from '@/modules/profile/screens/compensation';
-import { InsuranceDetailsScreen } from '@/modules/profile/screens/insurance-details';
+import {
+  InsuranceDetailsScreen,
+  InsuranceCertificateScreen,
+} from '@/modules/profile/screens/insurance-details';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { useAuth } from '@/shared/lib/auth';
@@ -77,6 +80,13 @@ export const RootNavigator: FC = () => {
         name={routes.InsuranceDetails}
         component={InsuranceDetailsScreen}
         options={{ header: () => <SecondaryTopbar title="" /> }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceCertificate}
+        component={InsuranceCertificateScreen}
+        options={{
+          header: () => <SecondaryTopbar title="Страховой сертификат" />,
+        }}
       />
     </RootStack.Navigator>
   );

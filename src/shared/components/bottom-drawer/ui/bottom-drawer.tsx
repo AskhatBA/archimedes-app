@@ -17,12 +17,14 @@ interface BottomDrawerProps {
   visible: boolean;
   onClose: () => void;
   children: ReactNode;
+  backdropPressEnabled?: boolean;
 }
 
 export const BottomDrawer: FC<BottomDrawerProps> = ({
   visible,
   onClose,
   children,
+  backdropPressEnabled = true,
 }) => {
   const { colors } = useTheme();
   const sheetHeight = SCREEN_HEIGHT * 0.8;
@@ -63,7 +65,10 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <TouchableWithoutFeedback onPress={closeSheet}>
+      <TouchableWithoutFeedback
+        disabled={!backdropPressEnabled}
+        onPress={closeSheet}
+      >
         <View style={styles.backdrop}>
           <Animated.View
             style={[
