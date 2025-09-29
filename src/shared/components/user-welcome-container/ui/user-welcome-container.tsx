@@ -1,13 +1,15 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import NotificationIcon from '@/assets/icons/tab-bar-notifications.svg';
 import UserIcon from '@/assets/icons/user-filled.svg';
+import { LogoutIcon } from '@/shared/icons';
+import { useAuth } from '@/shared/lib/auth';
 import { useUser } from '@/shared/lib/user';
 import { colors } from '@/shared/theme';
 
 export const UserWelcomeContainer: FC = () => {
   const { user } = useUser();
+  const { logout } = useAuth();
 
   return (
     <View style={styles.wrapper}>
@@ -22,8 +24,8 @@ export const UserWelcomeContainer: FC = () => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity>
-        <NotificationIcon width={35} height={35} color={colors.primary} />
+      <TouchableOpacity onPress={logout}>
+        <LogoutIcon width={30} height={30} color={colors.primary} />
       </TouchableOpacity>
     </View>
   );

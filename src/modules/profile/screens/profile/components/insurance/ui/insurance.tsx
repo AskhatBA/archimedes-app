@@ -18,18 +18,24 @@ export const Insurance: FC = () => {
     <View style={styles.container}>
       <Text style={globalStyles.sectionHeading}>Страховка</Text>
       <View style={styles.cards}>
-        {programs?.map(program => {
-          if (program.status === 'EXPIRED') return null;
+        {!programs || programs?.length === 0 ? (
+          <Text style={[styles.noInsuranceText, { color: colors.gray['500'] }]}>
+            Нет активных страховок
+          </Text>
+        ) : (
+          programs?.map(program => {
+            if (program.status === 'EXPIRED') return null;
 
-          return (
-            <InsuranceCard
-              key={program.id}
-              programId={program.id}
-              price={150000}
-              level={program.title}
-            />
-          );
-        })}
+            return (
+              <InsuranceCard
+                key={program.id}
+                programId={program.id}
+                price={150000}
+                level={program.title}
+              />
+            );
+          })
+        )}
       </View>
     </View>
   );
@@ -40,5 +46,9 @@ const styles = StyleSheet.create({
   cards: {
     marginTop: 20,
     gap: 16,
+  },
+  noInsuranceText: {
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

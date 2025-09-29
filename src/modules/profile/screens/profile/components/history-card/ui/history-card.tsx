@@ -3,16 +3,34 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
 
-export const TestCard: FC = () => {
+interface HistoryCardProps {
+  name: string;
+  color: 'orange' | 'blue';
+}
+
+export const HistoryCard: FC<HistoryCardProps> = ({ name, color }) => {
   const { colors } = useTheme();
 
+  const background = {
+    orange: colors.orange['50'],
+    blue: colors.blue['100'],
+  };
+
+  const secondary = {
+    orange: colors.orange['600'],
+    blue: colors.primary,
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.orange['50'] }]}>
-      <Text style={[styles.name, { color: colors.orange['600'] }]}>
-        Название анализа
+    <View style={[styles.container, { backgroundColor: background[color] }]}>
+      <Text
+        numberOfLines={1}
+        style={[styles.name, { color: secondary[color] }]}
+      >
+        {name}
       </Text>
       <TouchableOpacity
-        style={[styles.openButton, { backgroundColor: colors.orange['600'] }]}
+        style={[styles.openButton, { backgroundColor: secondary[color] }]}
       >
         <Text style={[styles.openButtonLabel, { color: colors.white }]}>
           Открыть
@@ -35,6 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 600,
     lineHeight: 25,
+    flex: 1,
   },
   openButton: {
     paddingHorizontal: 12,

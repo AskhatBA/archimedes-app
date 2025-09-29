@@ -5,14 +5,14 @@ import { globalStyles } from '@/shared/theme';
 
 import { HistoryCard } from '../../history-card';
 
-export const MyTests: FC = () => {
+export const AppointmentHistory: FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={globalStyles.sectionHeading}>Мои анализы</Text>
+      <Text style={globalStyles.sectionHeading}>История обращений</Text>
       <View style={styles.tests}>
-        <HistoryCard color="orange" name="12/09 - ОАК" />
-        <HistoryCard color="orange" name="12/09 - Анализ мочи" />
-        <HistoryCard color="orange" name="12/09 - Глубинный анализ" />
+        <HistoryCard color="blue" name="12/09 - Терапевт" />
+        <HistoryCard color="blue" name="15/09 - Оториноларин..." />
+        <HistoryCard color="blue" name="30/10 - Терапевт" />
       </View>
     </View>
   );
