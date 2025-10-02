@@ -39,7 +39,10 @@ export namespace Mis {
 */
   export namespace FindPatientList {
     export type RequestParams = {};
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /** Individual Identification Number */
+      iin: string;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = {
@@ -257,6 +260,34 @@ export namespace Mis {
       /** @example true */
       success?: boolean;
       appointments?: MISAppointment[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name AppointmentsDelete
+ * @summary Delete an appointment
+ * @request DELETE:/mis/appointments/{appointmentId}
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Appointment deleted successfully
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace AppointmentsDelete {
+    export type RequestParams = {
+      /** Appointment ID to delete */
+      appointmentId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
     };
   }
 }

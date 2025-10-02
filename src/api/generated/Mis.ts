@@ -39,7 +39,13 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
 }` Patient found successfully
  * @response `401` `void` User not found or unauthorized
  */
-  findPatientList = (params: RequestParams = {}) =>
+  findPatientList = (
+    query: {
+      /** Individual Identification Number */
+      iin: string;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<
       {
         /** @example true */
@@ -50,6 +56,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/find-patient`,
       method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,
@@ -303,6 +310,35 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/appointments`,
       method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name AppointmentsDelete
+ * @summary Delete an appointment
+ * @request DELETE:/mis/appointments/{appointmentId}
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Appointment deleted successfully
+ * @response `401` `void` User not found or unauthorized
+ */
+  appointmentsDelete = (appointmentId: string, params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+      },
+      void
+    >({
+      path: `/mis/appointments/${appointmentId}`,
+      method: 'DELETE',
       secure: true,
       format: 'json',
       ...params,

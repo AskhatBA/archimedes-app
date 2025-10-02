@@ -24,6 +24,11 @@ export const useInsuranceServiceAuth = () => {
       });
     },
     onError: () => {
+      showToast({
+        type: 'error',
+        message:
+          'К сожалению, мы не нашли вас в базе данных страховой компании',
+      });
       setIsUserHasInsuranceAccount(true);
     },
   });
@@ -35,6 +40,7 @@ export const useInsuranceServiceAuth = () => {
       await queryClient.invalidateQueries({
         queryKey: ['check-insurance-service-auth'],
       });
+      await queryClient.invalidateQueries({ queryKey: ['programs'] });
       showToast({
         type: 'success',
         message: 'Авторизация прошла успешно',

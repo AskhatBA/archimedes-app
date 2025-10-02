@@ -7,7 +7,7 @@ import { useTheme } from '@/shared/theme';
 
 interface InsuranceCardProps {
   level: string;
-  price: number;
+  price: string;
   programId: string;
 }
 
@@ -26,7 +26,7 @@ export const InsuranceCard: FC<InsuranceCardProps> = ({
           {level}
         </Text>
         <Text style={[styles.price, { color: colors.blue['500'] }]}>
-          {price} ₸
+          {price}
         </Text>
         <Button
           variant="secondary"

@@ -7,7 +7,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -23,6 +22,8 @@ import { useTheme } from '@/shared/theme';
 
 import { CreateUserForm, CreateUserPayload } from '../forms/create-user-form';
 import { useMisPatient } from '../hooks/use-mis-patient';
+
+import { SupportDetails } from './support-details';
 
 export const CreateUserScreen: FC = () => {
   const { colors } = useTheme();
@@ -99,29 +100,36 @@ export const CreateUserScreen: FC = () => {
         <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
           <View style={styles.container}>
             <Text style={[styles.title, { color: colors.blue['400'] }]}>
-              Данные пациента
+              {isUserExistsInMis ? 'Данные пациента' : 'Служба поддержки'}
             </Text>
-            <CreateUserForm
-              submitButtonText={isUserExistsInMis ? 'Продолжить' : 'Сохранить'}
-              isLoading={
-                saveUserProfileMutation.isPending ||
-                misProfileMutation.isPending
-              }
-              initialValues={{
-                firstName: misPatient?.patient?.firstName,
-                lastName: misPatient?.patient?.lastName,
-                birthDate: misPatient?.patient?.birthDate,
-                patronymic: misPatient?.patient?.patronymic,
-                iin: misPatient?.patient?.iin,
-                gender: misPatient?.patient?.gender,
-              }}
-              onSubmit={async formValues => {
-                if (!isUserExistsInMis) {
-                  await misProfileMutation.mutateAsync(formValues);
+            {isUserExistsInMis ? (
+              <CreateUserForm
+                submitButtonText={
+                  isUserExistsInMis ? 'Продолжить' : 'Сохранить'
                 }
-                await saveUserProfileMutation.mutateAsync(formValues);
-              }}
-            />
+                isLoading={
+                  saveUserProfileMutation.isPending ||
+                  misProfileMutation.isPending
+                }
+                initialValues={{
+                  firstName: misPatient?.patient?.firstName,
+                  lastName: misPatient?.patient?.lastName,
+                  birthDate: misPatient?.patient?.birthDate,
+                  patronymic: misPatient?.patient?.patronymic,
+                  iin: misPatient?.patient?.iin,
+                  gender: misPatient?.patient?.gender,
+                }}
+                onSubmit={async formValues => {
+                  if (!isUserExistsInMis) {
+                    await misProfileMutation.mutateAsync(formValues);
+                  }
+                  await saveUserProfileMutation.mutateAsync(formValues);
+                }}
+              />
+            ) : (
+              <SupportDetails />
+            )}
+
             <TouchableOpacity style={styles.logoutContainer} onPress={onLogout}>
               <Text style={styles.logoutText}>Отменить и выйти</Text>
             </TouchableOpacity>
@@ -134,8 +142,7 @@ export const CreateUserScreen: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingTop: 32,
+    paddingTop: 0,
   },
   title: {
     fontSize: 21,

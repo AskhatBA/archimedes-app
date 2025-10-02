@@ -1,6 +1,14 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActionSheetIOS,
+} from 'react-native';
 
+import { misApi } from '@/api';
 import { getTimeOfDay, formatDate } from '@/shared/adapters/date';
 import { ThreeDotsIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
@@ -12,6 +20,7 @@ interface AppointmentCardProps {
   doctorName: string;
   specialization: string;
   date: string;
+  appointmentId: string;
 }
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({
@@ -19,8 +28,17 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   doctorName,
   specialization,
   date,
+  appointmentId,
 }) => {
   const { colors } = useTheme();
+  const queryClient = useQueryClient();
+
+  const cancelAppointmentMutation = useMutation({
+    mutationFn: () => misApi.appointmentsDelete(appointmentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+  });
 
   const backgrounds = {
     blue: colors.blue['100'],
@@ -50,7 +68,23 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     <TouchableOpacity
       style={[styles.container, { backgroundColor: backgrounds[color] }]}
     >
-      <TouchableOpacity style={styles.moreButton}>
+      <TouchableOpacity
+        style={styles.moreButton}
+        onPress={() => {
+          ActionSheetIOS.showActionSheetWithOptions(
+            {
+              options: ['Отменить бронь', 'Отмена'],
+              cancelButtonIndex: 1,
+              destructiveButtonIndex: 0,
+            },
+            buttonIndex => {
+              if (buttonIndex === 0) {
+                cancelAppointmentMutation.mutate();
+              }
+            },
+          );
+        }}
+      >
         <ThreeDotsIcon color={moreButtonColor[color]} />
       </TouchableOpacity>
       <View style={[styles.square, { backgroundColor: squareColor[color] }]} />

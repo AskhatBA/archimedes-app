@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { SCREEN_WIDTH } from '@/shared/constants';
+import { useAuth } from '@/shared/lib/auth';
 import { useTheme } from '@/shared/theme';
 
 import { SignInForm } from '../forms/sign-in-form';
@@ -20,6 +21,13 @@ const logoImage = require('@/assets/images/main-logo.png');
 
 export const SignInScreen: FC = () => {
   const { colors } = useTheme();
+  // const { setLoginIin, loginIin } = useAuth();
+
+  // useEffect(() => {
+  //   if (loginIin) {
+  //     setLoginIin('');
+  //   }
+  // }, []);
 
   return (
     <SafeAreaView style={styles.wrapper}>

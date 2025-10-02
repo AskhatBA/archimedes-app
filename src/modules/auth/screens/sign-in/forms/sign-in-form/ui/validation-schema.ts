@@ -7,4 +7,7 @@ export const validationSchema = Yup.object().shape({
       'Некорректный формат телефона',
     )
     .required('Обязательное поле'),
+  iin: Yup.string()
+    .length(12, 'ИИН должен содержать 12 цифр')
+    .required('Обязательное поле'),
 });

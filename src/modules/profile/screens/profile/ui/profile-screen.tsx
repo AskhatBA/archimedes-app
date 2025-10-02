@@ -27,7 +27,7 @@ export const ProfileScreen: FC = () => {
             <Text style={[styles.warning, { color: colors.gray['500'] }]}>
               Приложение находится в стадии бета-тестирования. Если вы
               обнаружили ошибку, пожалуйста, сообщите об этом в службу
-              поддержки: support@archimedes.kz
+              поддержки: archimedes.medical.group.kaz@gmail.com
             </Text>
           </View>
         </View>

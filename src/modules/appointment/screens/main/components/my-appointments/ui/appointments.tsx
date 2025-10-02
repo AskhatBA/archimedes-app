@@ -85,6 +85,7 @@ export const Appointments: FC<{ startDate: string }> = ({ startDate }) => {
                   <AppointmentCard
                     color={currentSeparatorType as AppointmentCardColors}
                     key={appointment.id}
+                    appointmentId={appointment.id}
                     date={appointment.start_time}
                     doctorName={appointment.doctor_name}
                     specialization={appointment.branch_name}

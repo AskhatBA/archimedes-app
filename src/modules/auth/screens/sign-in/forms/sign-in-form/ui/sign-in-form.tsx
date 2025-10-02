@@ -11,7 +11,7 @@ import { TermsConsent } from '../../../components/terms-consent';
 import { validationSchema } from './validation-schema';
 
 export const SignInForm: FC = () => {
-  const { requestOtpMutation } = useAuth();
+  const { requestOtpMutation, loginIin, setLoginIin } = useAuth();
   const [terms, setTerms] = useState(false);
   const [termsError, setTermsError] = useState('');
 
@@ -23,12 +23,14 @@ export const SignInForm: FC = () => {
     useFormik({
       initialValues: {
         phone: '',
+        iin: loginIin,
       },
       onSubmit: formValues => {
         if (!terms) {
           setTermsError('TERMS');
           return;
         }
+        setLoginIin(formValues.iin);
         requestOtpMutation.mutate({
           phone: formatPhoneNumber(formValues.phone),
         });
@@ -40,18 +42,32 @@ export const SignInForm: FC = () => {
 
   return (
     <View>
-      <TextField
-        keyboardType="phone-pad"
-        label="Номер телефона"
-        placeholder="Введите номер телефона"
-        mask="+7 (999) 999-99-99"
-        value={values.phone}
-        error={errors.phone}
-        onChangeText={value => {
-          setFieldError('phone', undefined);
-          handleChange('phone')(value);
-        }}
-      />
+      <View style={{ gap: 24 }}>
+        <TextField
+          keyboardType="phone-pad"
+          label="Номер телефона"
+          placeholder="Введите номер телефона"
+          mask="+7 (999) 999-99-99"
+          value={values.phone}
+          error={errors.phone}
+          onChangeText={value => {
+            setFieldError('phone', undefined);
+            handleChange('phone')(value);
+          }}
+        />
+        <TextField
+          keyboardType="phone-pad"
+          label="ИИН"
+          placeholder="Введите свой ИИН"
+          mask="999999999999"
+          value={values.iin}
+          error={errors.iin}
+          onChangeText={value => {
+            setFieldError('iin', undefined);
+            handleChange('iin')(value);
+          }}
+        />
+      </View>
       <View style={{ marginTop: 35 }}>
         <TermsConsent
           terms={terms}

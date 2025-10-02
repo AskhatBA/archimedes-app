@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import { insuranceApi } from '@/api';
 
 export const usePrograms = () => {
-  const { data: programs, isLoading: loadingPrograms } = useQuery({
+  const {
+    data: programs,
+    isLoading: loadingPrograms,
+    error,
+  } = useQuery({
     queryKey: ['programs'],
     queryFn: async () => (await insuranceApi.programsList()).data?.programs,
   });
@@ -11,6 +16,9 @@ export const usePrograms = () => {
   return {
     programs,
     loadingPrograms,
+    isNotAuthorized:
+      (error as AxiosError<{ message: string }>)?.response?.data?.message ===
+      'INSURANCE_USER_NOT_AUTHORIZED',
   };
 };
 

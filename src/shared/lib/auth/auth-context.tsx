@@ -12,7 +12,6 @@ import {
 
 import {
   authApi,
-  resolveErrorMessage,
   RequestOTPBody,
   VerifyOTPBody,
   RequestOTPResponse,
@@ -44,6 +43,8 @@ interface AuthContextProps {
   requestOtpMutation: RequestOtpMutation;
   verifyOtpMutation: VerifyOtpMutation;
   logout: () => Promise<void>;
+  loginIin: string;
+  setLoginIin: (iin: string) => void;
 }
 
 const initialValues: AuthContextProps = {
@@ -53,6 +54,8 @@ const initialValues: AuthContextProps = {
   requestOtpMutation: {} as RequestOtpMutation,
   verifyOtpMutation: {} as VerifyOtpMutation,
   logout: () => Promise.resolve(),
+  loginIin: '',
+  setLoginIin: () => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(initialValues);
@@ -64,6 +67,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
   const { resetNavigation, navigate } = useNavigation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loginIin, setLoginIin] = useState('');
 
   const authenticate = async (tokens: VerifyOTPResponse) => {
     setIsLoading(true);
@@ -128,6 +132,8 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
       requestOtpMutation,
       verifyOtpMutation,
       logout,
+      loginIin,
+      setLoginIin,
     }),
     [
       isAuthenticated,

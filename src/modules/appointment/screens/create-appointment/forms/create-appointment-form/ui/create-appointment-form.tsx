@@ -96,7 +96,7 @@ export const CreateAppointmentForm: FC = () => {
         </View>
       )}
 
-      {availableSlots && availableSlots[selectedDate] && (
+      {availableSlots && availableSlots[selectedDate] ? (
         <View>
           <Text
             style={[
@@ -116,6 +116,10 @@ export const CreateAppointmentForm: FC = () => {
             }))}
           />
         </View>
+      ) : (
+        <Text style={[styles.noSlots, { color: colors.textMain }]}>
+          Нет доступных слотов
+        </Text>
       )}
 
       <Button
@@ -132,5 +136,9 @@ export const CreateAppointmentForm: FC = () => {
 const styles = StyleSheet.create({
   container: {
     gap: 32,
+  },
+  noSlots: {
+    marginVertical: 8,
+    textAlign: 'center',
   },
 });
