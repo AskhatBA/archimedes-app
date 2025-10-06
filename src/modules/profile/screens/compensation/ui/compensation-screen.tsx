@@ -59,58 +59,58 @@ export const CompensationScreen: FC = () => {
     }
   }, [isUserAuthorized]);
 
-  if (isLoading || isOtpSending) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
-    );
-  }
-
-  if (isUserHasInsuranceAccount) {
-    return (
-      <View style={{ paddingTop: 80, paddingHorizontal: 32, gap: 24 }}>
-        <Text
-          style={{
-            color: colors.textMain,
-            fontSize: 24,
-            textAlign: 'center',
-            fontWeight: 500,
-          }}
-        >
-          Вы не зарегистрированы в базе страховой компании.
-        </Text>
-        <Text style={[styles.noAccountCaption, { color: colors.textMain }]}>
-          Для использования сервиса обновите данные или свяжитесь с поддержкой
-        </Text>
-        <Button onPress={goBack} style={{ marginTop: 32 }}>
-          Вернуться
-        </Button>
-      </View>
-    );
-  }
-
-  if (isUserAuthorized === false) {
-    return (
-      <View style={{ flex: 1 }}>
-        <OtpContainer
-          isSending={isOtpChecking}
-          onSend={otpCode => {
-            verifyOtp(otpCode);
-          }}
-          onResend={() => {
-            sendOtp();
-          }}
-        />
-      </View>
-    );
-  }
+  // if (isLoading || isOtpSending) {
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         alignItems: 'center',
+  //         justifyContent: 'center',
+  //       }}
+  //     >
+  //       <ActivityIndicator color={colors.primary} size="large" />
+  //     </View>
+  //   );
+  // }
+  //
+  // if (isUserHasInsuranceAccount) {
+  //   return (
+  //     <View style={{ paddingTop: 80, paddingHorizontal: 32, gap: 24 }}>
+  //       <Text
+  //         style={{
+  //           color: colors.textMain,
+  //           fontSize: 24,
+  //           textAlign: 'center',
+  //           fontWeight: 500,
+  //         }}
+  //       >
+  //         Вы не зарегистрированы в базе страховой компании.
+  //       </Text>
+  //       <Text style={[styles.noAccountCaption, { color: colors.textMain }]}>
+  //         Для использования сервиса обновите данные или свяжитесь с поддержкой
+  //       </Text>
+  //       <Button onPress={goBack} style={{ marginTop: 32 }}>
+  //         Вернуться
+  //       </Button>
+  //     </View>
+  //   );
+  // }
+  //
+  // if (isUserAuthorized === false) {
+  //   return (
+  //     <View style={{ flex: 1 }}>
+  //       <OtpContainer
+  //         isSending={isOtpChecking}
+  //         onSend={otpCode => {
+  //           verifyOtp(otpCode);
+  //         }}
+  //         onResend={() => {
+  //           sendOtp();
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // }
 
   if (isSuccess) return <SuccessRefundRequest />;
 

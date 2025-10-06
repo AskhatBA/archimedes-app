@@ -14,7 +14,7 @@ export const usePrograms = () => {
   });
 
   return {
-    programs,
+    programs: programs || [],
     loadingPrograms,
     isNotAuthorized:
       (error as AxiosError<{ message: string }>)?.response?.data?.message ===

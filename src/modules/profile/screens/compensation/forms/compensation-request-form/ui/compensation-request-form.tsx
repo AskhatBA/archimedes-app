@@ -50,6 +50,9 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
 
   const { programs, loadingPrograms } = usePrograms();
   const { family, loadingFamily } = useFamily(values.program);
+  const activePrograms = programs.filter(
+    program => program.status !== 'EXPIRED',
+  );
 
   return (
     <View style={styles.container}>
@@ -57,9 +60,9 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         <SelectField
           value={values.program}
           onChange={value => handleChange('program')(value)}
-          options={programs.map(program => ({
+          options={activePrograms.map(program => ({
             value: program.id,
-            label: `${program.title} (${program.status})`,
+            label: `${program.title} (${program.cardNo})`,
           }))}
           placeholder="Выберите программу"
           error={errors.program}

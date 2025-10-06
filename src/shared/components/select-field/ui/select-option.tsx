@@ -35,7 +35,12 @@ export const SelectOption: FC<SelectOptionProps> = ({
         {label}
       </Text>
       {isSelected && (
-        <SelectIndicator width={24} height={24} color={colors.blue['400']} />
+        <SelectIndicator
+          width={24}
+          height={24}
+          color={colors.blue['400']}
+          style={{ flexShrink: 0 }}
+        />
       )}
     </TouchableOpacity>
   );
@@ -48,10 +53,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     paddingVertical: 16,
+    gap: 4,
   },
   label: {
     fontSize: 18,
     lineHeight: 22,
     fontWeight: 500,
+    flex: 1,
   },
 });

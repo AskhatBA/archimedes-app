@@ -3,9 +3,11 @@ import { FC, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import { SelectDrawer } from '@/shared/components/select-field';
-import { FileIcon, UploadFileIcon, CloseIcon } from '@/shared/icons';
+import { FileIcon, UploadFileIcon } from '@/shared/icons';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
+
+import { documentTypes } from '../constants';
 
 interface AttachedDocument {
   file: DocumentPickerResponse;
@@ -17,17 +19,6 @@ interface AttachDocumentsProps {
   onLoadFile: (data: AttachedDocument) => void;
   onRemove: (file: DocumentPickerResponse) => void;
 }
-
-const documentTypes = [
-  {
-    value: 'Кассовый чек',
-    label: 'Кассовый чек',
-  },
-  {
-    value: 'Удостоверение личности',
-    label: 'Удостоверение личности',
-  },
-];
 
 export const AttachDocuments: FC<AttachDocumentsProps> = ({
   files,
@@ -106,7 +97,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
           </TouchableOpacity>
         ))}
         <TouchableOpacity
-          onPress={pickFile}
+          onPress={() => setShowDocumentType(true)}
           style={[styles.uploadButton, { backgroundColor: colors.blue['100'] }]}
         >
           <UploadFileIcon width={36} height={36} color={colors.primary} />
@@ -122,7 +113,10 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
         onChange={load}
         buttonText="Выбрать"
         selected={documentType}
-        setSelected={setDocumentType}
+        setSelected={value => {
+          pickFile();
+          setDocumentType(value);
+        }}
         onClose={onCloseDrawer}
         options={documentTypes}
       />

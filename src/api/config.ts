@@ -1,7 +1,7 @@
 // import { config } from '@/shared/config';
 
-// const URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
-const URL = 'http://localhost:4000/v1/api';
+const URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
+// const URL = 'http://localhost:4000/v1/api';
 
 const securityWorker = (token: string | null | undefined): Promise<any> => {
   const securityConfig = {
