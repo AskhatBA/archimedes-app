@@ -1,13 +1,12 @@
 import { FC } from 'react';
-
-import { MainLayout } from '@/shared/layout/main-layout';
+import { View } from 'react-native';
 
 import { History } from '../components/history';
 
 export const CompensationsHistoryScreen: FC = () => {
   return (
-    <MainLayout>
+    <View style={{ paddingHorizontal: 24 }}>
       <History />
-    </MainLayout>
+    </View>
   );
 };

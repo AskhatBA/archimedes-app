@@ -10,12 +10,15 @@
  */
 
 import {
+  AvailableInsuranceCity,
   CheckUserAuthorizationResponse,
+  ElectronicReferralItem,
   InsuranceFamilyResponse,
   InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
+  MedicalNetworkClinics,
   RefundRequestBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
@@ -222,6 +225,117 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
     this.request<InsuranceRefundRequestsResponse, void>({
       path: `/insurance/refund-requests`,
       method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name CitiesList
+ * @summary Get list of cities from insurance service
+ * @request GET:/insurance/cities
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    cities?: (AvailableInsuranceCity)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ */
+  citiesList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        cities?: AvailableInsuranceCity[];
+      },
+      void
+    >({
+      path: `/insurance/cities`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name MedicalNetworkList
+ * @summary Get list of medical network locations
+ * @request GET:/insurance/medical-network
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinics?: (MedicalNetworkClinics)[],
+
+}` Response
+ * @response `400` `void` Bad Request - Missing required parameters
+ * @response `401` `void` Unauthorized
+ */
+  medicalNetworkList = (
+    query: {
+      /** City ID */
+      cityId: string;
+      /** Program ID */
+      programId: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        clinics?: MedicalNetworkClinics[];
+      },
+      void
+    >({
+      path: `/insurance/medical-network`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name ElectronicReferralsList
+ * @summary Get electronic referrals (appointments)
+ * @request GET:/insurance/electronic-referrals
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    electronicReferrals?: (ElectronicReferralItem)[],
+
+}` Response
+ * @response `400` `void` Bad Request - Missing required parameters
+ * @response `401` `void` Unauthorized
+ */
+  electronicReferralsList = (
+    query: {
+      /** Program ID */
+      programId: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        electronicReferrals?: ElectronicReferralItem[];
+      },
+      void
+    >({
+      path: `/insurance/electronic-referrals`,
+      method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,

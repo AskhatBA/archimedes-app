@@ -27,16 +27,6 @@ export const CompensationScreen: FC = () => {
   const { colors } = useTheme();
   const deviceInsets = useSafeAreaInsets();
   const { showToast } = useToast();
-  const { goBack } = useNavigation();
-  const {
-    isUserAuthorized,
-    isLoading,
-    sendOtp,
-    verifyOtp,
-    isOtpSending,
-    isOtpChecking,
-    isUserHasInsuranceAccount,
-  } = useInsuranceServiceAuth();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const refundRequestMutation = useMutation({
@@ -53,69 +43,10 @@ export const CompensationScreen: FC = () => {
     },
   });
 
-  useEffect(() => {
-    if (isUserAuthorized === false) {
-      sendOtp();
-    }
-  }, [isUserAuthorized]);
-
-  // if (isLoading || isOtpSending) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         alignItems: 'center',
-  //         justifyContent: 'center',
-  //       }}
-  //     >
-  //       <ActivityIndicator color={colors.primary} size="large" />
-  //     </View>
-  //   );
-  // }
-  //
-  // if (isUserHasInsuranceAccount) {
-  //   return (
-  //     <View style={{ paddingTop: 80, paddingHorizontal: 32, gap: 24 }}>
-  //       <Text
-  //         style={{
-  //           color: colors.textMain,
-  //           fontSize: 24,
-  //           textAlign: 'center',
-  //           fontWeight: 500,
-  //         }}
-  //       >
-  //         Вы не зарегистрированы в базе страховой компании.
-  //       </Text>
-  //       <Text style={[styles.noAccountCaption, { color: colors.textMain }]}>
-  //         Для использования сервиса обновите данные или свяжитесь с поддержкой
-  //       </Text>
-  //       <Button onPress={goBack} style={{ marginTop: 32 }}>
-  //         Вернуться
-  //       </Button>
-  //     </View>
-  //   );
-  // }
-  //
-  // if (isUserAuthorized === false) {
-  //   return (
-  //     <View style={{ flex: 1 }}>
-  //       <OtpContainer
-  //         isSending={isOtpChecking}
-  //         onSend={otpCode => {
-  //           verifyOtp(otpCode);
-  //         }}
-  //         onResend={() => {
-  //           sendOtp();
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // }
-
   if (isSuccess) return <SuccessRefundRequest />;
 
   return (
-    <MainLayout>
+    <>
       <ScrollView
         contentContainerStyle={[
           styles.container,
@@ -128,10 +59,11 @@ export const CompensationScreen: FC = () => {
         <CompensationRequestForm
           onSubmit={async requestParams => {
             const promises = requestParams.files.map(async file => {
-              const base64Content = await convertUriToBase64(file.file.uri);
+              const base64Content = await convertUriToBase64(file.uri);
+
               return {
-                fileType: file.file.type,
-                fileName: file.file.name,
+                fileType: file.type,
+                fileName: file.name,
                 content: base64Content,
               };
             });
@@ -148,18 +80,20 @@ export const CompensationScreen: FC = () => {
           }}
         />
       </ScrollView>
+
       {refundRequestMutation.isPending && (
         <View style={[styles.loaderBackdrop, { top: -deviceInsets.top - 54 }]}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
       )}
-    </MainLayout>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     gap: 32,
+    paddingHorizontal: 24,
   },
   heading: {
     fontSize: 24,

@@ -8,6 +8,7 @@ import { useTheme } from '@/shared/theme';
 type CompensationCardProps = InsuranceRefundRequest;
 
 export const CompensationCard: FC<CompensationCardProps> = ({
+  id,
   person,
   date,
   amount,
@@ -16,8 +17,21 @@ export const CompensationCard: FC<CompensationCardProps> = ({
   const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { borderColor: colors.gray['300'] }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.blue['100'],
+        },
+      ]}
+    >
       <Text style={[styles.name, { color: colors.textMain }]}>{person}</Text>
+      <View style={[styles.row, { marginBottom: 8 }]}>
+        <Text>Номер заявки: </Text>
+        <Text style={[styles.indificator, { color: colors.textMain }]}>
+          {id}
+        </Text>
+      </View>
       <View style={styles.row}>
         <Text style={[styles.label, { color: colors.textMain }]}>Дата: </Text>
         <Text style={[styles.value, { color: colors.textMain }]}>
@@ -40,11 +54,12 @@ export const CompensationCard: FC<CompensationCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderStyle: 'solid',
     borderRadius: 12,
-    borderWidth: 1,
     padding: 16,
     gap: 6,
+  },
+  indificator: {
+    fontWeight: 600,
   },
   row: {
     flexDirection: 'row',
@@ -61,6 +76,5 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: 600,
-    marginBottom: 8,
   },
 });

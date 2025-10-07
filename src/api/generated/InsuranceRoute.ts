@@ -10,12 +10,15 @@
  */
 
 import {
+  AvailableInsuranceCity,
   CheckUserAuthorizationResponse,
+  ElectronicReferralItem,
   InsuranceFamilyResponse,
   InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
+  MedicalNetworkClinics,
   RefundRequestBody,
 } from './data-contracts';
 
@@ -201,5 +204,96 @@ export namespace Insurance {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = InsuranceRefundRequestsResponse;
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name CitiesList
+ * @summary Get list of cities from insurance service
+ * @request GET:/insurance/cities
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    cities?: (AvailableInsuranceCity)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+*/
+  export namespace CitiesList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      cities?: AvailableInsuranceCity[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name MedicalNetworkList
+ * @summary Get list of medical network locations
+ * @request GET:/insurance/medical-network
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinics?: (MedicalNetworkClinics)[],
+
+}` Response
+ * @response `400` `void` Bad Request - Missing required parameters
+ * @response `401` `void` Unauthorized
+*/
+  export namespace MedicalNetworkList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** City ID */
+      cityId: string;
+      /** Program ID */
+      programId: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      clinics?: MedicalNetworkClinics[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name ElectronicReferralsList
+ * @summary Get electronic referrals (appointments)
+ * @request GET:/insurance/electronic-referrals
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    electronicReferrals?: (ElectronicReferralItem)[],
+
+}` Response
+ * @response `400` `void` Bad Request - Missing required parameters
+ * @response `401` `void` Unauthorized
+*/
+  export namespace ElectronicReferralsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Program ID */
+      programId: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      electronicReferrals?: ElectronicReferralItem[];
+    };
   }
 }

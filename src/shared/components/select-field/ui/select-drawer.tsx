@@ -1,9 +1,11 @@
 import { FC } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { Button } from '@/shared/components/button';
 import { SelectOption } from '@/shared/components/select-field/ui/select-option';
+import { colors } from '@/shared/theme';
 
 import { SelectFieldOption } from '../types';
 
@@ -26,27 +28,52 @@ export const SelectDrawer: FC<SelectDrawerProps> = ({
   selected,
   setSelected,
 }) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <BottomDrawer visible={isOpen} onClose={onClose}>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 24, paddingHorizontal: 16 }}
+        contentContainerStyle={{
+          paddingBottom: 130,
+          paddingHorizontal: 16,
+        }}
       >
-        {options.map(option => (
+        {options.map((option, index) => (
           <SelectOption
             key={option.value}
             isSelected={option.value === selected}
+            isLast={options.length - 1 === index}
             {...option}
             onSelect={selectedValue => setSelected(selectedValue)}
           />
         ))}
       </ScrollView>
-      <Button
-        onPress={() => onChange(selected)}
-        style={styles.selectButton}
-        disabled={!selected}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          backgroundColor: colors.white,
+          paddingBottom: insets.bottom,
+          shadowColor: colors.gray['500'],
+          shadowOffset: {
+            width: 0,
+            height: -2,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3,
+          elevation: 5,
+        }}
       >
-        {buttonText}
-      </Button>
+        <Button
+          onPress={() => onChange(selected)}
+          style={styles.selectButton}
+          disabled={!selected}
+        >
+          {buttonText}
+        </Button>
+      </View>
     </BottomDrawer>
   );
 };

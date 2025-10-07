@@ -196,6 +196,57 @@ export interface InsuranceRefundRequestsResponse {
   refundRequests?: InsuranceRefundRequest[];
 }
 
+export interface AvailableInsuranceCity {
+  /** @example 1 */
+  id: number;
+  /** @example "Астана" */
+  title: string;
+}
+
+export interface MedicalNetworkClinics {
+  /** @example 1 */
+  id?: number;
+  /** @example 1 */
+  city?: number;
+  /** @example "Medical Center" */
+  title?: string;
+  /** @example "123 Healthcare St." */
+  address?: string;
+  /** @example null */
+  contacts?: any;
+  /** @example 51.1801 */
+  latitude?: number;
+  /** @example 71.446 */
+  longitude?: number;
+  /** @example "https://2gis.kz/clinic" */
+  link2GIS?: string;
+  /** @example null */
+  extraInformation?: any;
+}
+
+export interface ElectronicReferralDetail {
+  id?: number;
+  service?: string;
+  amount?: number;
+}
+
+export interface ElectronicReferralItem {
+  id?: number;
+  /** @example "10.11.2020" */
+  date?: string;
+  /** @example "Иванов Иван Иванович" */
+  name?: string;
+  /** @example "Алматы, ТОО Архимедес" */
+  medical_institution?: string;
+  /** @example "Остеохондроз" */
+  diagnosis?: string;
+  /** @example 3850 */
+  amount?: number;
+  /** @example "KZT" */
+  currency?: string;
+  appointmentDetail?: ElectronicReferralDetail[];
+}
+
 export interface MISPatient {
   id: string;
   firstName: string;

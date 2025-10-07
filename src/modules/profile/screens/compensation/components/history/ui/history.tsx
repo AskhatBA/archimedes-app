@@ -45,6 +45,7 @@ export const History: FC = () => {
       data={compensationRequests}
       renderItem={({ item: request }) => <CompensationCard {...request} />}
       keyExtractor={request => `${request.id}`}
+      contentContainerStyle={{ gap: 16 }}
     />
   );
 };

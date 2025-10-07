@@ -9,6 +9,7 @@ import { SelectFieldOption } from '../types';
 interface SelectOptionProps extends SelectFieldOption {
   onSelect?: (value: string) => void;
   isSelected: boolean;
+  isLast?: boolean;
 }
 
 export const SelectOption: FC<SelectOptionProps> = ({
@@ -16,12 +17,19 @@ export const SelectOption: FC<SelectOptionProps> = ({
   label,
   isSelected,
   onSelect,
+  isLast,
 }) => {
   const { colors } = useTheme();
 
   return (
     <TouchableOpacity
-      style={[styles.container, { borderBottomColor: colors.gray['250'] }]}
+      style={[
+        styles.container,
+        {
+          borderBottomWidth: isLast ? 0 : 1,
+          borderBottomColor: colors.gray['250'],
+        },
+      ]}
       onPress={() => onSelect(value)}
     >
       <Text
@@ -51,7 +59,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
     paddingVertical: 16,
     gap: 4,
   },

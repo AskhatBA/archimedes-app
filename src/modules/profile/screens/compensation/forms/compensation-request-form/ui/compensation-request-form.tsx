@@ -3,20 +3,20 @@ import { FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button } from '@/shared/components/button';
+import { MediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { Datepicker } from '@/shared/components/picker';
 import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
 import { usePrograms, useFamily } from '@/shared/lib/insurance';
 
 import { AttachDocuments } from '../../../components/attach-documents';
-import { AttachedDocument } from '../../../types';
 import { validationSchema } from '../validation-schema';
 
 interface CompensationRequestFormProps {
   onSubmit: (values: {
     date: string;
     amount: number;
-    files: AttachedDocument[];
+    files: MediaFile[];
     programId: string;
     personId: string;
   }) => void;
@@ -25,7 +25,7 @@ interface CompensationRequestFormProps {
 export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
   onSubmit,
 }) => {
-  const [files, setFiles] = useState<AttachedDocument[]>([]);
+  const [files, setFiles] = useState<MediaFile[]>([]);
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -96,19 +96,14 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         onChange={value => handleChange('date')(value)}
         error={errors.date}
       />
-      <AttachDocuments
-        files={files}
-        onRemove={fileToRemove =>
-          setFiles(prevState =>
-            prevState.filter(
-              prevFile => prevFile.file.name !== fileToRemove.name,
-            ),
-          )
-        }
-        onLoadFile={async file => {
-          setFiles(prevState => [...prevState, file]);
-        }}
-      />
+      <MediaPicker onChange={setFiles}>
+        <AttachDocuments
+          files={files}
+          onRemove={fileToRemove => {
+            setFiles(files.filter(f => f.uri !== fileToRemove.uri));
+          }}
+        />
+      </MediaPicker>
       <Button onPress={() => handleSubmit()}>Отправить заявку</Button>
     </View>
   );

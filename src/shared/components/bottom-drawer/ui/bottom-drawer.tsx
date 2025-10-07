@@ -80,13 +80,24 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
               },
             ]}
           >
-            <TouchableOpacity
-              onPress={closeSheet}
-              style={[styles.handle, { backgroundColor: colors.gray['200'] }]}
-            >
-              <CloseIcon width={22} height={22} color={colors.gray['600']} />
-            </TouchableOpacity>
-            {children}
+            <TouchableWithoutFeedback onPress={e => e.stopPropagation()}>
+              <View>
+                <TouchableOpacity
+                  onPress={closeSheet}
+                  style={[
+                    styles.handle,
+                    { backgroundColor: colors.gray['200'] },
+                  ]}
+                >
+                  <CloseIcon
+                    width={22}
+                    height={22}
+                    color={colors.gray['600']}
+                  />
+                </TouchableOpacity>
+                {children}
+              </View>
+            </TouchableWithoutFeedback>
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>

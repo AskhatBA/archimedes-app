@@ -12,7 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
-import { ClipIcon } from '@/shared/icons';
+import { ClipIcon, HospitalIcon, InfoIcon, FileTextIcon } from '@/shared/icons';
 import { useProgramById } from '@/shared/lib/insurance';
 import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
@@ -104,9 +104,37 @@ export const InsuranceDetailsScreen: FC = () => {
               { backgroundColor: colors.gray['200'] },
             ]}
           >
-            <ClipIcon width={24} height={24} color={colors.primary} />
+            <InfoIcon width={24} height={24} color={colors.primary} />
             <Text style={[styles.documentItemText, { color: colors.textMain }]}>
               О программе
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigate(routes.InsuranceMedicalNetwork, { programId })
+            }
+            style={[
+              styles.documentItem,
+              { backgroundColor: colors.gray['200'] },
+            ]}
+          >
+            <HospitalIcon width={24} height={24} color={colors.primary} />
+            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
+              Медицинская сеть
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigate(routes.InsuranceElectronicReferrals, { programId })
+            }
+            style={[
+              styles.documentItem,
+              { backgroundColor: colors.gray['200'] },
+            ]}
+          >
+            <FileTextIcon width={24} height={24} color={colors.primary} />
+            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
+              Электронные направления
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,81 +1,20 @@
-import { FC, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import { FC } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
-import { OtpContainer } from '@/shared/components/otp-container';
-import { useInsuranceServiceAuth, usePrograms } from '@/shared/lib/insurance';
+import { usePrograms } from '@/shared/lib/insurance';
 import { globalStyles, useTheme } from '@/shared/theme';
 
 import { InsuranceCard } from './insurance-card';
 
 export const Insurance: FC = () => {
   const { colors } = useTheme();
-  const {
-    isUserAuthorized,
-    isLoading,
-    sendOtp,
-    verifyOtp,
-    isOtpSending,
-    isOtpChecking,
-  } = useInsuranceServiceAuth();
   const { programs, loadingPrograms } = usePrograms();
-  const [isOtpSent, setIsOtpSent] = useState(false);
 
-  if (loadingPrograms || isLoading) {
+  if (loadingPrograms) {
     return <ActivityIndicator color={colors.primary} />;
   }
 
   const renderInsuranceDetails = () => {
-    if (isOtpSent) {
-      return (
-        <OtpContainer
-          isSending={isOtpChecking}
-          onSend={otpCode => {
-            verifyOtp(otpCode);
-            setIsOtpSent(false);
-          }}
-          onResend={() => sendOtp()}
-        />
-      );
-    }
-
-    if (!isUserAuthorized) {
-      return (
-        <View style={styles.unauthorizedContainer}>
-          <Text
-            style={[styles.unauthorizedText, { color: colors.gray['500'] }]}
-          >
-            Для просмотра информации о страховке необходимо подтвердить аккаунт
-          </Text>
-          {isOtpSending ? (
-            <ActivityIndicator color={colors.primary} />
-          ) : (
-            <TouchableOpacity
-              style={[
-                styles.verifyButton,
-                { backgroundColor: colors.blue['400'] },
-              ]}
-            >
-              <Text
-                style={styles.verifyButtonText}
-                onPress={() => {
-                  sendOtp();
-                  setIsOtpSent(true);
-                }}
-              >
-                Отправить код подтверждения
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      );
-    }
-
     if (!programs || programs?.length === 0) {
       return (
         <Text style={[styles.noInsuranceText, { color: colors.gray['500'] }]}>

@@ -13,6 +13,8 @@ import {
 import {
   InsuranceDetailsScreen,
   InsuranceCertificateScreen,
+  InsuranceMedicalNetworkScreen,
+  InsuranceElectronicReferralsScreen,
 } from '@/modules/profile/screens/insurance-details';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
@@ -74,7 +76,9 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.CompensationsHistory}
         component={CompensationsHistoryScreen}
-        options={{ header: () => <SecondaryTopbar title="" /> }}
+        options={{
+          header: () => <SecondaryTopbar title="История возмещений" />,
+        }}
       />
       <RootStack.Screen
         name={routes.InsuranceDetails}
@@ -86,6 +90,20 @@ export const RootNavigator: FC = () => {
         component={InsuranceCertificateScreen}
         options={{
           header: () => <SecondaryTopbar title="Страховой сертификат" />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceMedicalNetwork}
+        component={InsuranceMedicalNetworkScreen}
+        options={{
+          header: () => <SecondaryTopbar title="Медицинская сеть" />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceElectronicReferrals}
+        component={InsuranceElectronicReferralsScreen}
+        options={{
+          header: () => <SecondaryTopbar title="Электронные направления" />,
         }}
       />
     </RootStack.Navigator>
