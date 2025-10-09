@@ -1,10 +1,16 @@
-import { pick } from '@react-native-documents/picker';
+import {
+  pick,
+  types as RNDocumentsTypes,
+} from '@react-native-documents/picker';
 import { FC } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {
+  launchCamera,
+  launchImageLibrary,
+  ImagePickerResponse,
+} from 'react-native-image-picker';
 
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
-import { useToast } from '@/shared/lib/toast';
 
 import { useMediaPicker } from '../media-picker-context';
 
@@ -17,39 +23,35 @@ const galleryImage = require('@/assets/images/photos-ios.png');
 
 export const ChooseMediaType: FC = () => {
   const { isTypePickerOpen, closeTypePicker, changeFiles } = useMediaPicker();
-  const { showToast } = useToast();
 
   const pickFile = async () => {
     try {
-      const [result] = await pick({
+      const result = await pick({
+        type: [RNDocumentsTypes.allFiles],
         mode: 'import',
       });
 
-      if (!result) return;
+      if (!result?.length) return;
 
+      const [file] = result;
       changeFiles([
         {
-          name: result.name,
-          size: result.size,
-          type: result.type,
-          uri: result.uri,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          uri: file.uri,
         },
       ]);
     } catch (error) {
-      showToast({
-        type: 'error',
-        message: error,
-      });
+      console.log('Document picker error: ', error);
     }
   };
 
-  const pickPhotoFromGallery = async () => {
-    const result = await launchImageLibrary({ mediaType: 'photo' });
-
-    if (!result?.assets.length) return;
+  const putPhotoToFiles = (photoResponse?: ImagePickerResponse) => {
+    if (!photoResponse?.assets.length) return;
 
     changeFiles(
-      result.assets.map(file => ({
+      photoResponse.assets.map(file => ({
         uri: file.uri,
         type: file.type,
         size: file.fileSize,
@@ -58,13 +60,23 @@ export const ChooseMediaType: FC = () => {
     );
   };
 
+  const pickPhotoFromGallery = async () => {
+    const result = await launchImageLibrary({ mediaType: 'photo' });
+    putPhotoToFiles(result);
+  };
+
   return (
     <BottomDrawer visible={isTypePickerOpen} onClose={closeTypePicker}>
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.mediaTypeItem}
           onPress={() =>
-            launchCamera({ cameraType: 'back', mediaType: 'photo' })
+            launchCamera(
+              { cameraType: 'back', mediaType: 'photo' },
+              photoResponse => {
+                putPhotoToFiles(photoResponse);
+              },
+            )
           }
         >
           <Image source={cameraImage} style={styles.mediaTypeItemImage} />

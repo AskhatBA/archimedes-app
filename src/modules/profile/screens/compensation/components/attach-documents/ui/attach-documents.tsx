@@ -1,6 +1,14 @@
 import { DocumentPickerResponse } from '@react-native-documents/picker';
 import { FC, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Platform,
+  ActionSheetIOS,
+} from 'react-native';
 
 import {
   MediaPicker,
@@ -47,21 +55,39 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
                 { borderColor: colors.primary },
               ]}
               onLongPress={() => {
-                Alert.alert(
-                  'Удаление файла',
-                  'Вы действительно хотите удалить этот файл?',
-                  [
-                    {
-                      text: 'Отмена',
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Удалить',
-                      onPress: () => onRemove(file),
-                      style: 'destructive',
-                    },
-                  ],
-                );
+                Platform.select({
+                  ios: () =>
+                    ActionSheetIOS.showActionSheetWithOptions(
+                      {
+                        title: 'Удаление файла',
+                        message: 'Вы действительно хотите удалить этот файл?',
+                        options: ['Отмена', 'Удалить'],
+                        cancelButtonIndex: 0,
+                        destructiveButtonIndex: 1,
+                      },
+                      buttonIndex => {
+                        if (buttonIndex === 1) {
+                          onRemove(file);
+                        }
+                      },
+                    ),
+                  android: () =>
+                    Alert.alert(
+                      'Удаление файла',
+                      'Вы действительно хотите удалить этот файл?',
+                      [
+                        {
+                          text: 'Отмена',
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Удалить',
+                          onPress: () => onRemove(file),
+                          style: 'destructive',
+                        },
+                      ],
+                    ),
+                })();
               }}
             >
               <FileIcon color={colors.blue['400']} width={24} height={24} />

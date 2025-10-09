@@ -34,7 +34,7 @@ export const SelectDrawer: FC<SelectDrawerProps> = ({
     <BottomDrawer visible={isOpen} onClose={onClose}>
       <ScrollView
         contentContainerStyle={{
-          paddingBottom: 130,
+          paddingBottom: 120,
           paddingHorizontal: 16,
         }}
       >
