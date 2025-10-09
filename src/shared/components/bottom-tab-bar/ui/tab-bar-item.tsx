@@ -1,6 +1,6 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { FC } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { colors } from '@/shared/theme';
 
@@ -21,7 +21,7 @@ export const TabBarItem: FC<TabBarItemProps> = ({
   navigation,
 }) => {
   const isActive = state.index === tabIndex;
-  const { Icon } = navigationItems[route.name];
+  const { Icon, label } = navigationItems[route.name];
 
   const onTabPress = (): void => {
     const event = navigation.emit({
@@ -37,7 +37,7 @@ export const TabBarItem: FC<TabBarItemProps> = ({
 
   return (
     <TouchableOpacity
-      style={{ flex: 1, alignItems: 'center' }}
+      style={{ flex: 1, alignItems: 'center', gap: 4 }}
       onPress={onTabPress}
     >
       <View
@@ -46,8 +46,23 @@ export const TabBarItem: FC<TabBarItemProps> = ({
           { backgroundColor: isActive ? colors.blue[100] : colors.gray[200] },
         ]}
       >
-        <Icon color={isActive ? colors.primary : colors.gray[300]} />
+        <Icon
+          width={26}
+          height={26}
+          color={isActive ? colors.primary : colors.gray[300]}
+        />
       </View>
+      <Text
+        style={[
+          styles.label,
+          {
+            color: isActive ? colors.primary : colors.blue['370'],
+            fontWeight: isActive ? 700 : 600,
+          },
+        ]}
+      >
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -56,8 +71,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 45,
-    height: 45,
+    width: 36,
+    height: 36,
     borderRadius: 45,
+  },
+  label: {
+    fontSize: 10,
+    textAlign: 'center',
   },
 });

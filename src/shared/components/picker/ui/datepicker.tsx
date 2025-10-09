@@ -15,6 +15,8 @@ type DateTimePickerProps = {
   label?: string;
   value?: string;
   error?: string;
+  maxDate?: Date;
+  minDate?: Date;
 };
 
 export const Datepicker: FC<DateTimePickerProps> = ({
@@ -23,6 +25,8 @@ export const Datepicker: FC<DateTimePickerProps> = ({
   onChange,
   label,
   error,
+  maxDate,
+  minDate,
 }) => {
   const [iosPickerOpened, setIosPickerOpened] = useState(false);
   const [timestamp, setTimestamp] = useState<number>();
@@ -55,6 +59,8 @@ export const Datepicker: FC<DateTimePickerProps> = ({
       >
         <View style={styles.pickerContainer}>
           <RNDateTimePicker
+            maximumDate={maxDate}
+            minimumDate={minDate}
             value={timestamp ? formatToDateObject(timestamp) : new Date()}
             display="spinner"
             onChange={event => {

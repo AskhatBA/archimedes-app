@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 export interface TabBarItemType {
-  Icon: FC<{ color: string }>;
+  Icon: FC<{ color: string; width?: number; height?: number }>;
   label: string;
 }
 

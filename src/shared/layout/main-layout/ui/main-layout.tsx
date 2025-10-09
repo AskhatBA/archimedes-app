@@ -14,7 +14,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       style={[
         styles.container,
         {
-          paddingTop: deviceInsets.top + 16,
+          paddingTop: 16,
           paddingBottom: deviceInsets.bottom + 16,
         },
       ]}

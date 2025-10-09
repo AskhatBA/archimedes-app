@@ -28,7 +28,7 @@ export const MyAppointments: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
+    marginTop: 8,
     marginHorizontal: -32,
   },
   heading: {

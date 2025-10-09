@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -7,6 +7,7 @@ import {
   StyleProp,
   ViewStyle,
   ActivityIndicator,
+  View,
 } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
@@ -19,6 +20,7 @@ interface ButtonProps extends NativeButtonProps {
   size?: ButtonSize;
   style?: StyleProp<ViewStyle>;
   isLoading?: boolean;
+  icon?: ReactNode;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -27,6 +29,7 @@ export const Button: FC<ButtonProps> = ({
   size = 'md',
   style,
   isLoading,
+  icon,
   ...props
 }) => {
   const { colors } = useTheme();
@@ -65,6 +68,7 @@ export const Button: FC<ButtonProps> = ({
       {isLoading && (
         <ActivityIndicator color={fontColor[variant]} size="small" />
       )}
+      {icon && <View>{icon}</View>}
       <Text
         style={[
           styles.primaryText,

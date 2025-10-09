@@ -23,7 +23,11 @@ function App() {
               <ThemeProvider>
                 <AuthContextProvider>
                   <UserContextProvider>
-                    <StatusBar barStyle="dark-content" />
+                    <StatusBar
+                      barStyle="dark-content"
+                      backgroundColor="white"
+                      translucent={false}
+                    />
                     <RootNavigator />
                   </UserContextProvider>
                 </AuthContextProvider>

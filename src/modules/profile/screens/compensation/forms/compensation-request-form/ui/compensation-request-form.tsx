@@ -95,6 +95,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         label="Дата наступления страхового случая"
         onChange={value => handleChange('date')(value)}
         error={errors.date}
+        maxDate={new Date()}
       />
       <MediaPicker onChange={setFiles}>
         <AttachDocuments

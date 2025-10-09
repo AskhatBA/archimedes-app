@@ -11,18 +11,18 @@ import { TabBarItemType } from './types';
 export const navigationItems: Record<string, TabBarItemType> = {
   [routes.Home]: {
     Icon: TabBarHomeIcon,
-    label: 'Home',
+    label: 'Главная',
   },
   [routes.AppointmentsMain]: {
     Icon: TabBarAppointmentsIcon,
-    label: 'Appointments',
+    label: 'Записи',
   },
   [routes.Notifications]: {
     Icon: TabBarNotificationsIcon,
-    label: 'NotificationsScreen',
+    label: 'Уведомл-я',
   },
   [routes.Profile]: {
     Icon: TabBarProfileIcon,
-    label: 'Profile',
+    label: 'Профиль',
   },
 };
