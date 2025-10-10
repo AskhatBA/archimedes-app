@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { InsuranceCard } from '@/modules/insurance/components/insurance-card';
 import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
-import { FilePenIcon } from '@/shared/icons';
+import { FilePenIcon, ShieldX } from '@/shared/icons';
 import { usePrograms } from '@/shared/lib/insurance';
 import { useNavigation, routes } from '@/shared/navigation';
 import { colors, globalStyles } from '@/shared/theme';
@@ -27,29 +27,23 @@ export const InsuranceMainScreen: FC = () => {
     return <ScreenLoader text="Получаем данные из страховой" />;
   }
 
-  const renderInsuranceDetails = () => {
-    if (!programs || programs.length === 0) {
-      return (
-        <Text style={[styles.noInsuranceText, { color: colors.gray['500'] }]}>
-          Нет активных страховок
+  if (!programs || programs.length === 0) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 16,
+        }}
+      >
+        <ShieldX width={120} height={120} color={colors.blue['370']} />
+        <Text style={{ fontWeight: 400, fontSize: 18, color: colors.primary }}>
+          У вас пока нет активных страховок
         </Text>
-      );
-    }
-
-    return programs.map(program => {
-      if (program.status === 'EXPIRED') return null;
-
-      return (
-        <InsuranceCard
-          key={program.id}
-          dateEnd={program.dateEnd}
-          programId={program.id}
-          price={program.cardNo}
-          level={program.title}
-        />
-      );
-    });
-  };
+      </View>
+    );
+  }
 
   return (
     <>
@@ -61,7 +55,21 @@ export const InsuranceMainScreen: FC = () => {
       >
         <View style={styles.container}>
           <Text style={globalStyles.sectionHeading}>Страховка</Text>
-          <View style={styles.cards}>{renderInsuranceDetails()}</View>
+          <View style={styles.cards}>
+            {programs.map(program => {
+              if (program.status === 'EXPIRED') return null;
+
+              return (
+                <InsuranceCard
+                  key={program.id}
+                  dateEnd={program.dateEnd}
+                  programId={program.id}
+                  price={program.cardNo}
+                  level={program.title}
+                />
+              );
+            })}
+          </View>
           <CompensationHistory />
         </View>
       </ScrollView>

@@ -11,6 +11,7 @@ export const usePrograms = () => {
   } = useQuery({
     queryKey: ['programs'],
     queryFn: async () => (await insuranceApi.programsList()).data?.programs,
+    retry: false,
   });
 
   return {
