@@ -3,6 +3,7 @@ import {
   TabBarProfileIcon,
   TabBarNotificationsIcon,
   TabBarHomeIcon,
+  ShieldPlusIcon,
 } from '@/shared/icons';
 import { routes } from '@/shared/navigation';
 
@@ -16,6 +17,10 @@ export const navigationItems: Record<string, TabBarItemType> = {
   [routes.AppointmentsMain]: {
     Icon: TabBarAppointmentsIcon,
     label: 'Записи',
+  },
+  [routes.Insurance]: {
+    Icon: ShieldPlusIcon,
+    label: 'Страховка',
   },
   [routes.Notifications]: {
     Icon: TabBarNotificationsIcon,

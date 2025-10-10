@@ -31,6 +31,11 @@ export const TabNavigator: FC = () => {
         options={{ header: () => <StatusBarUnderlay /> }}
       />
       <Tab.Screen
+        name={routes.Insurance}
+        component={AppointmentsMainScreen}
+        options={{ header: () => <StatusBarUnderlay /> }}
+      />
+      <Tab.Screen
         name={routes.Notifications}
         component={NotificationsScreen}
         options={{ header: () => <StatusBarUnderlay /> }}
