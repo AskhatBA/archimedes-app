@@ -26,9 +26,9 @@ export const CompensationCard: FC<CompensationCardProps> = ({
       ]}
     >
       <Text style={[styles.name, { color: colors.textMain }]}>{person}</Text>
-      <View style={[styles.row, { marginBottom: 8 }]}>
-        <Text>Номер заявки: </Text>
-        <Text style={[styles.indificator, { color: colors.textMain }]}>
+      <View style={[styles.row, { marginBottom: 4 }]}>
+        <Text style={{ color: colors.primary }}>Номер заявки: </Text>
+        <Text style={[styles.indificator, { color: colors.primary }]}>
           {id}
         </Text>
       </View>

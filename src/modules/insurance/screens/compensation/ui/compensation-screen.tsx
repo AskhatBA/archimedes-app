@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -10,13 +10,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { insuranceApi, RefundRequestBody } from '@/api';
-import { Button } from '@/shared/components/button';
-import { OtpContainer } from '@/shared/components/otp-container';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
-import { MainLayout } from '@/shared/layout/main-layout';
-import { useInsuranceServiceAuth } from '@/shared/lib/insurance';
 import { useToast } from '@/shared/lib/toast';
-import { useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 import { convertUriToBase64 } from '@/shared/utils/convert-uri-to-base64';
 

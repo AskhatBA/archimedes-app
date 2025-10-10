@@ -5,6 +5,7 @@ import ClipboardClockIcon from '@/assets/icons/clipboard-clock.svg';
 import ClockIcon from '@/assets/icons/clock.svg';
 import CloseIcon from '@/assets/icons/close.svg';
 import FamilyIcon from '@/assets/icons/family.svg';
+import FilePenIcon from '@/assets/icons/file-pen.svg';
 import FileTextIcon from '@/assets/icons/file-text.svg';
 import FileIcon from '@/assets/icons/file.svg';
 import HospitalIcon from '@/assets/icons/hospital.svg';
@@ -48,4 +49,5 @@ export {
   FileTextIcon,
   ClipboardClockIcon,
   ShieldPlusIcon,
+  FilePenIcon,
 };

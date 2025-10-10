@@ -5,6 +5,7 @@ import { AppointmentsMainScreen } from '@/modules/appointment/screens/main';
 import { HomeScreen } from '@/modules/home/screens/home';
 import { NotificationsScreen } from '@/modules/notifications/screens/notifications';
 import { ProfileScreen } from '@/modules/profile/screens/profile';
+import { InsuranceMainScreen } from '@/modules/insurance/screens/insurance-main';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { routes } from '@/shared/navigation';
@@ -32,7 +33,7 @@ export const TabNavigator: FC = () => {
       />
       <Tab.Screen
         name={routes.Insurance}
-        component={AppointmentsMainScreen}
+        component={InsuranceMainScreen}
         options={{ header: () => <StatusBarUnderlay /> }}
       />
       <Tab.Screen

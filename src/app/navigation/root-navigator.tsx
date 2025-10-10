@@ -5,17 +5,17 @@ import { CreateAppointmentScreen } from '@/modules/appointment/screens/create-ap
 import { CreateUserScreen } from '@/modules/auth/screens/create-user';
 import { OtpVerificationScreen } from '@/modules/auth/screens/otp-verification';
 import { SignInScreen } from '@/modules/auth/screens/sign-in';
-import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
 import {
   CompensationScreen,
   CompensationsHistoryScreen,
-} from '@/modules/profile/screens/compensation';
+} from '@/modules/insurance/screens/compensation';
 import {
   InsuranceDetailsScreen,
   InsuranceCertificateScreen,
   InsuranceMedicalNetworkScreen,
   InsuranceElectronicReferralsScreen,
-} from '@/modules/profile/screens/insurance-details';
+} from '@/modules/insurance/screens/insurance-details';
+import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { useAuth } from '@/shared/lib/auth';
