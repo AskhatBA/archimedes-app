@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   main: {
     marginTop: 48,
-    gap: 32,
+    gap: 16,
   },
   version: {
     fontSize: 14,

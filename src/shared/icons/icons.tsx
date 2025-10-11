@@ -3,12 +3,14 @@ import BanknoteArrowDown from '@/assets/icons/banknote-arrow-down.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
 import ClipIcon from '@/assets/icons/clip.svg';
 import ClipboardClockIcon from '@/assets/icons/clipboard-clock.svg';
+import ClipboardListIcon from '@/assets/icons/clipboard-list.svg';
 import ClockIcon from '@/assets/icons/clock.svg';
 import CloseIcon from '@/assets/icons/close.svg';
 import FamilyIcon from '@/assets/icons/family.svg';
 import FilePenIcon from '@/assets/icons/file-pen.svg';
 import FileTextIcon from '@/assets/icons/file-text.svg';
 import FileIcon from '@/assets/icons/file.svg';
+import HistoryIcon from '@/assets/icons/history.svg';
 import HospitalIcon from '@/assets/icons/hospital.svg';
 import InfoIcon from '@/assets/icons/info.svg';
 import LogoutIcon from '@/assets/icons/logout.svg';
@@ -54,4 +56,6 @@ export {
   FilePenIcon,
   ShieldX,
   BanknoteArrowDown,
+  ClipboardListIcon,
+  HistoryIcon,
 };
