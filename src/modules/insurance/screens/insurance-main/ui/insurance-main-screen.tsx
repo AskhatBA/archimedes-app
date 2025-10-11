@@ -1,26 +1,15 @@
 import { FC } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { InsuranceCard } from '@/modules/insurance/components/insurance-card';
-import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
-import { FilePenIcon, ShieldX } from '@/shared/icons';
+import { ShieldX } from '@/shared/icons';
 import { usePrograms } from '@/shared/lib/insurance';
-import { useNavigation, routes } from '@/shared/navigation';
 import { colors, globalStyles } from '@/shared/theme';
-
-import { CompensationHistory } from '../components/compensation-history';
 
 export const InsuranceMainScreen: FC = () => {
   const { programs, loadingPrograms } = usePrograms();
-  const { navigate } = useNavigation();
   const deviceInsets = useSafeAreaInsets();
 
   if (loadingPrograms) {
@@ -46,42 +35,31 @@ export const InsuranceMainScreen: FC = () => {
   }
 
   return (
-    <>
-      <ScrollView
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: deviceInsets.bottom + 80 },
-        ]}
-      >
-        <View style={styles.container}>
-          <Text style={globalStyles.sectionHeading}>Страховка</Text>
-          <View style={styles.cards}>
-            {programs.map(program => {
-              if (program.status === 'EXPIRED') return null;
+    <ScrollView
+      contentContainerStyle={[
+        styles.scrollContent,
+        { paddingBottom: deviceInsets.bottom + 80 },
+      ]}
+    >
+      <View style={styles.container}>
+        <Text style={globalStyles.sectionHeading}>Страховка</Text>
+        <View style={styles.cards}>
+          {programs.map(program => {
+            if (program.status === 'EXPIRED') return null;
 
-              return (
-                <InsuranceCard
-                  key={program.id}
-                  dateEnd={program.dateEnd}
-                  programId={program.id}
-                  price={program.cardNo}
-                  level={program.title}
-                />
-              );
-            })}
-          </View>
-          <CompensationHistory />
+            return (
+              <InsuranceCard
+                key={program.id}
+                dateEnd={program.dateEnd}
+                programId={program.id}
+                price={program.cardNo}
+                level={program.title}
+              />
+            );
+          })}
         </View>
-      </ScrollView>
-      <TouchableOpacity style={styles.compensationButton}>
-        <Button
-          icon={<FilePenIcon width={22} height={22} color={colors.white} />}
-          onPress={() => navigate(routes.Compensation)}
-        >
-          Заявка на возмещение
-        </Button>
-      </TouchableOpacity>
-    </>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -105,19 +83,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  compensationButton: {
-    width: '100%',
-    position: 'absolute',
-    padding: 16,
-    bottom: 0,
-    backgroundColor: colors.white,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
   },
 });

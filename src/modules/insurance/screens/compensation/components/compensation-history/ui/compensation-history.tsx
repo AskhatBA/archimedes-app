@@ -1,21 +1,12 @@
 import { FC } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { CompensationCard } from '@/modules/insurance/screens/compensation/components/history/ui/compensation-card';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { useUserCompensationRequests } from '@/shared/lib/insurance';
-import { useNavigation, routes } from '@/shared/navigation';
-import { colors, globalStyles, useTheme } from '@/shared/theme';
+import { colors, globalStyles } from '@/shared/theme';
 
 export const CompensationHistory: FC = () => {
-  const { colors: themeColors } = useTheme();
-  const { navigate } = useNavigation();
   const { compensationRequests, loadingCompensationRequests } =
     useUserCompensationRequests();
 
@@ -32,15 +23,6 @@ export const CompensationHistory: FC = () => {
     <View style={styles.container}>
       <View style={styles.headerRow}>
         <Text style={globalStyles.sectionHeading}>История возмещений</Text>
-        {!!(compensationRequests && compensationRequests.length > 0) && (
-          <TouchableOpacity
-            onPress={() => navigate(routes.CompensationsHistory)}
-          >
-            <Text style={[styles.showAllText, { color: themeColors.primary }]}>
-              Показать все
-            </Text>
-          </TouchableOpacity>
-        )}
       </View>
 
       {!compensationRequests || compensationRequests.length === 0 ? (
@@ -49,7 +31,7 @@ export const CompensationHistory: FC = () => {
         </Text>
       ) : (
         <View style={styles.list}>
-          {compensationRequests.slice(0, 3).map(request => (
+          {compensationRequests.map(request => (
             <CompensationCard key={request.id} {...request} />
           ))}
         </View>
@@ -60,7 +42,7 @@ export const CompensationHistory: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 24,
+    marginTop: 4,
   },
   headerRow: {
     flexDirection: 'row',

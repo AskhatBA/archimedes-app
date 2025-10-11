@@ -26,7 +26,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 32,
+    paddingHorizontal: 24,
     flex: 1,
   },
 });

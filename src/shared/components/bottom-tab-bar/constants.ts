@@ -4,6 +4,7 @@ import {
   TabBarNotificationsIcon,
   TabBarHomeIcon,
   ShieldPlusIcon,
+  BanknoteArrowDown,
 } from '@/shared/icons';
 import { routes } from '@/shared/navigation';
 
@@ -22,9 +23,9 @@ export const navigationItems: Record<string, TabBarItemType> = {
     Icon: ShieldPlusIcon,
     label: 'Страховка',
   },
-  [routes.Notifications]: {
-    Icon: TabBarNotificationsIcon,
-    label: 'Уведомл-я',
+  [routes.Compensation]: {
+    Icon: BanknoteArrowDown,
+    label: 'Возмещение',
   },
   [routes.Profile]: {
     Icon: TabBarProfileIcon,

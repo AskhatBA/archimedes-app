@@ -11,6 +11,7 @@ export const routes = {
   OtpVerification: 'otp-verification',
   CreateUser: 'create-user',
   Compensation: 'compensation',
+  CompensationRequest: 'compensation-request',
   CompensationOtpVerification: 'compensation-otp-verification',
   CompensationsHistory: 'compensations-history',
   InsuranceDetails: 'insurance-details',

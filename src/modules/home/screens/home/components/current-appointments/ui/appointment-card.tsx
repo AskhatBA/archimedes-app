@@ -31,7 +31,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
           {getDayOfWeek(date, 'short')}
         </Text>
       </View>
-      <View>
+      <View style={{ flexShrink: 1 }}>
         <View style={styles.timeContainer}>
           <Text style={[styles.timeOfDay, { color: colors.blue['400'] }]}>
             {getTimeOfDay(date)}
@@ -40,7 +40,11 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
             {formatDate(date, 'HH:mm')}
           </Text>
         </View>
-        <Text style={[styles.doctorName, { color: colors.blue['400'] }]}>
+        <Text
+          style={[styles.doctorName, { color: colors.blue['400'] }]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
           {doctorName}
         </Text>
         <Text style={[styles.specialization, { color: colors.blue['400'] }]}>
@@ -57,12 +61,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 16,
     gap: 16,
+    maxWidth: 340,
   },
   doctorName: {
     fontSize: 14,
     lineHeight: 14,
     fontWeight: 700,
     marginTop: 12,
+    marginBottom: 4,
   },
   specialization: {
     fontWeight: 300,

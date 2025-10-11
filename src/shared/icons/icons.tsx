@@ -1,4 +1,5 @@
 import ArrowBackIcon from '@/assets/icons/arrow-back.svg';
+import BanknoteArrowDown from '@/assets/icons/banknote-arrow-down.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
 import ClipIcon from '@/assets/icons/clip.svg';
 import ClipboardClockIcon from '@/assets/icons/clipboard-clock.svg';
@@ -52,4 +53,5 @@ export {
   ShieldPlusIcon,
   FilePenIcon,
   ShieldX,
+  BanknoteArrowDown,
 };

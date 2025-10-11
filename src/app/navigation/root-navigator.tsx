@@ -6,8 +6,8 @@ import { CreateUserScreen } from '@/modules/auth/screens/create-user';
 import { OtpVerificationScreen } from '@/modules/auth/screens/otp-verification';
 import { SignInScreen } from '@/modules/auth/screens/sign-in';
 import {
-  CompensationScreen,
   CompensationsHistoryScreen,
+  CompensationRequestScreen,
 } from '@/modules/insurance/screens/compensation';
 import {
   InsuranceDetailsScreen,
@@ -69,8 +69,8 @@ export const RootNavigator: FC = () => {
         options={{ headerShown: false }}
       />
       <RootStack.Screen
-        name={routes.Compensation}
-        component={CompensationScreen}
+        name={routes.CompensationRequest}
+        component={CompensationRequestScreen}
         options={{ header: () => <SecondaryTopbar title="" /> }}
       />
       <RootStack.Screen
