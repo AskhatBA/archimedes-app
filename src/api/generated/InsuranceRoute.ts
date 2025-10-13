@@ -256,6 +256,8 @@ export namespace Insurance {
       cityId: string;
       /** Program ID */
       programId: string;
+      /** Clinic type ID */
+      type?: string;
     };
     export type RequestBody = never;
     export type RequestHeaders = {};

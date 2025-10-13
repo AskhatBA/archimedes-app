@@ -283,6 +283,8 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       cityId: string;
       /** Program ID */
       programId: string;
+      /** Clinic type ID */
+      type?: string;
     },
     params: RequestParams = {},
   ) =>

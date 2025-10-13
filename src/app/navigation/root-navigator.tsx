@@ -16,8 +16,10 @@ import {
   InsuranceElectronicReferralsScreen,
 } from '@/modules/insurance/screens/insurance-details';
 import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
+import { NotificationsScreen } from '@/modules/notifications/screens/notifications';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
+import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { useAuth } from '@/shared/lib/auth';
 import { routes } from '@/shared/navigation';
 
@@ -104,6 +106,13 @@ export const RootNavigator: FC = () => {
         component={InsuranceElectronicReferralsScreen}
         options={{
           header: () => <SecondaryTopbar title="Электронные направления" />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.Notifications}
+        component={NotificationsScreen}
+        options={{
+          header: () => <StatusBarUnderlay />,
         }}
       />
     </RootStack.Navigator>

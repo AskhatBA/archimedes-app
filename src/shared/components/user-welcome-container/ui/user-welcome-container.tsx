@@ -1,15 +1,25 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import UserIcon from '@/assets/icons/user-filled.svg';
-import { LogoutIcon } from '@/shared/icons';
+import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
 import { useUser } from '@/shared/lib/user';
+import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
 export const UserWelcomeContainer: FC = () => {
   const { user } = useUser();
   const { logout } = useAuth();
+  const { navigate } = useNavigation();
+
+  const goToNotifications = () => navigate(routes.Notifications);
+
+  const confirmLogout = () =>
+    Alert.alert('Подтверждение', 'Вы действительно хотите выйти из аккаунта?', [
+      { text: 'Отмена', style: 'cancel' },
+      { text: 'Выйти', style: 'destructive', onPress: logout },
+    ]);
 
   return (
     <View style={styles.wrapper}>
@@ -24,9 +34,20 @@ export const UserWelcomeContainer: FC = () => {
           </Text>
         </View>
       </View>
-      <TouchableOpacity onPress={logout}>
-        <LogoutIcon width={30} height={30} color={colors.primary} />
-      </TouchableOpacity>
+      <View style={styles.actions}>
+        <TouchableOpacity
+          onPress={goToNotifications}
+          accessibilityLabel="Открыть уведомления"
+        >
+          <TabBarNotificationsIcon width={30} height={30} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={confirmLogout}
+          accessibilityLabel="Выйти из аккаунта"
+        >
+          <LogoutIcon width={30} height={30} color={colors.primary} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -58,5 +79,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 22,
     fontWeight: '600',
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 24,
   },
 });

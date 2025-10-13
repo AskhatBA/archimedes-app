@@ -10,12 +10,13 @@ import {
   Linking,
 } from 'react-native';
 
-import { Checkbox } from '@/shared/components/checkbox';
 import { SelectField } from '@/shared/components/select-field/ui/select-field';
 import { TextField } from '@/shared/components/text-field/ui/text-field';
 import { MapPinnedIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
+import { toCapitalize } from '@/shared/utils/to-capitalize';
 
+import { clinicTypes } from '../constants';
 import { useMedicalNetwork } from '../hooks/use-medical-network';
 
 interface RouteParams {
@@ -28,19 +29,23 @@ export const InsuranceMedicalNetworkScreen: FC = () => {
   const [query, setQuery] = useState('');
   const route = useRoute();
   const { programId } = route.params as RouteParams;
+  const [currentClinicType, setCurrentClinicType] = useState<number>();
   const { cityOptions, clinics, loading } = useMedicalNetwork({
     cityId: city,
     programId,
-  });
-  const [filters, setFilters] = useState({
-    clinic: false,
-    pharmacy: false,
-    dentistry: false,
-    med: false,
+    type: currentClinicType,
   });
 
-  const toggle = (key: keyof typeof filters) =>
-    setFilters(prev => ({ ...prev, [key]: !prev[key] }));
+  const clinicTypeOptions = useMemo(
+    () => [
+      { label: 'Все типы', value: '' },
+      ...clinicTypes.map(type => ({
+        label: toCapitalize(type.title),
+        value: String(type.id),
+      })),
+    ],
+    [],
+  );
 
   const filteredClinics = useMemo(
     () =>
@@ -62,6 +67,61 @@ export const InsuranceMedicalNetworkScreen: FC = () => {
     }
   };
 
+  const renderResults = () => {
+    if (!city)
+      return (
+        <Text
+          style={{
+            color: colors.gray['600'],
+            textAlign: 'center',
+            marginTop: 32,
+          }}
+        >
+          Город не выбран
+        </Text>
+      );
+
+    if (filteredClinics.length === 0) {
+      return (
+        <Text
+          style={{
+            color: colors.gray['600'],
+            textAlign: 'center',
+            marginTop: 32,
+          }}
+        >
+          Ничего не найдено
+        </Text>
+      );
+    }
+
+    return filteredClinics.map(clinic => (
+      <View
+        key={clinic.id}
+        style={[styles.card, { backgroundColor: colors.gray['200'] }]}
+      >
+        <Text style={[styles.cardTitle, { color: colors.textMain }]}>
+          {clinic.title}
+        </Text>
+        <TouchableOpacity
+          onPress={() => open2GIS(clinic.link2GIS)}
+          accessibilityRole="link"
+          activeOpacity={0.7}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+          }}
+        >
+          <MapPinnedIcon width={16} height={16} color={colors.primary} />
+          <Text style={[styles.cardAddress, { color: colors.gray['600'] }]}>
+            {clinic.address}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    ));
+  };
+
   return (
     <View style={{ flex: 1, paddingVertical: 16 }}>
       {loading ? (
@@ -70,103 +130,40 @@ export const InsuranceMedicalNetworkScreen: FC = () => {
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 24 }}>
-          <SelectField
-            options={cityOptions}
-            value={city}
-            placeholder="Город"
-            onChange={setCity}
-          />
-          <View style={{ height: 12 }} />
           <TextField
             placeholder="Поиск"
             value={query}
             onChangeText={setQuery}
           />
 
-          <View style={styles.filters}>
-            <View style={styles.filterItem}>
-              <Checkbox
-                checked={filters.clinic}
-                onCheck={() => toggle('clinic')}
-              />
-              <Text style={[styles.filterLabel, { color: colors.textMain }]}>
-                Клиника
-              </Text>
-            </View>
-            <View style={styles.filterItem}>
-              <Checkbox
-                checked={filters.pharmacy}
-                onCheck={() => toggle('pharmacy')}
-              />
-              <Text style={[styles.filterLabel, { color: colors.textMain }]}>
-                Аптека
-              </Text>
-            </View>
-            <View style={styles.filterItem}>
-              <Checkbox
-                checked={filters.dentistry}
-                onCheck={() => toggle('dentistry')}
-              />
-              <Text style={[styles.filterLabel, { color: colors.textMain }]}>
-                Стоматология
-              </Text>
-            </View>
-            <View style={[styles.filterItem, { marginTop: 8 }]}>
-              <Checkbox checked={filters.med} onCheck={() => toggle('med')} />
-              <Text style={[styles.filterLabel, { color: colors.textMain }]}>
-                Мед. учреждения
-              </Text>
-            </View>
-          </View>
+          <View style={{ height: 12 }} />
 
-          <View style={{ gap: 12 }}>
-            {filteredClinics.length === 0 ? (
-              <Text
-                style={{
-                  color: colors.gray['600'],
-                  textAlign: 'center',
-                  marginTop: 32,
-                }}
-              >
-                Ничего не найдено
-              </Text>
-            ) : (
-              filteredClinics.map(clinic => (
-                <View
-                  key={clinic.id}
-                  style={[styles.card, { backgroundColor: colors.gray['200'] }]}
-                >
-                  <Text style={[styles.cardTitle, { color: colors.textMain }]}>
-                    {clinic.title}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => open2GIS(clinic.link2GIS)}
-                    accessibilityRole="link"
-                    activeOpacity={0.7}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 8,
-                    }}
-                  >
-                    <MapPinnedIcon
-                      width={16}
-                      height={16}
-                      color={colors.primary}
-                    />
-                    <Text
-                      style={[
-                        styles.cardAddress,
-                        { color: colors.gray['600'] },
-                      ]}
-                    >
-                      {clinic.address}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))
-            )}
-          </View>
+          <SelectField
+            options={cityOptions}
+            value={city}
+            placeholder="Город"
+            onChange={setCity}
+          />
+
+          <View style={{ height: 12 }} />
+
+          <SelectField
+            options={clinicTypeOptions}
+            value={currentClinicType ? String(currentClinicType) : ''}
+            placeholder="Тип клиники"
+            onChange={value => {
+              if (!value) {
+                setCurrentClinicType(undefined);
+                return;
+              }
+              const clinicTypeId = Number(value);
+              setCurrentClinicType(
+                Number.isNaN(clinicTypeId) ? undefined : clinicTypeId,
+              );
+            }}
+          />
+
+          <View style={{ marginTop: 24, gap: 12 }}>{renderResults()}</View>
         </ScrollView>
       )}
     </View>
@@ -178,22 +175,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  filters: {
-    marginTop: 12,
-    marginBottom: 16,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 24,
-  },
-  filterItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  filterLabel: {
-    fontSize: 16,
-    fontWeight: 600,
   },
   card: {
     borderRadius: 16,

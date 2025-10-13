@@ -69,7 +69,7 @@ export const SelectDrawer: FC<SelectDrawerProps> = ({
         <Button
           onPress={() => onChange(selected)}
           style={styles.selectButton}
-          disabled={!selected}
+          disabled={selected === null || selected === undefined}
         >
           {buttonText}
         </Button>
