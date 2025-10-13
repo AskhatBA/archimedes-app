@@ -7,6 +7,8 @@ export const usePrograms = () => {
   const {
     data: programs,
     isLoading: loadingPrograms,
+    isFetching: fetchingPrograms,
+    refetch: refetchPrograms,
     error,
   } = useQuery({
     queryKey: ['programs'],
@@ -17,6 +19,8 @@ export const usePrograms = () => {
   return {
     programs: programs || [],
     loadingPrograms,
+    fetchingPrograms,
+    refetchPrograms,
     isNotAuthorized:
       (error as AxiosError<{ message: string }>)?.response?.data?.message ===
       'INSURANCE_USER_NOT_AUTHORIZED',

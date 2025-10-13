@@ -1,5 +1,11 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { InsuranceCard } from '@/modules/insurance/components/insurance-card';
@@ -9,7 +15,8 @@ import { usePrograms } from '@/shared/lib/insurance';
 import { colors, globalStyles } from '@/shared/theme';
 
 export const InsuranceMainScreen: FC = () => {
-  const { programs, loadingPrograms } = usePrograms();
+  const { programs, loadingPrograms, fetchingPrograms, refetchPrograms } =
+    usePrograms();
   const deviceInsets = useSafeAreaInsets();
 
   if (loadingPrograms) {
@@ -18,19 +25,28 @@ export const InsuranceMainScreen: FC = () => {
 
   if (!programs || programs.length === 0) {
     return (
-      <View
-        style={{
-          flex: 1,
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
           alignItems: 'center',
           justifyContent: 'center',
           gap: 16,
+          paddingTop: 16,
+          paddingHorizontal: 24,
+          paddingBottom: deviceInsets.bottom + 80,
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={!!fetchingPrograms}
+            onRefresh={refetchPrograms}
+          />
+        }
       >
         <ShieldX width={120} height={120} color={colors.blue['370']} />
         <Text style={{ fontWeight: 400, fontSize: 18, color: colors.primary }}>
           У вас пока нет активных страховок
         </Text>
-      </View>
+      </ScrollView>
     );
   }
 
@@ -40,6 +56,12 @@ export const InsuranceMainScreen: FC = () => {
         styles.scrollContent,
         { paddingBottom: deviceInsets.bottom + 80 },
       ]}
+      refreshControl={
+        <RefreshControl
+          refreshing={!!fetchingPrograms}
+          onRefresh={refetchPrograms}
+        />
+      }
     >
       <View style={styles.container}>
         <Text style={globalStyles.sectionHeading}>Страховка</Text>

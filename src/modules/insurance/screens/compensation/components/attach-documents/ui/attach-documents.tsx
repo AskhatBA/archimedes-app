@@ -33,7 +33,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   const { colors } = useTheme();
   const [showDocumentType, setShowDocumentType] = useState(false);
   const [documentType, setDocumentType] = useState('');
-  const { openTypePicker } = useMediaPicker();
+  const { openTypePicker, removeFile } = useMediaPicker();
 
   const onCloseDrawer = () => {
     setShowDocumentType(false);
@@ -68,6 +68,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
                       buttonIndex => {
                         if (buttonIndex === 1) {
                           onRemove(file);
+                          removeFile(file);
                         }
                       },
                     ),

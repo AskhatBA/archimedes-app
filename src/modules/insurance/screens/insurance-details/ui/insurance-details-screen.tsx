@@ -1,4 +1,5 @@
 import { useRoute } from '@react-navigation/native';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { FC, useState } from 'react';
 import {
   View,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -33,6 +35,12 @@ export const InsuranceDetailsScreen: FC = () => {
   const { user } = useUser();
   const { navigate } = useNavigation();
   const { program, loadingProgram } = useProgramById(programId);
+  const queryClient = useQueryClient();
+  const isFetchingProgram = useIsFetching({ queryKey: ['program', programId] });
+
+  const onRefresh = () => {
+    queryClient.refetchQueries({ queryKey: ['program', programId] });
+  };
 
   if (loadingProgram) {
     return (
@@ -47,6 +55,12 @@ export const InsuranceDetailsScreen: FC = () => {
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: deviceInsets.bottom + 32 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={!!isFetchingProgram}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <Text style={[styles.userName, { color: colors.primary }]}>
           {user.fullName}

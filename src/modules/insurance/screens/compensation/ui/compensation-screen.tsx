@@ -1,5 +1,6 @@
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
 import { Button } from '@/shared/components/button';
 import { FilePenIcon } from '@/shared/icons';
@@ -11,11 +12,26 @@ import { CompensationHistory } from '../components/compensation-history';
 
 export const CompensationScreen: FC = () => {
   const { navigate } = useNavigation();
+  const queryClient = useQueryClient();
+  const isFetchingCompensations = useIsFetching({
+    queryKey: ['user-compensation-requests'],
+  });
+
+  const onRefresh = () => {
+    queryClient.refetchQueries({ queryKey: ['user-compensation-requests'] });
+  };
 
   return (
     <>
       <MainLayout>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={!!isFetchingCompensations}
+              onRefresh={onRefresh}
+            />
+          }
+        >
           <CompensationHistory />
         </ScrollView>
       </MainLayout>

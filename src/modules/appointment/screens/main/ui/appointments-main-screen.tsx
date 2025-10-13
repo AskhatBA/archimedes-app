@@ -1,5 +1,6 @@
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
 import { Button } from '@/shared/components/button';
 import { ClipboardClockIcon } from '@/shared/icons';
@@ -11,10 +12,24 @@ import { MyAppointments } from '../components/my-appointments';
 
 export const AppointmentsMainScreen: FC = () => {
   const { navigate } = useNavigation();
+  const queryClient = useQueryClient();
+  const isFetchingAppointments = useIsFetching({ queryKey: ['appointments'] });
+
+  const onRefresh = () => {
+    queryClient.refetchQueries({ queryKey: ['appointments'] });
+  };
 
   return (
     <>
-      <ScrollView contentContainerStyle={styles.wrapper}>
+      <ScrollView
+        contentContainerStyle={styles.wrapper}
+        refreshControl={
+          <RefreshControl
+            refreshing={!!isFetchingAppointments}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <MainLayout>
           <MyAppointments />
         </MainLayout>
