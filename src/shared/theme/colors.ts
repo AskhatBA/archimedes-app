@@ -44,13 +44,19 @@ const palette = {
     500: '#C8A349',
     700: '#9A7A2F',
   },
-
   silver: {
     50: '#F9FAFB',
     100: '#E8EBED',
     300: '#C6CCD2',
     500: '#9AA0A6',
     700: '#6C7278',
+  },
+  platinum: {
+    50: '#F7F7F7',
+    100: '#E5E5E5',
+    300: '#BFBFBF',
+    500: '#8C8C8C',
+    700: '#595959',
   },
   white: '#FFFFFF',
 };

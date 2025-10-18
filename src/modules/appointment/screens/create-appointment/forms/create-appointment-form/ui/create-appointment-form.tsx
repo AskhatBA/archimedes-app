@@ -5,6 +5,7 @@ import { useCreateAppointment } from '@/modules/appointment/screens/create-appoi
 import { Button } from '@/shared/components/button';
 import { Calendar } from '@/shared/components/calendar';
 import { SelectField } from '@/shared/components/select-field';
+import { usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
 import { ChooseBranch } from './choose-branch';
@@ -12,6 +13,8 @@ import { createAppointmentFormStyles } from './styles';
 
 export const CreateAppointmentForm: FC = () => {
   const {
+    programId,
+    setProgramId,
     branch,
     specializations,
     setSpecialization,
@@ -28,9 +31,28 @@ export const CreateAppointmentForm: FC = () => {
     bookAppointment,
     isBooking,
   } = useCreateAppointment();
+  const { programs } = usePrograms();
 
   return (
     <View style={styles.container}>
+      <View style={{ marginTop: 24 }}>
+        <Text
+          style={[
+            createAppointmentFormStyles.title,
+            { color: colors.gray['500'] },
+          ]}
+        >
+          Выберите страховку
+        </Text>
+        <SelectField
+          value={programId || ''}
+          onChange={setProgramId}
+          placeholder="Страховка"
+          options={(programs || [])
+            .filter(p => p.status !== 'EXPIRED')
+            .map(p => ({ value: p.id, label: `${p.title} (${p.cardNo})` }))}
+        />
+      </View>
       <ChooseBranch />
       {branch && (
         <View>

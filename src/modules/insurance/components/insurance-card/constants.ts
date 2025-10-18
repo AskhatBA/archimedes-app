@@ -11,4 +11,9 @@ export const levelColors = {
     button: colors.gold['300'],
     text: colors.textMain,
   },
+  Platinum: {
+    background: colors.platinum['100'],
+    button: colors.platinum['300'],
+    text: colors.textMain,
+  },
 };

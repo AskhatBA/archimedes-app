@@ -1,13 +1,10 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
+import { SelectField } from '@/shared/components/select-field/ui/select-field';
 import { useTheme } from '@/shared/theme';
 
-import {
-  CardRadioGroup,
-  RadioCard,
-} from '../../../components/card-radio-group';
 import { useCreateAppointment } from '../../../context/create-appointment-context';
 
 import { createAppointmentFormStyles } from './styles';
@@ -16,6 +13,15 @@ export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
   const { branches, loadingBranches } = useBranches();
   const { branch, setBranch } = useCreateAppointment();
+
+  const branchOptions = useMemo(
+    () =>
+      (branches || []).map(clinic => ({
+        label: `${clinic.name} (${clinic.address})`,
+        value: String(clinic.id),
+      })),
+    [branches],
+  );
 
   if (loadingBranches) return null;
 
@@ -29,21 +35,20 @@ export const ChooseBranch: FC = () => {
       >
         Выберите филиал
       </Text>
-      <CardRadioGroup value={branch} onChange={setBranch}>
-        {branches?.map(clinic => (
-          <RadioCard
-            key={clinic.id}
-            value={clinic.id}
-            label={`${clinic.name} (${clinic.address})`}
-          />
-        ))}
-      </CardRadioGroup>
+      <SelectField
+        options={branchOptions}
+        value={branch ? String(branch) : ''}
+        placeholder="Филиал"
+        onChange={value => {
+          setBranch(value as never);
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 22,
+    marginTop: 0,
   },
 });

@@ -31,6 +31,8 @@ import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 
 interface CreateAppointmentContextProps {
+  programId: string | undefined;
+  setProgramId: (programId: string) => void;
   branch: MISBranch['id'] | undefined;
   specialization: MISSpecialization['id'] | undefined;
   specializations: MISSpecialization[];
@@ -50,6 +52,8 @@ interface CreateAppointmentContextProps {
 }
 
 const initialValues: CreateAppointmentContextProps = {
+  programId: undefined,
+  setProgramId: () => {},
   branch: undefined,
   specialization: undefined,
   specializations: [],
@@ -76,6 +80,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { goBack } = useNavigation();
+  const [programId, setProgramId] = useState<string>();
   const [branch, setBranch] = useState<MISBranch['id']>();
   const [specialization, setSpecialization] =
     useState<MISSpecialization['id']>();
@@ -149,6 +154,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
   const value = useMemo(
     (): CreateAppointmentContextProps => ({
+      programId,
+      setProgramId,
       availableSlots,
       specializations,
       branch,
@@ -168,6 +175,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     }),
     [
       createAppointmentMutation.isPending,
+      programId,
       availableSlots,
       selectedDate,
       branch,
