@@ -29,6 +29,7 @@ export const Calendar: FC<CalendarProps> = ({ value, onChange }) => {
             disableTouchEvent: true,
           },
         }}
+        firstDay={1}
         initialDate={currentMonth}
         customHeader={() => (
           <CalendarHeader

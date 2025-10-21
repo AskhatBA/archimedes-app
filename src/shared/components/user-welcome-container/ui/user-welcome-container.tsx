@@ -39,7 +39,11 @@ export const UserWelcomeContainer: FC = () => {
           onPress={goToNotifications}
           accessibilityLabel="Открыть уведомления"
         >
-          <TabBarNotificationsIcon width={30} height={30} />
+          <TabBarNotificationsIcon
+            color={colors.primary}
+            width={30}
+            height={30}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={confirmLogout}

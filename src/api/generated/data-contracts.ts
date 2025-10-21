@@ -354,6 +354,8 @@ export interface CreateMISAppointmentBody {
   endTime: string;
   /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
   branchId: string;
+  /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
+  insuranceProgramId?: string;
 }
 
 export interface MISAppointment {

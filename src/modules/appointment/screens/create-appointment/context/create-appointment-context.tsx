@@ -121,6 +121,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         doctorId: doctor,
         startTime: `${selectedDate}T${timeSlot}:00+05:00`,
         endTime: `${selectedDate}T${endTime}:00+05:00`,
+        insuranceProgramId: programId,
       });
     },
     onSuccess: () => {

@@ -53,7 +53,7 @@ export const CreateAppointmentForm: FC = () => {
             .map(p => ({ value: p.id, label: `${p.title} (${p.cardNo})` }))}
         />
       </View>
-      <ChooseBranch />
+      {programId && <ChooseBranch />}
       {branch && (
         <View>
           <Text

@@ -83,11 +83,13 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
                 <UserIcon color={colors.primary} />
               </View>
               <Text style={styles.title}>
-                Запись на прием к <Text style={styles.bold}>{doctorName}</Text>
+                Запись на прием к {'\n'}
+                <Text style={styles.bold}>{doctorName}</Text>
               </Text>
 
               <Text style={styles.subtitle}>
-                Успешная запись{'\n'}на {appointmentDate}
+                Колл-центр свяжется с Вами для подтверждения записи{'\n\n'}
+                Запись на {appointmentDate}
               </Text>
             </View>
             <TouchableOpacity
