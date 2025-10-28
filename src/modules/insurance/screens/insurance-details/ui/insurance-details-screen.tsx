@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
+import { GET_PROGRAM_QUERY } from '@/shared/constants';
 import { ClipIcon, HospitalIcon, InfoIcon, FileTextIcon } from '@/shared/icons';
 import { useProgramById } from '@/shared/lib/insurance';
 import { useUser } from '@/shared/lib/user';
@@ -36,10 +37,14 @@ export const InsuranceDetailsScreen: FC = () => {
   const { navigate } = useNavigation();
   const { program, loadingProgram } = useProgramById(programId);
   const queryClient = useQueryClient();
-  const isFetchingProgram = useIsFetching({ queryKey: ['program', programId] });
+  const isFetchingProgram = useIsFetching({
+    queryKey: [GET_PROGRAM_QUERY, programId],
+  });
 
-  const onRefresh = () => {
-    queryClient.refetchQueries({ queryKey: ['program', programId] });
+  const onRefresh = async () => {
+    await queryClient.refetchQueries({
+      queryKey: [GET_PROGRAM_QUERY, programId],
+    });
   };
 
   if (loadingProgram) {

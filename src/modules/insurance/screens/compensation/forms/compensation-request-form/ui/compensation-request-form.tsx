@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button } from '@/shared/components/button';
@@ -35,6 +35,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       amount: '',
     },
     onSubmit: formValues => {
+      console.log('submit form', formValues);
       if (!files.length) return;
 
       onSubmit({
@@ -47,6 +48,10 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
     },
     validationSchema,
   });
+
+  useEffect(() => {
+    console.log('values', values);
+  }, [values]);
 
   const { programs, loadingPrograms } = usePrograms();
   const { family, loadingFamily } = useFamily(values.program);
@@ -81,13 +86,12 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         />
       )}
       <TextField
-        mask="currency"
-        placeholder="0 000"
+        placeholder="0"
         label="Сумма возмещения в тенге"
         keyboardType="number-pad"
         value={values.amount}
-        onChangeText={value => handleChange('amount')(value)}
         error={errors.amount}
+        onChangeText={value => handleChange('amount')(value)}
       />
       <Datepicker
         value={values.date}

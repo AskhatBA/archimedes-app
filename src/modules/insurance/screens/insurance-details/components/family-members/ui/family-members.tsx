@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import {
   View,
   Text,
@@ -45,7 +45,7 @@ export const FamilyMembers: FC<FamilyMembersProps> = ({ programId }) => {
       </TouchableOpacity>
       {show && (
         <View style={styles.members}>
-          {family.map(member => (
+          {family?.map(member => (
             <View
               key={member.id}
               style={[
