@@ -2,6 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { insuranceApi } from '@/api';
+import {
+  GET_INSURANCE_PROGRAM_QUERY,
+  GET_INSURANCE_PROGRAMS_QUERY,
+} from '@/shared/constants';
 
 export const usePrograms = () => {
   const {
@@ -11,7 +15,7 @@ export const usePrograms = () => {
     refetch: refetchPrograms,
     error,
   } = useQuery({
-    queryKey: ['programs'],
+    queryKey: [GET_INSURANCE_PROGRAMS_QUERY],
     queryFn: async () => (await insuranceApi.programsList()).data?.programs,
     retry: false,
   });
@@ -29,7 +33,7 @@ export const usePrograms = () => {
 
 export const useProgramById = (programId: string) => {
   const { data: program, isLoading: loadingProgram } = useQuery({
-    queryKey: ['program', programId],
+    queryKey: [GET_INSURANCE_PROGRAM_QUERY, programId],
     queryFn: async () =>
       (await insuranceApi.programsDetail(programId)).data?.program,
     enabled: !!programId,

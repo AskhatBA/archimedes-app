@@ -12,7 +12,7 @@ import { createAppointmentFormStyles } from './styles';
 export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
   const { branches, loadingBranches } = useBranches();
-  const { branch, setBranch } = useCreateAppointment();
+  const { changeFormValues, formValues } = useCreateAppointment();
 
   const branchOptions = useMemo(
     () =>
@@ -37,10 +37,10 @@ export const ChooseBranch: FC = () => {
       </Text>
       <SelectField
         options={branchOptions}
-        value={branch ? String(branch) : ''}
+        value={formValues.branchId ? String(formValues.branchId) : ''}
         placeholder="Филиал"
         onChange={value => {
-          setBranch(value as never);
+          changeFormValues('branchId', value as never);
         }}
       />
     </View>

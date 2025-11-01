@@ -1,3 +1,6 @@
+export const INSURANCE_CERTIFICATE_URL =
+  'https://mobileapi.archimedes.kz/v1/certificate/:programId';
+
 export const ClinicTypes = {
   Clinic: 3,
   Pharmacy: 4,

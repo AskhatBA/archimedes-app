@@ -85,11 +85,6 @@ export interface RefundRequestBody {
   files?: Files;
 }
 
-export interface CheckUserAuthorizationResponse {
-  success?: boolean;
-  isUserAuthorized?: boolean;
-}
-
 export interface InsuranceProgram {
   /** @example "1234" */
   id: string;
@@ -247,6 +242,13 @@ export interface ElectronicReferralItem {
   appointmentDetail?: ElectronicReferralDetail[];
 }
 
+export interface ContactInfo {
+  /** @example "Астана" */
+  city: string;
+  /** @example ["+7 (7172) 123-456","+7 (7172) 654-321"] */
+  phones: string[];
+}
+
 export interface MISPatient {
   id: string;
   firstName: string;
@@ -354,6 +356,8 @@ export interface CreateMISAppointmentBody {
   endTime: string;
   /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
   branchId: string;
+  /** @example "f47ac10b-58cc-4372-a567-0e02b2c3d479" */
+  patientId?: string;
   /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
   insuranceProgramId?: string;
 }

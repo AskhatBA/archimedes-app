@@ -10,7 +10,7 @@ import {
 
 import { useTheme } from '@/shared/theme';
 
-import { useElectronicReferrals } from '../hooks/use-electronic-referrals';
+import { useElectronicReferrals } from '../../../hooks/use-electronic-referrals';
 
 interface RouteParams {
   programId: string;

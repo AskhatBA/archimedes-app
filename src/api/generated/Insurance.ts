@@ -11,7 +11,7 @@
 
 import {
   AvailableInsuranceCity,
-  CheckUserAuthorizationResponse,
+  ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
   InsuranceProgramResponse,
@@ -124,25 +124,6 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       body: data,
       secure: true,
       type: ContentType.Json,
-      format: 'json',
-      ...params,
-    });
-  /**
-   * No description
-   *
-   * @tags Insurance
-   * @name CheckUserAuthorizationList
-   * @summary Check if users is authorized in the insurance service successfully
-   * @request GET:/insurance/check-user-authorization
-   * @secure
-   * @response `200` `CheckUserAuthorizationResponse` Response
-   * @response `401` `void` Unauthorized
-   */
-  checkUserAuthorizationList = (params: RequestParams = {}) =>
-    this.request<CheckUserAuthorizationResponse, void>({
-      path: `/insurance/check-user-authorization`,
-      method: 'GET',
-      secure: true,
       format: 'json',
       ...params,
     });
@@ -338,6 +319,37 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       path: `/insurance/electronic-referrals`,
       method: 'GET',
       query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name ContactsList
+ * @summary Get insurance contact information
+ * @request GET:/insurance/contacts
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    contacts?: (ContactInfo)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ */
+  contactsList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        contacts?: ContactInfo[];
+      },
+      void
+    >({
+      path: `/insurance/contacts`,
+      method: 'GET',
       secure: true,
       format: 'json',
       ...params,

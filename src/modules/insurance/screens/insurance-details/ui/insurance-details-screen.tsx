@@ -15,13 +15,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { GET_PROGRAM_QUERY } from '@/shared/constants';
-import { ClipIcon, HospitalIcon, InfoIcon, FileTextIcon } from '@/shared/icons';
+import {
+  ClipIcon,
+  HospitalIcon,
+  InfoIcon,
+  FileTextIcon,
+  HeartIcon,
+} from '@/shared/icons';
 import { useProgramById } from '@/shared/lib/insurance';
 import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 import { FamilyMembers } from '../components/family-members';
+import { INSURANCE_CERTIFICATE_URL } from '../constants';
 
 interface RouteParams {
   programId: string;
@@ -105,7 +112,14 @@ export const InsuranceDetailsScreen: FC = () => {
         </View>
         <View style={styles.documents}>
           <TouchableOpacity
-            onPress={() => navigate(routes.InsuranceCertificate)}
+            onPress={() =>
+              navigate(routes.InsuranceDocument, {
+                uri: INSURANCE_CERTIFICATE_URL.replace(
+                  ':programId',
+                  program?.id,
+                ),
+              })
+            }
             style={[
               styles.documentItem,
               { backgroundColor: colors.gray['200'] },
@@ -117,7 +131,11 @@ export const InsuranceDetailsScreen: FC = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setOpenInformation(true)}
+            onPress={() =>
+              navigate(routes.InsuranceDocument, {
+                uri: program?.programUrl,
+              })
+            }
             style={[
               styles.documentItem,
               { backgroundColor: colors.gray['200'] },
@@ -154,6 +172,18 @@ export const InsuranceDetailsScreen: FC = () => {
             <FileTextIcon width={24} height={24} color={colors.primary} />
             <Text style={[styles.documentItemText, { color: colors.textMain }]}>
               Электронные направления
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigate(routes.InsuranceSupport)}
+            style={[
+              styles.documentItem,
+              { backgroundColor: colors.gray['200'] },
+            ]}
+          >
+            <HeartIcon width={24} height={24} color={colors.primary} />
+            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
+              Поддержка
             </Text>
           </TouchableOpacity>
         </View>

@@ -11,7 +11,6 @@ import { SelectDrawer } from './select-drawer';
 interface SelectFieldProps {
   options: SelectFieldOption[];
   placeholder?: string;
-  selectButtonText?: string;
   onChange?: (value: string) => void;
   value?: string;
   error?: string;
@@ -20,7 +19,6 @@ interface SelectFieldProps {
 export const SelectField: FC<SelectFieldProps> = ({
   options,
   placeholder,
-  selectButtonText = 'Выбрать',
   onChange,
   value,
   error,
@@ -31,8 +29,8 @@ export const SelectField: FC<SelectFieldProps> = ({
   const selectedOption = options.find(option => option.value === value);
   const isValueSelected = !!selectedOption;
 
-  const handleChange = () => {
-    if (onChange) onChange(selected);
+  const handleChange = (val: string) => {
+    if (onChange) onChange(val);
     setOptionsOpened(false);
   };
 
@@ -95,7 +93,6 @@ export const SelectField: FC<SelectFieldProps> = ({
         options={options}
         selected={selected}
         setSelected={setSelected}
-        buttonText={selectButtonText}
         onChange={handleChange}
       />
     </>

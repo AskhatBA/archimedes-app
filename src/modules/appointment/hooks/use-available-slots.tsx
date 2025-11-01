@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { misApi } from '@/api';
+import { GET_DOCTOR_AVAILABLE_SLOTS_QUERY } from '@/shared/constants';
 
 export const useAvailableSlots = (
   doctorId?: string,
@@ -8,7 +9,7 @@ export const useAvailableSlots = (
   endDate?: string,
 ) => {
   const { data: availableSlots, isLoading: loadingAvailableSlots } = useQuery({
-    queryKey: ['available-slots', doctorId, startDate, endDate],
+    queryKey: [GET_DOCTOR_AVAILABLE_SLOTS_QUERY, doctorId, startDate, endDate],
     queryFn: async () =>
       (
         await misApi.doctorAvailableSlotsDetail(doctorId, {

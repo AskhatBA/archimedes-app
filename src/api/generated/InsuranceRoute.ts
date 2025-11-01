@@ -11,7 +11,7 @@
 
 import {
   AvailableInsuranceCity,
-  CheckUserAuthorizationResponse,
+  ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
   InsuranceProgramResponse,
@@ -108,24 +108,6 @@ export namespace Insurance {
       /** @example "Refund request successfully sent" */
       message?: string;
     };
-  }
-
-  /**
-   * No description
-   * @tags Insurance
-   * @name CheckUserAuthorizationList
-   * @summary Check if users is authorized in the insurance service successfully
-   * @request GET:/insurance/check-user-authorization
-   * @secure
-   * @response `200` `CheckUserAuthorizationResponse` Response
-   * @response `401` `void` Unauthorized
-   */
-  export namespace CheckUserAuthorizationList {
-    export type RequestParams = {};
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = CheckUserAuthorizationResponse;
   }
 
   /**
@@ -296,6 +278,33 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       electronicReferrals?: ElectronicReferralItem[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name ContactsList
+ * @summary Get insurance contact information
+ * @request GET:/insurance/contacts
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    contacts?: (ContactInfo)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+*/
+  export namespace ContactsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      contacts?: ContactInfo[];
     };
   }
 }

@@ -1,27 +1,15 @@
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createContext,
   FC,
   ReactElement,
   ReactNode,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
 
-import {
-  MISSpecialization,
-  MISBranch,
-  MISDoctor,
-  MISAvailableSlots,
-  misApi,
-} from '@/api';
+import { MISSpecialization, MISDoctor, MISAvailableSlots, misApi } from '@/api';
 import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slots';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
@@ -30,43 +18,29 @@ import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 
+import { CreateAppointmentForm } from '../types';
+
+const FORM_INITIAL_VALUES: CreateAppointmentForm = {
+  date: formatDate(new Date()),
+};
+
 interface CreateAppointmentContextProps {
-  programId: string | undefined;
-  setProgramId: (programId: string) => void;
-  branch: MISBranch['id'] | undefined;
-  specialization: MISSpecialization['id'] | undefined;
+  formValues: CreateAppointmentForm;
+  changeFormValues: (key: keyof CreateAppointmentForm, value: any) => void;
   specializations: MISSpecialization[];
-  setBranch: (branch: MISBranch['id']) => void;
-  setSpecialization: (specialization: MISSpecialization['id']) => void;
-  doctor: MISDoctor['id'] | undefined;
-  setDoctor: (doctor: MISDoctor['id']) => void;
   doctors: MISDoctor[];
   availableSlots: MISAvailableSlots | undefined;
-  selectedDate: string | undefined;
-  setSelectedDate: (date: string) => void;
-  timeSlot: string | undefined;
-  setTimeSlot: (timeSlot: string) => void;
   isBookingEnabled: boolean;
   bookAppointment: () => void;
   isBooking?: boolean;
 }
 
 const initialValues: CreateAppointmentContextProps = {
-  programId: undefined,
-  setProgramId: () => {},
-  branch: undefined,
-  specialization: undefined,
+  formValues: FORM_INITIAL_VALUES,
+  changeFormValues: () => {},
   specializations: [],
-  setBranch: () => {},
-  setSpecialization: () => {},
-  doctor: undefined,
-  setDoctor: () => {},
   doctors: [],
   availableSlots: undefined,
-  selectedDate: undefined,
-  setSelectedDate: () => {},
-  timeSlot: undefined,
-  setTimeSlot: () => {},
   isBookingEnabled: false,
   bookAppointment: () => {},
 };
@@ -80,52 +54,60 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { goBack } = useNavigation();
-  const [programId, setProgramId] = useState<string>();
-  const [branch, setBranch] = useState<MISBranch['id']>();
-  const [specialization, setSpecialization] =
-    useState<MISSpecialization['id']>();
-  const [doctor, setDoctor] = useState<MISDoctor['id']>();
-  const [selectedDate, setSelectedDate] = useState<string>(
-    formatDate(new Date()),
-  );
+
   const [success, setSuccess] = useState(false);
-  const [timeSlot, setTimeSlot] = useState<string>();
-  const { specializations } = useSpecializations(branch);
-  const { doctors } = useDoctors(branch, specialization);
-  const { availableSlots } = useAvailableSlots(
-    doctor,
-    selectedDate,
-    selectedDate,
+  const [formValues, setFormValues] =
+    useState<CreateAppointmentForm>(FORM_INITIAL_VALUES);
+
+  const { specializations } = useSpecializations(formValues.branchId);
+
+  const { doctors } = useDoctors(
+    formValues.branchId,
+    formValues.specializationId,
   );
-  const doctorDetails = doctors.find(misDoctor => misDoctor.id === doctor);
+
+  const { availableSlots } = useAvailableSlots(
+    formValues.doctorId,
+    formValues.date,
+    formValues.date,
+  );
+
+  const doctorDetails = doctors.find(
+    misDoctor => misDoctor.id === formValues.doctorId,
+  );
 
   const isBookingEnabled =
-    !!branch && !!specialization && !!doctor && !!selectedDate && !!timeSlot;
+    !!formValues.branchId &&
+    !!formValues.specializationId &&
+    !!formValues.doctorId &&
+    !!formValues.doctorId &&
+    !!formValues.timeSlot;
 
   const resetFormValues = () => {
-    setBranch(undefined);
-    setSpecialization(undefined);
-    setDoctor(undefined);
-    setSelectedDate(formatDate(new Date()));
-    setTimeSlot(undefined);
+    setFormValues(FORM_INITIAL_VALUES);
+  };
+
+  const changeFormValues = (key: keyof CreateAppointmentForm, value: any) => {
+    setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
   const createAppointmentMutation = useMutation({
-    mutationFn: () => {
-      const endTime = availableSlots?.[selectedDate]?.timeSlots.find(
-        time => time.startTime === timeSlot,
+    mutationFn: (payload: CreateAppointmentForm) => {
+      const endTime = availableSlots?.[payload.date]?.timeSlots.find(
+        time => time.startTime === payload.timeSlot,
       )?.endTime;
 
       return misApi.createAppointmentCreate({
-        branchId: branch,
-        doctorId: doctor,
-        startTime: `${selectedDate}T${timeSlot}:00+05:00`,
-        endTime: `${selectedDate}T${endTime}:00+05:00`,
-        insuranceProgramId: programId,
+        patientId: payload.patientId,
+        branchId: payload.branchId,
+        doctorId: payload.doctorId,
+        startTime: `${payload.date}T${payload.timeSlot}:00+05:00`,
+        endTime: `${payload.date}T${endTime}:00+05:00`,
+        insuranceProgramId: payload.programId,
       });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['appointments'] });
       setSuccess(true);
     },
     onError: (error: any) => {
@@ -144,7 +126,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   });
 
   const bookAppointment = () => {
-    createAppointmentMutation.mutate();
+    createAppointmentMutation.mutate(formValues);
   };
 
   const finishBooking = () => {
@@ -155,36 +137,21 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
   const value = useMemo(
     (): CreateAppointmentContextProps => ({
-      programId,
-      setProgramId,
+      formValues,
+      changeFormValues,
       availableSlots,
       specializations,
-      branch,
-      setBranch,
-      specialization,
-      setSpecialization,
-      doctor,
-      setDoctor,
       doctors,
-      selectedDate,
-      setSelectedDate,
-      timeSlot,
-      setTimeSlot,
       isBookingEnabled,
       bookAppointment,
       isBooking: createAppointmentMutation.isPending,
     }),
     [
+      formValues,
       createAppointmentMutation.isPending,
-      programId,
       availableSlots,
-      selectedDate,
-      branch,
-      doctor,
-      specialization,
       specializations,
       doctors,
-      timeSlot,
       isBookingEnabled,
     ],
   );
@@ -197,9 +164,9 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         onClose={finishBooking}
         doctorName={doctorDetails?.name}
         appointmentDate={
-          selectedDate && timeSlot
+          formValues.date && formValues.timeSlot
             ? formatDate(
-                `${selectedDate}T${timeSlot}:00+05:00`,
+                `${formValues.date}T${formValues.timeSlot}:00+05:00`,
                 'DD MMMM YYYY, HH:mm',
               )
             : undefined

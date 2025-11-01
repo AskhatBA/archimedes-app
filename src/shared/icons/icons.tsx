@@ -10,6 +10,7 @@ import FamilyIcon from '@/assets/icons/family.svg';
 import FilePenIcon from '@/assets/icons/file-pen.svg';
 import FileTextIcon from '@/assets/icons/file-text.svg';
 import FileIcon from '@/assets/icons/file.svg';
+import HeartIcon from '@/assets/icons/heart.svg';
 import HistoryIcon from '@/assets/icons/history.svg';
 import HospitalIcon from '@/assets/icons/hospital.svg';
 import InfoIcon from '@/assets/icons/info.svg';
@@ -58,4 +59,5 @@ export {
   BanknoteArrowDown,
   ClipboardListIcon,
   HistoryIcon,
+  HeartIcon,
 };

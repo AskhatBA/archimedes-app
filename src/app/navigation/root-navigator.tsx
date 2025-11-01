@@ -8,13 +8,13 @@ import { SignInScreen } from '@/modules/auth/screens/sign-in';
 import {
   CompensationsHistoryScreen,
   CompensationRequestScreen,
-} from '@/modules/insurance/screens/compensation';
-import {
   InsuranceDetailsScreen,
   InsuranceCertificateScreen,
   InsuranceMedicalNetworkScreen,
   InsuranceElectronicReferralsScreen,
-} from '@/modules/insurance/screens/insurance-details';
+  InsuranceDocumentScreen,
+  InsuranceSupportScreen,
+} from '@/modules/insurance';
 import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
 import { NotificationsScreen } from '@/modules/notifications/screens/notifications';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
@@ -106,6 +106,20 @@ export const RootNavigator: FC = () => {
         component={InsuranceElectronicReferralsScreen}
         options={{
           header: () => <SecondaryTopbar title="Электронные направления" />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceDocument}
+        component={InsuranceDocumentScreen}
+        options={{
+          header: () => <SecondaryTopbar title="Документ" />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.InsuranceSupport}
+        component={InsuranceSupportScreen}
+        options={{
+          header: () => <SecondaryTopbar title="Поддержка" />,
         }}
       />
       <RootStack.Screen

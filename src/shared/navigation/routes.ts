@@ -18,4 +18,6 @@ export const routes = {
   InsuranceCertificate: 'insurance-certificate',
   InsuranceMedicalNetwork: 'insurance-medical-network',
   InsuranceElectronicReferrals: 'insurance-electronic-referrals',
+  InsuranceDocument: 'insurance-document',
+  InsuranceSupport: 'insurance-support',
 } as const;

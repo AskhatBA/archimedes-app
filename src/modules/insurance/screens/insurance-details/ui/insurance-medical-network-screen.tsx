@@ -16,8 +16,8 @@ import { MapPinnedIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 import { toCapitalize } from '@/shared/utils/to-capitalize';
 
+import { useMedicalNetwork } from '../../../hooks/use-medical-network';
 import { clinicTypes } from '../constants';
-import { useMedicalNetwork } from '../hooks/use-medical-network';
 
 interface RouteParams {
   programId: string;
