@@ -21,7 +21,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: colors.blue['100'],
+          backgroundColor: colors.gray['200'],
         },
       ]}
     >
