@@ -47,6 +47,7 @@ export const SkeletonElement: FC<SkeletonElementProps> = ({
 
     animation.start();
 
+    // eslint-disable-next-line consistent-return
     return () => {
       animation.stop();
     };
@@ -57,6 +58,8 @@ export const SkeletonElement: FC<SkeletonElementProps> = ({
       accessible={false}
       style={[
         styles.base,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         { width, height, borderRadius, backgroundColor, opacity },
         style,
       ]}

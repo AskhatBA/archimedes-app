@@ -5,9 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Linking,
-  Platform,
-  PermissionsAndroid,
 } from 'react-native';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';

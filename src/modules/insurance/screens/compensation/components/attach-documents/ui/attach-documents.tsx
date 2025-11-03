@@ -119,7 +119,6 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
             setDocumentType(selectedDocumentType);
             openTypePicker();
           }}
-          buttonText="Выбрать"
           selected={documentType}
           setSelected={value => {
             setDocumentType(value);

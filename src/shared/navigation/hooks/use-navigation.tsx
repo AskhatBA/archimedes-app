@@ -14,7 +14,9 @@ export const useNavigation = () => {
     routeName: Routes,
     params?: Record<string, string | number>,
   ) => {
-    nativeNavigate(routeName as unknown as never, params as unknown as never);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    nativeNavigate(routeName as never, params as never);
   };
 
   const goBack = () => {
