@@ -14,9 +14,11 @@ import {
   CreateMISPatientBody,
   CreateMISPatientResponse,
   MISAppointment,
+  MISAppointmentHistory,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
+  MISLaboratoryResult,
   MISPatient,
   MISSpecialization,
 } from './data-contracts';
@@ -309,6 +311,68 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
       void
     >({
       path: `/mis/appointments`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name AppointmentHistoryList
+ * @summary Get patient appointment history from MIS
+ * @request GET:/mis/appointment-history
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointmentHistory?: (MISAppointmentHistory)[],
+
+}` Appointment history fetched successfully
+ * @response `401` `void` User not found or unauthorized
+ */
+  appointmentHistoryList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        appointmentHistory?: MISAppointmentHistory[];
+      },
+      void
+    >({
+      path: `/mis/appointment-history`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name LaboratoryResultsList
+ * @summary Get laboratory results from MIS
+ * @request GET:/mis/laboratory-results
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    laboratoryResults?: (MISLaboratoryResult)[],
+
+}` Laboratory results fetched successfully
+ * @response `401` `void` User not found or unauthorized
+ */
+  laboratoryResultsList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        laboratoryResults?: MISLaboratoryResult[];
+      },
+      void
+    >({
+      path: `/mis/laboratory-results`,
       method: 'GET',
       secure: true,
       format: 'json',

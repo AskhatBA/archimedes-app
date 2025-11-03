@@ -14,9 +14,11 @@ import {
   CreateMISPatientBody,
   CreateMISPatientResponse,
   MISAppointment,
+  MISAppointmentHistory,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
+  MISLaboratoryResult,
   MISPatient,
   MISSpecialization,
 } from './data-contracts';
@@ -260,6 +262,60 @@ export namespace Mis {
       /** @example true */
       success?: boolean;
       appointments?: MISAppointment[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name AppointmentHistoryList
+ * @summary Get patient appointment history from MIS
+ * @request GET:/mis/appointment-history
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointmentHistory?: (MISAppointmentHistory)[],
+
+}` Appointment history fetched successfully
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace AppointmentHistoryList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      appointmentHistory?: MISAppointmentHistory[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name LaboratoryResultsList
+ * @summary Get laboratory results from MIS
+ * @request GET:/mis/laboratory-results
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    laboratoryResults?: (MISLaboratoryResult)[],
+
+}` Laboratory results fetched successfully
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace LaboratoryResultsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      laboratoryResults?: MISLaboratoryResult[];
     };
   }
 

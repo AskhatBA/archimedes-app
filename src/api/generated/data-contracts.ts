@@ -378,6 +378,51 @@ export interface MISAppointment {
   notes?: string;
 }
 
+export interface MISAppointmentHistoryDoctor {
+  id?: string;
+  name?: string;
+  specialtyName?: string;
+  branchName?: string;
+  position?: string;
+  appointmentDurationMinutes?: number;
+}
+
+export interface MISAppointmentHistoryDocument {
+  id?: string;
+  documentTypeName?: string;
+  fileUrl?: string;
+  status?: string;
+  createdAt?: string;
+}
+
+export interface MISAppointmentHistory {
+  id?: string;
+  doctor?: MISAppointmentHistoryDoctor;
+  actualStartTime?: string;
+  diagnosis?: string | null;
+  documents?: MISAppointmentHistoryDocument[];
+  templateType?: string;
+  appointmentType?: string;
+  appointmentTypeDisplay?: string;
+}
+
+export interface MISLaboratoryResult {
+  /** Registration date of laboratory result */
+  registrationDate: string;
+  /** Laboratory result number */
+  number: string;
+  /** Full name of the patient */
+  patientFullName: string;
+  /** Birth date of the patient */
+  birthDate: string;
+  /** Base64 encoded PDF document */
+  pdfBase64: string;
+  /** Name of the department */
+  departmentName: string;
+  /** Name of the biomaterial */
+  biomaterialName: string;
+}
+
 export interface GetPatientProfileResponse {
   success?: boolean;
   isProfileComplete?: boolean;

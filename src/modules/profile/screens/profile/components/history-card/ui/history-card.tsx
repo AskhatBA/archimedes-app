@@ -5,10 +5,17 @@ import { useTheme } from '@/shared/theme';
 
 interface HistoryCardProps {
   name: string;
+  subtitle?: string;
   color: 'orange' | 'blue';
+  onPress?: () => void;
 }
 
-export const HistoryCard: FC<HistoryCardProps> = ({ name, color }) => {
+export const HistoryCard: FC<HistoryCardProps> = ({
+  name,
+  color,
+  subtitle,
+  onPress,
+}) => {
   const { colors } = useTheme();
 
   const background = {
@@ -23,13 +30,25 @@ export const HistoryCard: FC<HistoryCardProps> = ({ name, color }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: background[color] }]}>
-      <Text
-        numberOfLines={1}
-        style={[styles.name, { color: secondary[color] }]}
-      >
-        {name}
-      </Text>
+      <View style={styles.textContainer}>
+        <Text
+          numberOfLines={1}
+          style={[styles.name, { color: secondary[color] }]}
+        >
+          {name}
+        </Text>
+        {subtitle && (
+          <Text
+            numberOfLines={1}
+            style={[styles.subtitle, { color: secondary[color] }]}
+          >
+            {subtitle}
+          </Text>
+        )}
+      </View>
       <TouchableOpacity
+        onPress={onPress}
+        accessibilityRole="button"
         style={[styles.openButton, { backgroundColor: secondary[color] }]}
       >
         <Text style={[styles.openButtonLabel, { color: colors.white }]}>
@@ -49,11 +68,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderRadius: 15,
   },
+  textContainer: {
+    flex: 1,
+  },
   name: {
     fontSize: 16,
     fontWeight: 600,
     lineHeight: 25,
-    flex: 1,
+  },
+  subtitle: {
+    fontSize: 13,
+    fontWeight: 500,
+    lineHeight: 16,
+    marginTop: 2,
   },
   openButton: {
     paddingHorizontal: 12,
