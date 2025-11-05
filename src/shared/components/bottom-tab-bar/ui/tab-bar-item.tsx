@@ -2,7 +2,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { colors } from '@/shared/theme';
+import { colors, fonts } from '@/shared/theme';
 
 import { navigationItems } from '../constants';
 import { NavigationRoute } from '../types';
@@ -78,5 +78,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 10,
     textAlign: 'center',
+    fontFamily: fonts.SFPro.Regular,
   },
 });

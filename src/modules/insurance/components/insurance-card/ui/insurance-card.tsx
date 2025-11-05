@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { formatDate } from '@/shared/adapters/date';
 import { useNavigation, routes } from '@/shared/navigation';
-import { useTheme } from '@/shared/theme';
+import { fonts, useTheme } from '@/shared/theme';
 
 import { levelColors } from '../constants';
 
@@ -67,11 +67,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 25,
     marginBottom: 8,
+    fontFamily: fonts.SFPro.Bold,
   },
   price: {
     fontSize: 30,
     fontWeight: 300,
     marginBottom: 4,
+    fontFamily: fonts.SFPro.Light,
   },
   button: {
     paddingVertical: 12,
@@ -80,15 +82,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     color: '#fff',
     fontSize: 16,
+    fontFamily: fonts.SFPro.Medium,
   },
   buttonText: {
     textAlign: 'center',
     fontWeight: 600,
+    fontFamily: fonts.SFPro.Semibold,
     fontSize: 14,
   },
   date: {
     fontSize: 12,
     fontWeight: 500,
     marginBottom: 24,
+    fontFamily: fonts.SFPro.Medium,
   },
 });

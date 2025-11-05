@@ -6,7 +6,7 @@ import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
 import { useUser } from '@/shared/lib/user';
 import { routes, useNavigation } from '@/shared/navigation';
-import { colors } from '@/shared/theme';
+import { colors, fonts } from '@/shared/theme';
 
 export const UserWelcomeContainer: FC = () => {
   const { user } = useUser();
@@ -77,12 +77,14 @@ const styles = StyleSheet.create({
   text1: {
     fontSize: 16,
     lineHeight: 22,
-    fontWeight: '300',
+    fontWeight: 300,
+    fontFamily: fonts.SFPro.Light,
   },
   text2: {
     fontSize: 18,
     lineHeight: 22,
-    fontWeight: '600',
+    fontWeight: 600,
+    fontFamily: fonts.SFPro.Semibold,
   },
   actions: {
     flexDirection: 'row',

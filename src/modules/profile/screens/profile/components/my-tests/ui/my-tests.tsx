@@ -59,7 +59,7 @@ export const MyTests: FC = () => {
       </TouchableOpacity>
       {open && (
         <View style={styles.tests}>
-          {medicalTests.length ? (
+          {medicalTests?.length ? (
             medicalTests?.map(test => (
               <HistoryCard
                 key={`${test.biomaterialName}${test.registrationDate}`}

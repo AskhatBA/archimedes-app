@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
-import { globalStyles, useTheme } from '@/shared/theme';
+import { fonts, globalStyles, useTheme } from '@/shared/theme';
 
 import { AppointmentCard } from './appointment-card';
 
@@ -80,5 +80,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: '#666',
+    fontFamily: fonts.SFPro.Regular,
   },
 });

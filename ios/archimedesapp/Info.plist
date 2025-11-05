@@ -34,7 +34,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Мы используем камеру, чтобы вы могли сделать фото прямо в приложении.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Мы используем доступ к фото, чтобы вы могли выбрать изображение из галереи.</string>
 	<key>RCTNewArchEnabled</key>
@@ -57,5 +57,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SF-Pro-Display-Bold.otf</string>
+		<string>SF-Pro-Display-Light.otf</string>
+		<string>SF-Pro-Display-Medium.otf</string>
+		<string>SF-Pro-Display-Regular.otf</string>
+		<string>SF-Pro-Display-Semibold.otf</string>
+		<string>SF-Pro-Display-Thin.otf</string>
+	</array>
 </dict>
 </plist>

@@ -62,7 +62,7 @@ export const AppointmentHistory: FC = () => {
       </TouchableOpacity>
       {open && (
         <View style={[styles.tests]}>
-          {appointmentHistory.length > 0 ? (
+          {appointmentHistory?.length > 0 ? (
             appointmentHistory.map(appointment => (
               <HistoryCard
                 key={appointment.id}

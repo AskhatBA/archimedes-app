@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { useTheme } from '@/shared/theme';
+import { fonts, useTheme } from '@/shared/theme';
 
 import { ButtonVariant, ButtonSize } from '../types';
 
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     lineHeight: 22,
     textAlign: 'center',
+    fontFamily: fonts.SFPro.Medium,
   },
   disabled: {
     opacity: 0.5,
