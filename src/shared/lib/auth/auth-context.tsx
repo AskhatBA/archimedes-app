@@ -88,7 +88,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     mutationFn: async (credentials: RequestOTPBody) =>
       (await authApi.requestOtpCreate(credentials)).data,
     onSuccess: async data => {
-      // console.log('otp: ', data.otp);
+      console.log('otp: ', (data as { otp: string }).otp);
       navigate(routes.OtpVerification, { phone: data.phone });
     },
     onError: () => {

@@ -59,15 +59,28 @@ export const MyTests: FC = () => {
       </TouchableOpacity>
       {open && (
         <View style={styles.tests}>
-          {medicalTests?.map(test => (
-            <HistoryCard
-              key={`${test.biomaterialName}${test.registrationDate}`}
-              color="orange"
-              name={`${test.biomaterialName} - ${test.number}`}
-              subtitle={test.departmentName}
-              onPress={() => onOpenTest(test as MISLaboratoryResult)}
-            />
-          ))}
+          {medicalTests.length ? (
+            medicalTests?.map(test => (
+              <HistoryCard
+                key={`${test.biomaterialName}${test.registrationDate}`}
+                color="orange"
+                name={`${test.biomaterialName} - ${test.number}`}
+                subtitle={test.departmentName}
+                onPress={() => onOpenTest(test as MISLaboratoryResult)}
+              />
+            ))
+          ) : (
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: colors.gray['200'], alignItems: 'center' },
+              ]}
+            >
+              <Text style={[styles.cardTitle, { color: colors.gray['600'] }]}>
+                Нет записей
+              </Text>
+            </View>
+          )}
         </View>
       )}
 

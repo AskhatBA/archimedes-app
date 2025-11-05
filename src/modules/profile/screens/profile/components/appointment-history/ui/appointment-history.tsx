@@ -62,17 +62,30 @@ export const AppointmentHistory: FC = () => {
       </TouchableOpacity>
       {open && (
         <View style={[styles.tests]}>
-          {appointmentHistory.map(appointment => (
-            <HistoryCard
-              key={appointment.id}
-              color="blue"
-              subtitle={appointment.doctor.name}
-              name={`${appointment.appointmentTypeDisplay} - ${formatDate(appointment.actualStartTime, 'DD/MM/YYYY')}`}
-              onPress={() =>
-                onOpenAppointment(appointment as MISAppointmentHistory)
-              }
-            />
-          ))}
+          {appointmentHistory.length > 0 ? (
+            appointmentHistory.map(appointment => (
+              <HistoryCard
+                key={appointment.id}
+                color="blue"
+                subtitle={appointment.doctor.name}
+                name={`${appointment.appointmentTypeDisplay} - ${formatDate(appointment.actualStartTime, 'DD/MM/YYYY')}`}
+                onPress={() =>
+                  onOpenAppointment(appointment as MISAppointmentHistory)
+                }
+              />
+            ))
+          ) : (
+            <View
+              style={[
+                styles.card,
+                { backgroundColor: colors.gray['200'], alignItems: 'center' },
+              ]}
+            >
+              <Text style={[styles.cardTitle, { color: colors.gray['600'] }]}>
+                Нет записей
+              </Text>
+            </View>
+          )}
         </View>
       )}
 
