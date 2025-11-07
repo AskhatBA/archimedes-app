@@ -1,2 +1,9 @@
-export * from './dimensions';
-export * from './query-keys';
+export { SCREEN_HEIGHT, SCREEN_WIDTH } from './dimensions';
+export {
+  GET_INSURANCE_ELECTRONIC_REFERRALS,
+  GET_INSURANCE_PROGRAM_QUERY,
+  GET_INSURANCE_CONTACTS_QUERY,
+  GET_PROGRAM_QUERY,
+  GET_DOCTOR_AVAILABLE_SLOTS_QUERY,
+  GET_INSURANCE_PROGRAMS_QUERY,
+} from './query-keys';

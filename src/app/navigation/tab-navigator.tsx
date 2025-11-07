@@ -1,10 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { AppointmentsMainScreen } from '@/modules/appointment/screens/main';
-import { HomeScreen } from '@/modules/home/screens/home';
-import { CompensationScreen } from '@/modules/insurance/screens/compensation';
-import { InsuranceMainScreen } from '@/modules/insurance/screens/insurance-main';
-import { ProfileScreen } from '@/modules/profile/screens/profile';
+import { AppointmentsMainScreen } from '@/modules/appointment';
+import { HomeScreen } from '@/modules/home';
+import { CompensationScreen, InsuranceMainScreen } from '@/modules/insurance';
+import { ProfileScreen } from '@/modules/profile';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { routes } from '@/shared/navigation';

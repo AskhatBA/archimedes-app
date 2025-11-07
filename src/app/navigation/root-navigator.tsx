@@ -1,10 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
-import { CreateAppointmentScreen } from '@/modules/appointment/screens/create-appointment';
-import { CreateUserScreen } from '@/modules/auth/screens/create-user';
-import { OtpVerificationScreen } from '@/modules/auth/screens/otp-verification';
-import { SignInScreen } from '@/modules/auth/screens/sign-in';
+import { CreateAppointmentScreen } from '@/modules/appointment';
+import {
+  CreateUserScreen,
+  OtpVerificationScreen,
+  SignInScreen,
+} from '@/modules/auth';
 import {
   CompensationsHistoryScreen,
   CompensationRequestScreen,
@@ -15,8 +17,8 @@ import {
   InsuranceDocumentScreen,
   InsuranceSupportScreen,
 } from '@/modules/insurance';
-import { MedBotChatScreen } from '@/modules/med-bot/screens/med-bot-chat';
-import { NotificationsScreen } from '@/modules/notifications/screens/notifications';
+import { MedBotChatScreen } from '@/modules/med-bot';
+import { NotificationsScreen } from '@/modules/notifications';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';

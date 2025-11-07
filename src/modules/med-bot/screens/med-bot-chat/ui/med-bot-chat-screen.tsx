@@ -9,9 +9,9 @@ import {
   Keyboard,
 } from 'react-native';
 
-import { FeatureGrid } from '../../components/feature-grid';
-import { MessageInput } from '../../components/message-input';
-import { WelcomeMessage } from '../../components/welcome-message';
+import { FeatureGrid } from '@/modules/med-bot/components/feature-grid';
+import { MessageInput } from '@/modules/med-bot/components/message-input';
+import { WelcomeMessage } from '@/modules/med-bot/components/welcome-message';
 
 export const MedBotChatScreen: FC = () => {
   return (

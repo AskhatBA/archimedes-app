@@ -1,1 +1,1 @@
-export * from './ui/med-bot-chat-screen';
+export { MedBotChatScreen } from './ui/med-bot-chat-screen';
