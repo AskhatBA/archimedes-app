@@ -57,7 +57,7 @@ export const CompensationRequestScreen: FC = () => {
               const base64Content = await convertUriToBase64(file.uri);
 
               return {
-                fileType: file.type,
+                fileType: file.localFileType,
                 fileName: file.name,
                 content: base64Content,
               };

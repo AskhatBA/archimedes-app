@@ -1,1 +1,1 @@
-export * from './ui/bottom-tab-bar';
+export { BottomTabBar } from './ui/bottom-tab-bar';

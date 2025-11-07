@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button } from '@/shared/components/button';
@@ -26,6 +26,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
   onSubmit,
 }) => {
   const [files, setFiles] = useState<MediaFile[]>([]);
+  const [documentType, setDocumentType] = useState('');
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -35,7 +36,6 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       amount: '',
     },
     onSubmit: formValues => {
-      console.log('submit form', formValues);
       if (!files.length) return;
 
       onSubmit({
@@ -48,10 +48,6 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
     },
     validationSchema,
   });
-
-  useEffect(() => {
-    console.log('values', values);
-  }, [values]);
 
   const { programs, loadingPrograms } = usePrograms();
   const { family, loadingFamily } = useFamily(values.program);
@@ -101,8 +97,16 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         error={errors.date}
         maxDate={new Date()}
       />
-      <MediaPicker onChange={setFiles}>
+      <MediaPicker
+        onChange={newFiles => {
+          newFiles[newFiles.length - 1].localFileType = documentType;
+          setFiles(newFiles);
+          setDocumentType('');
+        }}
+      >
         <AttachDocuments
+          documentType={documentType}
+          setDocumentType={setDocumentType}
           files={files}
           onRemove={fileToRemove => {
             setFiles(files.filter(f => f.uri !== fileToRemove.uri));
