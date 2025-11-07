@@ -16,6 +16,7 @@ import {
   CreatePatientBody,
 } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
+import { GET_USER_INFO_QUERY } from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -50,7 +51,7 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
     isLoading: loadingUser,
     refetch: refreshUserData,
   } = useQuery({
-    queryKey: ['user', isAuthenticated],
+    queryKey: [GET_USER_INFO_QUERY, isAuthenticated],
     queryFn: async () => (await patientApi.profileList()).data,
     enabled: isAuthenticated,
   });

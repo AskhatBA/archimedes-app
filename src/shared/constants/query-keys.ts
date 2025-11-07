@@ -4,3 +4,4 @@ export const GET_INSURANCE_CONTACTS_QUERY = 'insurance-contacts';
 export const GET_INSURANCE_PROGRAM_QUERY = 'insurance-program';
 export const GET_INSURANCE_PROGRAMS_QUERY = 'insurance-programs';
 export const GET_INSURANCE_ELECTRONIC_REFERRALS = 'electronic-referrals';
+export const GET_USER_INFO_QUERY = 'user-info';
