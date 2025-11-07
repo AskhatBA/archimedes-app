@@ -8,7 +8,8 @@ import {
   Linking,
 } from 'react-native';
 
-import { useAppointmentHistory } from '@/modules/profile/hooks/use-appointment-history';
+import { CONSULTATION_SHEET } from '@/modules/profile/constants';
+import { useAppointmentHistory } from '@/modules/profile/hooks';
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { SelectCaretIcon, HistoryIcon, FileTextIcon } from '@/shared/icons';
@@ -68,7 +69,7 @@ export const AppointmentHistory: FC = () => {
                 key={appointment.id}
                 color="blue"
                 subtitle={appointment.doctor.name}
-                name={`${appointment.appointmentTypeDisplay} - ${formatDate(appointment.actualStartTime, 'DD/MM/YYYY')}`}
+                name={`${appointment.doctor.specialtyName} - ${formatDate(appointment.actualStartTime, 'DD.MM.YYYY')}`}
                 onPress={() =>
                   onOpenAppointment(appointment as MISAppointmentHistory)
                 }
@@ -101,7 +102,11 @@ export const AppointmentHistory: FC = () => {
             {/* Documents section */}
             {hasDocuments ? (
               <View style={{ gap: 8 }}>
-                {(selected.documents || []).map(doc => (
+                {(
+                  selected.documents?.filter(
+                    doc => doc.documentTypeName === CONSULTATION_SHEET,
+                  ) || []
+                ).map(doc => (
                   <TouchableOpacity
                     key={doc.id}
                     onPress={() => openUrl(doc.fileUrl)}

@@ -10,6 +10,7 @@ import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 
 import { useMedicalTests } from '@/modules/profile/hooks/use-medical-tests';
+import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import {
   SelectCaretIcon,
@@ -64,8 +65,8 @@ export const MyTests: FC = () => {
               <HistoryCard
                 key={`${test.biomaterialName}${test.registrationDate}`}
                 color="orange"
-                name={`${test.biomaterialName} - ${test.number}`}
-                subtitle={test.departmentName}
+                name={`${test.departmentName}`}
+                subtitle={formatDate(test.registrationDate, 'DD MMMM YYYY')}
                 onPress={() => onOpenTest(test as MISLaboratoryResult)}
               />
             ))
