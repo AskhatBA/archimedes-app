@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { patientApi, misApi } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
@@ -32,6 +33,7 @@ export const CreateUserScreen: FC = () => {
   const { user, refreshUserData } = useUser();
   const { logout } = useAuth();
   const { showToast } = useToast();
+  const deviceInsets = useSafeAreaInsets();
 
   const isUserExistsInMis =
     !!misPatient?.patient?.lastName &&
@@ -97,7 +99,12 @@ export const CreateUserScreen: FC = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
     >
       <MainLayout>
-        <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+        <ScrollView
+          contentContainerStyle={{
+            paddingTop: deviceInsets.top,
+            paddingBottom: 32,
+          }}
+        >
           <View style={styles.container}>
             <Text style={[styles.title, { color: colors.blue['400'] }]}>
               {isUserExistsInMis ? 'Данные пациента' : 'Служба поддержки'}

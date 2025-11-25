@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
-import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -9,23 +8,19 @@ const image = require('@/assets/images/home-banner-doctor.png');
 
 export const FindSpecialistBanner: FC = () => {
   const { colors } = useTheme();
-  const { navigate } = useNavigation();
 
   return (
-    <TouchableOpacity
-      onPress={() => navigate(routes.MedBotChat)}
-      style={[styles.container, { backgroundColor: colors.orange['200'] }]}
-    >
+    <View style={[styles.container, { backgroundColor: colors.orange['200'] }]}>
       <View style={styles.infoContainer}>
         <Text style={[styles.title, { color: colors.orange['600'] }]}>
           Подобрать специалиста
         </Text>
         <Text style={[styles.subtitle, { color: colors.orange['400'] }]}>
-          Запишитесь на прием к подходящему врачу, используя ИИ
+          Найдите своего идеального врача прямо сейчас
         </Text>
       </View>
       <Image source={image} resizeMode="contain" style={styles.image} />
-    </TouchableOpacity>
+    </View>
   );
 };
 
