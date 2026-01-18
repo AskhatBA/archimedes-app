@@ -79,12 +79,14 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontWeight: 300,
     fontFamily: fonts.SFPro.Light,
+    color: colors.textMain,
   },
   text2: {
     fontSize: 18,
     lineHeight: 22,
     fontWeight: 600,
     fontFamily: fonts.SFPro.Semibold,
+    color: colors.textMain,
   },
   actions: {
     flexDirection: 'row',

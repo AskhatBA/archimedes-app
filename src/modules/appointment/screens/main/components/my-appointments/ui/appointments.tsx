@@ -38,7 +38,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
 
   const groupedAppointments = appointments.reduce(
     (acc, appointment) => {
-      const hour = dayjs(appointment.start_time).format('HH:00');
+      const hour = dayjs(appointment.start_time).format('DD MMM HH:00');
       if (!acc[hour]) {
         acc[hour] = [];
       }
@@ -51,7 +51,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
   return (
     <View style={styles.container}>
       {Object.entries(groupedAppointments)
-        .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+        .sort(([timeA], [timeB]) => timeB.localeCompare(timeA))
         .map(([time, appointmentList], index) => {
           const currentSeparatorType =
             separatorTypes[index % separatorTypes.length];
