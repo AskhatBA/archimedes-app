@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { FC, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button } from '@/shared/components/button';
@@ -51,9 +51,16 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
 
   const { programs, loadingPrograms } = usePrograms();
   const { family, loadingFamily } = useFamily(values.program);
-  const activePrograms = programs.filter(
-    program => program.status !== 'EXPIRED',
+  const activePrograms = useMemo(
+    () => programs.filter(program => program.status !== 'EXPIRED'),
+    [programs],
   );
+
+  useEffect(() => {
+    if (activePrograms.length === 1) {
+      handleChange('program')(activePrograms[0].id);
+    }
+  }, [activePrograms]);
 
   return (
     <View style={styles.container}>

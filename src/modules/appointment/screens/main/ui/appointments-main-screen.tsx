@@ -52,7 +52,7 @@ export const AppointmentsMainScreen: FC = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    paddingBottom: 50,
   },
   createAppointmentButton: {
     width: '100%',

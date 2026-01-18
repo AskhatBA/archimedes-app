@@ -19,13 +19,19 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.container, { backgroundColor: colors.blue['100'] }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.blue['100'],
+        },
+      ]}
+      activeOpacity={0.9}
     >
       <View
         style={[styles.dateContainer, { backgroundColor: colors.gray['50'] }]}
       >
         <Text style={[styles.date, { color: colors.blue['400'] }]}>
-          {formatDate(date, 'DD')}
+          {formatDate(date, 'DD.MM')}
         </Text>
         <Text style={[styles.dayOfWeek, { color: colors.blue['400'] }]}>
           {getDayOfWeek(date, 'short')}
@@ -58,38 +64,38 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 16,
     gap: 16,
-    maxWidth: 340,
+    width: '100%',
   },
   doctorName: {
-    fontSize: 14,
-    lineHeight: 14,
+    fontSize: 16,
+    lineHeight: 20,
     fontWeight: 700,
     marginTop: 12,
     marginBottom: 4,
   },
   specialization: {
-    fontWeight: 300,
-    fontSize: 12,
-    lineHeight: 14,
+    fontWeight: '400' as any,
+    fontSize: 13,
+    lineHeight: 18,
   },
   dateContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 62,
-    borderRadius: 15,
+    borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 12,
   },
   date: {
-    fontSize: 24,
+    fontSize: 12,
     fontWeight: 700,
     lineHeight: 25,
   },
   dayOfWeek: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 700,
     lineHeight: 25,
     textTransform: 'capitalize',
@@ -99,12 +105,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   timeOfDay: {
-    fontSize: 14,
-    lineHeight: 25,
+    fontSize: 13,
+    lineHeight: 20,
   },
   time: {
     fontSize: 14,
     fontWeight: 600,
-    lineHeight: 25,
+    lineHeight: 20,
   },
 });

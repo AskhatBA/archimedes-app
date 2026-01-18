@@ -1,8 +1,14 @@
 // import { config } from '@/shared/config';
+import { Platform } from 'react-native';
 
-const URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
+// const URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
 // const URL = 'http://192.168.10.3:4000/v1/api';
 // const URL = 'http://localhost:4000/v1/api';
+
+export const baseURL = Platform.select({
+  ios: 'http://localhost:4000/v1/api',
+  android: 'http://10.0.2.2:4000/v1/api',
+});
 
 const securityWorker = (token: string | null | undefined): Promise<any> => {
   const securityConfig = {
@@ -21,7 +27,7 @@ const securityWorker = (token: string | null | undefined): Promise<any> => {
 };
 
 export const apiConfig = {
-  baseURL: URL,
+  baseURL,
   securityWorker,
   withCredentials: true,
 };

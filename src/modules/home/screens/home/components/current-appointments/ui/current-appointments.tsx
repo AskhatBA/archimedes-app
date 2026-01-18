@@ -37,17 +37,20 @@ export const CurrentAppointments: FC = () => {
 
     return (
       <ScrollView
-        horizontal
-        contentContainerStyle={styles.carouselContainer}
-        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.listContainer}
+        showsVerticalScrollIndicator={false}
       >
-        {appointments.map(appointment => (
-          <AppointmentCard
+        {appointments.slice(0, 5).map((appointment, index) => (
+          <View
             key={appointment.id}
-            doctorName={appointment.doctor_name}
-            specialization={appointment.branch_name}
-            date={appointment.start_time}
-          />
+            style={{ marginBottom: index === appointments.length - 1 ? 0 : 12 }}
+          >
+            <AppointmentCard
+              doctorName={appointment.doctor_name}
+              specialization={appointment.branch_name}
+              date={appointment.start_time}
+            />
+          </View>
         ))}
       </ScrollView>
     );
@@ -64,11 +67,12 @@ export const CurrentAppointments: FC = () => {
 };
 
 const styles = StyleSheet.create({
-  carouselContainer: {
+  listContainer: {
     marginTop: 18,
-    gap: 8,
+    gap: 0,
     paddingLeft: 32,
     paddingRight: 32,
+    paddingBottom: 8,
   },
   loaderContainer: {
     marginTop: 24,

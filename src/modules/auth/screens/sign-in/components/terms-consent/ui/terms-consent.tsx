@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Checkbox } from '@/shared/components/checkbox';
+import { colors } from '@/shared/theme';
 
 interface TermsConsentProps {
   terms: boolean;
@@ -33,5 +34,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
+    color: colors.textMain,
   },
 });

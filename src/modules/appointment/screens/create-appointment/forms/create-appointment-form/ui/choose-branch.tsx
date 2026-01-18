@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
@@ -9,19 +9,46 @@ import { useCreateAppointment } from '../../../context/create-appointment-contex
 
 import { createAppointmentFormStyles } from './styles';
 
+const BRANCHES_TO_SHOW = ['ТОО "Archimedes Medical Group"'];
+
 export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
   const { branches, loadingBranches } = useBranches();
   const { changeFormValues, formValues } = useCreateAppointment();
 
-  const branchOptions = useMemo(
-    () =>
-      (branches || []).map(clinic => ({
-        label: `${clinic.name} (${clinic.address})`,
+  useEffect(() => {
+    console.log('branches', branches);
+  }, [branches]);
+
+  const sectionsByCity = useMemo(() => {
+    const filtered = (branches || []).filter(clinic =>
+      BRANCHES_TO_SHOW.includes(clinic.name),
+    );
+
+    const getCity = (address?: string) => {
+      if (!address) return 'Прочее';
+      const firstPart = address.split(',')[0] || '';
+      // remove common prefixes like 'г.' or 'г '
+      return firstPart.replace(/^г\.?\s*/i, '').trim() || 'Прочее';
+    };
+
+    const map = new Map<
+      string,
+      { title: string; options: { label: string; value: string }[] }
+    >();
+    // eslint-disable-next-line no-restricted-syntax
+    for (const clinic of filtered) {
+      const city = getCity(clinic.address);
+      if (!map.has(city)) {
+        map.set(city, { title: city, options: [] });
+      }
+      map.get(city)!.options.push({
+        label: clinic.address,
         value: String(clinic.id),
-      })),
-    [branches],
-  );
+      });
+    }
+    return Array.from(map.values());
+  }, [branches]);
 
   if (loadingBranches) return null;
 
@@ -36,7 +63,7 @@ export const ChooseBranch: FC = () => {
         Выберите филиал
       </Text>
       <SelectField
-        options={branchOptions}
+        sections={sectionsByCity}
         value={formValues.branchId ? String(formValues.branchId) : ''}
         placeholder="Филиал"
         onChange={value => {

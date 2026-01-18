@@ -6,7 +6,7 @@ import { MainLayout } from '@/shared/layout/main-layout';
 import { colors } from '@/shared/theme';
 
 import { AppointmentHistory } from '../components/appointment-history';
-import { MyTests } from '../components/my-tests';
+// import { MyTests } from '../components/my-tests';
 
 export const ProfileScreen: FC = () => {
   return (
@@ -14,7 +14,7 @@ export const ProfileScreen: FC = () => {
       <MainLayout>
         <UserWelcomeContainer />
         <View style={styles.main}>
-          <MyTests />
+          {/* <MyTests /> */}
           <AppointmentHistory />
           <View style={{ gap: 8 }}>
             <Text style={[styles.version, { color: colors.textMain }]}>

@@ -6,7 +6,6 @@ import { CalendarIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
 import { Appointments } from './appointments';
-import { DaySelector } from './day-selector';
 
 export const MyAppointments: FC = () => {
   const [date, setDate] = useState(dayjs());
@@ -20,7 +19,6 @@ export const MyAppointments: FC = () => {
         </Text>
         <CalendarIcon />
       </View>
-      <DaySelector value={date} onChange={setDate} />
       <Appointments startDate={date.format('YYYY-MM-DD')} />
     </View>
   );

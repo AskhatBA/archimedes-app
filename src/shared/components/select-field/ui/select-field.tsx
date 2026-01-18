@@ -4,12 +4,13 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SelectCaretIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
-import { SelectFieldOption } from '../types';
+import { SelectFieldOption, SelectFieldSection } from '../types';
 
 import { SelectDrawer } from './select-drawer';
 
 interface SelectFieldProps {
-  options: SelectFieldOption[];
+  options?: SelectFieldOption[];
+  sections?: SelectFieldSection[];
   placeholder?: string;
   onChange?: (value: string) => void;
   value?: string;
@@ -18,6 +19,7 @@ interface SelectFieldProps {
 
 export const SelectField: FC<SelectFieldProps> = ({
   options,
+  sections,
   placeholder,
   onChange,
   value,
@@ -26,7 +28,10 @@ export const SelectField: FC<SelectFieldProps> = ({
   const [selected, setSelected] = useState<string>();
   const [optionsOpened, setOptionsOpened] = useState(false);
   const { colors } = useTheme();
-  const selectedOption = options.find(option => option.value === value);
+  const allOptions: SelectFieldOption[] = sections
+    ? sections.flatMap(s => s.options)
+    : options || [];
+  const selectedOption = allOptions.find(option => option.value === value);
   const isValueSelected = !!selectedOption;
 
   const handleChange = (val: string) => {
@@ -91,6 +96,7 @@ export const SelectField: FC<SelectFieldProps> = ({
         isOpen={optionsOpened}
         onClose={onClose}
         options={options}
+        sections={sections}
         selected={selected}
         setSelected={setSelected}
         onChange={handleChange}

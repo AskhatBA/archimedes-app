@@ -8,11 +8,9 @@ import { useTheme } from '@/shared/theme';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 
-export const Appointments: FC<{ startDate: string }> = ({ startDate }) => {
+export const Appointments: FC<{ startDate: string }> = () => {
   const { colors } = useTheme();
-  const { appointments, loadingAppointments } = useAppointments({
-    filter: { startDate },
-  });
+  const { appointments, loadingAppointments } = useAppointments();
 
   const separatorColors = {
     blue: colors.blue['500'],

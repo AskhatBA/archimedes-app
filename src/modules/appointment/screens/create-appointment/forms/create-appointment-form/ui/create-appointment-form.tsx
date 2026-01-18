@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { TimeSlots } from '@/modules/appointment/components/time-slots';
@@ -26,6 +26,17 @@ export const CreateAppointmentForm: FC = () => {
   const { programs } = usePrograms();
   const { family } = useFamily(formValues.programId);
 
+  const availablePrograms = useMemo(
+    () => programs?.filter(p => p.status !== 'EXPIRED'),
+    [programs],
+  );
+
+  useEffect(() => {
+    if (availablePrograms?.length === 1) {
+      changeFormValues('programId', availablePrograms[0].id);
+    }
+  }, [availablePrograms]);
+
   return (
     <View style={styles.container}>
       <View style={{ marginTop: 24 }}>
@@ -41,9 +52,10 @@ export const CreateAppointmentForm: FC = () => {
           value={formValues.programId || ''}
           onChange={value => changeFormValues('programId', value)}
           placeholder="Страховка"
-          options={(programs || [])
-            .filter(p => p.status !== 'EXPIRED')
-            .map(p => ({ value: p.id, label: `${p.title} (${p.cardNo})` }))}
+          options={(availablePrograms || []).map(p => ({
+            value: p.id,
+            label: `${p.title} (${p.cardNo})`,
+          }))}
         />
       </View>
 
