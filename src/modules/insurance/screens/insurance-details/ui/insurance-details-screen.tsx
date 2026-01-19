@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Linking,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -52,6 +54,17 @@ export const InsuranceDetailsScreen: FC = () => {
     await queryClient.refetchQueries({
       queryKey: [GET_PROGRAM_QUERY, programId],
     });
+  };
+
+  const openSupport = async () => {
+    const phoneNumber = '77019511647';
+    const url = `https://wa.me/${phoneNumber}`;
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
   };
 
   if (loadingProgram) {
@@ -175,7 +188,7 @@ export const InsuranceDetailsScreen: FC = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigate(routes.InsuranceSupport)}
+            onPress={() => openSupport()}
             style={[
               styles.documentItem,
               { backgroundColor: colors.gray['200'] },
