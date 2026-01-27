@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner';
-import { UserWelcomeContainer } from '@/shared/components/user-welcome-container';
+import { GreetUser } from '@/shared/components/greet-user';
 import { MainLayout } from '@/shared/layout/main-layout';
 
 import { CurrentAppointments } from '../components/current-appointments';
@@ -13,7 +13,7 @@ export const HomeScreen: FC = () => {
     <ScrollView>
       <MainLayout>
         <View style={styles.content}>
-          <UserWelcomeContainer />
+          <GreetUser />
           <SearchField />
           <FindSpecialistBanner />
           <CurrentAppointments />

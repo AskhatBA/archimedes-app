@@ -8,7 +8,7 @@ import { useUser } from '@/shared/lib/user';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
-export const UserWelcomeContainer: FC = () => {
+export const GreetUser: FC = () => {
   const { user } = useUser();
   const { logout } = useAuth();
   const { navigate } = useNavigation();

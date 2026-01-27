@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
-import { UserWelcomeContainer } from '@/shared/components/user-welcome-container';
+import { GreetUser } from '@/shared/components/greet-user';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { colors } from '@/shared/theme';
 
@@ -12,7 +12,7 @@ export const ProfileScreen: FC = () => {
   return (
     <ScrollView>
       <MainLayout>
-        <UserWelcomeContainer />
+        <GreetUser />
         <View style={styles.main}>
           <MyTests />
           <AppointmentHistory />
