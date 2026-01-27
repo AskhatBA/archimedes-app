@@ -5,4 +5,5 @@ export const validationSchema = Yup.object().shape({
   amount: Yup.string().required('Обязательное поле'),
   person: Yup.string().required('Обязательное поле'),
   program: Yup.string().required('Обязательное поле'),
+  category: Yup.string().required('Обязательное поле'),
 });

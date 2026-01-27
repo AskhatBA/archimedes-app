@@ -9,17 +9,13 @@ import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
 import { usePrograms, useFamily } from '@/shared/lib/insurance';
 
-import { AttachDocuments } from '../../../components/attach-documents';
+import { compensationCategories } from '../../../constants';
+import { AttachDocuments } from '../../../screens/compensation/components/attach-documents';
+import { CompensationRequestFormValues } from '../../../types';
 import { validationSchema } from '../validation-schema';
 
 interface CompensationRequestFormProps {
-  onSubmit: (values: {
-    date: string;
-    amount: number;
-    files: MediaFile[];
-    programId: string;
-    personId: string;
-  }) => void;
+  onSubmit: (values: CompensationRequestFormValues) => void;
 }
 
 export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
@@ -34,6 +30,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       person: '',
       date: '',
       amount: '',
+      category: '',
     },
     onSubmit: formValues => {
       if (!files.length) return;
@@ -44,6 +41,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         files,
         personId: formValues.person,
         programId: formValues.program,
+        category: +formValues.category,
       });
     },
     validationSchema,
@@ -88,6 +86,16 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           error={errors.person}
         />
       )}
+      <SelectField
+        value={values.category}
+        onChange={value => handleChange('category')(value)}
+        options={compensationCategories.map(item => ({
+          value: item.id.toString(),
+          label: item.title,
+        }))}
+        placeholder="Категория"
+        error={errors.category}
+      />
       <TextField
         placeholder="0"
         label="Сумма возмещения в тенге"

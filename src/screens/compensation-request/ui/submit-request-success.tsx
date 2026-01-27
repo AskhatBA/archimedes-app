@@ -3,10 +3,10 @@ import { View, StyleSheet, Text } from 'react-native';
 
 import { Button } from '@/shared/components/button';
 import { SuccessCheckIcon } from '@/shared/icons';
-import { useNavigation, routes } from '@/shared/navigation';
+import { useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
-export const SuccessRefundRequest: FC = () => {
+export const SubmitRequestSuccess: FC = () => {
   const { colors } = useTheme();
   const { goBack } = useNavigation();
 

@@ -11,6 +11,7 @@
 
 import {
   AvailableInsuranceCity,
+  ClinicType,
   ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
@@ -305,6 +306,33 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       contacts?: ContactInfo[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name ClinicTypesList
+ * @summary Get clinic types
+ * @request GET:/insurance/clinic-types
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinicTypes?: (ClinicType)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+*/
+  export namespace ClinicTypesList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      clinicTypes?: ClinicType[];
     };
   }
 }

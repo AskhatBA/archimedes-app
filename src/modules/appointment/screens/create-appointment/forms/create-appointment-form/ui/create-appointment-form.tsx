@@ -1,11 +1,10 @@
 import { FC, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { TimeSlots } from '@/modules/appointment/components/time-slots';
 import { useCreateAppointment } from '@/modules/appointment/screens/create-appointment/context/create-appointment-context';
 import { Button } from '@/shared/components/button';
-import { Calendar } from '@/shared/components/calendar';
 import { SelectField } from '@/shared/components/select-field';
+import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
 import { useFamily, usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
@@ -58,7 +57,6 @@ export const CreateAppointmentForm: FC = () => {
           }))}
         />
       </View>
-
       {formValues.programId && family && (
         <View>
           <Text
@@ -83,9 +81,7 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
-
       {formValues.programId && <ChooseBranch />}
-
       {formValues.branchId && (
         <View>
           <Text
@@ -107,7 +103,6 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
-
       {formValues.branchId && formValues.specializationId && (
         <View>
           <Text
@@ -129,51 +124,22 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
-
-      {formValues.branchId &&
-        formValues.specializationId &&
-        formValues.doctorId && (
-          <View>
-            <Text
-              style={[
-                createAppointmentFormStyles.title,
-                { color: colors.gray['500'] },
-              ]}
-            >
-              Выберите дату
-            </Text>
-            <Calendar
-              value={formValues.date}
-              onChange={value => {
-                changeFormValues('timeSlot', '');
-                changeFormValues('date', value);
-              }}
-            />
-          </View>
-        )}
-
-      {availableSlots && availableSlots[formValues.date] ? (
-        <View>
-          <Text
-            style={[
-              createAppointmentFormStyles.title,
-              { color: colors.gray['500'] },
-            ]}
-          >
-            Выберите время
-          </Text>
-          <TimeSlots
-            value={formValues.timeSlot}
-            onChange={value => changeFormValues('timeSlot', value)}
-            slots={availableSlots[formValues.date].timeSlots.map(
-              item => item.startTime,
-            )}
-          />
-        </View>
-      ) : (
-        <Text style={[styles.noSlots, { color: colors.textMain }]}>
-          Нет доступных слотов
-        </Text>
+      {formValues.doctorId && (
+        <TimeSlotPicker
+          onSelect={(selectedDate, selectedTime) => {
+            changeFormValues('date', selectedDate);
+            changeFormValues('timeSlot', selectedTime);
+          }}
+          selectedDate={formValues.date}
+          selectedTime={formValues.timeSlot}
+          days={Object.values(availableSlots || {}).map(slot => ({
+            ...slot,
+            slots: slot.timeSlots.map(item => ({
+              time: item.startTime,
+              available: true,
+            })),
+          }))}
+        />
       )}
 
       <Button

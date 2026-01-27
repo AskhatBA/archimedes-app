@@ -10,21 +10,25 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { insuranceApi, RefundRequestBody } from '@/api';
+import {
+  CompensationRequestForm,
+  CompensationRequestFormValues,
+  CompensationCategoryEnum,
+} from '@/modules/insurance';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 import { convertUriToBase64 } from '@/shared/utils/convert-uri-to-base64';
 
-import { SuccessRefundRequest } from '../components/success-refund-request';
-import { CompensationRequestForm } from '../forms/compensation-request-form';
+import { SubmitRequestSuccess } from './submit-request-success';
 
 export const CompensationRequestScreen: FC = () => {
   const { colors } = useTheme();
-  const deviceInsets = useSafeAreaInsets();
   const { showToast } = useToast();
+  const deviceInsets = useSafeAreaInsets();
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const refundRequestMutation = useMutation({
+  const compensationRequestMutation = useMutation({
     mutationFn: async (data: RefundRequestBody) =>
       (await insuranceApi.refundRequestCreate(data)).data,
     onSuccess: () => {
@@ -38,7 +42,32 @@ export const CompensationRequestScreen: FC = () => {
     },
   });
 
-  if (isSuccess) return <SuccessRefundRequest />;
+  const submitCompensationRequest = async (
+    formValues: CompensationRequestFormValues,
+  ) => {
+    const promises = formValues.files.map(async file => {
+      const base64Content = await convertUriToBase64(file.uri);
+
+      return {
+        fileType: file.localFileType,
+        fileName: file.name,
+        content: base64Content,
+      };
+    });
+
+    const convertedFiles = await Promise.all(promises);
+
+    compensationRequestMutation.mutate({
+      programId: formValues.programId,
+      personId: formValues.personId,
+      date: formValues.date,
+      amount: +formValues.amount,
+      files: convertedFiles,
+      category: formValues.category as CompensationCategoryEnum,
+    });
+  };
+
+  if (isSuccess) return <SubmitRequestSuccess />;
 
   return (
     <>
@@ -51,32 +80,10 @@ export const CompensationRequestScreen: FC = () => {
         <Text style={[styles.heading, { color: colors.primary }]}>
           Заявка на возмещение
         </Text>
-        <CompensationRequestForm
-          onSubmit={async requestParams => {
-            const promises = requestParams.files.map(async file => {
-              const base64Content = await convertUriToBase64(file.uri);
-
-              return {
-                fileType: file.localFileType,
-                fileName: file.name,
-                content: base64Content,
-              };
-            });
-
-            const convertedFiles = await Promise.all(promises);
-
-            refundRequestMutation.mutate({
-              programId: requestParams.programId,
-              personId: requestParams.personId,
-              date: requestParams.date,
-              amount: +requestParams.amount,
-              files: convertedFiles,
-            });
-          }}
-        />
+        <CompensationRequestForm onSubmit={submitCompensationRequest} />
       </ScrollView>
 
-      {refundRequestMutation.isPending && (
+      {compensationRequestMutation.isPending && (
         <View style={[styles.loaderBackdrop, { top: -deviceInsets.top - 54 }]}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>

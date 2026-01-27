@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import {
   createContext,
   FC,
@@ -66,11 +67,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     formValues.specializationId,
   );
 
-  const { availableSlots } = useAvailableSlots(
-    formValues.doctorId,
-    formValues.date,
-    formValues.date,
-  );
+  const { availableSlots } = useAvailableSlots(formValues.doctorId);
 
   const doctorDetails = doctors.find(
     misDoctor => misDoctor.id === formValues.doctorId,

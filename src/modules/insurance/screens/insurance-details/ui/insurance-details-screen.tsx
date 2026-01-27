@@ -160,9 +160,7 @@ export const InsuranceDetailsScreen: FC = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              navigate(routes.InsuranceMedicalNetwork, { programId })
-            }
+            onPress={() => navigate(routes.MedicalNetwork, { programId })}
             style={[
               styles.documentItem,
               { backgroundColor: colors.gray['200'] },

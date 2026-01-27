@@ -34,7 +34,7 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
   const openSheet = () => {
     Animated.timing(translateY, {
       toValue: 0,
-      duration: 200,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
@@ -42,7 +42,7 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
   const closeSheet = () => {
     Animated.timing(translateY, {
       toValue: sheetHeight,
-      duration: 200,
+      duration: 250,
       useNativeDriver: true,
     }).start(() => {
       onClose?.();

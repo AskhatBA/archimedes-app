@@ -82,6 +82,15 @@ export interface RefundRequestBody {
   personId?: string;
   /** @example "a2f6c7d8-3b1e-4f0a-9c3d-7e5a1b2c3d4e" */
   programId?: string;
+  /**
+   * Refund category type:
+   * * 0 - АПП (амбулаторно-поликлиническая помощь)
+   * * 4 - Стоматология
+   * * 5 - Медикаменты
+   * * 2 - Стацинарное лечение
+   * @example 0
+   */
+  category?: 0 | 2 | 4 | 5;
   files?: Files;
 }
 
@@ -247,6 +256,13 @@ export interface ContactInfo {
   city: string;
   /** @example ["+7 (7172) 123-456","+7 (7172) 654-321"] */
   phones: string[];
+}
+
+export interface ClinicType {
+  /** @example 1 */
+  id: number;
+  /** @example "Поликлиника" */
+  title: string;
 }
 
 export interface MISPatient {

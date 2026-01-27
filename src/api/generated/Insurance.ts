@@ -11,6 +11,7 @@
 
 import {
   AvailableInsuranceCity,
+  ClinicType,
   ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
@@ -349,6 +350,37 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       void
     >({
       path: `/insurance/contacts`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name ClinicTypesList
+ * @summary Get clinic types
+ * @request GET:/insurance/clinic-types
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinicTypes?: (ClinicType)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ */
+  clinicTypesList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        clinicTypes?: ClinicType[];
+      },
+      void
+    >({
+      path: `/insurance/clinic-types`,
       method: 'GET',
       secure: true,
       format: 'json',

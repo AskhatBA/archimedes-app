@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
@@ -16,10 +16,6 @@ export const ChooseBranch: FC = () => {
   const { branches, loadingBranches } = useBranches();
   const { changeFormValues, formValues } = useCreateAppointment();
 
-  useEffect(() => {
-    console.log('branches', branches);
-  }, [branches]);
-
   const sectionsByCity = useMemo(() => {
     const filtered = (branches || []).filter(clinic =>
       BRANCHES_TO_SHOW.includes(clinic.name),
@@ -28,7 +24,6 @@ export const ChooseBranch: FC = () => {
     const getCity = (address?: string) => {
       if (!address) return 'Прочее';
       const firstPart = address.split(',')[0] || '';
-      // remove common prefixes like 'г.' or 'г '
       return firstPart.replace(/^г\.?\s*/i, '').trim() || 'Прочее';
     };
 

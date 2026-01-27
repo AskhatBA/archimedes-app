@@ -9,16 +9,16 @@ import {
 } from '@/modules/auth';
 import {
   CompensationsHistoryScreen,
-  CompensationRequestScreen,
   InsuranceDetailsScreen,
   InsuranceCertificateScreen,
-  InsuranceMedicalNetworkScreen,
   InsuranceElectronicReferralsScreen,
   InsuranceDocumentScreen,
   InsuranceSupportScreen,
 } from '@/modules/insurance';
 import { MedBotChatScreen } from '@/modules/med-bot';
 import { NotificationsScreen } from '@/modules/notifications';
+import { CompensationRequestScreen } from '@/screens/compensation-request';
+import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
@@ -97,8 +97,8 @@ export const RootNavigator: FC = () => {
         }}
       />
       <RootStack.Screen
-        name={routes.InsuranceMedicalNetwork}
-        component={InsuranceMedicalNetworkScreen}
+        name={routes.MedicalNetwork}
+        component={MedicalNetworkScreen}
         options={{
           header: () => <SecondaryTopbar title="Медицинская сеть" />,
         }}
