@@ -1,5 +1,8 @@
 import { CompensationCategoryEnum } from './types';
 
+export const INSURANCE_CERTIFICATE_URL =
+  'https://mobileapi.archimedes.kz/v1/certificate/:programId';
+
 export const compensationCategories = [
   {
     id: CompensationCategoryEnum.OutpatientCare,

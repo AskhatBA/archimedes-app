@@ -14,6 +14,11 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import {
+  FamilyMembers,
+  INSURANCE_CERTIFICATE_URL,
+  useProgramById,
+} from '@/modules/insurance';
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { GET_PROGRAM_QUERY } from '@/shared/constants';
@@ -24,13 +29,9 @@ import {
   FileTextIcon,
   HeartIcon,
 } from '@/shared/icons';
-import { useProgramById } from '@/shared/lib/insurance';
 import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
-
-import { FamilyMembers } from '../components/family-members';
-import { INSURANCE_CERTIFICATE_URL } from '../constants';
 
 interface RouteParams {
   programId: string;
@@ -126,7 +127,7 @@ export const InsuranceDetailsScreen: FC = () => {
         <View style={styles.documents}>
           <TouchableOpacity
             onPress={() =>
-              navigate(routes.InsuranceDocument, {
+              navigate(routes.DocumentViewer, {
                 uri: INSURANCE_CERTIFICATE_URL.replace(
                   ':programId',
                   program?.id,
@@ -145,7 +146,7 @@ export const InsuranceDetailsScreen: FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              navigate(routes.InsuranceDocument, {
+              navigate(routes.DocumentViewer, {
                 uri: program?.programUrl,
               })
             }

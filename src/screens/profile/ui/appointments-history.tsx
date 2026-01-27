@@ -8,21 +8,22 @@ import {
   Linking,
 } from 'react-native';
 
-import { CONSULTATION_SHEET } from '@/modules/profile/constants';
-import { useAppointmentHistory } from '@/modules/profile/hooks';
+import { useAppointmentsHistory } from '@/modules/appointment';
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { SelectCaretIcon, HistoryIcon, FileTextIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
-import { HistoryCard } from '../../history-card';
+import { HistoryCard } from './history-card';
 
 import type { MISAppointmentHistory } from '@/api/generated/data-contracts';
+
+export const CONSULTATION_SHEET = 'Консультационный лист';
 
 export const AppointmentHistory: FC = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<MISAppointmentHistory | null>(null);
-  const { appointmentHistory } = useAppointmentHistory();
+  const { appointmentsHistory } = useAppointmentsHistory();
   const { colors } = useTheme();
 
   const headerBg = open ? colors.blue['100'] : colors.gray['200'];
@@ -63,8 +64,8 @@ export const AppointmentHistory: FC = () => {
       </TouchableOpacity>
       {open && (
         <View style={[styles.tests]}>
-          {appointmentHistory?.length > 0 ? (
-            appointmentHistory.map(appointment => (
+          {appointmentsHistory?.length > 0 ? (
+            appointmentsHistory.map(appointment => (
               <HistoryCard
                 key={appointment.id}
                 color="blue"

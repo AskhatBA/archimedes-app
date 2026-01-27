@@ -5,8 +5,8 @@ import { UserWelcomeContainer } from '@/shared/components/user-welcome-container
 import { MainLayout } from '@/shared/layout/main-layout';
 import { colors } from '@/shared/theme';
 
-import { AppointmentHistory } from '../components/appointment-history';
-import { MyTests } from '../components/my-tests';
+import { AppointmentHistory } from './appointments-history';
+import { MyTests } from './my-tests';
 
 export const ProfileScreen: FC = () => {
   return (

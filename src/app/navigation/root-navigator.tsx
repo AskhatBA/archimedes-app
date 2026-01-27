@@ -9,15 +9,14 @@ import {
 } from '@/modules/auth';
 import {
   CompensationsHistoryScreen,
-  InsuranceDetailsScreen,
-  InsuranceCertificateScreen,
   InsuranceElectronicReferralsScreen,
-  InsuranceDocumentScreen,
   InsuranceSupportScreen,
 } from '@/modules/insurance';
 import { MedBotChatScreen } from '@/modules/med-bot';
 import { NotificationsScreen } from '@/modules/notifications';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
+import { DocumentViewerScreen } from '@/screens/document-viewer';
+import { InsuranceDetailsScreen } from '@/screens/insurance-details';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
@@ -90,13 +89,6 @@ export const RootNavigator: FC = () => {
         options={{ header: () => <SecondaryTopbar title="" /> }}
       />
       <RootStack.Screen
-        name={routes.InsuranceCertificate}
-        component={InsuranceCertificateScreen}
-        options={{
-          header: () => <SecondaryTopbar title="Страховой сертификат" />,
-        }}
-      />
-      <RootStack.Screen
         name={routes.MedicalNetwork}
         component={MedicalNetworkScreen}
         options={{
@@ -111,8 +103,8 @@ export const RootNavigator: FC = () => {
         }}
       />
       <RootStack.Screen
-        name={routes.InsuranceDocument}
-        component={InsuranceDocumentScreen}
+        name={routes.DocumentViewer}
+        component={DocumentViewerScreen}
         options={{
           header: () => <SecondaryTopbar title="Документ" />,
         }}

@@ -1,13 +1,26 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
 import { FC, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Platform, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
 import { useTheme } from '@/shared/theme';
 
-export const InsuranceCertificateScreen: FC = () => {
+type RouteParams = {
+  InsuranceDocument: {
+    uri: string;
+  };
+};
+
+export const DocumentViewerScreen: FC = () => {
   const { colors } = useTheme();
-  const [loading, setLoading] = useState(false);
+  const { params } = useRoute<RouteProp<RouteParams, 'InsuranceDocument'>>();
+  const [loading, setLoading] = useState(true);
+
+  const fileUri = Platform.select({
+    ios: params.uri,
+    android: `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(params.uri)}`,
+  });
 
   return (
     <View
@@ -22,10 +35,11 @@ export const InsuranceCertificateScreen: FC = () => {
       )}
       <WebView
         source={{
-          uri: 'https://mobileapitest.archimedes.kz/v1/certificate/22864eac-f198-4555-a3ac-0423db0edc0c',
+          uri: fileUri,
         }}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
+        onError={() => setLoading(false)}
         style={{ flex: 1, width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
       />
     </View>

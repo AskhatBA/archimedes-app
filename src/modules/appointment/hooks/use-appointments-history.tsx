@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { misApi } from '@/api';
 
-export const useAppointmentHistory = () => {
-  const { data: appointmentHistory, isLoading: loadingAppointmentHistory } =
+export const useAppointmentsHistory = () => {
+  const { data: appointmentsHistory, isLoading: loadingAppointmentsHistory } =
     useQuery({
-      queryKey: ['appointment-history'],
+      queryKey: ['appointments-history'],
       queryFn: async () => {
         const data = await misApi.appointmentHistoryList();
         return data.data?.appointmentHistory || [];
@@ -13,7 +13,7 @@ export const useAppointmentHistory = () => {
     });
 
   return {
-    appointmentHistory,
-    loadingAppointmentHistory,
+    appointmentsHistory,
+    loadingAppointmentsHistory,
   };
 };

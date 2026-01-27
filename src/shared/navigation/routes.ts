@@ -15,9 +15,8 @@ export const routes = {
   CompensationOtpVerification: 'compensation-otp-verification',
   CompensationsHistory: 'compensations-history',
   InsuranceDetails: 'insurance-details',
-  InsuranceCertificate: 'insurance-certificate',
   MedicalNetwork: 'medical-network',
   InsuranceElectronicReferrals: 'insurance-electronic-referrals',
-  InsuranceDocument: 'insurance-document',
   InsuranceSupport: 'insurance-support',
+  DocumentViewer: 'document-viewer',
 } as const;
