@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
+import {
+  CreateAppointmentContextProvider,
+  CreateAppointmentForm,
+} from '@/modules/appointment';
 import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner';
 import { useTheme } from '@/shared/theme';
-
-import { CreateAppointmentContextProvider } from '../context/create-appointment-context';
-import { CreateAppointmentForm } from '../forms/create-appointment-form';
 
 export const CreateAppointmentScreen: FC = () => {
   const { colors } = useTheme();

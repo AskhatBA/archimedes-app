@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { AppointmentsMainScreen } from '@/modules/appointment';
 import { CompensationScreen } from '@/modules/insurance';
+import { AppointmentsScreen } from '@/screens/appointments';
 import { HomeScreen } from '@/screens/home';
 import { InsuranceScreen } from '@/screens/insurance';
 import { ProfileScreen } from '@/screens/profile';
@@ -27,7 +27,7 @@ export const TabNavigator: FC = () => {
       />
       <Tab.Screen
         name={routes.AppointmentsMain}
-        component={AppointmentsMainScreen}
+        component={AppointmentsScreen}
         options={{ header: () => <StatusBarUnderlay /> }}
       />
       <Tab.Screen

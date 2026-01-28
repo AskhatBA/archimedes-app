@@ -2,15 +2,14 @@ import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
 import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
+import { MyAppointments } from '@/modules/appointment';
 import { Button } from '@/shared/components/button';
 import { ClipboardClockIcon } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useNavigation, routes } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
-import { MyAppointments } from '../components/my-appointments';
-
-export const AppointmentsMainScreen: FC = () => {
+export const AppointmentsScreen: FC = () => {
   const { navigate } = useNavigation();
   const queryClient = useQueryClient();
   const isFetchingAppointments = useIsFetching({ queryKey: ['appointments'] });

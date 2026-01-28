@@ -13,6 +13,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { patientApi, misApi } from '@/api';
+import { CreateUserForm, CreateUserPayload } from '@/modules/auth';
+import { useMisPatient } from '@/modules/user';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useAuth } from '@/shared/lib/auth';
@@ -20,9 +22,6 @@ import { useToast } from '@/shared/lib/toast';
 import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
-
-import { CreateUserForm, CreateUserPayload } from '../forms/create-user-form';
-import { useMisPatient } from '../hooks/use-mis-patient';
 
 import { SupportDetails } from './support-details';
 

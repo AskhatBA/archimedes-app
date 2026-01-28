@@ -1,8 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
-import { CreateAppointmentScreen } from '@/modules/appointment';
-import { CreateUserScreen } from '@/modules/auth';
 import {
   CompensationsHistoryScreen,
   InsuranceElectronicReferralsScreen,
@@ -11,6 +9,8 @@ import {
 import { MedBotChatScreen } from '@/modules/med-bot';
 import { NotificationsScreen } from '@/modules/notifications';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
+import { CreateAppointmentScreen } from '@/screens/create-appointment';
+import { CreateUserScreen } from '@/screens/create-user';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { InsuranceDetailsScreen } from '@/screens/insurance-details';
 import { MedicalNetworkScreen } from '@/screens/medical-network';

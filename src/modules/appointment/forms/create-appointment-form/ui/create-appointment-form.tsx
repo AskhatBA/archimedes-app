@@ -1,7 +1,6 @@
 import { FC, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { useCreateAppointment } from '@/modules/appointment/screens/create-appointment/context/create-appointment-context';
 import { Button } from '@/shared/components/button';
 import { SelectField } from '@/shared/components/select-field';
 import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
@@ -10,6 +9,8 @@ import { colors } from '@/shared/theme';
 
 import { ChooseBranch } from './choose-branch';
 import { createAppointmentFormStyles } from './styles';
+
+import { useCreateAppointment } from '@/modules/appointment/context/create-appointment-context';
 
 export const CreateAppointmentForm: FC = () => {
   const {
