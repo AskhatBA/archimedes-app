@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
 
+import { useOtp } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
-import { useAuth } from '@/shared/lib/auth';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
@@ -20,12 +20,13 @@ interface RouteParams {
 export const OtpVerificationScreen: FC = () => {
   const route = useRoute();
   const { phone } = route.params as RouteParams;
-  const { verifyOtpMutation, requestOtpMutation } = useAuth();
   const { colors } = useTheme();
+  const { requestOtp, verifyOtp, isPending } = useOtp();
+
+  const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
   const [otpCode, setOtpCode] = useState<string>();
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-  const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -48,7 +49,7 @@ export const OtpVerificationScreen: FC = () => {
     if (canResend) {
       setTimer(60);
       setCanResend(false);
-      requestOtpMutation.mutate({ phone });
+      requestOtp({ phone });
     }
   }, [canResend]);
 
@@ -104,11 +105,9 @@ export const OtpVerificationScreen: FC = () => {
         </TouchableOpacity>
 
         <Button
-          isLoading={verifyOtpMutation.isPending}
+          isLoading={isPending}
           onPress={() => {
-            if (otpCode.length === 4) {
-              verifyOtpMutation.mutate({ otp: otpCode, phone });
-            }
+            if (otpCode.length === 4) verifyOtp({ otp: otpCode, phone });
           }}
         >
           Подтвердить

@@ -5,8 +5,8 @@ import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner
 import { GreetUser } from '@/shared/components/greet-user';
 import { MainLayout } from '@/shared/layout/main-layout';
 
-import { CurrentAppointments } from '../components/current-appointments';
-import { SearchField } from '../components/search-field';
+import { CurrentAppointments } from './current-appointments';
+import { SearchField } from './search-field';
 
 export const HomeScreen: FC = () => {
   return (

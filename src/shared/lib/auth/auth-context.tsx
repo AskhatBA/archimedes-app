@@ -1,4 +1,3 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import {
   createContext,
   FC,
@@ -10,52 +9,30 @@ import {
   useState,
 } from 'react';
 
-import {
-  authApi,
-  RequestOTPBody,
-  VerifyOTPBody,
-  RequestOTPResponse,
-  VerifyOTPResponse,
-  setApiErrorHandler,
-} from '@/api';
+import { VerifyOTPResponse, setApiErrorHandler } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
-import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 
 import { getAuthToken, removeAuthToken, setAuthToken } from './utils';
-
-type RequestOtpMutation = UseMutationResult<
-  RequestOTPResponse,
-  Error,
-  RequestOTPBody
->;
-
-type VerifyOtpMutation = UseMutationResult<
-  VerifyOTPResponse,
-  Error,
-  VerifyOTPBody
->;
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   isLoading: boolean;
-  requestOtpMutation: RequestOtpMutation;
-  verifyOtpMutation: VerifyOtpMutation;
   logout: () => Promise<void>;
   loginIin: string;
   setLoginIin: (iin: string) => void;
+  authenticate: (tokens: VerifyOTPResponse) => Promise<void>;
 }
 
 const initialValues: AuthContextProps = {
   isAuthenticated: false,
   setIsAuthenticated: () => {},
   isLoading: false,
-  requestOtpMutation: {} as RequestOtpMutation,
-  verifyOtpMutation: {} as VerifyOtpMutation,
   logout: () => Promise.resolve(),
   loginIin: '',
   setLoginIin: () => {},
+  authenticate: async () => {},
 };
 
 const AuthContext = createContext<AuthContextProps>(initialValues);
@@ -63,8 +40,7 @@ const AuthContext = createContext<AuthContextProps>(initialValues);
 export const AuthContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }): ReactElement | null => {
-  const { showToast } = useToast();
-  const { resetNavigation, navigate } = useNavigation();
+  const { resetNavigation } = useNavigation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loginIin, setLoginIin] = useState('');
@@ -84,35 +60,6 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     setIsLoading(false);
   };
 
-  const requestOtpMutation = useMutation({
-    mutationFn: async (credentials: RequestOTPBody) =>
-      (await authApi.requestOtpCreate(credentials)).data,
-    onSuccess: async data => {
-      console.log('otp: ', (data as { otp: string }).otp);
-      navigate(routes.OtpVerification, { phone: data.phone });
-    },
-    onError: () => {
-      showToast({
-        type: 'error',
-        message: 'Не удалось отправить код. Попробуйте снова',
-      });
-    },
-  });
-
-  const verifyOtpMutation = useMutation({
-    mutationFn: async (body: VerifyOTPBody) =>
-      (await authApi.verifyOtpCreate(body)).data,
-    onSuccess: async data => {
-      await authenticate(data);
-    },
-    onError: () => {
-      showToast({
-        type: 'error',
-        message: 'Похоже вы ввели неверный код. Попробуйте снова',
-      });
-    },
-  });
-
   const logout = async () => {
     await removeAuthToken();
     setIsAuthenticated(false);
@@ -129,18 +76,12 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
       isAuthenticated,
       setIsAuthenticated,
       isLoading,
-      requestOtpMutation,
-      verifyOtpMutation,
       logout,
       loginIin,
       setLoginIin,
+      authenticate,
     }),
-    [
-      isAuthenticated,
-      isLoading,
-      requestOtpMutation.isPending,
-      verifyOtpMutation.isPending,
-    ],
+    [isAuthenticated, isLoading],
   );
 
   if (isLoading) return <ScreenLoader />;

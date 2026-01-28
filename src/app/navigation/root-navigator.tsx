@@ -2,11 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
 import { CreateAppointmentScreen } from '@/modules/appointment';
-import {
-  CreateUserScreen,
-  OtpVerificationScreen,
-  SignInScreen,
-} from '@/modules/auth';
+import { CreateUserScreen } from '@/modules/auth';
 import {
   CompensationsHistoryScreen,
   InsuranceElectronicReferralsScreen,
@@ -18,6 +14,8 @@ import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { InsuranceDetailsScreen } from '@/screens/insurance-details';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
+import { OtpVerificationScreen } from '@/screens/otp-verification';
+import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';

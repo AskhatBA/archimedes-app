@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { AppointmentsMainScreen } from '@/modules/appointment';
-import { HomeScreen } from '@/modules/home';
 import { CompensationScreen } from '@/modules/insurance';
+import { HomeScreen } from '@/screens/home';
 import { InsuranceScreen } from '@/screens/insurance';
 import { ProfileScreen } from '@/screens/profile';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';

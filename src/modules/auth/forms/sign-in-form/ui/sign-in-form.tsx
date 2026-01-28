@@ -1,17 +1,19 @@
 import { useFormik } from 'formik';
 import { FC, useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { useOtp } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
+import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
 import { useAuth } from '@/shared/lib/auth';
-
-import { TermsConsent } from '../../../components/terms-consent';
+import { colors } from '@/shared/theme';
 
 import { validationSchema } from './validation-schema';
 
 export const SignInForm: FC = () => {
-  const { requestOtpMutation, loginIin, setLoginIin } = useAuth();
+  const { loginIin, setLoginIin } = useAuth();
+  const { requestOtp, isPending } = useOtp();
   const [terms, setTerms] = useState(false);
   const [termsError, setTermsError] = useState('');
 
@@ -31,7 +33,7 @@ export const SignInForm: FC = () => {
           return;
         }
         setLoginIin(formValues.iin);
-        requestOtpMutation.mutate({
+        requestOtp({
           phone: formatPhoneNumber(formValues.phone),
         });
       },
@@ -69,17 +71,23 @@ export const SignInForm: FC = () => {
         />
       </View>
       <View style={{ marginTop: 35 }}>
-        <TermsConsent
-          terms={terms}
-          setTerms={checked => {
-            setTermsError('');
-            setTerms(checked);
-          }}
-          error={termsError}
-        />
+        <View style={styles.container}>
+          <Checkbox
+            checked={terms}
+            onCheck={checked => {
+              setTermsError('');
+              setTerms(checked);
+            }}
+            error={termsError}
+          />
+          <Text style={styles.text}>
+            Я соглашаюсь с условиями Пользовательского соглашения и Политики
+            конфиденциальности.
+          </Text>
+        </View>
       </View>
       <Button
-        isLoading={requestOtpMutation.isPending}
+        isLoading={isPending}
         style={{ marginTop: 50 }}
         onPress={() => {
           handleSubmit();
@@ -90,3 +98,15 @@ export const SignInForm: FC = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  text: {
+    fontSize: 12,
+    color: colors.textMain,
+  },
+});
