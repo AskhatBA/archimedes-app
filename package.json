@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "generate-api": "node ./src/api/generator.js"
+    "generate-api": "node ./src/api/generator.js",
+    "ios:local": "ENVFILE=.env.local npx react-native run-ios"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",

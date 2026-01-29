@@ -11,7 +11,7 @@ import {
 
 import { useMediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { SelectDrawer } from '@/shared/components/select-field';
-import { FileIcon, UploadFileIcon } from '@/shared/icons';
+import { FileIcon, UploadFileIcon, CloseIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
 import { documentTypes } from '../constants';
@@ -81,26 +81,55 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
       </Text>
       <View style={styles.attachedFiles}>
         {files.map(file => (
-          <TouchableOpacity
+          <View
             key={file.name}
             style={[
-              styles.uploadButton,
-              styles.attachedFileBox,
-              { borderColor: colors.primary },
+              styles.attachedFileItem,
+              { borderColor: colors.blue['100'] },
             ]}
-            onLongPress={() => remove(file)}
           >
-            <FileIcon color={colors.blue['400']} width={24} height={24} />
-            <Text numberOfLines={1} style={styles.attachedFileName}>
-              {file.name}
-            </Text>
-          </TouchableOpacity>
+            <View style={styles.fileInfo}>
+              <FileIcon color={colors.primary} width={24} height={24} />
+              <View>
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    styles.attachedFileName,
+                    { color: colors.blue['400'] },
+                  ]}
+                >
+                  {file.name}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    styles.attachedFileType,
+                    { color: colors.gray['500'] },
+                  ]}
+                >
+                  {file.localFileType}
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity onPress={() => remove(file)} hitSlop={10}>
+              <CloseIcon color={colors.error} width={20} height={20} />
+            </TouchableOpacity>
+          </View>
         ))}
         <TouchableOpacity
           onPress={() => setShowDocumentType(true)}
-          style={[styles.uploadButton, { backgroundColor: colors.blue['100'] }]}
+          style={[
+            styles.uploadButton,
+            {
+              backgroundColor: colors.blue['100'],
+              borderColor: colors.primary,
+            },
+          ]}
         >
-          <UploadFileIcon width={36} height={36} color={colors.primary} />
+          <UploadFileIcon width={24} height={24} color={colors.primary} />
+          <Text style={[styles.uploadButtonText, { color: colors.primary }]}>
+            Добавить файл
+          </Text>
         </TouchableOpacity>
       </View>
       {files.length === 0 && (
@@ -129,32 +158,56 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
 const styles = StyleSheet.create({
   label: {
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: '600',
     marginBottom: 8,
   },
   uploadButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 64,
-    height: 59,
-    borderRadius: 10,
-  },
-  attachedFiles: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 48,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderStyle: 'dashed',
     marginTop: 8,
     gap: 8,
   },
-  attachedFileBox: {
-    borderWidth: 2,
-    gap: 4,
+  uploadButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  attachedFiles: {
+    flexDirection: 'column',
+    marginTop: 8,
+    gap: 12,
+  },
+  attachedFileItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    backgroundColor: '#fff',
+  },
+  fileInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: 10,
   },
   attachedFileName: {
-    fontSize: 10,
+    fontSize: 14,
+    fontWeight: '400',
+    flex: 1,
+  },
+  attachedFileType: {
+    fontSize: 12,
+    fontWeight: '400',
   },
   error: {
     fontSize: 12,
-    fontWeight: 500,
+    fontWeight: '500',
     marginTop: 8,
   },
 });
