@@ -3,7 +3,6 @@ import { type FC, useMemo } from 'react';
 
 import {
   CompensationsHistoryScreen,
-  InsuranceElectronicReferralsScreen,
   InsuranceSupportScreen,
 } from '@/modules/insurance';
 import { MedBotChatScreen } from '@/modules/med-bot';
@@ -12,6 +11,7 @@ import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
+import { ElectronicReferralsScreen } from '@/screens/electronic-referrals';
 import { InsuranceDetailsScreen } from '@/screens/insurance-details';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
@@ -94,8 +94,8 @@ export const RootNavigator: FC = () => {
         }}
       />
       <RootStack.Screen
-        name={routes.InsuranceElectronicReferrals}
-        component={InsuranceElectronicReferralsScreen}
+        name={routes.ElectronicReferrals}
+        component={ElectronicReferralsScreen}
         options={{
           header: () => <SecondaryTopbar title="Электронные направления" />,
         }}

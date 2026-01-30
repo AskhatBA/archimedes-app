@@ -10,12 +10,18 @@ interface UseMedicalNetworkParams {
   type?: number;
 }
 
+const EXCLUDED_CITY_IDS = [610, 321];
+const PRIORITY_CITY_NAMES = ['Астана', 'Алматы'];
+
 export const useMedicalNetwork = (params?: UseMedicalNetworkParams) => {
   const { cityId, programId, type } = params || {};
 
   const { data: cities, isLoading: loadingCities } = useQuery({
     queryKey: ['insurance', 'cities'],
-    queryFn: async () => (await insuranceApi.citiesList()).data?.cities || [],
+    queryFn: async () =>
+      (await insuranceApi.citiesList()).data?.cities.filter(
+        city => !EXCLUDED_CITY_IDS.includes(city.id),
+      ) || [],
     staleTime: 1000 * 60 * 10,
   });
 
@@ -40,15 +46,14 @@ export const useMedicalNetwork = (params?: UseMedicalNetworkParams) => {
       raw: city,
     }));
 
-    const priority = ['Астана', 'Алматы'];
     const collator =
       typeof Intl !== 'undefined' && typeof Intl.Collator === 'function'
         ? new Intl.Collator('ru', { sensitivity: 'base' })
         : null;
 
     options.sort((a, b) => {
-      const ai = priority.indexOf(a.label);
-      const bi = priority.indexOf(b.label);
+      const ai = PRIORITY_CITY_NAMES.indexOf(a.label);
+      const bi = PRIORITY_CITY_NAMES.indexOf(b.label);
       if (ai !== -1 || bi !== -1) {
         if (ai === -1) return 1;
         if (bi === -1) return -1;

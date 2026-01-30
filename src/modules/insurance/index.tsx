@@ -7,6 +7,7 @@ export { useMedicalNetwork } from './hooks/use-medical-network';
 export { useClinicTypes } from './hooks/use-clinic-types';
 export { useMedicalNetworkReducer } from './hooks/use-medical-network-reducer';
 export { useProgramById, usePrograms } from './hooks/use-programs';
+export { useElectronicReferrals } from './hooks/use-electronic-referrals';
 
 export { CompensationRequestForm } from './forms/compensation-request-form';
 

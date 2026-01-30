@@ -16,7 +16,7 @@ export const routes = {
   CompensationsHistory: 'compensations-history',
   InsuranceDetails: 'insurance-details',
   MedicalNetwork: 'medical-network',
-  InsuranceElectronicReferrals: 'insurance-electronic-referrals',
+  ElectronicReferrals: 'electronic-referrals',
   InsuranceSupport: 'insurance-support',
   DocumentViewer: 'document-viewer',
 } as const;

@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.SFPro.Bold,
     fontSize: 12,
     color: colors.white,
+    fontWeight: 700,
   },
   slotTextSelected: {
     color: colors.blue[500],

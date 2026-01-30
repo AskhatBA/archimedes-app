@@ -11,7 +11,11 @@ import { usePrograms, useFamily } from '@/shared/lib/insurance';
 
 import { compensationCategories } from '../../../constants';
 import { AttachDocuments } from '../../../screens/compensation/components/attach-documents';
-import { CompensationRequestFormValues } from '../../../types';
+import { REQUIRED_DOCUMENT_TYPES } from '../../../screens/compensation/components/attach-documents/constants';
+import {
+  CompensationRequestFormValues,
+  CompensationCategoryEnum,
+} from '../../../types';
 import { validationSchema } from '../validation-schema';
 
 interface CompensationRequestFormProps {
@@ -23,6 +27,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
 }) => {
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [documentType, setDocumentType] = useState('');
+  const [showFilesError, setShowFilesError] = useState(false);
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -33,7 +38,21 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       category: '',
     },
     onSubmit: formValues => {
-      if (!files.length) return;
+      const attachedTypes = files.map(f => f.localFileType);
+      const currentRequiredTypes = [...REQUIRED_DOCUMENT_TYPES];
+
+      if (+formValues.category === CompensationCategoryEnum.Dentistry) {
+        currentRequiredTypes.push('Стоматологический заказ-наряд');
+      }
+
+      const missingRequiredTypes = currentRequiredTypes.filter(
+        type => !attachedTypes.includes(type),
+      );
+
+      if (missingRequiredTypes.length > 0) {
+        setShowFilesError(true);
+        return;
+      }
 
       onSubmit({
         date: formValues.date,
@@ -53,6 +72,14 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
     () => programs.filter(program => program.status !== 'EXPIRED'),
     [programs],
   );
+
+  const requiredTypes = useMemo(() => {
+    const types = [...REQUIRED_DOCUMENT_TYPES];
+    if (+values.category === CompensationCategoryEnum.Dentistry) {
+      types.push('Стоматологический заказ-наряд');
+    }
+    return types;
+  }, [values.category]);
 
   useEffect(() => {
     if (activePrograms.length === 1) {
@@ -117,6 +144,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           newFiles[newFiles.length - 1].localFileType = documentType;
           setFiles(newFiles);
           setDocumentType('');
+          setShowFilesError(false);
         }}
       >
         <AttachDocuments
@@ -126,6 +154,8 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           onRemove={fileToRemove => {
             setFiles(files.filter(f => f.uri !== fileToRemove.uri));
           }}
+          showError={showFilesError}
+          requiredDocumentTypes={requiredTypes}
         />
       </MediaPicker>
       <Button onPress={() => handleSubmit()}>Отправить заявку</Button>

@@ -21,6 +21,8 @@ interface AttachDocumentsProps {
   onRemove: (file: MediaFile) => void;
   documentType: string;
   setDocumentType: (docType: string) => void;
+  showError?: boolean;
+  requiredDocumentTypes: string[];
 }
 
 export const AttachDocuments: FC<AttachDocumentsProps> = ({
@@ -28,6 +30,8 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   onRemove,
   documentType,
   setDocumentType,
+  showError,
+  requiredDocumentTypes,
 }) => {
   const { colors } = useTheme();
   const [showDocumentType, setShowDocumentType] = useState(false);
@@ -73,6 +77,11 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
         ),
     })();
   };
+
+  const attachedTypes = files.map(file => file.localFileType);
+  const missingRequiredTypes = requiredDocumentTypes.filter(
+    type => !attachedTypes.includes(type),
+  );
 
   return (
     <View>
@@ -132,10 +141,17 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
-      {files.length === 0 && (
-        <Text style={[styles.error, { color: colors.error }]}>
-          Обязательное поле
-        </Text>
+      {showError && missingRequiredTypes.length > 0 && (
+        <View style={styles.errorContainer}>
+          <Text style={[styles.error, { color: colors.error }]}>
+            Необходимо прикрепить следующие документы:
+          </Text>
+          {missingRequiredTypes.map(type => (
+            <Text key={type} style={[styles.error, { color: colors.error }]}>
+              • {type}
+            </Text>
+          ))}
+        </View>
       )}
       <SelectDrawer
         isOpen={showDocumentType}
@@ -208,6 +224,9 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     fontWeight: '500',
+    marginTop: 4,
+  },
+  errorContainer: {
     marginTop: 8,
   },
 });

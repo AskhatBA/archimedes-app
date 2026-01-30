@@ -173,9 +173,7 @@ export const InsuranceDetailsScreen: FC = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              navigate(routes.InsuranceElectronicReferrals, { programId })
-            }
+            onPress={() => navigate(routes.ElectronicReferrals, { programId })}
             style={[
               styles.documentItem,
               { backgroundColor: colors.gray['200'] },

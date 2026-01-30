@@ -8,15 +8,14 @@ import {
   View,
 } from 'react-native';
 
+import { useElectronicReferrals } from '@/modules/insurance';
 import { useTheme } from '@/shared/theme';
-
-import { useElectronicReferrals } from '../../../hooks/use-electronic-referrals';
 
 interface RouteParams {
   programId: string;
 }
 
-export const InsuranceElectronicReferralsScreen: FC = () => {
+export const ElectronicReferralsScreen: FC = () => {
   const route = useRoute();
   const { colors } = useTheme();
   const { programId } = route.params as RouteParams;

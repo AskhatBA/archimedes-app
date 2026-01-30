@@ -7,10 +7,10 @@ import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
 import { useFamily, usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
+import { useCreateAppointment } from '../../../context/create-appointment-context';
+
 import { ChooseBranch } from './choose-branch';
 import { createAppointmentFormStyles } from './styles';
-
-import { useCreateAppointment } from '@/modules/appointment/context/create-appointment-context';
 
 export const CreateAppointmentForm: FC = () => {
   const {
@@ -37,6 +37,11 @@ export const CreateAppointmentForm: FC = () => {
     }
   }, [availablePrograms]);
 
+  const availableSlotList = useMemo(
+    () => Object.values(availableSlots || {}),
+    [availableSlots],
+  );
+
   return (
     <View style={styles.container}>
       <View style={{ marginTop: 24 }}>
@@ -58,6 +63,7 @@ export const CreateAppointmentForm: FC = () => {
           }))}
         />
       </View>
+
       {formValues.programId && family && (
         <View>
           <Text
@@ -82,7 +88,9 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
+
       {formValues.programId && <ChooseBranch />}
+
       {formValues.branchId && (
         <View>
           <Text
@@ -104,6 +112,7 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
+
       {formValues.branchId && formValues.specializationId && (
         <View>
           <Text
@@ -125,7 +134,8 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
-      {formValues.doctorId && (
+
+      {formValues.doctorId && availableSlotList.length > 0 && (
         <TimeSlotPicker
           onSelect={(selectedDate, selectedTime) => {
             changeFormValues('date', selectedDate);
@@ -133,7 +143,7 @@ export const CreateAppointmentForm: FC = () => {
           }}
           selectedDate={formValues.date}
           selectedTime={formValues.timeSlot}
-          days={Object.values(availableSlots || {}).map(slot => ({
+          days={availableSlotList.map(slot => ({
             ...slot,
             slots: slot.timeSlots.map(item => ({
               time: item.startTime,
@@ -141,6 +151,11 @@ export const CreateAppointmentForm: FC = () => {
             })),
           }))}
         />
+      )}
+      {formValues.doctorId && availableSlotList.length === 0 && (
+        <Text style={[styles.noSlots, { color: colors.gray['500'] }]}>
+          Нет доступных слотов для записи
+        </Text>
       )}
 
       <Button
