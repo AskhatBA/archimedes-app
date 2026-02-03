@@ -81,7 +81,7 @@ export const CreateAppointmentForm: FC = () => {
             options={[
               { value: '', label: 'Оформить на себя' },
               ...family.map(member => ({
-                value: member.id,
+                value: member.benId,
                 label: member.fullName,
               })),
             ]}

@@ -4,7 +4,7 @@ const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { generateApi } = require('swagger-typescript-api');
 
-const API_URL = 'http://0.0.0.0:4000';
+const API_URL = 'http://localhost:4000';
 const SWAGGER_SCHEMA_PATH = '/api-docs.json';
 const BASE_URL = `${API_URL}${SWAGGER_SCHEMA_PATH}`;
 const OUTPUT_DIR = path.join(path.resolve(__dirname, '.', 'generated'));

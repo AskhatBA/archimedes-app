@@ -157,7 +157,7 @@ export interface InsuranceProgramResponse {
 }
 
 export interface InsuranceFamily {
-  /** @example "1234" */
+  /** @example "3f7c2a6b-8e3d-4f5b-b9f4-1b2a9c8e6d21" */
   id: string;
   /** @example "John Doe" */
   fullName: string;
@@ -168,6 +168,8 @@ export interface InsuranceFamily {
    * @example "1990-01-01"
    */
   dateBirth: string;
+  /** @example "a1c4f9d2-6b7e-4a13-9f82-5d3e8b6a4c70" */
+  benId?: string;
 }
 
 export interface InsuranceFamilyResponse {
