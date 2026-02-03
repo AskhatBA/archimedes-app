@@ -5,6 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  Platform,
 } from 'react-native';
 import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
@@ -37,9 +39,37 @@ export const MyTests: FC = () => {
   const closeDrawer = () => setSelected(null);
 
   const openPdf = async (fileName: string, base64?: string) => {
-    const path = `${RNFS.DocumentDirectoryPath}/${fileName}.pdf`;
-    await RNFS.writeFile(path, base64, 'base64');
-    await FileViewer.open(path);
+    try {
+      if (!base64) {
+        Alert.alert('Ошибка', 'PDF недоступен');
+        return;
+      }
+
+      // Some APIs return: "data:application/pdf;base64,...."
+      const cleanedBase64 = base64.replace(
+        /^data:application\/pdf;base64,/,
+        '',
+      );
+
+      // Android is picky about filename characters
+      const safeName = fileName.replace(/[^\w.-]+/g, '_');
+
+      const dir =
+        Platform.OS === 'android'
+          ? RNFS.CachesDirectoryPath
+          : RNFS.DocumentDirectoryPath;
+
+      const path = `${dir}/${safeName}.pdf`;
+
+      await RNFS.writeFile(path, cleanedBase64, 'base64');
+
+      await (FileViewer as any).open(path, {
+        showOpenWithDialog: true,
+      });
+    } catch (e) {
+      console.log('file upload error: ', e.toString());
+      Alert.alert('Ошибка', 'Не удалось открыть PDF');
+    }
   };
 
   return (
