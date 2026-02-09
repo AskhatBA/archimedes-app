@@ -267,6 +267,31 @@ export interface ClinicType {
   title: string;
 }
 
+export interface CreateMeetingBody {
+  /** @example "Patient Consultation" */
+  topic: string;
+  /**
+   * ISO 8601 date-time in UTC
+   * @format date-time
+   * @example "2026-02-10T10:00:00Z"
+   */
+  start_time: string;
+  /**
+   * Meeting duration in minutes
+   * @example 30
+   */
+  duration: number;
+}
+
+export interface MeetingResponse {
+  /** @example "123456789" */
+  meetingId?: string;
+  /** @example "https://zoom.us/j/123456789" */
+  joinUrl?: string;
+  /** @example "https://zoom.us/s/123456789" */
+  startUrl?: string;
+}
+
 export interface MISPatient {
   id: string;
   firstName: string;
