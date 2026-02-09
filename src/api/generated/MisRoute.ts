@@ -346,4 +346,35 @@ export namespace Mis {
       success?: boolean;
     };
   }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name AppointmentsDetail
+ * @summary Get detailed information about a specific appointment
+ * @request GET:/mis/appointments/{appointmentId}
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointment?: MISAppointment,
+
+}` Appointment details fetched successfully
+ * @response `400` `void` Validation error
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace AppointmentsDetail {
+    export type RequestParams = {
+      /** Appointment ID to get details for */
+      appointmentId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      appointment?: MISAppointment;
+    };
+  }
 }

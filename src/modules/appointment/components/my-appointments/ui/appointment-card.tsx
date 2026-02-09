@@ -11,6 +11,7 @@ import {
 import { misApi } from '@/api';
 import { getTimeOfDay, formatDate } from '@/shared/adapters/date';
 import { ThreeDotsIcon } from '@/shared/icons';
+import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 export type AppointmentCardColors = 'blue' | 'green' | 'orange';
@@ -32,6 +33,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 }) => {
   const { colors } = useTheme();
   const queryClient = useQueryClient();
+  const { navigate } = useNavigation();
 
   const cancelAppointmentMutation = useMutation({
     mutationFn: () => misApi.appointmentsDelete(appointmentId),
@@ -66,6 +68,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 
   return (
     <TouchableOpacity
+      onPress={() => navigate(routes.AppointmentDetails, { appointmentId })}
       style={[styles.container, { backgroundColor: backgrounds[color] }]}
     >
       <TouchableOpacity

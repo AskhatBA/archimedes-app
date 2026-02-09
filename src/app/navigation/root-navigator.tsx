@@ -7,6 +7,7 @@ import {
 } from '@/modules/insurance';
 import { MedBotChatScreen } from '@/modules/med-bot';
 import { NotificationsScreen } from '@/modules/notifications';
+import { AppointmentDetails } from '@/screens/appointment-details';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
@@ -119,6 +120,13 @@ export const RootNavigator: FC = () => {
         component={NotificationsScreen}
         options={{
           header: () => <StatusBarUnderlay />,
+        }}
+      />
+      <RootStack.Screen
+        name={routes.AppointmentDetails}
+        component={AppointmentDetails}
+        options={{
+          header: () => <SecondaryTopbar title="Детали записи" />,
         }}
       />
     </RootStack.Navigator>

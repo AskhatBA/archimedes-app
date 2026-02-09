@@ -3,6 +3,7 @@ export const routes = {
   SignIn: 'sign-in',
   TabNavigation: 'tab-navigation',
   AppointmentsMain: 'appointments-main',
+  AppointmentDetails: 'appointment-details',
   Insurance: 'insurance',
   Notifications: 'notifications',
   Profile: 'profile',

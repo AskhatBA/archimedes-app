@@ -407,4 +407,36 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
       format: 'json',
       ...params,
     });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name AppointmentsDetail
+ * @summary Get detailed information about a specific appointment
+ * @request GET:/mis/appointments/{appointmentId}
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    appointment?: MISAppointment,
+
+}` Appointment details fetched successfully
+ * @response `400` `void` Validation error
+ * @response `401` `void` User not found or unauthorized
+ */
+  appointmentsDetail = (appointmentId: string, params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        appointment?: MISAppointment;
+      },
+      void
+    >({
+      path: `/mis/appointments/${appointmentId}`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
 }

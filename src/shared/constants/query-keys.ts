@@ -6,3 +6,4 @@ export const GET_INSURANCE_PROGRAMS_QUERY = 'insurance-programs';
 export const GET_INSURANCE_ELECTRONIC_REFERRALS = 'electronic-referrals';
 export const GET_USER_INFO_QUERY = 'user-info';
 export const GET_INSURANCE_CLINIC_TYPES = 'clinic-types';
+export const GET_APPOINTMENT_DETAILS_QUERY = 'appointment-details';
