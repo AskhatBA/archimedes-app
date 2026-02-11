@@ -12,7 +12,7 @@ import {
   FileTextIcon,
   HospitalIcon,
   ClipboardListIcon,
-  FamilyIcon,
+  UserFilledIcon,
 } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
@@ -140,7 +140,7 @@ export const AppointmentDetailsScreen: FC = () => {
           style={[styles.detailCard, { backgroundColor: colors.gray['200'] }]}
         >
           <View style={styles.detailRow}>
-            <FamilyIcon width={20} height={20} color={colors.blue['370']} />
+            <UserFilledIcon width={20} height={20} color={colors.blue['370']} />
             <View style={styles.detailContent}>
               <Text style={[styles.detailLabel, { color: colors.blue['370'] }]}>
                 Врач
@@ -156,7 +156,7 @@ export const AppointmentDetailsScreen: FC = () => {
           style={[styles.detailCard, { backgroundColor: colors.gray['200'] }]}
         >
           <View style={styles.detailRow}>
-            <FamilyIcon width={20} height={20} color={colors.blue['370']} />
+            <UserFilledIcon width={20} height={20} color={colors.blue['370']} />
             <View style={styles.detailContent}>
               <Text style={[styles.detailLabel, { color: colors.blue['370'] }]}>
                 Пациент

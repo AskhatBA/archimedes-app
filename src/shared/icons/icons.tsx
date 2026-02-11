@@ -28,6 +28,8 @@ import TabBarNotificationsIcon from '@/assets/icons/tab-bar-notifications.svg';
 import TabBarProfileIcon from '@/assets/icons/tab-bar-profile.svg';
 import ThreeDotsIcon from '@/assets/icons/three-dots.svg';
 import UploadFileIcon from '@/assets/icons/upload-file.svg';
+import UserFilledIcon from '@/assets/icons/user-filled.svg';
+import UserOutlinedIcon from '@/assets/icons/user-outlined.svg';
 import VideoIcon from '@/assets/icons/video.svg';
 
 export {
@@ -62,4 +64,6 @@ export {
   HistoryIcon,
   HeartIcon,
   VideoIcon,
+  UserFilledIcon,
+  UserOutlinedIcon,
 };
