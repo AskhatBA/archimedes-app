@@ -19,6 +19,7 @@ import {
   INSURANCE_CERTIFICATE_URL,
   useProgramById,
 } from '@/modules/insurance';
+import { useUser } from '@/modules/user';
 import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { GET_PROGRAM_QUERY } from '@/shared/constants';
@@ -29,7 +30,6 @@ import {
   FileTextIcon,
   HeartIcon,
 } from '@/shared/icons';
-import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 

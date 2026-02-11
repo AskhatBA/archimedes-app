@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import UserIcon from '@/assets/icons/user-filled.svg';
+import { useUser } from '@/modules/user';
 import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
-import { useUser } from '@/shared/lib/user';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 

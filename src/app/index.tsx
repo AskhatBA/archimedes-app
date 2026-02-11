@@ -3,9 +3,9 @@ import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { UserContextProvider } from '@/modules/user';
 import { AuthContextProvider } from '@/shared/lib/auth';
 import { ToastProvider } from '@/shared/lib/toast';
-import { UserContextProvider } from '@/shared/lib/user';
 import { NavigationProvider } from '@/shared/navigation';
 import { ThemeProvider } from '@/shared/theme';
 

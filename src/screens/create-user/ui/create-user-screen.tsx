@@ -14,12 +14,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { patientApi, misApi } from '@/api';
 import { CreateUserForm, CreateUserPayload } from '@/modules/auth';
-import { useMisPatient } from '@/modules/user';
+import { useMisPatient, useUser } from '@/modules/user';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useAuth } from '@/shared/lib/auth';
 import { useToast } from '@/shared/lib/toast';
-import { useUser } from '@/shared/lib/user';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
