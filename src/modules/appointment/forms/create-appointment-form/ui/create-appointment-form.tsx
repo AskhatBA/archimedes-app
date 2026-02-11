@@ -7,6 +7,7 @@ import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
 import { useFamily, usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
+import { AppointmentTypeSwitch } from '../../../components/appointment-type-switch';
 import { useCreateAppointment } from '../../../context/create-appointment-context';
 
 import { ChooseBranch } from './choose-branch';
@@ -44,7 +45,11 @@ export const CreateAppointmentForm: FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ marginTop: 24 }}>
+      <View style={styles.typeSwitchContainer}>
+        <AppointmentTypeSwitch />
+      </View>
+
+      <View>
         <Text
           style={[
             createAppointmentFormStyles.title,
@@ -176,5 +181,8 @@ const styles = StyleSheet.create({
   noSlots: {
     marginVertical: 8,
     textAlign: 'center',
+  },
+  typeSwitchContainer: {
+    marginTop: 24,
   },
 });

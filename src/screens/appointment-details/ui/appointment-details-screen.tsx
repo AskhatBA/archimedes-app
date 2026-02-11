@@ -20,7 +20,7 @@ interface RouteParams {
   appointmentId: string;
 }
 
-export const AppointmentDetails: FC = () => {
+export const AppointmentDetailsScreen: FC = () => {
   const route = useRoute();
   const { appointmentId } = route.params as RouteParams;
   const { colors } = useTheme();

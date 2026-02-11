@@ -28,6 +28,7 @@ import TabBarNotificationsIcon from '@/assets/icons/tab-bar-notifications.svg';
 import TabBarProfileIcon from '@/assets/icons/tab-bar-profile.svg';
 import ThreeDotsIcon from '@/assets/icons/three-dots.svg';
 import UploadFileIcon from '@/assets/icons/upload-file.svg';
+import VideoIcon from '@/assets/icons/video.svg';
 
 export {
   TabBarAppointmentsIcon,
@@ -60,4 +61,5 @@ export {
   ClipboardListIcon,
   HistoryIcon,
   HeartIcon,
+  VideoIcon,
 };

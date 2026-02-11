@@ -1,1 +1,1 @@
-export { AppointmentDetails } from './ui/appointment-details';
+export { AppointmentDetailsScreen } from './ui/appointment-details-screen';
