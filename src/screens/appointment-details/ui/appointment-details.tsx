@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppointmentDetails } from '@/modules/appointment';
 import { formatDate } from '@/shared/adapters/date';
-import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import {
   CalendarIcon,
@@ -205,17 +204,6 @@ export const AppointmentDetails: FC = () => {
           </View>
         )}
       </View>
-
-      {appointment.status === 'scheduled' && (
-        <View style={styles.actions}>
-          <Button variant="secondary" onPress={() => {}}>
-            Отменить запись
-          </Button>
-          <Button variant="primary" onPress={() => {}}>
-            Перенести запись
-          </Button>
-        </View>
-      )}
     </ScrollView>
   );
 };
