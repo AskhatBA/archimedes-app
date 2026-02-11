@@ -1,10 +1,11 @@
 import { useRoute } from '@react-navigation/native';
 import { FC } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppointmentDetails } from '@/modules/appointment';
 import { formatDate } from '@/shared/adapters/date';
+import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import {
   CalendarIcon,
@@ -13,6 +14,7 @@ import {
   HospitalIcon,
   ClipboardListIcon,
   UserFilledIcon,
+  VideoIcon,
 } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
@@ -77,6 +79,14 @@ export const AppointmentDetailsScreen: FC = () => {
           {appointment.status_display}
         </Text>
       </View>
+
+      <Button
+        icon={<VideoIcon width={22} height={22} color={colors.white} />}
+        onPress={() => Linking.openURL('https://zoom.us')}
+        style={styles.zoomButton}
+      >
+        Подключиться через Zoom
+      </Button>
 
       <View style={[styles.mainCard, { backgroundColor: colors.blue['100'] }]}>
         <View style={styles.mainCardRow}>
@@ -298,5 +308,8 @@ const styles = StyleSheet.create({
   actions: {
     gap: 12,
     marginTop: 24,
+  },
+  zoomButton: {
+    marginBottom: 24,
   },
 });
