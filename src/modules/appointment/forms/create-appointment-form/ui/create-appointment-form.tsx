@@ -50,9 +50,10 @@ export const CreateAppointmentForm: FC = () => {
           appointmentType={
             formValues.isTelemedicine ? 'telemedicine' : 'regular'
           }
-          changeAppointmentType={value =>
-            changeFormValues('isTelemedicine', value === 'telemedicine')
-          }
+          changeAppointmentType={value => {
+            changeFormValues('isTelemedicine', value === 'telemedicine');
+            changeFormValues('specializationId', undefined);
+          }}
         />
       </View>
 

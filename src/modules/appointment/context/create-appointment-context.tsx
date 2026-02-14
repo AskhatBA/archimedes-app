@@ -60,7 +60,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const [formValues, setFormValues] =
     useState<CreateAppointmentForm>(FORM_INITIAL_VALUES);
 
-  const { specializations } = useSpecializations(formValues.branchId);
+  const { specializations } = useSpecializations(
+    formValues.branchId,
+    formValues.isTelemedicine,
+  );
 
   const { doctors } = useDoctors(
     formValues.branchId,
