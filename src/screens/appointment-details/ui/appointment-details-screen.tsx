@@ -65,7 +65,7 @@ export const AppointmentDetailsScreen: FC = () => {
       style={styles.container}
       contentContainerStyle={{ paddingBottom: deviceInsets.bottom + 32 }}
     >
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <View
           style={[
             styles.statusBadge,
@@ -88,9 +88,13 @@ export const AppointmentDetailsScreen: FC = () => {
           ]}
         >
           {appointment.meeting_id ? (
-            <VideoIcon width={20} height={20} />
+            <VideoIcon color={colors.blue['400']} width={20} height={20} />
           ) : (
-            <ClipboardClockIcon width={20} height={20} />
+            <ClipboardClockIcon
+              color={colors.blue['400']}
+              width={20}
+              height={20}
+            />
           )}
           <Text
             style={[
@@ -251,9 +255,10 @@ const styles = StyleSheet.create({
   },
   statusBadge: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 24,
     marginBottom: 24,
   },

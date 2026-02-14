@@ -1,12 +1,15 @@
 import { useFormik } from 'formik';
 import { FC, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useOtp } from '@/modules/auth';
+import { INSURANCE_CERTIFICATE_URL } from '@/modules/insurance';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
+import { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
+import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
 import { validationSchema } from './validation-schema';
@@ -14,8 +17,12 @@ import { validationSchema } from './validation-schema';
 export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
   const { requestOtp, isPending } = useOtp();
-  const [terms, setTerms] = useState(false);
-  const [termsError, setTermsError] = useState('');
+  const { navigate } = useNavigation();
+
+  const [userAgreement, setUserAgreement] = useState(false);
+  const [privacyPolicy, setPrivacyPolicy] = useState(false);
+  const [userAgreementError, setUserAgreementError] = useState('');
+  const [privacyPolicyError, setPrivacyPolicyError] = useState('');
 
   const formatPhoneNumber = phoneString => {
     return phoneString.replace(/\D/g, '');
@@ -28,8 +35,12 @@ export const SignInForm: FC = () => {
         iin: loginIin,
       },
       onSubmit: formValues => {
-        if (!terms) {
-          setTermsError('TERMS');
+        if (!userAgreement) {
+          setUserAgreementError('TERMS');
+          return;
+        }
+        if (!privacyPolicy) {
+          setPrivacyPolicyError('TERMS');
           return;
         }
         setLoginIin(formValues.iin);
@@ -70,19 +81,51 @@ export const SignInForm: FC = () => {
           }}
         />
       </View>
-      <View style={{ marginTop: 35 }}>
+      <View style={{ marginTop: 35, gap: 16 }}>
         <View style={styles.container}>
           <Checkbox
-            checked={terms}
+            checked={userAgreement}
             onCheck={checked => {
-              setTermsError('');
-              setTerms(checked);
+              setUserAgreementError('');
+              setUserAgreement(checked);
             }}
-            error={termsError}
+            error={userAgreementError}
           />
           <Text style={styles.text}>
-            Я соглашаюсь с условиями Пользовательского соглашения и Политики
-            конфиденциальности.
+            Я соглашаюсь с условиями{' '}
+            <Pressable
+              onPress={() => {
+                navigate(routes.DocumentViewer, {
+                  uri: USER_AGREEMENT_FILE,
+                  isOnlyUrl: true,
+                });
+              }}
+            >
+              <Text style={styles.link}>Пользовательского соглашения</Text>
+            </Pressable>
+          </Text>
+        </View>
+        <View style={styles.container}>
+          <Checkbox
+            checked={privacyPolicy}
+            onCheck={checked => {
+              setPrivacyPolicyError('');
+              setPrivacyPolicy(checked);
+            }}
+            error={privacyPolicyError}
+          />
+          <Text style={styles.text}>
+            Я соглашаюсь с условиями{' '}
+            <Pressable
+              onPress={() => {
+                navigate(routes.DocumentViewer, {
+                  uri: PRIVACY_POLICY_FILE,
+                  isOnlyUrl: true,
+                });
+              }}
+            >
+              <Text style={styles.link}>Политики конфиденциальности</Text>
+            </Pressable>
           </Text>
         </View>
       </View>
@@ -108,5 +151,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     color: colors.textMain,
+  },
+  link: {
+    fontSize: 12,
+    color: colors.primary,
+    textDecorationLine: 'underline',
   },
 });

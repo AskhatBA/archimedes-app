@@ -12,7 +12,7 @@ export const useNavigation = () => {
 
   const navigate = (
     routeName: Routes,
-    params?: Record<string, string | number>,
+    params?: Record<string, string | number | boolean>,
   ) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error

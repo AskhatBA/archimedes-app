@@ -10,3 +10,5 @@ export {
   GET_INSURANCE_CLINIC_TYPES,
   GET_APPOINTMENT_DETAILS_QUERY,
 } from './query-keys';
+
+export { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from './agreement-files';

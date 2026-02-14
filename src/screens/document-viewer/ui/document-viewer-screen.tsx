@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
@@ -9,6 +9,7 @@ import { useTheme } from '@/shared/theme';
 type RouteParams = {
   InsuranceDocument: {
     uri: string;
+    isOnlyUrl: boolean;
   };
 };
 
@@ -35,7 +36,7 @@ export const DocumentViewerScreen: FC = () => {
       )}
       <WebView
         source={{
-          uri: fileUri,
+          uri: params.isOnlyUrl ? params.uri : fileUri,
         }}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
