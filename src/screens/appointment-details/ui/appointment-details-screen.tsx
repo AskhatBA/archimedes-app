@@ -15,6 +15,7 @@ import {
   ClipboardListIcon,
   UserFilledIcon,
   VideoIcon,
+  ClipboardClockIcon,
 } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
@@ -64,29 +65,53 @@ export const AppointmentDetailsScreen: FC = () => {
       style={styles.container}
       contentContainerStyle={{ paddingBottom: deviceInsets.bottom + 32 }}
     >
-      <View
-        style={[
-          styles.statusBadge,
-          { backgroundColor: getStatusBackground(appointment.status) },
-        ]}
-      >
-        <Text
+      <View style={{ flexDirection: 'row' }}>
+        <View
           style={[
-            styles.statusText,
-            { color: getStatusColor(appointment.status) },
+            styles.statusBadge,
+            { backgroundColor: getStatusBackground(appointment.status) },
           ]}
         >
-          {appointment.status_display}
-        </Text>
+          <Text
+            style={[
+              styles.statusText,
+              { color: getStatusColor(appointment.status) },
+            ]}
+          >
+            {appointment.appointment_type_display}
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.statusBadge,
+            { backgroundColor: getStatusBackground(appointment.status) },
+          ]}
+        >
+          {appointment.meeting_id ? (
+            <VideoIcon width={20} height={20} />
+          ) : (
+            <ClipboardClockIcon width={20} height={20} />
+          )}
+          <Text
+            style={[
+              styles.statusText,
+              { color: getStatusColor(appointment.status) },
+            ]}
+          >
+            {appointment.meeting_id ? 'Телемедицина' : 'Обычный'}
+          </Text>
+        </View>
       </View>
 
-      <Button
-        icon={<VideoIcon width={22} height={22} color={colors.white} />}
-        onPress={() => Linking.openURL('https://zoom.us')}
-        style={styles.zoomButton}
-      >
-        Подключиться через Zoom
-      </Button>
+      {appointment.meeting_id && appointment.meeting_join_url && (
+        <Button
+          icon={<VideoIcon width={22} height={22} color={colors.white} />}
+          onPress={() => Linking.openURL(appointment.meeting_join_url)}
+          style={styles.zoomButton}
+        >
+          Подключиться через Zoom
+        </Button>
+      )}
 
       <View style={[styles.mainCard, { backgroundColor: colors.blue['100'] }]}>
         <View style={styles.mainCardRow}>
@@ -225,7 +250,8 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   statusBadge: {
-    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    gap: 8,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 24,

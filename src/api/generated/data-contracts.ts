@@ -445,6 +445,12 @@ export interface MISAppointment {
   appointment_type?: string;
   appointment_type_display?: string;
   notes?: string;
+  /** @example "82621241232" */
+  meeting_id?: string;
+  /** @example "https://us05web.zoom.us/j/82621241232?pwd=4o5c456vxgrrCQaUroAbGISNB3zkb5.1" */
+  meeting_join_url?: string;
+  /** @example "https://us05web.zoom.us/s/82621241232?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMiIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJ3ZWIiLCJjbHQiOjAsIm1udW0iOiI4MjYyMTI0MjYxMiIsImF1ZCI6ImNsaWVudHNtIiwidWlkIjoiMlJpRjZWLVhRaHlXNDBkaVpOV3NsZyIsInppZCI6ImE0MmUyMTVlMzU0MDRhZTc4NWFjMzc0YjgyMzBjNDQ3Iiwic2siOiIwIiwic3R5IjoxMDAsIndjZCI6InVzMDUiLCJleHAiOjE3NzExMDEzMDc3ImlhdCI6Mfc3MTA5NDEwNywigWlkIjoiNkpDNWlsRFfTY3k4RmVGYmZZQUVuZyIsIrNpZCI6IiJ9.wfFK-x91l1FFedCFgquu7fYq4zxlmrDi-e80OH08zkI" */
+  meeting_start_url?: string;
 }
 
 export interface MISAppointmentHistoryDoctor {
