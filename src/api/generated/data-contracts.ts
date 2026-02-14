@@ -292,6 +292,30 @@ export interface MeetingResponse {
   startUrl?: string;
 }
 
+export interface RecordingFile {
+  id?: string;
+  /** @example "MP4" */
+  fileType?: string;
+  /** @example 52428800 */
+  fileSize?: number;
+  /** @example "https://zoom.us/rec/download/..." */
+  downloadUrl?: string;
+  /** @example "shared_screen_with_speaker_view" */
+  recordingType?: string;
+}
+
+export interface RecordingResponse {
+  /** @example "123456789" */
+  meetingId?: string;
+  /** @example "Patient Consultation" */
+  topic?: string;
+  /** @format date-time */
+  startTime?: string;
+  /** @example 30 */
+  duration?: number;
+  files?: RecordingFile[];
+}
+
 export interface MISPatient {
   id: string;
   firstName: string;
@@ -403,6 +427,8 @@ export interface CreateMISAppointmentBody {
   patientId?: string;
   /** @example "8b9a7c6d-5e4f-4321-a987-6543210fedcb" */
   insuranceProgramId?: string;
+  /** @example false */
+  isTelemedicine: boolean;
 }
 
 export interface MISAppointment {

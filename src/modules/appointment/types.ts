@@ -8,4 +8,5 @@ export interface CreateAppointmentForm {
   date: string;
   timeSlot?: string;
   patientId?: string;
+  isTelemedicine: boolean;
 }

@@ -22,6 +22,7 @@ import { CreateAppointmentForm } from '../types';
 
 const FORM_INITIAL_VALUES: CreateAppointmentForm = {
   date: formatDate(new Date()),
+  isTelemedicine: false,
 };
 
 interface CreateAppointmentContextProps {
@@ -100,6 +101,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         startTime: `${payload.date}T${payload.timeSlot}:00+05:00`,
         endTime: `${payload.date}T${endTime}:00+05:00`,
         insuranceProgramId: payload.programId,
+        isTelemedicine: payload.isTelemedicine,
       });
     },
     onSuccess: async () => {
@@ -122,6 +124,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   });
 
   const bookAppointment = () => {
+    console.log('formValues: ', formValues);
     createAppointmentMutation.mutate(formValues);
   };
 

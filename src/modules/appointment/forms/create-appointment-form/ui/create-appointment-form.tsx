@@ -46,7 +46,14 @@ export const CreateAppointmentForm: FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.typeSwitchContainer}>
-        <AppointmentTypeSwitch />
+        <AppointmentTypeSwitch
+          appointmentType={
+            formValues.isTelemedicine ? 'telemedicine' : 'regular'
+          }
+          changeAppointmentType={value =>
+            changeFormValues('isTelemedicine', value === 'telemedicine')
+          }
+        />
       </View>
 
       <View>

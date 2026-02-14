@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { CreateMeetingBody, MeetingResponse } from './data-contracts';
+import { CreateMeetingBody, MeetingResponse, RecordingResponse } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
 export class Meetings<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
@@ -44,6 +44,39 @@ export class Meetings<SecurityDataType = unknown> extends HttpClient<SecurityDat
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Meetings
+ * @name RecordingsDetail
+ * @summary Get recordings for a Zoom meeting
+ * @request GET:/meetings/{meetingId}/recordings
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    recordings?: RecordingResponse,
+
+}` Recordings retrieved successfully
+ * @response `400` `void` Bad Request - Invalid meeting ID
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Recording not found
+ */
+  recordingsDetail = (meetingId: string, params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        recordings?: RecordingResponse;
+      },
+      void
+    >({
+      path: `/meetings/${meetingId}/recordings`,
+      method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });
