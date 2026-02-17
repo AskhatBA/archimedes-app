@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
+import { REQUIRED_DOCUMENT_TYPES } from '@/modules/insurance/components/attach-documents/constants';
 import { Button } from '@/shared/components/button';
 import { MediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { Datepicker } from '@/shared/components/picker';
@@ -9,9 +10,8 @@ import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
 import { usePrograms, useFamily } from '@/shared/lib/insurance';
 
+import { AttachDocuments } from '../../../components/attach-documents';
 import { compensationCategories } from '../../../constants';
-import { AttachDocuments } from '../../../screens/compensation/components/attach-documents';
-import { REQUIRED_DOCUMENT_TYPES } from '../../../screens/compensation/components/attach-documents/constants';
 import {
   CompensationRequestFormValues,
   CompensationCategoryEnum,

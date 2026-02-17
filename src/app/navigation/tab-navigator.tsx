@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { CompensationScreen } from '@/modules/insurance';
 import { AppointmentsScreen } from '@/screens/appointments';
+import { CompensationScreen } from '@/screens/compensation';
 import { HomeScreen } from '@/screens/home';
 import { InsuranceScreen } from '@/screens/insurance';
 import { ProfileScreen } from '@/screens/profile';

@@ -1,10 +1,9 @@
 import { FC } from 'react';
 import { View, ScrollView } from 'react-native';
 
+import { Topbar, NotificationStack } from '@/modules/notifications';
 import { MainLayout } from '@/shared/layout/main-layout';
 
-import { NotificationStack } from '../components/notification-stack';
-import { Topbar } from '../components/topbar';
 import { notifications } from '../data';
 
 export const NotificationsScreen: FC = () => {

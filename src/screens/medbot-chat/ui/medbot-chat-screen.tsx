@@ -9,11 +9,9 @@ import {
   Keyboard,
 } from 'react-native';
 
-import { FeatureGrid } from '@/modules/med-bot/components/feature-grid';
-import { MessageInput } from '@/modules/med-bot/components/message-input';
-import { WelcomeMessage } from '@/modules/med-bot/components/welcome-message';
+import { WelcomeMessage, MessageInput, FeatureGrid } from '@/modules/medbot';
 
-export const MedBotChatScreen: FC = () => {
+export const MedbotChatScreen: FC = () => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

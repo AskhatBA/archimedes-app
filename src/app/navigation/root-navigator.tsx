@@ -1,12 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
-import {
-  CompensationsHistoryScreen,
-  InsuranceSupportScreen,
-} from '@/modules/insurance';
-import { MedBotChatScreen } from '@/modules/med-bot';
-import { NotificationsScreen } from '@/modules/notifications';
 import { AppointmentDetailsScreen } from '@/screens/appointment-details';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
@@ -14,7 +8,10 @@ import { CreateUserScreen } from '@/screens/create-user';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { ElectronicReferralsScreen } from '@/screens/electronic-referrals';
 import { InsuranceDetailsScreen } from '@/screens/insurance-details';
+import { InsuranceSupportScreen } from '@/screens/insurance-support';
+import { MedbotChatScreen } from '@/screens/medbot-chat';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
+import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
@@ -56,8 +53,8 @@ export const RootNavigator: FC = () => {
         options={{ header: () => <SecondaryTopbar title="Запись на прием" /> }}
       />
       <RootStack.Screen
-        name={routes.MedBotChat}
-        component={MedBotChatScreen}
+        name={routes.MedbotChat}
+        component={MedbotChatScreen}
         options={{ header: () => <MedBotTopbar /> }}
       />
       <RootStack.Screen
@@ -74,13 +71,6 @@ export const RootNavigator: FC = () => {
         name={routes.CompensationRequest}
         component={CompensationRequestScreen}
         options={{ header: () => <SecondaryTopbar title="" /> }}
-      />
-      <RootStack.Screen
-        name={routes.CompensationsHistory}
-        component={CompensationsHistoryScreen}
-        options={{
-          header: () => <SecondaryTopbar title="История возмещений" />,
-        }}
       />
       <RootStack.Screen
         name={routes.InsuranceDetails}

@@ -10,9 +10,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useContacts } from '@/modules/insurance';
 import { useTheme } from '@/shared/theme';
-
-import { useContacts } from '../../../hooks/use-contacts';
 
 export const InsuranceSupportScreen: FC = () => {
   const { contacts, loadingContacts } = useContacts();

@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { CompensationCard } from '@/modules/insurance/screens/compensation/components/history/ui/compensation-card';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { useUserCompensationRequests } from '@/shared/lib/insurance';
 import { colors, globalStyles } from '@/shared/theme';
+
+import { CompensationCard } from './compensation-card';
 
 export const CompensationHistory: FC = () => {
   const { compensationRequests, loadingCompensationRequests } =
