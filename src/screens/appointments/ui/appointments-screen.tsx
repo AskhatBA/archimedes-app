@@ -52,6 +52,7 @@ export const AppointmentsScreen: FC = () => {
 const styles = StyleSheet.create({
   wrapper: {
     paddingBottom: 50,
+    paddingHorizontal: 16,
   },
   createAppointmentButton: {
     width: '100%',

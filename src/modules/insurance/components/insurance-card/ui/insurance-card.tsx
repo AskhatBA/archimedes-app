@@ -23,18 +23,35 @@ export const InsuranceCard: FC<InsuranceCardProps> = ({
   const { colors } = useTheme();
   const { navigate } = useNavigation();
 
+  const defaultBackground = levelColors.Standard.background;
+  const defaultTextColor = levelColors.Standard.text;
+  const defaultButtonColor = levelColors.Standard.button;
+
   return (
     <View style={{ gap: 16 }}>
       <View
         style={[
           styles.container,
-          { backgroundColor: levelColors[level].background },
+          {
+            backgroundColor:
+              levelColors[level]?.background || defaultBackground,
+          },
         ]}
       >
-        <Text style={[styles.title, { color: levelColors[level].text }]}>
+        <Text
+          style={[
+            styles.title,
+            { color: levelColors[level]?.text || defaultTextColor },
+          ]}
+        >
           {level}
         </Text>
-        <Text style={[styles.price, { color: levelColors[level].text }]}>
+        <Text
+          style={[
+            styles.price,
+            { color: levelColors[level]?.text || defaultTextColor },
+          ]}
+        >
           {price}
         </Text>
         <Text style={[styles.date, { color: colors.gray['500'] }]}>
@@ -43,11 +60,18 @@ export const InsuranceCard: FC<InsuranceCardProps> = ({
         <TouchableOpacity
           style={[
             styles.button,
-            { backgroundColor: levelColors[level].button },
+            {
+              backgroundColor: levelColors[level]?.button || defaultButtonColor,
+            },
           ]}
           onPress={() => navigate(routes.InsuranceDetails, { programId })}
         >
-          <Text style={[styles.buttonText, { color: levelColors[level].text }]}>
+          <Text
+            style={[
+              styles.buttonText,
+              { color: levelColors[level]?.text || defaultTextColor },
+            ]}
+          >
             Перейти к деталям страховки
           </Text>
         </TouchableOpacity>

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useEffect } from 'react';
 
 import { insuranceApi } from '@/api';
 import {
@@ -19,6 +20,14 @@ export const usePrograms = () => {
     queryFn: async () => (await insuranceApi.programsList()).data?.programs,
     retry: false,
   });
+
+  useEffect(() => {
+    console.log('error', error);
+  }, [error]);
+
+  useEffect(() => {
+    console.log('programs: ', programs);
+  }, [programs]);
 
   return {
     programs: programs || [],

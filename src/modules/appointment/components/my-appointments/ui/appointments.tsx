@@ -100,7 +100,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
-    marginHorizontal: 24,
+    marginHorizontal: 16,
   },
   appointments: {
     gap: 8,

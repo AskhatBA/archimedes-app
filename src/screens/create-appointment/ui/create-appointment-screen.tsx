@@ -20,7 +20,7 @@ export const CreateAppointmentScreen: FC = () => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    paddingHorizontal: 32,
+    paddingHorizontal: 16,
     paddingBottom: 32,
   },
   title: {

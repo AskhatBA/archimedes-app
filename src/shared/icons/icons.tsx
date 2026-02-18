@@ -16,6 +16,7 @@ import HospitalIcon from '@/assets/icons/hospital.svg';
 import InfoIcon from '@/assets/icons/info.svg';
 import LogoutIcon from '@/assets/icons/logout.svg';
 import MapPinnedIcon from '@/assets/icons/map-pinned.svg';
+import PhoneIcon from '@/assets/icons/phone.svg';
 import SearchIcon from '@/assets/icons/search.svg';
 import SelectCaretIcon from '@/assets/icons/select-caret.svg';
 import SelectIndicator from '@/assets/icons/select-indicator.svg';
@@ -31,6 +32,7 @@ import UploadFileIcon from '@/assets/icons/upload-file.svg';
 import UserFilledIcon from '@/assets/icons/user-filled.svg';
 import UserOutlinedIcon from '@/assets/icons/user-outlined.svg';
 import VideoIcon from '@/assets/icons/video.svg';
+import WhatsAppIcon from '@/assets/icons/whatsapp.svg';
 
 export {
   TabBarAppointmentsIcon,
@@ -66,4 +68,6 @@ export {
   VideoIcon,
   UserFilledIcon,
   UserOutlinedIcon,
+  WhatsAppIcon,
+  PhoneIcon,
 };

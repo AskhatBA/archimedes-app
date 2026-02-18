@@ -88,7 +88,7 @@ export const InsuranceScreen: FC = () => {
 const styles = StyleSheet.create({
   scrollContent: {
     paddingTop: 16,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   container: {
     flex: 1,

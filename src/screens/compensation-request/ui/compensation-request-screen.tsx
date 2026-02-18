@@ -95,7 +95,7 @@ export const CompensationRequestScreen: FC = () => {
 const styles = StyleSheet.create({
   container: {
     gap: 32,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
   },
   heading: {
     fontSize: 24,
