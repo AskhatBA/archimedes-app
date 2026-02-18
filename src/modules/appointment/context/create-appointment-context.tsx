@@ -127,7 +127,6 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   });
 
   const bookAppointment = () => {
-    console.log('formValues: ', formValues);
     createAppointmentMutation.mutate(formValues);
   };
 

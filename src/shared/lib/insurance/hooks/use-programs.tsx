@@ -21,14 +21,6 @@ export const usePrograms = () => {
     retry: false,
   });
 
-  useEffect(() => {
-    console.log('error', error);
-  }, [error]);
-
-  useEffect(() => {
-    console.log('programs: ', programs);
-  }, [programs]);
-
   return {
     programs: programs || [],
     loadingPrograms,

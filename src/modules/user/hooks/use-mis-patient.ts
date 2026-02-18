@@ -7,19 +7,11 @@ import { useAuth } from '@/shared/lib/auth';
 export const useMisPatient = () => {
   const { loginIin } = useAuth();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['mis-patient', loginIin],
     queryFn: async () => (await misApi.findPatientList({ iin: loginIin })).data,
     retry: false,
   });
-
-  useEffect(() => {
-    console.log('mis-patient:', data);
-  }, [data]);
-
-  useEffect(() => {
-    console.log('mis-patient error:', error);
-  }, [error]);
 
   return {
     misPatient: data,
