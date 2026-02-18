@@ -7,11 +7,14 @@ import {
   ActivityIndicator,
   StyleSheet,
   Linking,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useContacts } from '@/modules/insurance';
 import { useTheme } from '@/shared/theme';
+
+const WHATSAPP_PHONE = '77019511647';
 
 export const InsuranceSupportScreen: FC = () => {
   const { contacts, loadingContacts } = useContacts();
@@ -26,6 +29,19 @@ export const InsuranceSupportScreen: FC = () => {
     );
   }
 
+  const getWhatsAppUrl = (phone: string) => `https://wa.me/${phone}`;
+
+  const openWhatsApp = async () => {
+    const url = getWhatsAppUrl(WHATSAPP_PHONE);
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  };
+
   const hasContacts = Array.isArray(contacts) && contacts.length > 0;
 
   return (
@@ -35,6 +51,26 @@ export const InsuranceSupportScreen: FC = () => {
         { backgroundColor: 'transparent', paddingBottom: insets.bottom },
       ]}
     >
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.gray['500'] }]}>
+          WhatsApp
+        </Text>
+        <View style={styles.phonesContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[
+              styles.phoneChip,
+              { backgroundColor: colors.gray['200'] },
+            ]}
+            onPress={openWhatsApp}
+          >
+            <Text style={[styles.phoneText, { color: colors.gray['500'] }]}>
+              +{WHATSAPP_PHONE}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       {hasContacts ? (
         contacts.map(({ city, phones }) => (
           <View key={city} style={styles.section}>

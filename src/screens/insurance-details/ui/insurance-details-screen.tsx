@@ -58,14 +58,7 @@ export const InsuranceDetailsScreen: FC = () => {
   };
 
   const openSupport = async () => {
-    const phoneNumber = '77019511647';
-    const url = `https://wa.me/${phoneNumber}`;
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
-    }
+    navigate(routes.InsuranceSupport);
   };
 
   if (loadingProgram) {
