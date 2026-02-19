@@ -72,7 +72,7 @@ export const InsuranceCard: FC<InsuranceCardProps> = ({
               { color: levelColors[level]?.text || defaultTextColor },
             ]}
           >
-            Перейти к деталям страховки
+            Перейти к деталям программы
           </Text>
         </TouchableOpacity>
       </View>

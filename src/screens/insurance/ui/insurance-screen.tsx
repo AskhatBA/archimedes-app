@@ -64,7 +64,7 @@ export const InsuranceScreen: FC = () => {
       }
     >
       <View style={styles.container}>
-        <Text style={globalStyles.sectionHeading}>Страховка</Text>
+        <Text style={globalStyles.sectionHeading}>Программы</Text>
         <View style={styles.cards}>
           {programs.map(program => {
             if (program.status === 'EXPIRED') return null;

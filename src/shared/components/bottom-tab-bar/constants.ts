@@ -1,7 +1,6 @@
 import {
   TabBarAppointmentsIcon,
   TabBarProfileIcon,
-  TabBarNotificationsIcon,
   TabBarHomeIcon,
   ShieldPlusIcon,
   BanknoteArrowDown,
@@ -21,7 +20,7 @@ export const navigationItems: Record<string, TabBarItemType> = {
   },
   [routes.Insurance]: {
     Icon: ShieldPlusIcon,
-    label: 'Страховка',
+    label: 'Программы',
   },
   [routes.Compensation]: {
     Icon: BanknoteArrowDown,
