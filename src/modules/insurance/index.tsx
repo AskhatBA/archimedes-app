@@ -8,7 +8,7 @@ export { useContacts } from './hooks/use-contacts';
 export { CompensationRequestForm } from './forms/compensation-request-form';
 
 export { MedicalNetworkResults } from './components/medical-network-results';
-export { InsuranceCard } from './components/insurance-card';
+export { ProgramCard } from './components/program-card';
 export { FamilyMembers } from './components/family-members';
 export { CompensationHistory } from './components/compensation-history';
 

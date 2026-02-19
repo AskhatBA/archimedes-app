@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { InsuranceCard } from '@/modules/insurance/components/insurance-card';
+import { ProgramCard } from '@/modules/insurance';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { ShieldX } from '@/shared/icons';
 import { usePrograms } from '@/shared/lib/insurance';
@@ -70,7 +70,7 @@ export const ProgramsScreen: FC = () => {
             if (program.status === 'EXPIRED') return null;
 
             return (
-              <InsuranceCard
+              <ProgramCard
                 key={program.id}
                 dateEnd={program.dateEnd}
                 programId={program.id}

@@ -14,7 +14,7 @@ interface InsuranceCardProps {
   dateEnd: string;
 }
 
-export const InsuranceCard: FC<InsuranceCardProps> = ({
+export const ProgramCard: FC<InsuranceCardProps> = ({
   level,
   price,
   programId,
