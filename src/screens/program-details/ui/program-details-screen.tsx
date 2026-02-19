@@ -35,7 +35,7 @@ interface RouteParams {
   programId: string;
 }
 
-export const InsuranceDetailsScreen: FC = () => {
+export const ProgramDetailsScreen: FC = () => {
   const [openInformation, setOpenInformation] = useState(false);
   const route = useRoute();
   const deviceInsets = useSafeAreaInsets();

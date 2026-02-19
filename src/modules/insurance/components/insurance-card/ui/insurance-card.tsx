@@ -64,7 +64,7 @@ export const InsuranceCard: FC<InsuranceCardProps> = ({
               backgroundColor: levelColors[level]?.button || defaultButtonColor,
             },
           ]}
-          onPress={() => navigate(routes.InsuranceDetails, { programId })}
+          onPress={() => navigate(routes.ProgramDetails, { programId })}
         >
           <Text
             style={[
