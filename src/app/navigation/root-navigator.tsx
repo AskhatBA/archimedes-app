@@ -90,9 +90,7 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.DocumentViewer}
         component={DocumentViewerScreen}
-        options={{
-          header: () => <SecondaryTopbar />,
-        }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.ProgramSupport}
@@ -102,16 +100,12 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.Notifications}
         component={NotificationsScreen}
-        options={{
-          header: () => <StatusBarUnderlay />,
-        }}
+        options={{ header: () => <StatusBarUnderlay /> }}
       />
       <RootStack.Screen
         name={routes.AppointmentDetails}
         component={AppointmentDetailsScreen}
-        options={{
-          header: () => <SecondaryTopbar />,
-        }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
     </RootStack.Navigator>
   );
