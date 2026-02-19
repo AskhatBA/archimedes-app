@@ -7,12 +7,12 @@ import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { ElectronicReferralsScreen } from '@/screens/electronic-referrals';
-import { InsuranceSupportScreen } from '@/screens/insurance-support';
 import { MedbotChatScreen } from '@/screens/medbot-chat';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
 import { ProgramDetailsScreen } from '@/screens/program-details';
+import { ProgramSupportScreen } from '@/screens/program-support';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
@@ -99,8 +99,8 @@ export const RootNavigator: FC = () => {
         }}
       />
       <RootStack.Screen
-        name={routes.InsuranceSupport}
-        component={InsuranceSupportScreen}
+        name={routes.ProgramSupport}
+        component={ProgramSupportScreen}
         options={{
           header: () => <SecondaryTopbar title="Поддержка" />,
         }}

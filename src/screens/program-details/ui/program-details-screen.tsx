@@ -56,7 +56,7 @@ export const ProgramDetailsScreen: FC = () => {
   };
 
   const openSupport = async () => {
-    navigate(routes.InsuranceSupport);
+    navigate(routes.ProgramSupport);
   };
 
   if (loadingProgram) {

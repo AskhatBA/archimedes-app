@@ -22,7 +22,7 @@ import { useTheme } from '@/shared/theme';
 
 const WHATSAPP_PHONE = '77019511647';
 
-export const InsuranceSupportScreen: FC = () => {
+export const ProgramSupportScreen: FC = () => {
   const { contacts, loadingContacts } = useContacts();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
