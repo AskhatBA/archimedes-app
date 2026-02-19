@@ -18,7 +18,7 @@ export const navigationItems: Record<string, TabBarItemType> = {
     Icon: TabBarAppointmentsIcon,
     label: 'Записи',
   },
-  [routes.Insurance]: {
+  [routes.Programs]: {
     Icon: ShieldPlusIcon,
     label: 'Программы',
   },

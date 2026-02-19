@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppointmentsScreen } from '@/screens/appointments';
 import { CompensationScreen } from '@/screens/compensation';
 import { HomeScreen } from '@/screens/home';
-import { InsuranceScreen } from '@/screens/insurance';
 import { ProfileScreen } from '@/screens/profile';
+import { ProgramsScreen } from '@/screens/programs';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { routes } from '@/shared/navigation';
@@ -31,8 +31,8 @@ export const TabNavigator: FC = () => {
         options={{ header: () => <StatusBarUnderlay /> }}
       />
       <Tab.Screen
-        name={routes.Insurance}
-        component={InsuranceScreen}
+        name={routes.Programs}
+        component={ProgramsScreen}
         options={{ header: () => <StatusBarUnderlay /> }}
       />
       <Tab.Screen

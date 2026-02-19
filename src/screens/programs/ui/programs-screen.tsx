@@ -14,7 +14,7 @@ import { ShieldX } from '@/shared/icons';
 import { usePrograms } from '@/shared/lib/insurance';
 import { colors, globalStyles } from '@/shared/theme';
 
-export const InsuranceScreen: FC = () => {
+export const ProgramsScreen: FC = () => {
   const { programs, loadingPrograms, fetchingPrograms, refetchPrograms } =
     usePrograms();
   const deviceInsets = useSafeAreaInsets();
