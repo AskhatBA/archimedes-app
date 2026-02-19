@@ -12,6 +12,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useContacts } from '@/modules/insurance';
+import { usePageHeader } from '@/shared/hooks';
 import {
   WhatsAppIcon,
   MapPinnedIcon,
@@ -23,6 +24,8 @@ import { useTheme } from '@/shared/theme';
 const WHATSAPP_PHONE = '77019511647';
 
 export const ProgramSupportScreen: FC = () => {
+  usePageHeader({ title: 'Поддержка' });
+
   const { contacts, loadingContacts } = useContacts();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();

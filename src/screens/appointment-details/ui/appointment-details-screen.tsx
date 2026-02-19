@@ -7,6 +7,7 @@ import { useAppointmentDetails } from '@/modules/appointment';
 import { formatDate } from '@/shared/adapters/date';
 import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
+import { usePageHeader } from '@/shared/hooks';
 import {
   CalendarIcon,
   ClockIcon,
@@ -24,6 +25,8 @@ interface RouteParams {
 }
 
 export const AppointmentDetailsScreen: FC = () => {
+  usePageHeader({ title: 'Детали записи' });
+
   const route = useRoute();
   const { appointmentId } = route.params as RouteParams;
   const { colors } = useTheme();

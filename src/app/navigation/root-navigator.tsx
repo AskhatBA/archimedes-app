@@ -50,7 +50,7 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.CreateAppointment}
         component={CreateAppointmentScreen}
-        options={{ header: () => <SecondaryTopbar title="Запись на прием" /> }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.MedbotChat}
@@ -60,7 +60,7 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.OtpVerification}
         component={OtpVerificationScreen}
-        options={{ header: () => <SecondaryTopbar title="" /> }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.CreateUser}
@@ -70,40 +70,34 @@ export const RootNavigator: FC = () => {
       <RootStack.Screen
         name={routes.CompensationRequest}
         component={CompensationRequestScreen}
-        options={{ header: () => <SecondaryTopbar title="" /> }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.ProgramDetails}
         component={ProgramDetailsScreen}
-        options={{ header: () => <SecondaryTopbar title="" /> }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.MedicalNetwork}
         component={MedicalNetworkScreen}
-        options={{
-          header: () => <SecondaryTopbar title="Медицинская сеть" />,
-        }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.ElectronicReferrals}
         component={ElectronicReferralsScreen}
-        options={{
-          header: () => <SecondaryTopbar title="Электронные направления" />,
-        }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.DocumentViewer}
         component={DocumentViewerScreen}
         options={{
-          header: () => <SecondaryTopbar title="Документ" />,
+          header: () => <SecondaryTopbar />,
         }}
       />
       <RootStack.Screen
         name={routes.ProgramSupport}
         component={ProgramSupportScreen}
-        options={{
-          header: () => <SecondaryTopbar title="Поддержка" />,
-        }}
+        options={{ header: () => <SecondaryTopbar /> }}
       />
       <RootStack.Screen
         name={routes.Notifications}
@@ -116,7 +110,7 @@ export const RootNavigator: FC = () => {
         name={routes.AppointmentDetails}
         component={AppointmentDetailsScreen}
         options={{
-          header: () => <SecondaryTopbar title="Детали записи" />,
+          header: () => <SecondaryTopbar />,
         }}
       />
     </RootStack.Navigator>

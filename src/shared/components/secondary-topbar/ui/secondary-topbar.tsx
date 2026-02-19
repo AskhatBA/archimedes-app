@@ -4,13 +4,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ArrowBackIcon } from '@/shared/icons';
 import { useNavigation } from '@/shared/navigation';
+import { usePageHeaderStore } from '@/shared/store';
 import { useTheme } from '@/shared/theme';
 
 interface SecondaryTopbarProps {
-  title: string;
+  title?: string;
 }
 
 export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
+  const globalTitle = usePageHeaderStore(state => state.title);
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const { goBack } = useNavigation();
@@ -27,7 +29,7 @@ export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
         numberOfLines={1}
         style={[styles.title, { color: colors.textMain }]}
       >
-        {title}
+        {globalTitle || title}
       </Text>
       <View style={{ flex: 1 }} />
     </View>

@@ -1,9 +1,10 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { ActivityIndicator, Platform, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
+import { usePageHeader } from '@/shared/hooks';
 import { useTheme } from '@/shared/theme';
 
 type RouteParams = {
@@ -14,6 +15,8 @@ type RouteParams = {
 };
 
 export const DocumentViewerScreen: FC = () => {
+  usePageHeader({ title: 'Документ' });
+
   const { colors } = useTheme();
   const { params } = useRoute<RouteProp<RouteParams, 'InsuranceDocument'>>();
   const [loading, setLoading] = useState(true);

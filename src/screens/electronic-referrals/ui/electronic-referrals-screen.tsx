@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { useElectronicReferrals } from '@/modules/insurance';
+import { usePageHeader } from '@/shared/hooks';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
@@ -16,6 +17,8 @@ interface RouteParams {
 }
 
 export const ElectronicReferralsScreen: FC = () => {
+  usePageHeader({ title: 'Электронные направления' });
+
   const route = useRoute();
   const { colors } = useTheme();
   const { programId } = route.params as RouteParams;

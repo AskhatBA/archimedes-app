@@ -10,6 +10,7 @@ import {
 } from '@/modules/insurance';
 import { SelectField } from '@/shared/components/select-field/ui/select-field';
 import { TextField } from '@/shared/components/text-field/ui/text-field';
+import { usePageHeader } from '@/shared/hooks';
 import { useTheme } from '@/shared/theme';
 import { toCapitalize } from '@/shared/utils/to-capitalize';
 
@@ -18,6 +19,8 @@ interface RouteParams {
 }
 
 export const MedicalNetworkScreen: FC = () => {
+  usePageHeader({ title: 'Медицинская сеть' });
+
   const { colors } = useTheme();
   const route = useRoute();
   const { programId } = route.params as RouteParams;
