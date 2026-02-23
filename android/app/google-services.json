@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "729417854534",
+    "project_id": "archimedes-2a676",
+    "storage_bucket": "archimedes-2a676.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729417854534:android:41a4e3aa0fbd6cf52ae447",
+        "android_client_info": {
+          "package_name": "com.archimedesapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-wgVb6Al76_Dn7PBhB0JnYZaJ5YHUy4k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
