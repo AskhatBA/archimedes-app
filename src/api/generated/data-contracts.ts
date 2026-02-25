@@ -9,6 +9,47 @@
  * ---------------------------------------------------------------
  */
 
+export interface Appointment {
+  /** @format uuid */
+  id?: string;
+  /** @format uuid */
+  patientId?: string;
+  /** @format uuid */
+  doctorId?: string;
+  /** @format uuid */
+  externalId?: string;
+  /** @format date-time */
+  dateTime?: string;
+  status?: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+  notes?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+  patient?: object;
+  doctor?: object;
+}
+
+export interface CreateAppointmentBody {
+  /** @format uuid */
+  patientId: string;
+  /** @format uuid */
+  doctorId: string;
+  /** @format uuid */
+  externalId: string;
+  /** @format date-time */
+  dateTime: string;
+  notes?: string;
+  status?: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+}
+
+export interface UpdateAppointmentBody {
+  /** @format date-time */
+  dateTime?: string;
+  status?: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+  notes?: string;
+}
+
 export interface RequestOTPBody {
   /**
    * Phone number starting with 7 followed by 10 digits
@@ -496,6 +537,73 @@ export interface MISLaboratoryResult {
   departmentName: string;
   /** Name of the biomaterial */
   biomaterialName: string;
+}
+
+export interface RegisterDeviceBody {
+  /**
+   * Unique device identifier (OneSignal player ID or FCM token)
+   * @example "abc123-def456-ghi789"
+   */
+  deviceId: string;
+  /**
+   * Device platform
+   * @example "IOS"
+   */
+  platform: 'IOS' | 'ANDROID' | 'WEB';
+}
+
+export interface RegisterDeviceResponse {
+  /** @example true */
+  success?: boolean;
+  data?: {
+    /** @format uuid */
+    id?: string;
+    /** @format uuid */
+    userId?: string;
+    deviceId?: string;
+    platform?: 'IOS' | 'ANDROID' | 'WEB';
+    /** @format date-time */
+    createdAt?: string;
+  };
+}
+
+export interface DeviceListResponse {
+  /** @example true */
+  success?: boolean;
+  data?: {
+    /** @format uuid */
+    id?: string;
+    deviceId?: string;
+    platform?: 'IOS' | 'ANDROID' | 'WEB';
+    /** @format date-time */
+    createdAt?: string;
+  }[];
+}
+
+export interface SendNotificationBody {
+  /**
+   * Target user ID
+   * @format uuid
+   */
+  userId: string;
+  /**
+   * Notification title
+   * @example "New Appointment"
+   */
+  title?: string;
+  /**
+   * Notification message
+   * @example "You have a new appointment scheduled"
+   */
+  message: string;
+  /** Additional data payload */
+  data?: Record<string, any>;
+}
+
+export interface SuccessResponse {
+  /** @example true */
+  success?: boolean;
+  message?: string;
 }
 
 export interface GetPatientProfileResponse {

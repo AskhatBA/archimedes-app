@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { UserContextProvider } from '@/modules/user';
 import { AuthContextProvider } from '@/shared/lib/auth';
+import { OneSignalProvider } from '@/shared/lib/one-signal';
 import { ToastProvider } from '@/shared/lib/toast';
 import { NavigationProvider } from '@/shared/navigation';
 import { ThemeProvider } from '@/shared/theme';
@@ -23,12 +24,14 @@ function App() {
               <ThemeProvider>
                 <AuthContextProvider>
                   <UserContextProvider>
-                    <StatusBar
-                      barStyle="dark-content"
-                      backgroundColor="white"
-                      translucent={false}
-                    />
-                    <RootNavigator />
+                    <OneSignalProvider>
+                      <StatusBar
+                        barStyle="dark-content"
+                        backgroundColor="white"
+                        translucent={false}
+                      />
+                      <RootNavigator />
+                    </OneSignalProvider>
                   </UserContextProvider>
                 </AuthContextProvider>
               </ThemeProvider>

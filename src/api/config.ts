@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 const PROD_URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
-const DEV_IOS_URL = 'http://localhost:4000/v1/api';
+const DEV_IOS_URL = 'http://192.168.10.2:4000/v1/api';
 const DEV_ANDROID_URL = 'http://10.0.2.2:4000/v1/api';
 
 export const baseURL = Platform.select({
