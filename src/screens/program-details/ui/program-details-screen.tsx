@@ -18,7 +18,6 @@ import {
   useProgramById,
 } from '@/modules/insurance';
 import { useUser } from '@/modules/user';
-import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { GET_PROGRAM_QUERY } from '@/shared/constants';
 import { usePageHeader } from '@/shared/hooks';
@@ -29,6 +28,7 @@ import {
   FileTextIcon,
   HeartIcon,
 } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 

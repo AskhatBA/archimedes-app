@@ -12,13 +12,13 @@ import FileViewer from 'react-native-file-viewer';
 import RNFS from 'react-native-fs';
 
 import { useMedicalTests } from '@/modules/medical-tests';
-import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import {
   SelectCaretIcon,
   ClipboardListIcon,
   FileTextIcon,
 } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { HistoryCard } from './history-card';

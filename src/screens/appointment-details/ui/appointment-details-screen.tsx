@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppointmentDetails } from '@/modules/appointment';
-import { formatDate } from '@/shared/adapters/date';
 import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { usePageHeader } from '@/shared/hooks';
@@ -18,6 +17,7 @@ import {
   VideoIcon,
   ClipboardClockIcon,
 } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {

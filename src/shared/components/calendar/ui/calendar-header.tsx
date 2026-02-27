@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
 import { ArrowBackIcon } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { WEEK_DAYS } from '../constants';

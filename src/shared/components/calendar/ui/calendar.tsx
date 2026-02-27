@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Calendar as RNCalendar } from 'react-native-calendars';
 
-import { formatDate, addMonths, subtractMonths } from '@/shared/adapters/date';
+import { formatDate, addMonths, subtractMonths } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { CalendarHeader } from './calendar-header';

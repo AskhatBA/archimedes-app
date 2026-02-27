@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 
 import { useAppointmentsHistory } from '@/modules/appointment';
-import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { SelectCaretIcon, HistoryIcon, FileTextIcon } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { HistoryCard } from './history-card';

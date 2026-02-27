@@ -1,12 +1,14 @@
 import { Platform } from 'react-native';
 
-const PROD_URL = 'https://mis.archimedes.kz/mobile-app/v1/api';
-const DEV_IOS_URL = 'http://192.168.10.2:4000/v1/api';
-const DEV_ANDROID_URL = 'http://10.0.2.2:4000/v1/api';
+import {
+  BASE_API_URL,
+  DEV_ANDROID_API_URL,
+  DEV_IOS_API_URL,
+} from '@/shared/config';
 
 export const baseURL = Platform.select({
-  ios: __DEV__ ? DEV_IOS_URL : PROD_URL,
-  android: __DEV__ ? DEV_ANDROID_URL : PROD_URL,
+  ios: __DEV__ ? DEV_IOS_API_URL : BASE_API_URL,
+  android: __DEV__ ? DEV_ANDROID_API_URL : BASE_API_URL,
 });
 
 const securityWorker = (token: string | null | undefined): Promise<any> => {

@@ -3,7 +3,6 @@ import { FC, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useOtp } from '@/modules/auth';
-import { INSURANCE_CERTIFICATE_URL } from '@/modules/insurance';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';

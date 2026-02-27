@@ -12,9 +12,9 @@ import {
   Platform,
 } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { Button } from '@/shared/components/button';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 type DateTimePickerProps = (

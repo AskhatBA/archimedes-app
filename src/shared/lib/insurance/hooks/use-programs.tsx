@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useEffect } from 'react';
 
 import { insuranceApi } from '@/api';
 import {

@@ -2,9 +2,9 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { FC, useState } from 'react';
 import { View, StyleSheet, Platform, Text } from 'react-native';
 
-import { formatDate, formatToDateObject } from '@/shared/adapters/date';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { Button } from '@/shared/components/button';
+import { formatDate, formatToDateObject } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { FieldTrigger } from './field-trigger';

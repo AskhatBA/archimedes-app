@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 export const Topbar: FC = () => {

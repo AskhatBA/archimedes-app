@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
+import { formatDate } from '@/shared/lib/date';
 import { useNavigation, routes } from '@/shared/navigation';
 import { fonts, useTheme } from '@/shared/theme';
 

@@ -4,9 +4,8 @@ import { Platform } from 'react-native';
 import { OneSignal, LogLevel } from 'react-native-onesignal';
 
 import { notificationsApi } from '@/api';
+import { ONE_SIGNAL_APP_ID } from '@/shared/config';
 import { useAuth } from '@/shared/lib/auth';
-
-const ONE_SIGNAL_APP_ID = '657eca16-0dda-4d03-8bb4-fbd749ba7204';
 
 export const OneSignalProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated } = useAuth();

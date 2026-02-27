@@ -1,10 +1,10 @@
+import { useRoute } from '@react-navigation/native';
 import { FC } from 'react';
 import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ArrowBackIcon } from '@/shared/icons';
 import { useNavigation } from '@/shared/navigation';
-import { usePageHeaderStore } from '@/shared/store';
 import { useTheme } from '@/shared/theme';
 
 interface SecondaryTopbarProps {
@@ -12,7 +12,7 @@ interface SecondaryTopbarProps {
 }
 
 export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
-  const globalTitle = usePageHeaderStore(state => state.title);
+  const route = useRoute();
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const { goBack } = useNavigation();
@@ -29,7 +29,7 @@ export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
         numberOfLines={1}
         style={[styles.title, { color: colors.textMain }]}
       >
-        {globalTitle || title}
+        {(route.params as { title: string }).title || title}
       </Text>
       <View style={{ flex: 1 }} />
     </View>

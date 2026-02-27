@@ -1,16 +1,14 @@
-import { useEffect } from 'react';
-
-import { usePageHeaderStore } from '@/shared/store';
+import { useNavigation } from '@react-navigation/native';
+import { useLayoutEffect } from 'react';
 
 interface PageHeaderProps {
   title: string;
 }
 
 export const usePageHeader = ({ title }: PageHeaderProps) => {
-  const setTitle = usePageHeaderStore(state => state.setTitle);
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    if (title) setTitle(title);
-    return () => setTitle('');
-  }, [title]);
+  useLayoutEffect(() => {
+    navigation.setParams({ title } as undefined);
+  }, [navigation]);
 };

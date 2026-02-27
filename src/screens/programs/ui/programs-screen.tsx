@@ -44,7 +44,7 @@ export const ProgramsScreen: FC = () => {
       >
         <ShieldX width={120} height={120} color={colors.blue['370']} />
         <Text style={{ fontWeight: 400, fontSize: 18, color: colors.primary }}>
-          У вас пока нет активных страховок
+          У вас пока нет активных программ
         </Text>
       </ScrollView>
     );

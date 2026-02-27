@@ -4,6 +4,7 @@ import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
 import { CompensationHistory } from '@/modules/insurance';
 import { Button } from '@/shared/components/button';
+import { GET_COMPENSATION_REQUESTS_QUERY } from '@/shared/constants';
 import { FilePenIcon } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -13,27 +14,28 @@ export const CompensationScreen: FC = () => {
   const { navigate } = useNavigation();
   const queryClient = useQueryClient();
   const isFetchingCompensations = useIsFetching({
-    queryKey: ['user-compensation-requests'],
+    queryKey: [GET_COMPENSATION_REQUESTS_QUERY],
   });
 
   const onRefresh = () => {
-    queryClient.refetchQueries({ queryKey: ['user-compensation-requests'] });
+    queryClient.refetchQueries({ queryKey: [GET_COMPENSATION_REQUESTS_QUERY] });
   };
 
   return (
     <>
-      <MainLayout>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={!!isFetchingCompensations}
-              onRefresh={onRefresh}
-            />
-          }
-        >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={!!isFetchingCompensations}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <MainLayout>
           <CompensationHistory />
-        </ScrollView>
-      </MainLayout>
+        </MainLayout>
+      </ScrollView>
       <View style={styles.compensationButton}>
         <Button
           icon={<FilePenIcon width={22} height={22} color={colors.white} />}
@@ -47,6 +49,9 @@ export const CompensationScreen: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 60,
+  },
   heading: {
     fontSize: 24,
     fontWeight: 700,

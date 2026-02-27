@@ -8,7 +8,7 @@ import {
 import { usePageHeader } from '@/shared/hooks';
 
 export const CreateAppointmentScreen: FC = () => {
-  usePageHeader({ title: '"Запись на прием"' });
+  usePageHeader({ title: 'Запись на прием' });
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

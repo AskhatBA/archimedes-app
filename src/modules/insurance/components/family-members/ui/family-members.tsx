@@ -7,8 +7,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
 import { FamilyIcon, ArrowBackIcon as CaretIcon } from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useFamily } from '@/shared/lib/insurance';
 import { useTheme } from '@/shared/theme';
 

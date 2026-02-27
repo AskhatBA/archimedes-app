@@ -13,8 +13,8 @@ import { MISSpecialization, MISDoctor, MISAvailableSlots, misApi } from '@/api';
 import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slots';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
-import { formatDate } from '@/shared/adapters/date';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
+import { formatDate } from '@/shared/lib/date';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 

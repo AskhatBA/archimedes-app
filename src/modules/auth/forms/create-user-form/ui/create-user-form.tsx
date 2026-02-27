@@ -2,11 +2,11 @@ import { useFormik } from 'formik';
 import { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-import { formatDate } from '@/shared/adapters/date';
 import { Button } from '@/shared/components/button';
 import { Datepicker } from '@/shared/components/picker';
 import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { CreateUserPayload, UserGender } from '../types';

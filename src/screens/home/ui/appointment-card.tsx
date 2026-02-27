@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { formatDate, getDayOfWeek, getTimeOfDay } from '@/shared/adapters/date';
+import { formatDate, getDayOfWeek, getTimeOfDay } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 interface AppointmentCardProps {

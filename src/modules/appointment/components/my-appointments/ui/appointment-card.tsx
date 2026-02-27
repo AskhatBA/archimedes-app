@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 
 import { misApi } from '@/api';
-import { getTimeOfDay, formatDate } from '@/shared/adapters/date';
 import { ThreeDotsIcon } from '@/shared/icons';
+import { getTimeOfDay, formatDate } from '@/shared/lib/date';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 

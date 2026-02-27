@@ -64,12 +64,12 @@ export const CreateAppointmentForm: FC = () => {
             { color: colors.gray['500'] },
           ]}
         >
-          Выберите страховку
+          Выберите программу
         </Text>
         <SelectField
           value={formValues.programId || ''}
           onChange={value => changeFormValues('programId', value)}
-          placeholder="Страховка"
+          placeholder="Программа"
           options={(availablePrograms || []).map(p => ({
             value: p.id,
             label: `${p.title} (${p.cardNo})`,
