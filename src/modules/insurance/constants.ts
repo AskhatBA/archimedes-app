@@ -1,4 +1,4 @@
-import { CompensationCategoryEnum } from './types';
+import { CompensationCategoryEnum, ElectronicReferralStatus } from './types';
 
 export const INSURANCE_CERTIFICATE_URL =
   'https://mobileapi.archimedes.kz/v1/certificate/:programId';
@@ -21,3 +21,9 @@ export const compensationCategories = [
     title: 'Стационарное лечение',
   },
 ];
+
+export const REFERRAL_OPTIONS = [
+  { id: ElectronicReferralStatus.NOT_RECEIVED, label: 'Услуга не получена' },
+  { id: ElectronicReferralStatus.RECEIVED, label: 'Услуга получена' },
+  { id: ElectronicReferralStatus.DECLINED, label: 'Отказ от услуги' },
+] as const;

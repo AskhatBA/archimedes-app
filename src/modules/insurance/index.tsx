@@ -11,6 +11,7 @@ export { MedicalNetworkResults } from './components/medical-network-results';
 export { ProgramCard } from './components/program-card';
 export { FamilyMembers } from './components/family-members';
 export { CompensationHistory } from './components/compensation-history';
+export { ElectronicReferralCard } from './components/electronic-referral-card';
 
 export { INSURANCE_CERTIFICATE_URL } from './constants';
 

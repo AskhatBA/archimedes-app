@@ -1,3 +1,4 @@
+import { ElectronicReferralServiceStatus } from '@/api';
 import { MediaFile } from '@/shared/components/media-picker';
 
 export interface CompensationRequestFormValues {
@@ -14,4 +15,10 @@ export enum CompensationCategoryEnum {
   Dentistry = 4,
   Medications = 5,
   InpatientTreatment = 2,
+}
+
+export enum ElectronicReferralStatus {
+  NOT_RECEIVED = ElectronicReferralServiceStatus.Value0,
+  RECEIVED = ElectronicReferralServiceStatus.Value1,
+  DECLINED = ElectronicReferralServiceStatus.Value2,
 }

@@ -21,6 +21,7 @@ import {
   InsuranceVerifyOtpBody,
   MedicalNetworkClinics,
   RefundRequestBody,
+  UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
 
 export namespace Insurance {
@@ -333,6 +334,35 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       clinicTypes?: ClinicType[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name ElectronicReferralsServiceStatusPartialUpdate
+ * @summary Update electronic referral service status
+ * @request PATCH:/insurance/electronic-referrals/{electronicReferralId}/service-status
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Service status updated successfully
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace ElectronicReferralsServiceStatusPartialUpdate {
+    export type RequestParams = {
+      /** Electronic referral ID */
+      electronicReferralId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = UpdateElectronicReferralServiceStatusBody;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
     };
   }
 }

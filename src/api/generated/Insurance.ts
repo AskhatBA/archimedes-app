@@ -21,6 +21,7 @@ import {
   InsuranceVerifyOtpBody,
   MedicalNetworkClinics,
   RefundRequestBody,
+  UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
@@ -383,6 +384,42 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       path: `/insurance/clinic-types`,
       method: 'GET',
       secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name ElectronicReferralsServiceStatusPartialUpdate
+ * @summary Update electronic referral service status
+ * @request PATCH:/insurance/electronic-referrals/{electronicReferralId}/service-status
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Service status updated successfully
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  electronicReferralsServiceStatusPartialUpdate = (
+    electronicReferralId: string,
+    data: UpdateElectronicReferralServiceStatusBody,
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+      },
+      void
+    >({
+      path: `/insurance/electronic-referrals/${electronicReferralId}/service-status`,
+      method: 'PATCH',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
       format: 'json',
       ...params,
     });

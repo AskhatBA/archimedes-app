@@ -308,6 +308,21 @@ export interface ClinicType {
   title: string;
 }
 
+/**
+ * Service status
+ * @example 1
+ */
+export enum ElectronicReferralServiceStatus {
+  Value0 = 0,
+  Value1 = 1,
+  Value2 = 2,
+}
+
+export interface UpdateElectronicReferralServiceStatusBody {
+  /** Service status */
+  serviceStatus: ElectronicReferralServiceStatus;
+}
+
 export interface CreateMeetingBody {
   /** @example "Patient Consultation" */
   topic: string;
@@ -585,7 +600,7 @@ export interface SendNotificationBody {
    * Target user ID
    * @format uuid
    */
-  userId: string;
+  userId?: string;
   /**
    * Notification title
    * @example "New Appointment"
