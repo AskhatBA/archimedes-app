@@ -29,7 +29,7 @@ export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
         numberOfLines={1}
         style={[styles.title, { color: colors.textMain }]}
       >
-        {(route.params as { title: string }).title || title}
+        {(route.params as { title: string })?.title || title}
       </Text>
       <View style={{ flex: 1 }} />
     </View>

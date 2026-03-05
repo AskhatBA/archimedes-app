@@ -433,8 +433,8 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = archimedesapp/archimedesapp.entitlements;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = G928Z9QSNL;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65WS7JAYBS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = archimedesapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Archimedes;
@@ -450,7 +450,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.medical;
+				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.med;
 				PRODUCT_NAME = archimedesapp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -471,8 +471,8 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = archimedesapp/archimedesapp.entitlements;
-				CURRENT_PROJECT_VERSION = 44;
-				DEVELOPMENT_TEAM = G928Z9QSNL;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65WS7JAYBS;
 				INFOPLIST_FILE = archimedesapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Archimedes;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
@@ -487,7 +487,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.medical;
+				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.med;
 				PRODUCT_NAME = archimedesapp;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -660,7 +660,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = G928Z9QSNL;
+				DEVELOPMENT_TEAM = 65WS7JAYBS;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -677,7 +677,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.medical.OneSignalNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.med.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -707,7 +707,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = G928Z9QSNL;
+				DEVELOPMENT_TEAM = 65WS7JAYBS;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -723,7 +723,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.medical.OneSignalNotificationServiceExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.archimedes.med.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
