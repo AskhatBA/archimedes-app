@@ -11,6 +11,7 @@
 
 import {
   DeviceListResponse,
+  NotificationListResponse,
   RegisterDeviceBody,
   RegisterDeviceResponse,
   SendNotificationBody,
@@ -99,6 +100,117 @@ export class Notifications<SecurityDataType = unknown> extends HttpClient<Securi
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Notifications
+   * @name NotificationsList
+   * @summary Get notification history for authenticated user
+   * @request GET:/notifications
+   * @secure
+   * @response `200` `NotificationListResponse` List of notifications
+   * @response `401` `void` Unauthorized
+   */
+  notificationsList = (
+    query?: {
+      /**
+       * Number of notifications to return
+       * @default 50
+       */
+      limit?: number;
+      /**
+       * Number of notifications to skip
+       * @default 0
+       */
+      offset?: number;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NotificationListResponse, void>({
+      path: `/notifications`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Notifications
+   * @name ReadPartialUpdate
+   * @summary Mark a notification as read
+   * @request PATCH:/notifications/{notificationId}/read
+   * @secure
+   * @response `200` `SuccessResponse` Notification marked as read
+   * @response `401` `void` Unauthorized
+   * @response `404` `void` Notification not found
+   */
+  readPartialUpdate = (notificationId: string, params: RequestParams = {}) =>
+    this.request<SuccessResponse, void>({
+      path: `/notifications/${notificationId}/read`,
+      method: 'PATCH',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Notifications
+   * @name ReadAllPartialUpdate
+   * @summary Mark all notifications as read
+   * @request PATCH:/notifications/read-all
+   * @secure
+   * @response `200` `SuccessResponse` All notifications marked as read
+   * @response `401` `void` Unauthorized
+   */
+  readAllPartialUpdate = (params: RequestParams = {}) =>
+    this.request<SuccessResponse, void>({
+      path: `/notifications/read-all`,
+      method: 'PATCH',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Notifications
+ * @name UnreadCountList
+ * @summary Get unread notification count
+ * @request GET:/notifications/unread-count
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: {
+  \** @example 5 *\
+    count?: number,
+
+},
+
+}` Unread notification count
+ * @response `401` `void` Unauthorized
+ */
+  unreadCountList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        data?: {
+          /** @example 5 */
+          count?: number;
+        };
+      },
+      void
+    >({
+      path: `/notifications/unread-count`,
+      method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });

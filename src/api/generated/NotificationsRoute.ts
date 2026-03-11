@@ -11,6 +11,7 @@
 
 import {
   DeviceListResponse,
+  NotificationListResponse,
   RegisterDeviceBody,
   RegisterDeviceResponse,
   SendNotificationBody,
@@ -94,5 +95,111 @@ export namespace Notifications {
     export type RequestBody = SendNotificationBody;
     export type RequestHeaders = {};
     export type ResponseBody = SuccessResponse;
+  }
+
+  /**
+   * No description
+   * @tags Notifications
+   * @name NotificationsList
+   * @summary Get notification history for authenticated user
+   * @request GET:/notifications
+   * @secure
+   * @response `200` `NotificationListResponse` List of notifications
+   * @response `401` `void` Unauthorized
+   */
+  export namespace NotificationsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Number of notifications to return
+       * @default 50
+       */
+      limit?: number;
+      /**
+       * Number of notifications to skip
+       * @default 0
+       */
+      offset?: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = NotificationListResponse;
+  }
+
+  /**
+   * No description
+   * @tags Notifications
+   * @name ReadPartialUpdate
+   * @summary Mark a notification as read
+   * @request PATCH:/notifications/{notificationId}/read
+   * @secure
+   * @response `200` `SuccessResponse` Notification marked as read
+   * @response `401` `void` Unauthorized
+   * @response `404` `void` Notification not found
+   */
+  export namespace ReadPartialUpdate {
+    export type RequestParams = {
+      /**
+       * Notification ID to mark as read
+       * @format uuid
+       */
+      notificationId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = SuccessResponse;
+  }
+
+  /**
+   * No description
+   * @tags Notifications
+   * @name ReadAllPartialUpdate
+   * @summary Mark all notifications as read
+   * @request PATCH:/notifications/read-all
+   * @secure
+   * @response `200` `SuccessResponse` All notifications marked as read
+   * @response `401` `void` Unauthorized
+   */
+  export namespace ReadAllPartialUpdate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = SuccessResponse;
+  }
+
+  /**
+ * No description
+ * @tags Notifications
+ * @name UnreadCountList
+ * @summary Get unread notification count
+ * @request GET:/notifications/unread-count
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: {
+  \** @example 5 *\
+    count?: number,
+
+},
+
+}` Unread notification count
+ * @response `401` `void` Unauthorized
+*/
+  export namespace UnreadCountList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      data?: {
+        /** @example 5 */
+        count?: number;
+      };
+    };
   }
 }

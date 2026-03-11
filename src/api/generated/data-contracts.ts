@@ -554,6 +554,26 @@ export interface MISLaboratoryResult {
   biomaterialName: string;
 }
 
+export interface NotificationItem {
+  /** @format uuid */
+  id?: string;
+  title?: string;
+  message?: string;
+  data?: Record<string, any>;
+  status?: 'SENT' | 'DELIVERED' | 'FAILED';
+  isRead?: boolean;
+  /** @format date-time */
+  readAt?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+}
+
+export interface NotificationListResponse {
+  /** @example true */
+  success?: boolean;
+  data?: NotificationItem[];
+}
+
 export interface RegisterDeviceBody {
   /**
    * Unique device identifier (OneSignal player ID or FCM token)
