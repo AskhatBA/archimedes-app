@@ -1,6 +1,15 @@
 import { FC } from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from 'react-native';
 
+import { CALL_CENTER_PHONE } from '@/shared/constants';
+import { PhoneIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -13,7 +22,8 @@ export const SupportDetails: FC = () => {
     <View style={styles.container}>
       <Image source={image} style={{ width: 279, height: 334 }} />
       <Text style={[styles.informationText, { color: colors.gray['500'] }]}>
-        Служба поддержки работает круглосуточно
+        Извините, данные пациента не найдены. Пожалуйста, обратитесь в службу
+        поддержки.
       </Text>
       <Text
         style={[
@@ -21,16 +31,23 @@ export const SupportDetails: FC = () => {
           { color: colors.gray['500'], marginTop: 16 },
         ]}
       >
-        Напишите нам свой запрос, по почте:
+        Служба поддержки работает круглосуточно.
       </Text>
-      <Text
-        style={[
-          styles.informationText,
-          { color: colors.gray['500'], marginTop: 4 },
-        ]}
+      <TouchableOpacity
+        onPress={() => Linking.openURL(`tel:${CALL_CENTER_PHONE}`)}
+        style={styles.phoneContainer}
       >
-        archimedes.medical.group.kaz@gmail.com
-      </Text>
+        <PhoneIcon width={20} height={20} color={colors.primary} />
+        <Text
+          style={[
+            styles.informationText,
+            styles.phoneLink,
+            { color: colors.primary },
+          ]}
+        >
+          {CALL_CENTER_PHONE}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -43,5 +60,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
     textAlign: 'center',
+  },
+  phoneContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 16,
+  },
+  phoneLink: {
+    fontSize: 24,
+    fontWeight: 700,
   },
 });
