@@ -20,7 +20,7 @@ export const ProgramsScreen: FC = () => {
   const deviceInsets = useSafeAreaInsets();
 
   if (loadingPrograms) {
-    return <ScreenLoader text="Получаем данные из страховой" />;
+    return <ScreenLoader text="Загружаем ваши программы..." />;
   }
 
   if (!programs || programs.length === 0) {

@@ -93,7 +93,7 @@ export const ProgramDetailsScreen: FC = () => {
         >
           <View style={{ gap: 4 }}>
             <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Страховая компания
+              Компания
             </Text>
             <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
               {program.insuranceCompany}
@@ -101,7 +101,7 @@ export const ProgramDetailsScreen: FC = () => {
           </View>
           <View style={{ gap: 4 }}>
             <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Номер страховой карты
+              Номер карты
             </Text>
             <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
               {program.cardNo}
@@ -109,7 +109,7 @@ export const ProgramDetailsScreen: FC = () => {
           </View>
           <View style={{ gap: 4 }}>
             <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Период страхования
+              Период программы
             </Text>
             <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
               {program?.dateStart &&
@@ -135,7 +135,7 @@ export const ProgramDetailsScreen: FC = () => {
           >
             <ClipIcon width={24} height={24} color={colors.primary} />
             <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              Страховой сертификат
+              Сертификат программы
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
