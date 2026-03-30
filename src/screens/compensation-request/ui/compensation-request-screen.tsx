@@ -64,6 +64,7 @@ export const CompensationRequestScreen: FC = () => {
       amount: +formValues.amount,
       files: convertedFiles,
       category: formValues.category as CompensationCategoryEnum,
+      comments: formValues.comments,
     });
   };
 

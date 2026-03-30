@@ -123,6 +123,8 @@ export interface RefundRequestBody {
   personId?: string;
   /** @example "a2f6c7d8-3b1e-4f0a-9c3d-7e5a1b2c3d4e" */
   programId?: string;
+  /** @example "Пример комментария" */
+  comments?: string;
   /**
    * Refund category type:
    * * 0 - АПП (амбулаторно-поликлиническая помощь)
@@ -236,6 +238,8 @@ export interface InsuranceRefundRequest {
   amount: number;
   /** @example "pending" */
   status: string;
+  /** @example "Request for refund due to policy violation" */
+  comments?: string;
 }
 
 export interface InsuranceRefundRequestsResponse {
@@ -616,11 +620,6 @@ export interface DeviceListResponse {
 }
 
 export interface SendNotificationBody {
-  /**
-   * Target user ID
-   * @format uuid
-   */
-  userId?: string;
   /**
    * Notification title
    * @example "New Appointment"

@@ -8,6 +8,7 @@ export interface CompensationRequestFormValues {
   programId: string;
   personId: string;
   category: number;
+  comments: string;
 }
 
 export enum CompensationCategoryEnum {

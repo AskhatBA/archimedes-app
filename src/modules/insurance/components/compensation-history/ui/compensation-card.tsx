@@ -13,6 +13,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
   date,
   amount,
   status,
+  comments,
 }) => {
   const { colors } = useTheme();
 
@@ -48,6 +49,16 @@ export const CompensationCard: FC<CompensationCardProps> = ({
         <Text style={[styles.label, { color: colors.textMain }]}>Статус: </Text>
         <Text style={[styles.value, { color: colors.textMain }]}>{status}</Text>
       </View>
+      {comments && (
+        <View style={styles.row}>
+          <Text style={[styles.label, { color: colors.textMain }]}>
+            Комментарий:
+          </Text>
+          <Text style={[styles.value, { color: colors.textMain }]}>
+            {comments}
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

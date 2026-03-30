@@ -29,12 +29,14 @@ export const Datepicker: FC<DateTimePickerProps> = ({
   minDate,
 }) => {
   const [iosPickerOpened, setIosPickerOpened] = useState(false);
+  const [androidPickerOpened, setAndroidPickerOpened] = useState(false);
   const [timestamp, setTimestamp] = useState<number>();
   const { colors } = useTheme();
 
   const openPicker = () => {
+    console.log('open picker');
     if (Platform.OS === 'android') {
-      return;
+      setAndroidPickerOpened(true);
     }
     if (Platform.OS === 'ios') {
       setIosPickerOpened(true);
@@ -53,6 +55,26 @@ export const Datepicker: FC<DateTimePickerProps> = ({
         value={value ? formatDate(value, 'DD.MM.YYYY') : placeholder}
         onOpen={openPicker}
       />
+      {androidPickerOpened && (
+        <RNDateTimePicker
+          maximumDate={maxDate}
+          minimumDate={minDate}
+          value={timestamp ? formatToDateObject(timestamp) : new Date()}
+          display="default"
+          onChange={event => {
+            if (event.nativeEvent.timestamp) {
+              setTimestamp(event.nativeEvent.timestamp);
+              onChange(formatDate(timestamp));
+              setAndroidPickerOpened(false);
+            }
+            if (event.type === 'dismissed') {
+              setAndroidPickerOpened(false);
+            }
+          }}
+          themeVariant="light"
+          mode="date"
+        />
+      )}
       <BottomDrawer
         visible={iosPickerOpened}
         onClose={() => setIosPickerOpened(false)}

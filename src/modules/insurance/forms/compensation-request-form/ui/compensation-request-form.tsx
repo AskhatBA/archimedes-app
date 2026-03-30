@@ -36,6 +36,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       date: '',
       amount: '',
       category: '',
+      comments: '',
     },
     onSubmit: formValues => {
       const attachedTypes = files.map(f => f.localFileType);
@@ -61,6 +62,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         personId: formValues.person,
         programId: formValues.program,
         category: +formValues.category,
+        comments: formValues.comments,
       });
     },
     validationSchema,
@@ -138,6 +140,13 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         onChange={value => handleChange('date')(value)}
         error={errors.date}
         maxDate={new Date()}
+      />
+      <TextField
+        placeholder="Введите комментарий"
+        label="Комментарий"
+        value={values.comments}
+        error={errors.comments}
+        onChangeText={value => handleChange('comments')(value)}
       />
       <MediaPicker
         onChange={newFiles => {
