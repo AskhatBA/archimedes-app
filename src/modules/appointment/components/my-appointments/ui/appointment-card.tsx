@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 
 import { misApi } from '@/api';
-import { ThreeDotsIcon, ClipboardClockIcon, VideoIcon } from '@/shared/icons';
+import {
+  ThreeDotsIcon,
+  ClipboardClockIcon,
+  VideoIcon,
+  StethoscopeIcon,
+  HospitalIcon,
+} from '@/shared/icons';
 import { getTimeOfDay, formatDate } from '@/shared/lib/date';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
@@ -41,6 +47,9 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     mutationFn: () => misApi.appointmentsDelete(appointmentId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+    onError: err => {
+      console.log('canceling error', err);
     },
   });
 
@@ -74,8 +83,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
         onPress={() => {
           ActionSheetIOS.showActionSheetWithOptions(
             {
-              options: ['Отменить бронь', 'Отмена'],
-              cancelButtonIndex: 1,
+              options: ['Отменить запись', 'Отмена'],
               destructiveButtonIndex: 0,
             },
             buttonIndex => {
@@ -97,12 +105,18 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
             {formatDate(date, 'HH:mm')}
           </Text>
         </View>
-        <Text style={[styles.doctorName, { color: fontColor[color] }]}>
-          {doctorName}
-        </Text>
-        <Text style={[styles.specializationName, { color: fontColor[color] }]}>
-          {specialization}
-        </Text>
+        <View style={styles.infoRow}>
+          <StethoscopeIcon width={16} height={16} color={fontColor[color]} />
+          <Text style={[styles.doctorName, { color: fontColor[color] }]}>
+            {doctorName}
+          </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <HospitalIcon width={16} height={16} color={fontColor[color]} />
+          <Text style={[styles.specializationName, { color: fontColor[color] }]}>
+            {specialization}
+          </Text>
+        </View>
         <View style={styles.appointmentTypeLabel}>
           {isTelemedicine ? (
             <VideoIcon width={16} height={16} color={fontColor[color]} />
@@ -150,12 +164,16 @@ const styles = StyleSheet.create({
   doctorName: {
     fontSize: 18,
     fontWeight: 700,
-    marginTop: 8,
   },
   specializationName: {
     fontSize: 14,
     fontWeight: 300,
-    marginTop: 4,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 8,
   },
   moreButton: {
     width: 20,

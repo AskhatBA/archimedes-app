@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointment } from '@/api';
@@ -11,10 +11,6 @@ import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 export const Appointments: FC<{ startDate: string }> = () => {
   const { colors } = useTheme();
   const { appointments, loadingAppointments } = useAppointments();
-
-  useEffect(() => {
-    console.log('appointments', appointments);
-  }, [appointments]);
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -55,7 +51,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
   return (
     <View style={styles.container}>
       {Object.entries(groupedAppointments)
-        .sort(([timeA], [timeB]) => timeB.localeCompare(timeA))
+        .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
         .map(([time, appointmentList], index) => {
           const currentSeparatorType =
             separatorTypes[index % separatorTypes.length];
