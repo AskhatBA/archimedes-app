@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointment } from '@/api';
@@ -11,6 +11,10 @@ import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 export const Appointments: FC<{ startDate: string }> = () => {
   const { colors } = useTheme();
   const { appointments, loadingAppointments } = useAppointments();
+
+  useEffect(() => {
+    console.log('appointments', appointments);
+  }, [appointments]);
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -38,11 +42,11 @@ export const Appointments: FC<{ startDate: string }> = () => {
 
   const groupedAppointments = appointments.reduce(
     (acc, appointment) => {
-      const hour = dayjs(appointment.start_time).format('DD MMM HH:00');
-      if (!acc[hour]) {
-        acc[hour] = [];
+      const day = dayjs(appointment.start_time).format('DD MMM');
+      if (!acc[day]) {
+        acc[day] = [];
       }
-      acc[hour].push(appointment);
+      acc[day].push(appointment);
       return acc;
     },
     {} as Record<string, MISAppointment[]>,
@@ -87,6 +91,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
                     date={appointment.start_time}
                     doctorName={appointment.doctor_name}
                     specialization={appointment.branch_name}
+                    appointmentType={appointment.appointment_type}
                   />
                 ))}
               </View>

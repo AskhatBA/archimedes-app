@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import { misApi } from '@/api';
-import { ThreeDotsIcon } from '@/shared/icons';
+import { ThreeDotsIcon, ClipboardClockIcon, VideoIcon } from '@/shared/icons';
 import { getTimeOfDay, formatDate } from '@/shared/lib/date';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
@@ -22,6 +22,7 @@ interface AppointmentCardProps {
   specialization: string;
   date: string;
   appointmentId: string;
+  appointmentType?: string;
 }
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({
@@ -30,6 +31,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   specialization,
   date,
   appointmentId,
+  appointmentType,
 }) => {
   const { colors } = useTheme();
   const queryClient = useQueryClient();
@@ -48,12 +50,6 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     green: colors.green['100'],
   };
 
-  const squareColor = {
-    blue: colors.blue['150'],
-    orange: colors.orange['300'],
-    green: colors.green['300'],
-  };
-
   const fontColor = {
     blue: colors.blue['400'],
     orange: colors.orange['600'],
@@ -65,6 +61,8 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     orange: colors.orange['600'],
     green: colors.green['600'],
   };
+
+  const isTelemedicine = appointmentType === 'telemedicine';
 
   return (
     <TouchableOpacity
@@ -90,7 +88,6 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
       >
         <ThreeDotsIcon color={moreButtonColor[color]} />
       </TouchableOpacity>
-      <View style={[styles.square, { backgroundColor: squareColor[color] }]} />
       <View style={{ flex: 1 }}>
         <View style={styles.dateContainer}>
           <Text style={[styles.timeOfDay, { color: fontColor[color] }]}>
@@ -106,6 +103,22 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
         <Text style={[styles.specializationName, { color: fontColor[color] }]}>
           {specialization}
         </Text>
+        <View style={styles.appointmentTypeLabel}>
+          {isTelemedicine ? (
+            <VideoIcon width={16} height={16} color={fontColor[color]} />
+          ) : (
+            <ClipboardClockIcon
+              width={16}
+              height={16}
+              color={fontColor[color]}
+            />
+          )}
+          <Text
+            style={[styles.appointmentTypeText, { color: fontColor[color] }]}
+          >
+            {isTelemedicine ? 'Телемедицина' : 'Обычный прием'}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -152,5 +165,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 15,
+  },
+  appointmentTypeLabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 8,
+  },
+  appointmentTypeText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
