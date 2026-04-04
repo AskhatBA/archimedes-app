@@ -98,7 +98,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
             ]}
           >
             <View style={styles.fileInfo}>
-              <FileIcon color={colors.primary} width={24} height={24} />
+              <FileIcon color={colors.primary} width={18} height={18} />
               <View>
                 <Text
                   numberOfLines={1}
@@ -107,7 +107,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
                     { color: colors.blue['400'] },
                   ]}
                 >
-                  {file.name}
+                  {file.localFileType}
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -116,7 +116,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
                     { color: colors.gray['500'] },
                   ]}
                 >
-                  {file.localFileType}
+                  {file.name}
                 </Text>
               </View>
             </View>
@@ -201,20 +201,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 12,
+    padding: 10,
     borderRadius: 12,
     borderWidth: 1,
+    gap: 24,
     backgroundColor: '#fff',
   },
   fileInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    gap: 10,
+    gap: 8,
   },
   attachedFileName: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: '500',
     flex: 1,
   },
   attachedFileType: {

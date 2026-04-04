@@ -86,7 +86,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
     },
     {
       fieldName: 'patronymic',
-      initialValue: initialValues?.patronymic,
+      initialValue: initialValues?.patronymic || '-',
       label: 'Отчество',
       placeholder: 'Введите отчество',
     },
