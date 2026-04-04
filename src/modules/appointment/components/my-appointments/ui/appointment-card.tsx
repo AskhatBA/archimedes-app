@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActionSheetIOS,
+  Alert,
+  Platform,
 } from 'react-native';
 
 import { misApi } from '@/api';
@@ -73,27 +75,40 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 
   const isTelemedicine = appointmentType === 'telemedicine';
 
+  const onCancelAppointment = () => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['Отменить запись', 'Отмена'],
+          destructiveButtonIndex: 0,
+        },
+        buttonIndex => {
+          if (buttonIndex === 0) {
+            cancelAppointmentMutation.mutate();
+          }
+        },
+      );
+    } else {
+      Alert.alert('Отменить запись', 'Вы уверены?', [
+        {
+          text: 'Отмена',
+          style: 'cancel',
+        },
+        {
+          text: 'Отменить запись',
+          style: 'destructive',
+          onPress: () => cancelAppointmentMutation.mutate(),
+        },
+      ]);
+    }
+  };
+
   return (
     <TouchableOpacity
       onPress={() => navigate(routes.AppointmentDetails, { appointmentId })}
       style={[styles.container, { backgroundColor: backgrounds[color] }]}
     >
-      <TouchableOpacity
-        style={styles.moreButton}
-        onPress={() => {
-          ActionSheetIOS.showActionSheetWithOptions(
-            {
-              options: ['Отменить запись', 'Отмена'],
-              destructiveButtonIndex: 0,
-            },
-            buttonIndex => {
-              if (buttonIndex === 0) {
-                cancelAppointmentMutation.mutate();
-              }
-            },
-          );
-        }}
-      >
+      <TouchableOpacity style={styles.moreButton} onPress={onCancelAppointment}>
         <ThreeDotsIcon color={moreButtonColor[color]} />
       </TouchableOpacity>
       <View style={{ flex: 1 }}>
@@ -113,7 +128,9 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
         </View>
         <View style={styles.infoRow}>
           <HospitalIcon width={16} height={16} color={fontColor[color]} />
-          <Text style={[styles.specializationName, { color: fontColor[color] }]}>
+          <Text
+            style={[styles.specializationName, { color: fontColor[color] }]}
+          >
             {specialization}
           </Text>
         </View>
