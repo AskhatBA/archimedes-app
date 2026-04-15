@@ -15,6 +15,7 @@ import {
   CreateMISPatientResponse,
   MISAppointment,
   MISAppointmentHistory,
+  MISAppointmentRequest,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
@@ -199,6 +200,8 @@ export namespace Mis {
       startDate: string;
       /** End date */
       endDate: string;
+      /** Branch ID from MIS */
+      branchId?: string;
     };
     export type RequestBody = never;
     export type RequestHeaders = {};
@@ -375,6 +378,39 @@ export namespace Mis {
       /** @example true */
       success?: boolean;
       appointment?: MISAppointment;
+    };
+  }
+
+  /**
+ * No description
+ * @tags MIS
+ * @name AppointmentRequestsList
+ * @summary Get patient appointment requests from MIS
+ * @request GET:/mis/appointment-requests
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    requests?: (MISAppointmentRequest)[],
+
+}` Appointment requests fetched successfully
+ * @response `400` `void` Patient not found
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace AppointmentRequestsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Include past requests */
+      include_past?: boolean;
+      /** Filter by request status (e.g. rejected) */
+      status?: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      requests?: MISAppointmentRequest[];
     };
   }
 }

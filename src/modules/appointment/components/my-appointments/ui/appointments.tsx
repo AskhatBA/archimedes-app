@@ -1,16 +1,17 @@
 import dayjs from 'dayjs';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
-import { MISAppointment } from '@/api';
-import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
+import { MISAppointmentHistory } from '@/api';
+import { useAppointmentsHistory } from '@/modules/appointment';
 import { useTheme } from '@/shared/theme';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 
 export const Appointments: FC<{ startDate: string }> = () => {
   const { colors } = useTheme();
-  const { appointments, loadingAppointments } = useAppointments();
+  const { appointmentsHistory, loadingAppointmentsHistory } =
+    useAppointmentsHistory();
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -18,16 +19,20 @@ export const Appointments: FC<{ startDate: string }> = () => {
     green: colors.green['600'],
   };
 
+  useEffect(() => {
+    console.log('appointmentsHistory: ', appointmentsHistory);
+  }, [appointmentsHistory]);
+
   const separatorTypes = Object.keys(separatorColors);
 
-  if (loadingAppointments)
+  if (loadingAppointmentsHistory)
     return (
       <View style={{ marginTop: 64 }}>
         <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
 
-  if (!appointments?.length)
+  if (!appointmentsHistory?.length)
     return (
       <View style={styles.noAppointmentsContainer}>
         <Text style={styles.noAppointmentsText}>
@@ -36,22 +41,27 @@ export const Appointments: FC<{ startDate: string }> = () => {
       </View>
     );
 
-  const groupedAppointments = appointments.reduce(
+  const now = dayjs();
+  const groupedAppointments = appointmentsHistory.reduce(
     (acc, appointment) => {
-      const day = dayjs(appointment.start_time).format('DD MMM');
+      const day = dayjs(appointment.startTime).format('DD MMM YYYY');
       if (!acc[day]) {
         acc[day] = [];
       }
       acc[day].push(appointment);
       return acc;
     },
-    {} as Record<string, MISAppointment[]>,
+    {} as Record<string, MISAppointmentHistory[]>,
   );
 
   return (
     <View style={styles.container}>
       {Object.entries(groupedAppointments)
-        .sort(([timeA], [timeB]) => timeA.localeCompare(timeB))
+        .sort(
+          ([timeA], [timeB]) =>
+            dayjs(timeB, 'DD MMM YYYY').valueOf() -
+            dayjs(timeA, 'DD MMM YYYY').valueOf(),
+        )
         .map(([time, appointmentList], index) => {
           const currentSeparatorType =
             separatorTypes[index % separatorTypes.length];
@@ -79,17 +89,24 @@ export const Appointments: FC<{ startDate: string }> = () => {
                 />
               </View>
               <View style={styles.appointments}>
-                {appointmentList.map(appointment => (
-                  <AppointmentCard
-                    color={currentSeparatorType as AppointmentCardColors}
-                    key={appointment.id}
-                    appointmentId={appointment.id}
-                    date={appointment.start_time}
-                    doctorName={appointment.doctor_name}
-                    specialization={appointment.branch_name}
-                    appointmentType={appointment.appointment_type}
-                  />
-                ))}
+                {appointmentList.map(appointment => {
+                  const appointmentTime = dayjs(appointment.startTime);
+                  const isAppointmentPast = appointmentTime.isBefore(now);
+
+                  return (
+                    <AppointmentCard
+                      color={currentSeparatorType as AppointmentCardColors}
+                      key={appointment.id}
+                      appointmentId={appointment.id}
+                      date={appointment.startTime}
+                      doctorName={appointment.doctor.name}
+                      branchName={appointment.branch.name}
+                      branchAddress={appointment.branch.address}
+                      appointmentType={appointment.appointmentType}
+                      isPast={isAppointmentPast}
+                    />
+                  );
+                })}
               </View>
             </View>
           );
@@ -100,7 +117,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    marginTop: 16,
     marginHorizontal: 16,
   },
   appointments: {

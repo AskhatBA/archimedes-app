@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -16,6 +16,7 @@ import {
   UserFilledIcon,
   VideoIcon,
   ClipboardClockIcon,
+  MapPinnedIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
@@ -68,7 +69,25 @@ export const AppointmentDetailsScreen: FC = () => {
       style={styles.container}
       contentContainerStyle={{ paddingBottom: deviceInsets.bottom + 32 }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      {(appointment.status === 'completed' ||
+        new Date(appointment.start_time) < new Date()) && (
+        <View
+          style={[styles.statusBadge, { backgroundColor: colors.green['100'] }]}
+        >
+          <Text style={[styles.statusText, { color: colors.green['600'] }]}>
+            Завершена
+          </Text>
+        </View>
+      )}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+          flexWrap: 'wrap',
+          marginBottom: 16,
+        }}
+      >
         <View
           style={[
             styles.statusBadge,
@@ -224,6 +243,19 @@ export const AppointmentDetailsScreen: FC = () => {
               </Text>
             </View>
           </View>
+          {appointment.branch?.address && (
+            <View style={[styles.detailRow, { marginTop: 12 }]}>
+              <MapPinnedIcon width={20} height={20} color={colors.blue['370']} />
+              <View style={styles.detailContent}>
+                <Text style={[styles.detailLabel, { color: colors.blue['370'] }]}>
+                  Адрес
+                </Text>
+                <Text style={[styles.detailValue, { color: colors.textMain }]}>
+                  {appointment.branch.address}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
 
         {appointment.notes && (
@@ -257,13 +289,14 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   statusBadge: {
+    justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 24,
-    marginBottom: 24,
+    marginBottom: 16,
   },
   statusText: {
     fontSize: 15,

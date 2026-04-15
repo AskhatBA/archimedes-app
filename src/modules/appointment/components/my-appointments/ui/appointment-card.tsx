@@ -17,6 +17,7 @@ import {
   VideoIcon,
   StethoscopeIcon,
   HospitalIcon,
+  MapPinnedIcon,
 } from '@/shared/icons';
 import { getTimeOfDay, formatDate } from '@/shared/lib/date';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -27,19 +28,23 @@ export type AppointmentCardColors = 'blue' | 'green' | 'orange';
 interface AppointmentCardProps {
   color?: AppointmentCardColors;
   doctorName: string;
-  specialization: string;
   date: string;
   appointmentId: string;
   appointmentType?: string;
+  branchName?: string;
+  branchAddress: string;
+  isPast?: boolean;
 }
 
 export const AppointmentCard: FC<AppointmentCardProps> = ({
   color = 'blue',
   doctorName,
-  specialization,
   date,
   appointmentId,
   appointmentType,
+  branchName,
+  branchAddress,
+  isPast = false,
 }) => {
   const { colors } = useTheme();
   const queryClient = useQueryClient();
@@ -106,11 +111,25 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   return (
     <TouchableOpacity
       onPress={() => navigate(routes.AppointmentDetails, { appointmentId })}
-      style={[styles.container, { backgroundColor: backgrounds[color] }]}
+      style={[
+        styles.container,
+        { backgroundColor: backgrounds[color] },
+        isPast && styles.pastCard,
+      ]}
     >
-      <TouchableOpacity style={styles.moreButton} onPress={onCancelAppointment}>
-        <ThreeDotsIcon color={moreButtonColor[color]} />
-      </TouchableOpacity>
+      {!isPast && (
+        <TouchableOpacity
+          style={styles.moreButton}
+          onPress={onCancelAppointment}
+        >
+          <ThreeDotsIcon color={moreButtonColor[color]} />
+        </TouchableOpacity>
+      )}
+      {isPast && (
+        <View style={styles.pastLabel}>
+          <Text style={styles.pastLabelText}>Завершена</Text>
+        </View>
+      )}
       <View style={{ flex: 1 }}>
         <View style={styles.dateContainer}>
           <Text style={[styles.timeOfDay, { color: fontColor[color] }]}>
@@ -131,9 +150,19 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
           <Text
             style={[styles.specializationName, { color: fontColor[color] }]}
           >
-            {specialization}
+            {branchName}
           </Text>
         </View>
+        {branchName && (
+          <View style={styles.infoRow}>
+            <MapPinnedIcon width={16} height={16} color={fontColor[color]} />
+            <Text
+              style={[styles.specializationName, { color: fontColor[color] }]}
+            >
+              {isTelemedicine ? 'Онлайн' : branchAddress}
+            </Text>
+          </View>
+        )}
         <View style={styles.appointmentTypeLabel}>
           {isTelemedicine ? (
             <VideoIcon width={16} height={16} color={fontColor[color]} />
@@ -210,5 +239,22 @@ const styles = StyleSheet.create({
   appointmentTypeText: {
     fontSize: 12,
     fontWeight: '500',
+  },
+  pastCard: {
+    opacity: 1,
+  },
+  pastLabel: {
+    position: 'absolute',
+    top: 10,
+    right: 15,
+    backgroundColor: '#E0E0E0',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  pastLabelText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#666',
   },
 });

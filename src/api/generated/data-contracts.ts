@@ -509,6 +509,7 @@ export interface MISAppointment {
   meeting_id?: string;
   /** @example "https://us05web.zoom.us/j/82621241232?pwd=4o5c456vxgrrCQaUroAbGISNB3zkb5.1" */
   meeting_join_url?: string;
+  branch?: MISBranch;
   /** @example "https://us05web.zoom.us/s/82621241232?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMiIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJ3ZWIiLCJjbHQiOjAsIm1udW0iOiI4MjYyMTI0MjYxMiIsImF1ZCI6ImNsaWVudHNtIiwidWlkIjoiMlJpRjZWLVhRaHlXNDBkaVpOV3NsZyIsInppZCI6ImE0MmUyMTVlMzU0MDRhZTc4NWFjMzc0YjgyMzBjNDQ3Iiwic2siOiIwIiwic3R5IjoxMDAsIndjZCI6InVzMDUiLCJleHAiOjE3NzExMDEzMDc3ImlhdCI6Mfc3MTA5NDEwNywigWlkIjoiNkpDNWlsRFfTY3k4RmVGYmZZQUVuZyIsIrNpZCI6IiJ9.wfFK-x91l1FFedCFgquu7fYq4zxlmrDi-e80OH08zkI" */
   meeting_start_url?: string;
 }
@@ -530,10 +531,20 @@ export interface MISAppointmentHistoryDocument {
   createdAt?: string;
 }
 
+export interface MISAppointmentHistoryBranch {
+  id?: string;
+  name?: string;
+  address?: string;
+}
+
 export interface MISAppointmentHistory {
   id?: string;
   doctor?: MISAppointmentHistoryDoctor;
+  startTime?: string;
+  endTime?: string;
   actualStartTime?: string;
+  status?: 'scheduled' | 'in_progress' | 'completed';
+  branch?: MISAppointmentHistoryBranch;
   diagnosis?: string | null;
   documents?: MISAppointmentHistoryDocument[];
   templateType?: string;
@@ -556,6 +567,40 @@ export interface MISLaboratoryResult {
   departmentName: string;
   /** Name of the biomaterial */
   biomaterialName: string;
+}
+
+export interface MISAppointmentRequest {
+  /** @example "appointment_request" */
+  item_type?: string;
+  id?: string;
+  doctor_name?: string;
+  beneficiary_name?: string;
+  branch?: MISBranch;
+  branch_name?: string;
+  phone_number?: string;
+  address?: string;
+  /** @format date-time */
+  start_time?: string;
+  /** @format date-time */
+  end_time?: string;
+  /** @example "rejected" */
+  status?: string;
+  status_display?: string;
+  record_type?: string;
+  record_type_display?: string;
+  appointment_type?: string;
+  appointment_type_display?: string;
+  notes?: string;
+  is_archived?: boolean;
+  rejection_reason?: string | null;
+  appointment_id?: string | null;
+  /** @format date-time */
+  created_at?: string;
+  /** @format date-time */
+  processed_at?: string | null;
+  meeting_id?: string | null;
+  meeting_join_url?: string | null;
+  meeting_start_url?: string | null;
 }
 
 export interface NotificationItem {

@@ -15,7 +15,7 @@ export const MyAppointments: FC = () => {
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={[styles.title, { color: colors.gray['700'] }]}>
-          Мои записи
+          История записей
         </Text>
         <CalendarIcon />
       </View>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
   },
   title: {
     fontWeight: '700',

@@ -108,7 +108,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       });
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['appointments-history'] }),
+        queryClient.invalidateQueries({ queryKey: ['appointment-requests'] }),
+      ]);
       setSuccess(true);
     },
     onError: (error: any) => {

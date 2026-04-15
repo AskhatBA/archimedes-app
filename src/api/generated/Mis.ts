@@ -15,6 +15,7 @@ import {
   CreateMISPatientResponse,
   MISAppointment,
   MISAppointmentHistory,
+  MISAppointmentRequest,
   MISAvailableSlots,
   MISBranch,
   MISDoctor,
@@ -232,6 +233,8 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
       startDate: string;
       /** End date */
       endDate: string;
+      /** Branch ID from MIS */
+      branchId?: string;
     },
     params: RequestParams = {},
   ) =>
@@ -435,6 +438,47 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/appointments/${appointmentId}`,
       method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags MIS
+ * @name AppointmentRequestsList
+ * @summary Get patient appointment requests from MIS
+ * @request GET:/mis/appointment-requests
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    requests?: (MISAppointmentRequest)[],
+
+}` Appointment requests fetched successfully
+ * @response `400` `void` Patient not found
+ * @response `401` `void` User not found or unauthorized
+ */
+  appointmentRequestsList = (
+    query?: {
+      /** Include past requests */
+      include_past?: boolean;
+      /** Filter by request status (e.g. rejected) */
+      status?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        requests?: MISAppointmentRequest[];
+      },
+      void
+    >({
+      path: `/mis/appointment-requests`,
+      method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,

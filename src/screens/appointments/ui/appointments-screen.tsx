@@ -1,8 +1,12 @@
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
-import { MyAppointments } from '@/modules/appointment';
+import {
+  AppointmentRequests,
+  MyAppointments,
+  useAppointments,
+} from '@/modules/appointment';
 import { Button } from '@/shared/components/button';
 import { ClipboardClockIcon } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';
@@ -30,6 +34,7 @@ export const AppointmentsScreen: FC = () => {
         }
       >
         <MainLayout>
+          <AppointmentRequests />
           <MyAppointments />
         </MainLayout>
       </ScrollView>
@@ -68,8 +73,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
   },
-  content: {
-    flex: 1,
-    gap: 24,
+  divider: {
+    height: 1,
+    backgroundColor: colors.gray['250'],
+    marginTop: 16,
+    marginBottom: 8,
   },
 });

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import {
   View,
   StyleSheet,
@@ -32,10 +32,6 @@ export const CreateUserScreen: FC = () => {
   const { logout } = useAuth();
   const { showToast } = useToast();
   const deviceInsets = useSafeAreaInsets();
-
-  useEffect(() => {
-    console.log('misPatient', misPatient);
-  }, [misPatient]);
 
   const isUserExistsInMis =
     !!misPatient?.patient?.lastName &&
