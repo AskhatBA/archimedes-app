@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 500,
     marginTop: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
   },
 });

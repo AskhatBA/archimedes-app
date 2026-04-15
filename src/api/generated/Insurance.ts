@@ -423,4 +423,49 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       format: 'json',
       ...params,
     });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name CheckIinList
+ * @summary Check if IIN is registered in the insurance service
+ * @request GET:/insurance/check-iin
+ * @secure
+ * @response `200` `{
+  \** @example 0 *\
+    errorCode: number,
+  \** @example "77772114452" *\
+    phone?: string,
+  \** @example "Пользователь не найден" *\
+    message?: string,
+
+}` IIN check result
+ * @response `400` `void` IIN is required
+ * @response `401` `void` User not found or unauthorized
+ */
+  checkIinList = (
+    query: {
+      /** Individual Identification Number */
+      iin: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example 0 */
+        errorCode: number;
+        /** @example "77772114452" */
+        phone?: string;
+        /** @example "Пользователь не найден" */
+        message?: string;
+      },
+      void
+    >({
+      path: `/insurance/check-iin`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
 }

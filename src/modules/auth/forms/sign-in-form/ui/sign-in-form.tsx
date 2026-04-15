@@ -1,13 +1,16 @@
+import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import { FC, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { insuranceApi } from '@/api';
 import { useOtp } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
 import { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
+import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
@@ -17,13 +20,14 @@ export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
   const { requestOtp, isPending } = useOtp();
   const { navigate } = useNavigation();
+  const { showToast } = useToast();
 
   const [userAgreement, setUserAgreement] = useState(false);
   const [privacyPolicy, setPrivacyPolicy] = useState(false);
   const [userAgreementError, setUserAgreementError] = useState('');
   const [privacyPolicyError, setPrivacyPolicyError] = useState('');
 
-  const formatPhoneNumber = phoneString => {
+  const formatPhoneNumber = (phoneString: string) => {
     return phoneString.replace(/\D/g, '');
   };
 
@@ -42,8 +46,8 @@ export const SignInForm: FC = () => {
           setPrivacyPolicyError('TERMS');
           return;
         }
-        setLoginIin(formValues.iin);
-        requestOtp({
+        checkIinMutation.mutate({
+          iin: formValues.iin,
           phone: formatPhoneNumber(formValues.phone),
         });
       },
@@ -51,6 +55,35 @@ export const SignInForm: FC = () => {
       validateOnBlur: false,
       validationSchema,
     });
+
+  const checkIinMutation = useMutation({
+    mutationFn: ({ iin }: { iin: string; phone: string }) =>
+      insuranceApi.checkIinList({ iin }).then(r => r.data),
+    onSuccess: (data, { iin, phone }) => {
+      if (!data.phone) {
+        setFieldError(
+          'iin',
+          `${data.message || 'ИИН не найден в системе'}. Пожалуйста, свяжитесь с колл-центром по номеру 2828.`,
+        );
+        return;
+      }
+      if (data.phone !== phone) {
+        setFieldError(
+          'phone',
+          'Номер телефона не совпадает с данными в страховой системе. Пожалуйста, свяжитесь с колл-центром по номеру 2828.',
+        );
+        return;
+      }
+      setLoginIin(iin);
+      requestOtp({ phone });
+    },
+    onError: () => {
+      showToast({
+        type: 'error',
+        message: 'Не удалось проверить ИИН. Попробуйте снова',
+      });
+    },
+  });
 
   return (
     <View>
@@ -129,7 +162,7 @@ export const SignInForm: FC = () => {
         </View>
       </View>
       <Button
-        isLoading={isPending}
+        isLoading={checkIinMutation.isPending || isPending}
         style={{ marginTop: 50 }}
         onPress={() => {
           handleSubmit();

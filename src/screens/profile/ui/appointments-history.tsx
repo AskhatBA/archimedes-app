@@ -70,7 +70,7 @@ export const AppointmentHistory: FC = () => {
                 key={appointment.id}
                 color="blue"
                 subtitle={appointment.doctor.name}
-                name={`${appointment.doctor.specialtyName} - ${formatDate(appointment.actualStartTime, 'DD.MM.YYYY')}`}
+                name={`${appointment.doctor.specialtyName} - ${formatDate(appointment.actualStartTime || appointment.startTime, 'DD.MM.YYYY')}`}
                 onPress={() =>
                   onOpenAppointment(appointment as MISAppointmentHistory)
                 }

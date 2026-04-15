@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import {
   createContext,
   FC,
@@ -70,7 +71,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     formValues.specializationId,
   );
 
-  const { availableSlots } = useAvailableSlots(formValues.doctorId, formValues.branchId);
+  const { availableSlots } = useAvailableSlots(
+    formValues.doctorId,
+    formValues.branchId,
+  );
 
   const doctorDetails = doctors.find(
     misDoctor => misDoctor.id === formValues.doctorId,
@@ -130,6 +134,16 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   });
 
   const bookAppointment = () => {
+    if (formValues.date && formValues.timeSlot) {
+      const slotDateTime = dayjs(`${formValues.date}T${formValues.timeSlot}`);
+      if (!slotDateTime.isAfter(dayjs().add(1, 'hour'))) {
+        showToast({
+          type: 'error',
+          message: 'Нельзя записаться менее чем за 1 час до приема',
+        });
+        return;
+      }
+    }
     createAppointmentMutation.mutate(formValues);
   };
 

@@ -365,4 +365,41 @@ export namespace Insurance {
       success?: boolean;
     };
   }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name CheckIinList
+ * @summary Check if IIN is registered in the insurance service
+ * @request GET:/insurance/check-iin
+ * @secure
+ * @response `200` `{
+  \** @example 0 *\
+    errorCode: number,
+  \** @example "77772114452" *\
+    phone?: string,
+  \** @example "Пользователь не найден" *\
+    message?: string,
+
+}` IIN check result
+ * @response `400` `void` IIN is required
+ * @response `401` `void` User not found or unauthorized
+*/
+  export namespace CheckIinList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Individual Identification Number */
+      iin: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example 0 */
+      errorCode: number;
+      /** @example "77772114452" */
+      phone?: string;
+      /** @example "Пользователь не найден" */
+      message?: string;
+    };
+  }
 }

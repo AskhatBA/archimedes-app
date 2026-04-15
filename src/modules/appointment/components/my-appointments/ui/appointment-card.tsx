@@ -20,6 +20,7 @@ import {
   MapPinnedIcon,
 } from '@/shared/icons';
 import { getTimeOfDay, formatDate } from '@/shared/lib/date';
+import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
@@ -49,14 +50,19 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   const { colors } = useTheme();
   const queryClient = useQueryClient();
   const { navigate } = useNavigation();
+  const { showToast } = useToast();
 
   const cancelAppointmentMutation = useMutation({
     mutationFn: () => misApi.appointmentsDelete(appointmentId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointments-history'] });
+      showToast({ type: 'success', message: 'Запись успешно отменена' });
     },
-    onError: err => {
-      console.log('canceling error', err);
+    onError: () => {
+      showToast({
+        type: 'error',
+        message: 'Не удалось отменить запись. Попробуйте снова',
+      });
     },
   });
 

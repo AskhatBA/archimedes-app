@@ -19,7 +19,8 @@ export const AppointmentsScreen: FC = () => {
   const isFetchingAppointments = useIsFetching({ queryKey: ['appointments'] });
 
   const onRefresh = () => {
-    queryClient.refetchQueries({ queryKey: ['appointments'] });
+    queryClient.refetchQueries({ queryKey: ['appointments-history'] });
+    queryClient.refetchQueries({ queryKey: ['appointment-requests'] });
   };
 
   return (
