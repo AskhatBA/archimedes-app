@@ -35,6 +35,24 @@ export const TimeSlotPicker: FC<TimeSlotPickerProps> = ({
     }
   }, [maxDays, startIndex]);
 
+  const visibleDaysHaveNoSlots = useMemo(() => {
+    const today = dayjs().startOf('day');
+    for (let i = 0; i < DAYS_PER_PAGE; i += 1) {
+      const currentDate = today.add(startIndex + i, 'day');
+      const foundDay = days.find(d => dayjs(d.date).isSame(currentDate, 'day'));
+      if (foundDay && foundDay.slots.length > 0) {
+        return false;
+      }
+    }
+    return true;
+  }, [days, startIndex]);
+
+  useEffect(() => {
+    if (visibleDaysHaveNoSlots && startIndex + DAYS_PER_PAGE < maxDays) {
+      setStartIndex(prev => prev + DAYS_PER_PAGE);
+    }
+  }, [visibleDaysHaveNoSlots, startIndex, maxDays]);
+
   const visibleDays = useMemo(() => {
     const result: DaySlots[] = [];
     const today = dayjs().startOf('day');
