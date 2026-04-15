@@ -100,14 +100,12 @@ export const TimeSlotPicker: FC<TimeSlotPickerProps> = ({
 
   const renderSlot = (slot: TimeSlot, date: string) => {
     const isSelected = selectedDate === date && selectedTime === slot.time;
-    const isAvailable = slot.available;
+    const slotDateTime = dayjs(`${date}T${slot.time}`);
+    const isAvailable =
+      slot.available && slotDateTime.isAfter(dayjs().add(1, 'hour'));
 
     if (!isAvailable && !isSelected) {
-      return (
-        <View key={`${date}-${slot.time}`} style={styles.slotPlaceholder}>
-          <View style={styles.placeholderLine} />
-        </View>
-      );
+      return null;
     }
 
     return (
