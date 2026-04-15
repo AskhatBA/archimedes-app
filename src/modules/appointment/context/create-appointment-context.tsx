@@ -70,7 +70,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     formValues.specializationId,
   );
 
-  const { availableSlots } = useAvailableSlots(formValues.doctorId);
+  const { availableSlots } = useAvailableSlots(formValues.doctorId, formValues.branchId);
 
   const doctorDetails = doctors.find(
     misDoctor => misDoctor.id === formValues.doctorId,
