@@ -1,6 +1,7 @@
 import { FC, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { useUser } from '@/modules/user';
 import { Button } from '@/shared/components/button';
 import { SelectField } from '@/shared/components/select-field';
 import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
@@ -25,6 +26,7 @@ export const CreateAppointmentForm: FC = () => {
     formValues,
   } = useCreateAppointment();
   const { programs } = usePrograms();
+  const { user } = useUser();
   const { family } = useFamily(formValues.programId);
 
   const availablePrograms = useMemo(
@@ -72,7 +74,8 @@ export const CreateAppointmentForm: FC = () => {
           placeholder="Программа"
           options={(availablePrograms || []).map(p => ({
             value: p.id,
-            label: `${p.title} (${p.cardNo})`,
+            label: p.title,
+            subtitle: p.cardNo,
           }))}
         />
       </View>
@@ -93,10 +96,13 @@ export const CreateAppointmentForm: FC = () => {
             placeholder="Пациент"
             options={[
               { value: '', label: 'Оформить на себя' },
-              ...family.map(member => ({
-                value: member.benId,
-                label: member.fullName,
-              })),
+              ...family
+                .filter(member => member.benId !== user.misPatientId)
+                .map(member => ({
+                  value: member.benId,
+                  label: member.fullName,
+                  subtitle: member.cardNo,
+                })),
             ]}
           />
         </View>

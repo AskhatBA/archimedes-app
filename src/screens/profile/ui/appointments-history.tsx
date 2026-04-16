@@ -10,7 +10,15 @@ import {
 
 import { useAppointmentsHistory } from '@/modules/appointment';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
-import { SelectCaretIcon, HistoryIcon, FileTextIcon } from '@/shared/icons';
+import {
+  SelectCaretIcon,
+  HistoryIcon,
+  FileTextIcon,
+  UserFilledIcon,
+  StethoscopeIcon,
+  HospitalIcon,
+  ClockIcon,
+} from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
@@ -97,7 +105,7 @@ export const AppointmentHistory: FC = () => {
             contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
           >
             <Text style={[styles.drawerTitle, { color: colors.textMain }]}>
-              {`${selected.appointmentTypeDisplay ?? 'Прием'} • ${formatDate(selected.actualStartTime, 'DD/MM/YYYY HH:mm')}`}
+              {`${selected.appointmentTypeDisplay ?? 'Прием'} • ${formatDate(selected.startTime || selected.actualStartTime, 'DD/MM/YYYY HH:mm')}`}
             </Text>
 
             {/* Documents section */}
@@ -146,40 +154,143 @@ export const AppointmentHistory: FC = () => {
             {selected.doctor && (
               <View
                 style={[
-                  styles.card,
-                  { backgroundColor: colors.gray['200'], marginTop: 12 },
+                  styles.doctorCard,
+                  { backgroundColor: colors.blue['100'], marginTop: 12 },
                 ]}
               >
-                <Text style={[styles.cardTitle, { color: colors.textMain }]}>
-                  Врач
-                </Text>
-                {!!selected.doctor.name && (
-                  <Text style={[styles.docText, { color: colors.gray['700'] }]}>
-                    Имя: {selected.doctor.name}
-                  </Text>
+                {/* Header: avatar + name + specialty */}
+                <View style={styles.doctorHeader}>
+                  <View
+                    style={[
+                      styles.doctorAvatar,
+                      { backgroundColor: colors.blue['150'] },
+                    ]}
+                  >
+                    <UserFilledIcon
+                      width={22}
+                      height={22}
+                      color={colors.primary}
+                    />
+                  </View>
+                  <View style={styles.doctorHeaderText}>
+                    {!!selected.doctor.name && (
+                      <Text
+                        style={[styles.doctorName, { color: colors.textMain }]}
+                        numberOfLines={2}
+                      >
+                        {selected.doctor.name}
+                      </Text>
+                    )}
+                    {!!selected.doctor.specialtyName && (
+                      <Text
+                        style={[
+                          styles.doctorSpecialty,
+                          { color: colors.gray['500'] },
+                        ]}
+                        numberOfLines={1}
+                      >
+                        {selected.doctor.specialtyName}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+
+                {(!!selected.doctor.position ||
+                  !!selected.doctor.branchName ||
+                  typeof selected.doctor.appointmentDurationMinutes ===
+                    'number') && (
+                  <View
+                    style={[
+                      styles.doctorDivider,
+                      { backgroundColor: colors.blue['200'] },
+                    ]}
+                  />
                 )}
-                {!!selected.doctor.specialtyName && (
-                  <Text style={[styles.docText, { color: colors.gray['700'] }]}>
-                    Специальность: {selected.doctor.specialtyName}
-                  </Text>
-                )}
-                {!!selected.doctor.position && (
-                  <Text style={[styles.docText, { color: colors.gray['700'] }]}>
-                    Должность: {selected.doctor.position}
-                  </Text>
-                )}
-                {!!selected.doctor.branchName && (
-                  <Text style={[styles.docText, { color: colors.gray['700'] }]}>
-                    Филиал: {selected.doctor.branchName}
-                  </Text>
-                )}
-                {typeof selected.doctor.appointmentDurationMinutes ===
-                  'number' && (
-                  <Text style={[styles.docText, { color: colors.gray['700'] }]}>
-                    Длительность приема:{' '}
-                    {selected.doctor.appointmentDurationMinutes} мин
-                  </Text>
-                )}
+
+                <View style={styles.doctorDetails}>
+                  {!!selected.doctor.position && (
+                    <View style={styles.doctorDetailRow}>
+                      <StethoscopeIcon
+                        width={16}
+                        height={16}
+                        color={colors.gray['500']}
+                      />
+                      <View style={styles.doctorDetailTexts}>
+                        <Text
+                          style={[
+                            styles.doctorDetailLabel,
+                            { color: colors.gray['500'] },
+                          ]}
+                        >
+                          Должность
+                        </Text>
+                        <Text
+                          style={[
+                            styles.doctorDetailValue,
+                            { color: colors.textMain },
+                          ]}
+                        >
+                          {selected.doctor.position}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  {!!selected.doctor.branchName && (
+                    <View style={styles.doctorDetailRow}>
+                      <HospitalIcon
+                        width={16}
+                        height={16}
+                        color={colors.gray['500']}
+                      />
+                      <View style={styles.doctorDetailTexts}>
+                        <Text
+                          style={[
+                            styles.doctorDetailLabel,
+                            { color: colors.gray['500'] },
+                          ]}
+                        >
+                          Филиал
+                        </Text>
+                        <Text
+                          style={[
+                            styles.doctorDetailValue,
+                            { color: colors.textMain },
+                          ]}
+                        >
+                          {selected.doctor.branchName}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  {typeof selected.doctor.appointmentDurationMinutes ===
+                    'number' && (
+                    <View style={styles.doctorDetailRow}>
+                      <ClockIcon
+                        width={16}
+                        height={16}
+                        color={colors.gray['500']}
+                      />
+                      <View style={styles.doctorDetailTexts}>
+                        <Text
+                          style={[
+                            styles.doctorDetailLabel,
+                            { color: colors.gray['500'] },
+                          ]}
+                        >
+                          Длительность приёма
+                        </Text>
+                        <Text
+                          style={[
+                            styles.doctorDetailValue,
+                            { color: colors.textMain },
+                          ]}
+                        >
+                          {selected.doctor.appointmentDurationMinutes} мин
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
               </View>
             )}
           </ScrollView>
@@ -224,5 +335,60 @@ const styles = StyleSheet.create({
   docText: {
     fontSize: 14,
     marginTop: 4,
+  },
+  doctorCard: {
+    borderRadius: 15,
+    padding: 14,
+    gap: 12,
+  },
+  doctorHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  doctorAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  doctorHeaderText: {
+    flex: 1,
+    gap: 2,
+  },
+  doctorName: {
+    fontSize: 15,
+    fontWeight: '600',
+    lineHeight: 20,
+  },
+  doctorSpecialty: {
+    fontSize: 13,
+    fontWeight: '400',
+  },
+  doctorDivider: {
+    height: 1,
+  },
+  doctorDetails: {
+    gap: 10,
+  },
+  doctorDetailRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  doctorDetailTexts: {
+    flex: 1,
+    gap: 1,
+  },
+  doctorDetailLabel: {
+    fontSize: 11,
+    fontWeight: '400',
+  },
+  doctorDetailValue: {
+    fontSize: 14,
+    fontWeight: '500',
+    lineHeight: 18,
   },
 });

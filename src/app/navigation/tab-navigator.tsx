@@ -6,7 +6,7 @@ import { HomeScreen } from '@/screens/home';
 import { ProfileScreen } from '@/screens/profile';
 import { ProgramsScreen } from '@/screens/programs';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
-import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
+import { TabTopBar } from '@/shared/components/tab-top-bar';
 import { routes } from '@/shared/navigation';
 
 import type { FC } from 'react';
@@ -23,27 +23,27 @@ export const TabNavigator: FC = () => {
       <Tab.Screen
         name={routes.Home}
         component={HomeScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
+        options={{ header: () => <TabTopBar variant="greeting" /> }}
       />
       <Tab.Screen
         name={routes.AppointmentsMain}
         component={AppointmentsScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
+        options={{ header: () => <TabTopBar title="Записи" /> }}
       />
       <Tab.Screen
         name={routes.Programs}
         component={ProgramsScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
+        options={{ header: () => <TabTopBar title="Программы" /> }}
       />
       <Tab.Screen
         name={routes.Compensation}
         component={CompensationScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
+        options={{ header: () => <TabTopBar title="Возмещение" /> }}
       />
       <Tab.Screen
         name={routes.Profile}
         component={ProfileScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
+        options={{ header: () => <TabTopBar variant="greeting" /> }}
       />
     </Tab.Navigator>
   );

@@ -1,12 +1,8 @@
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 
-import {
-  AppointmentRequests,
-  MyAppointments,
-  useAppointments,
-} from '@/modules/appointment';
+import { AppointmentRequests, MyAppointments } from '@/modules/appointment';
 import { Button } from '@/shared/components/button';
 import { ClipboardClockIcon } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';

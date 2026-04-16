@@ -12,11 +12,10 @@ import { ProgramCard } from '@/modules/insurance';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { ShieldX } from '@/shared/icons';
 import { usePrograms } from '@/shared/lib/insurance';
-import { colors, globalStyles } from '@/shared/theme';
+import { colors } from '@/shared/theme';
 
 export const ProgramsScreen: FC = () => {
-  const { programs, loadingPrograms, fetchingPrograms, refetchPrograms } =
-    usePrograms();
+  const { programs, loadingPrograms, refetchPrograms } = usePrograms();
   const deviceInsets = useSafeAreaInsets();
 
   if (loadingPrograms) {
@@ -37,7 +36,7 @@ export const ProgramsScreen: FC = () => {
         }}
         refreshControl={
           <RefreshControl
-            refreshing={!!fetchingPrograms}
+            refreshing={loadingPrograms}
             onRefresh={refetchPrograms}
           />
         }
@@ -58,13 +57,12 @@ export const ProgramsScreen: FC = () => {
       ]}
       refreshControl={
         <RefreshControl
-          refreshing={!!fetchingPrograms}
+          refreshing={loadingPrograms}
           onRefresh={refetchPrograms}
         />
       }
     >
       <View style={styles.container}>
-        <Text style={globalStyles.sectionHeading}>Программы</Text>
         <View style={styles.cards}>
           {programs.map(program => {
             if (program.status === 'EXPIRED') return null;
@@ -87,7 +85,7 @@ export const ProgramsScreen: FC = () => {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingTop: 16,
+    paddingTop: 0,
     paddingHorizontal: 16,
   },
   container: {

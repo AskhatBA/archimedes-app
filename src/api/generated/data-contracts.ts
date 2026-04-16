@@ -213,6 +213,8 @@ export interface InsuranceFamily {
   dateBirth: string;
   /** @example "a1c4f9d2-6b7e-4a13-9f82-5d3e8b6a4c70" */
   benId?: string;
+  /** @example "1234567890" */
+  cardNo?: string;
 }
 
 export interface InsuranceFamilyResponse {
@@ -702,6 +704,7 @@ export interface GetPatientProfileResponse {
     fullName?: string;
     birthDate?: string;
     gender?: string;
+    misPatientId?: string;
   };
 }
 

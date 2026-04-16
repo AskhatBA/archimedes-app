@@ -73,17 +73,19 @@ export const SelectField: FC<SelectFieldProps> = ({
             },
           ]}
         >
-          <Text
-            numberOfLines={1}
-            style={[
-              styles.value,
-              {
-                color: valueFontColor(),
-              },
-            ]}
-          >
-            {selectedOption?.label || placeholder}
-          </Text>
+          <View style={styles.valueContainer}>
+            <Text
+              numberOfLines={1}
+              style={[styles.value, { color: valueFontColor() }]}
+            >
+              {selectedOption?.label || placeholder}
+            </Text>
+            {selectedOption?.subtitle && (
+              <Text numberOfLines={1} style={[styles.subtitle, { color: colors.gray['500'] }]}>
+                {selectedOption.subtitle}
+              </Text>
+            )}
+          </View>
           <SelectCaretIcon
             color={isValueSelected ? colors.blue['400'] : colors.gray['500']}
           />
@@ -113,10 +115,19 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 18,
   },
+  valueContainer: {
+    flex: 1,
+    gap: 2,
+  },
   value: {
     fontSize: 18,
     lineHeight: 22,
     fontWeight: 600,
+  },
+  subtitle: {
+    fontSize: 13,
+    lineHeight: 17,
+    fontWeight: 400,
   },
   error: {
     fontSize: 12,

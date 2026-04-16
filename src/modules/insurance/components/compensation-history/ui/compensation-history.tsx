@@ -22,10 +22,6 @@ export const CompensationHistory: FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
-        <Text style={globalStyles.sectionHeading}>История возмещений</Text>
-      </View>
-
       {!compensationRequests || compensationRequests.length === 0 ? (
         <Text style={[styles.noItemsText, { color: colors.gray['500'] }]}>
           У вас пока нет заявок на возмещение
@@ -42,9 +38,7 @@ export const CompensationHistory: FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 4,
-  },
+  container: {},
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',

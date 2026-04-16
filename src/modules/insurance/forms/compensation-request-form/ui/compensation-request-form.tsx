@@ -97,7 +97,8 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           onChange={value => handleChange('program')(value)}
           options={activePrograms.map(program => ({
             value: program.id,
-            label: `${program.title} (${program.cardNo})`,
+            label: program.title,
+            subtitle: program.cardNo,
           }))}
           placeholder="Выберите программу"
           error={errors.program}
@@ -110,6 +111,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           options={family.map(item => ({
             value: item.id,
             label: item.fullName,
+            subtitle: item.cardNo,
           }))}
           placeholder="За кого осуществляется"
           error={errors.person}

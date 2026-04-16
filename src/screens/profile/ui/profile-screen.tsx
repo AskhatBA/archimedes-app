@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
-import { GreetUser } from '@/shared/components/greet-user';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { colors } from '@/shared/theme';
 
@@ -12,7 +11,6 @@ export const ProfileScreen: FC = () => {
   return (
     <ScrollView>
       <MainLayout>
-        <GreetUser />
         <View style={styles.main}>
           <MyTests />
           <AppointmentHistory />
@@ -37,7 +35,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   main: {
-    marginTop: 48,
     gap: 16,
   },
   version: {

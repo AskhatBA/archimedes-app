@@ -17,7 +17,7 @@ export const MyAppointments: FC = () => {
         <Text style={[styles.title, { color: colors.gray['700'] }]}>
           История записей
         </Text>
-        <CalendarIcon />
+        {/* <CalendarIcon /> */}
       </View>
       <Appointments startDate={date.format('YYYY-MM-DD')} />
     </View>
