@@ -48,7 +48,7 @@ export const ChooseMediaType: FC = () => {
   };
 
   const putPhotoToFiles = (photoResponse?: ImagePickerResponse) => {
-    if (!photoResponse?.assets.length) return;
+    if (!photoResponse?.assets?.length) return;
 
     changeFiles(
       photoResponse.assets.map(file => ({
