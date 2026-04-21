@@ -55,6 +55,13 @@ export const SelectField: FC<SelectFieldProps> = ({
     return colors.gray['200'];
   };
 
+  const fieldBorderColor = () => {
+    if (error) return colors.error;
+    if (optionsOpened) return colors.blue['400'];
+    if (isValueSelected) return colors.blue['350'];
+    return colors.gray['250'];
+  };
+
   const valueFontColor = () => {
     if (error) return colors.error;
     if (isValueSelected) return colors.blue['400'];
@@ -70,6 +77,7 @@ export const SelectField: FC<SelectFieldProps> = ({
             styles.fieldContainer,
             {
               backgroundColor: fieldContainerBackground(),
+              borderColor: fieldBorderColor(),
             },
           ]}
         >
@@ -113,6 +121,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 15,
+    borderWidth: 1.5,
     padding: 18,
   },
   valueContainer: {
@@ -133,6 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 500,
     marginTop: 4,
-    paddingHorizontal: 16,
+    paddingHorizontal: 4,
   },
 });

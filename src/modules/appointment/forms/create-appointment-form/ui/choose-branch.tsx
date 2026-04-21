@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
@@ -9,7 +9,10 @@ import { useCreateAppointment } from '../../../context/create-appointment-contex
 
 import { createAppointmentFormStyles } from './styles';
 
-const BRANCHES_TO_SHOW = ['ТОО "Archimedes Medical Group"'];
+const BRANCHES_TO_SHOW = [
+  'ТОО "Archimedes Medical Group"',
+  'ТОО "Archimedes Medical Group" педиатрия',
+];
 
 export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
@@ -27,22 +30,23 @@ export const ChooseBranch: FC = () => {
       return firstPart.replace(/^г\.?\s*/i, '').trim() || 'Прочее';
     };
 
-    const map = new Map<
+    const citiesMap = new Map<
       string,
       { title: string; options: { label: string; value: string }[] }
     >();
     // eslint-disable-next-line no-restricted-syntax
     for (const clinic of filtered) {
       const city = getCity(clinic.address);
-      if (!map.has(city)) {
-        map.set(city, { title: city, options: [] });
+      if (!citiesMap.has(city)) {
+        citiesMap.set(city, { title: city, options: [] });
       }
-      map.get(city)!.options.push({
-        label: clinic.address,
+      const afterCity = clinic.address?.split(',').slice(1).join(',').trim();
+      citiesMap.get(city)!.options.push({
+        label: afterCity || clinic.address || '',
         value: String(clinic.id),
       });
     }
-    return Array.from(map.values());
+    return Array.from(citiesMap.values());
   }, [branches]);
 
   if (loadingBranches) return null;
