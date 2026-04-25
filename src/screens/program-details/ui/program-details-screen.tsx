@@ -229,7 +229,6 @@ export const ProgramDetailsScreen: FC = () => {
         </View>
       </ScrollView>
       <BottomDrawer
-        backdropPressEnabled={false}
         visible={openInformation}
         onClose={() => setOpenInformation(false)}
       >

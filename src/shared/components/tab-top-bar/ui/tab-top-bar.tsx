@@ -21,7 +21,11 @@ const TitleRow: FC<{ title?: string }> = ({ title }) => {
         onPress={() => navigate(routes.Notifications)}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
-        <TabBarNotificationsIcon color={colors.primary} width={28} height={28} />
+        <TabBarNotificationsIcon
+          color={colors.primary}
+          width={28}
+          height={28}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -31,12 +35,7 @@ export const TabTopBar: FC<TabTopBarProps> = ({ variant = 'title', title }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top + 4 },
-      ]}
-    >
+    <View style={[styles.container, { paddingTop: insets.top + 4 }]}>
       {variant === 'greeting' ? <GreetUser /> : <TitleRow title={title} />}
     </View>
   );

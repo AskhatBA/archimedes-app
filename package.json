@@ -12,6 +12,7 @@
     "ios:local": "ENVFILE=.env.local npx react-native run-ios"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^5.2.10",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "^8.4.5",
     "@react-native-documents/picker": "^10.1.5",
@@ -23,6 +24,7 @@
     "@react-navigation/stack": "^7.4.2",
     "@tanstack/react-query": "^5.85.5",
     "axios": "^1.11.0",
+    "compare-versions": "^6.1.1",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "i18next": "^25.4.0",
@@ -30,6 +32,7 @@
     "react-i18next": "^15.7.1",
     "react-native": "0.80.1",
     "react-native-calendars": "^1.1313.0",
+    "react-native-device-info": "^15.0.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-file-viewer": "^2.1.5",
     "react-native-fs": "^2.20.0",

@@ -1,4 +1,5 @@
 import { apiConfig } from './config';
+import { App } from './generated/App';
 import { Auth } from './generated/Auth';
 import { Insurance } from './generated/Insurance';
 import { Meetings } from './generated/Meetings';
@@ -13,6 +14,7 @@ const patientApi = new Patient(apiConfig);
 const insuranceApi = new Insurance(apiConfig);
 const meetingsApi = new Meetings(apiConfig);
 const notificationsApi = new Notifications(apiConfig);
+const appApi = new App(apiConfig);
 
 export {
   authApi,
@@ -21,6 +23,7 @@ export {
   insuranceApi,
   meetingsApi,
   notificationsApi,
+  appApi,
 };
 
 const authUtils = new AuthUtils(authApi);
@@ -29,6 +32,7 @@ const patientUtils = new AuthUtils(patientApi);
 const insuranceUtils = new AuthUtils(insuranceApi);
 const meetingsUtils = new AuthUtils(meetingsApi);
 const notificationsUtils = new AuthUtils(notificationsApi);
+const appUtils = new AuthUtils(appApi);
 
 export const setApiErrorHandler = (callback: () => void) => {
   authUtils.setUnauthorizedErrorHandler(callback);
@@ -37,6 +41,7 @@ export const setApiErrorHandler = (callback: () => void) => {
   insuranceUtils.setUnauthorizedErrorHandler(callback);
   meetingsUtils.setUnauthorizedErrorHandler(callback);
   notificationsUtils.setUnauthorizedErrorHandler(callback);
+  appUtils.setUnauthorizedErrorHandler(callback);
 };
 
 authUtils.initToken();
@@ -45,3 +50,4 @@ patientUtils.initToken();
 insuranceUtils.initToken();
 meetingsUtils.initToken();
 notificationsUtils.initToken();
+appUtils.initToken();

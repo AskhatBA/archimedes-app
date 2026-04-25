@@ -15,9 +15,11 @@ import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
+import { NewVersionDrawer } from '@/shared/components/new-version-drawer';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { useAuth } from '@/shared/lib/auth';
+import { useNewVersionDrawer } from '@/shared/lib/version';
 import { routes } from '@/shared/navigation';
 
 import { TabNavigator } from './tab-navigator';
@@ -26,6 +28,7 @@ const RootStack = createStackNavigator();
 
 export const RootNavigator: FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
+  const newVersion = useNewVersionDrawer();
 
   const initialRoute = useMemo((): string => {
     if (isAuthenticated && !isLoading) {
@@ -36,77 +39,85 @@ export const RootNavigator: FC = () => {
   }, [isAuthenticated, isLoading]);
 
   return (
-    <RootStack.Navigator id={undefined} initialRouteName={initialRoute}>
-      <RootStack.Screen
-        name={routes.SignIn}
-        component={SignInScreen}
-        options={{ headerShown: false }}
+    <>
+      <RootStack.Navigator id={undefined} initialRouteName={initialRoute}>
+        <RootStack.Screen
+          name={routes.SignIn}
+          component={SignInScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name={routes.TabNavigation}
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name={routes.CreateAppointment}
+          component={CreateAppointmentScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.MedbotChat}
+          component={MedbotChatScreen}
+          options={{ header: () => <MedBotTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.OtpVerification}
+          component={OtpVerificationScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.CreateUser}
+          component={CreateUserScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name={routes.CompensationRequest}
+          component={CompensationRequestScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.ProgramDetails}
+          component={ProgramDetailsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.MedicalNetwork}
+          component={MedicalNetworkScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.ElectronicReferrals}
+          component={ElectronicReferralsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.DocumentViewer}
+          component={DocumentViewerScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.ProgramSupport}
+          component={ProgramSupportScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.Notifications}
+          component={NotificationsScreen}
+          options={{ header: () => <StatusBarUnderlay /> }}
+        />
+        <RootStack.Screen
+          name={routes.AppointmentDetails}
+          component={AppointmentDetailsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+      </RootStack.Navigator>
+      <NewVersionDrawer
+        visible={newVersion.visible}
+        onClose={newVersion.onClose}
+        onUpdate={newVersion.onUpdate}
+        latestVersion={newVersion.latestVersion}
       />
-      <RootStack.Screen
-        name={routes.TabNavigation}
-        component={TabNavigator}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name={routes.CreateAppointment}
-        component={CreateAppointmentScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.MedbotChat}
-        component={MedbotChatScreen}
-        options={{ header: () => <MedBotTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.OtpVerification}
-        component={OtpVerificationScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.CreateUser}
-        component={CreateUserScreen}
-        options={{ headerShown: false }}
-      />
-      <RootStack.Screen
-        name={routes.CompensationRequest}
-        component={CompensationRequestScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.ProgramDetails}
-        component={ProgramDetailsScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.MedicalNetwork}
-        component={MedicalNetworkScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.ElectronicReferrals}
-        component={ElectronicReferralsScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.DocumentViewer}
-        component={DocumentViewerScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.ProgramSupport}
-        component={ProgramSupportScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-      <RootStack.Screen
-        name={routes.Notifications}
-        component={NotificationsScreen}
-        options={{ header: () => <StatusBarUnderlay /> }}
-      />
-      <RootStack.Screen
-        name={routes.AppointmentDetails}
-        component={AppointmentDetailsScreen}
-        options={{ header: () => <SecondaryTopbar /> }}
-      />
-    </RootStack.Navigator>
+    </>
   );
 };

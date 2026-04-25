@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -24,14 +25,16 @@ function App() {
               <ThemeProvider>
                 <AuthContextProvider>
                   <UserContextProvider>
-                    <OneSignalProvider>
-                      <StatusBar
-                        barStyle="dark-content"
-                        backgroundColor="white"
-                        translucent={false}
-                      />
-                      <RootNavigator />
-                    </OneSignalProvider>
+                    <BottomSheetModalProvider>
+                      <OneSignalProvider>
+                        <StatusBar
+                          barStyle="dark-content"
+                          backgroundColor="white"
+                          translucent={false}
+                        />
+                        <RootNavigator />
+                      </OneSignalProvider>
+                    </BottomSheetModalProvider>
                   </UserContextProvider>
                 </AuthContextProvider>
               </ThemeProvider>

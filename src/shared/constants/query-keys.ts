@@ -8,3 +8,4 @@ export const GET_USER_INFO_QUERY = 'user-info';
 export const GET_INSURANCE_CLINIC_TYPES = 'clinic-types';
 export const GET_APPOINTMENT_DETAILS_QUERY = 'appointment-details';
 export const GET_COMPENSATION_REQUESTS_QUERY = 'compensation-requests';
+export const GET_APP_VERSION_QUERY = 'app-version';

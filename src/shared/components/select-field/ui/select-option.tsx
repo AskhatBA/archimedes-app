@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { SelectIndicator } from '@/shared/icons';
-import { useTheme } from '@/shared/theme';
+import { colors } from '@/shared/theme';
 
 import { SelectFieldOption } from '../types';
 
@@ -20,8 +20,6 @@ export const SelectOption: FC<SelectOptionProps> = ({
   onSelect,
   isLast,
 }) => {
-  const { colors } = useTheme();
-
   return (
     <TouchableOpacity
       style={[

@@ -9,6 +9,51 @@
  * ---------------------------------------------------------------
  */
 
+export interface AppVersionResponse {
+  /** @example true */
+  success?: boolean;
+  /** @example "2.4.0" */
+  latestVersion?: string;
+  /** @example "2.0.0" */
+  minSupportedVersion?: string;
+  /** @example false */
+  forceUpdate?: boolean;
+  /** @example "https://apps.apple.com/app/id123456789" */
+  iosUrl?: string;
+  /** @example "https://play.google.com/store/apps/details?id=com.example.app" */
+  androidUrl?: string;
+  /** @example "Bug fixes and performance improvements" */
+  changelog?: string | null;
+}
+
+export interface CreateAppVersionBody {
+  /** @example "all" */
+  platform: 'ios' | 'android' | 'all';
+  /** @example "2.4.0" */
+  latestVersion: string;
+  /** @example "2.0.0" */
+  minSupportedVersion: string;
+  /** @example false */
+  forceUpdate: boolean;
+  /** @example "Bug fixes and performance improvements" */
+  changelog?: string;
+}
+
+export interface CreateAppVersionResponse {
+  success?: boolean;
+  appVersion?: {
+    /** @format uuid */
+    id?: string;
+    platform?: 'IOS' | 'ANDROID' | 'ALL';
+    latestVersion?: string;
+    minSupportedVersion?: string;
+    forceUpdate?: boolean;
+    changelog?: string | null;
+    /** @format date-time */
+    createdAt?: string;
+  };
+}
+
 export interface Appointment {
   /** @format uuid */
   id?: string;
