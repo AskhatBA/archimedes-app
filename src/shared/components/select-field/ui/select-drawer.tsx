@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { SelectOption } from '@/shared/components/select-field/ui/select-option';
@@ -29,9 +29,9 @@ export const SelectDrawer: FC<SelectDrawerProps> = ({
   const { colors } = useTheme();
 
   return (
-    <BottomDrawer visible={isOpen} onClose={onClose}>
-      <ScrollView
-        contentContainerStyle={{
+    <BottomDrawer visible={isOpen} onClose={onClose} scrollable>
+      <View
+        style={{
           paddingBottom: 120,
           paddingHorizontal: 16,
         }}
@@ -79,7 +79,7 @@ export const SelectDrawer: FC<SelectDrawerProps> = ({
                 }}
               />
             ))}
-      </ScrollView>
+      </View>
     </BottomDrawer>
   );
 };

@@ -27,11 +27,6 @@ export const useNewVersionDrawer = () => {
   const isNewVersionAvailable =
     !!latestVersion && compareVersions(latestVersion, currentVersion) > 0;
 
-  useEffect(() => {
-    console.log('latestVersion: ', latestVersion);
-    console.log('currentVersion: ', currentVersion);
-  }, [latestVersion, currentVersion]);
-
   const onUpdate = async () => {
     if (!storeUrl) return;
     const supported = await Linking.canOpenURL(storeUrl);

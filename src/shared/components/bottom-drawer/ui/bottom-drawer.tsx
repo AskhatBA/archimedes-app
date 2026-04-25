@@ -3,6 +3,7 @@ import {
   type BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetView,
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { FC, ReactNode, useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -15,13 +16,16 @@ interface BottomDrawerProps {
   visible: boolean;
   onClose: () => void;
   children: ReactNode;
+  scrollable?: boolean;
 }
 
 export const BottomDrawer: FC<BottomDrawerProps> = ({
   visible,
   onClose,
   children,
+  scrollable = false,
 }) => {
+  const Container = scrollable ? BottomSheetScrollView : BottomSheetView;
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const sheetRef = useRef<BottomSheetModal>(null);
@@ -58,17 +62,17 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
       backgroundStyle={styles.background}
       topInset={100}
     >
-      <BottomSheetView
+      <TouchableOpacity
+        onPress={() => sheetRef.current?.dismiss()}
+        style={[styles.handle, { backgroundColor: colors.gray['200'] }]}
+      >
+        <CloseIcon width={22} height={22} color={colors.gray['600']} />
+      </TouchableOpacity>
+      <Container
         style={[styles.content, { paddingBottom: insets.bottom + 16 }]}
       >
-        <TouchableOpacity
-          onPress={() => sheetRef.current?.dismiss()}
-          style={[styles.handle, { backgroundColor: colors.gray['200'] }]}
-        >
-          <CloseIcon width={22} height={22} color={colors.gray['600']} />
-        </TouchableOpacity>
         {children}
-      </BottomSheetView>
+      </Container>
     </BottomSheetModal>
   );
 };
