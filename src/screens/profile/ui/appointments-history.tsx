@@ -101,9 +101,7 @@ export const AppointmentHistory: FC = () => {
 
       <BottomDrawer visible={!!selected} onClose={closeDrawer}>
         {selected && (
-          <ScrollView
-            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
-          >
+          <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
             <Text style={[styles.drawerTitle, { color: colors.textMain }]}>
               {`${selected.appointmentTypeDisplay ?? 'Прием'} • ${formatDate(selected.startTime || selected.actualStartTime, 'DD/MM/YYYY HH:mm')}`}
             </Text>
@@ -293,7 +291,7 @@ export const AppointmentHistory: FC = () => {
                 </View>
               </View>
             )}
-          </ScrollView>
+          </View>
         )}
       </BottomDrawer>
     </View>

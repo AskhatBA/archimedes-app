@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import { MainLayout } from '@/shared/layout/main-layout';
 import { colors } from '@/shared/theme';
@@ -8,6 +9,8 @@ import { AppointmentHistory } from './appointments-history';
 import { MyTests } from './my-tests';
 
 export const ProfileScreen: FC = () => {
+  const currentVersion = DeviceInfo.getVersion();
+
   return (
     <ScrollView>
       <MainLayout>
@@ -16,7 +19,7 @@ export const ProfileScreen: FC = () => {
           <AppointmentHistory />
           <View style={{ gap: 8 }}>
             <Text style={[styles.version, { color: colors.textMain }]}>
-              Версия 1.0.0-beta
+              Версия {currentVersion}-beta
             </Text>
             <Text style={[styles.warning, { color: colors.gray['500'] }]}>
               Приложение находится в стадии бета-тестирования. Если вы

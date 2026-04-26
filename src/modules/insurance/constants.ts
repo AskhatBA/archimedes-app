@@ -1,7 +1,7 @@
 import { CompensationCategoryEnum, ElectronicReferralStatus } from './types';
 
 export const INSURANCE_CERTIFICATE_URL =
-  'https://mobileapi.archimedes.kz/v1/certificate/:programId';
+  'https://mobileapi.archimedes.kz/v3/certificate/:programId';
 
 export const compensationCategories = [
   {

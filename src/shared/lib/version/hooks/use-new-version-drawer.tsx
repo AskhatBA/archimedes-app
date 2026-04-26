@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { compareVersions } from 'compare-versions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 

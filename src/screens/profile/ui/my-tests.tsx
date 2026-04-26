@@ -117,9 +117,7 @@ export const MyTests: FC = () => {
 
       <BottomDrawer visible={!!selected} onClose={closeDrawer}>
         {selected && (
-          <ScrollView
-            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
-          >
+          <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
             <Text style={[styles.drawerTitle, { color: colors.textMain }]}>
               {`${selected.biomaterialName} • ${selected.number}`}
             </Text>
@@ -167,7 +165,7 @@ export const MyTests: FC = () => {
                 </Text>
               </View>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
         )}
       </BottomDrawer>
     </View>

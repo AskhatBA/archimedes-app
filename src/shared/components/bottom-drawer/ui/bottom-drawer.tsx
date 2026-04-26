@@ -51,6 +51,17 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
     [],
   );
 
+  const renderHeader = () => (
+    <TouchableOpacity
+      onPress={() => {
+        sheetRef.current?.dismiss();
+      }}
+      style={[styles.handle, { backgroundColor: colors.gray['200'] }]}
+    >
+      <CloseIcon width={22} height={22} color={colors.gray['600']} />
+    </TouchableOpacity>
+  );
+
   return (
     <BottomSheetModal
       ref={sheetRef}
@@ -60,17 +71,18 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
       backdropComponent={renderBackdrop}
       handleComponent={null}
       backgroundStyle={styles.background}
+      enableContentPanningGesture={false}
       topInset={100}
     >
-      <TouchableOpacity
-        onPress={() => sheetRef.current?.dismiss()}
-        style={[styles.handle, { backgroundColor: colors.gray['200'] }]}
-      >
-        <CloseIcon width={22} height={22} color={colors.gray['600']} />
-      </TouchableOpacity>
+      {scrollable && renderHeader()}
       <Container
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: insets.bottom + 16 },
+        ]}
         style={[styles.content, { paddingBottom: insets.bottom + 16 }]}
       >
+        {!scrollable && renderHeader()}
         {children}
       </Container>
     </BottomSheetModal>
