@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { CreatePatientBody, GetPatientProfileResponse } from './data-contracts';
+import { CreatePatientBody, GetPatientByIinResponse, GetPatientProfileResponse } from './data-contracts';
 
 export namespace Patient {
   /**
@@ -51,5 +51,32 @@ export namespace Patient {
     export type ResponseBody = {
       success?: boolean;
     };
+  }
+
+  /**
+   * No description
+   * @tags Patient
+   * @name ByIinDetail
+   * @summary Get patient info by IIN
+   * @request GET:/patient/by-iin/{iin}
+   * @secure
+   * @response `200` `GetPatientByIinResponse` Patient found
+   * @response `400` `void` Invalid IIN
+   * @response `401` `void` Unauthorized
+   * @response `404` `void` Patient not found
+   */
+  export namespace ByIinDetail {
+    export type RequestParams = {
+      /**
+       * 12-digit IIN
+       * @minLength 12
+       * @maxLength 12
+       */
+      iin: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = GetPatientByIinResponse;
   }
 }

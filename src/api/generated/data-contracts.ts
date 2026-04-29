@@ -294,6 +294,36 @@ export interface InsuranceRefundRequestsResponse {
   refundRequests?: InsuranceRefundRequest[];
 }
 
+export interface LocalInsuranceRefundRequestFile {
+  /** @example "Кассовый чек" */
+  fileType?: string;
+  /** @example "cheque.pdf" */
+  fileName?: string;
+}
+
+export interface LocalInsuranceRefundRequest {
+  /** @format uuid */
+  id?: string;
+  beneficiaryId?: string;
+  personId?: string;
+  /** @example "Иванов Иван Иванович" */
+  personName?: string;
+  programId?: string;
+  category?: number;
+  /** @example "2025-09-01" */
+  date?: string;
+  amount?: number;
+  comments?: string | null;
+  files?: LocalInsuranceRefundRequestFile[];
+  /** @format date-time */
+  createdAt?: string;
+}
+
+export interface LocalInsuranceRefundRequestsResponse {
+  success?: boolean;
+  refundRequests?: LocalInsuranceRefundRequest[];
+}
+
 export interface AvailableInsuranceCity {
   /** @example 1 */
   id: number;
@@ -749,6 +779,22 @@ export interface GetPatientProfileResponse {
     fullName?: string;
     birthDate?: string;
     gender?: string;
+    misPatientId?: string;
+  };
+}
+
+export interface GetPatientByIinResponse {
+  success?: boolean;
+  patient?: {
+    id?: string;
+    userId?: string;
+    firstName?: string;
+    lastName?: string;
+    patronymic?: string;
+    fullName?: string;
+    birthDate?: string;
+    gender?: string;
+    iin?: string;
     misPatientId?: string;
   };
 }

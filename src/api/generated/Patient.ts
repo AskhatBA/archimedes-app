@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { CreatePatientBody, GetPatientProfileResponse } from './data-contracts';
+import { CreatePatientBody, GetPatientByIinResponse, GetPatientProfileResponse } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
 export class Patient<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
@@ -58,6 +58,27 @@ export class Patient<SecurityDataType = unknown> extends HttpClient<SecurityData
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Patient
+   * @name ByIinDetail
+   * @summary Get patient info by IIN
+   * @request GET:/patient/by-iin/{iin}
+   * @secure
+   * @response `200` `GetPatientByIinResponse` Patient found
+   * @response `400` `void` Invalid IIN
+   * @response `401` `void` Unauthorized
+   * @response `404` `void` Patient not found
+   */
+  byIinDetail = (iin: string, params: RequestParams = {}) =>
+    this.request<GetPatientByIinResponse, void>({
+      path: `/patient/by-iin/${iin}`,
+      method: 'GET',
+      secure: true,
       format: 'json',
       ...params,
     });

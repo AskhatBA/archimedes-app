@@ -19,6 +19,7 @@ import {
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
+  LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
@@ -207,6 +208,25 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
   refundRequestsList = (params: RequestParams = {}) =>
     this.request<InsuranceRefundRequestsResponse, void>({
       path: `/insurance/refund-requests`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Insurance
+   * @name LocalRefundRequestsList
+   * @summary Get list of refund requests stored in local DB for the authenticated user
+   * @request GET:/insurance/local-refund-requests
+   * @secure
+   * @response `200` `LocalInsuranceRefundRequestsResponse` Response
+   * @response `401` `void` Unauthorized
+   */
+  localRefundRequestsList = (params: RequestParams = {}) =>
+    this.request<LocalInsuranceRefundRequestsResponse, void>({
+      path: `/insurance/local-refund-requests`,
       method: 'GET',
       secure: true,
       format: 'json',

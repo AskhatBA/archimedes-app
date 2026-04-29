@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { useUserCompensationRequests } from '@/shared/lib/insurance';
-import { colors, globalStyles } from '@/shared/theme';
+import { colors } from '@/shared/theme';
 
 import { CompensationCard } from './compensation-card';
 

@@ -19,6 +19,7 @@ import {
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
+  LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
@@ -188,6 +189,24 @@ export namespace Insurance {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = InsuranceRefundRequestsResponse;
+  }
+
+  /**
+   * No description
+   * @tags Insurance
+   * @name LocalRefundRequestsList
+   * @summary Get list of refund requests stored in local DB for the authenticated user
+   * @request GET:/insurance/local-refund-requests
+   * @secure
+   * @response `200` `LocalInsuranceRefundRequestsResponse` Response
+   * @response `401` `void` Unauthorized
+   */
+  export namespace LocalRefundRequestsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = LocalInsuranceRefundRequestsResponse;
   }
 
   /**
