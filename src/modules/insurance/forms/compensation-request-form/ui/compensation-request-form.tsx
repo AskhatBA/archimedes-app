@@ -152,6 +152,17 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       />
       <MediaPicker
         onChange={newFiles => {
+          if (newFiles.length < files.length) {
+            setFiles(
+              files.filter(file =>
+                newFiles.some(
+                  nf => nf.name === file.name && nf.uri === file.uri,
+                ),
+              ),
+            );
+            return;
+          }
+
           newFiles[newFiles.length - 1].localFileType = documentType;
           setFiles(newFiles);
           setDocumentType('');

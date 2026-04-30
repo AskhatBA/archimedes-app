@@ -75,7 +75,7 @@ export const SignInForm: FC = () => {
         return;
       }
       setLoginIin(iin);
-      requestOtp({ phone });
+      requestOtp({ phone, iin });
     },
     onError: () => {
       showToast({

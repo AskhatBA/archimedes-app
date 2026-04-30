@@ -9,7 +9,14 @@
  * ---------------------------------------------------------------
  */
 
-import { RequestOTPBody, RequestOTPResponse, VerifyOTPBody, VerifyOTPResponse } from './data-contracts';
+import {
+  ChangePhoneBody,
+  ChangePhoneResponse,
+  RequestOTPBody,
+  RequestOTPResponse,
+  VerifyOTPBody,
+  VerifyOTPResponse,
+} from './data-contracts';
 
 export namespace Auth {
   /**
@@ -47,5 +54,24 @@ export namespace Auth {
     export type RequestBody = VerifyOTPBody;
     export type RequestHeaders = {};
     export type ResponseBody = VerifyOTPResponse;
+  }
+
+  /**
+   * No description
+   * @tags Auth
+   * @name ChangePhoneCreate
+   * @summary Update authenticated user's phone number
+   * @request POST:/auth/change-phone
+   * @secure
+   * @response `200` `ChangePhoneResponse` Phone updated
+   * @response `400` `void` Invalid phone or already in use
+   * @response `401` `void` Unauthorized
+   */
+  export namespace ChangePhoneCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = ChangePhoneBody;
+    export type RequestHeaders = {};
+    export type ResponseBody = ChangePhoneResponse;
   }
 }

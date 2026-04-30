@@ -97,10 +97,15 @@ export interface UpdateAppointmentBody {
 
 export interface RequestOTPBody {
   /**
-   * Phone number starting with 7 followed by 10 digits
+   * Phone number starting with 7 followed by 10 digits. Ignored if `iin` is supplied and resolves to a phone in the insurance service.
    * @example "77771400962"
    */
   phone: string;
+  /**
+   * Optional 12-digit IIN. When supplied, the authoritative phone is fetched from the insurance service and the local user's phone is synced if it has changed.
+   * @example "630301350211"
+   */
+  iin?: string;
 }
 
 export interface RequestOTPResponse {
@@ -133,6 +138,23 @@ export interface VerifyOTPResponse {
   accessToken?: string;
   /** JWT refresh token */
   refreshToken?: string;
+}
+
+export interface ChangePhoneBody {
+  /**
+   * New phone number starting with 7 followed by 10 digits
+   * @example "77051234567"
+   */
+  phone: string;
+}
+
+export interface ChangePhoneResponse {
+  success?: boolean;
+  user?: {
+    id?: string;
+    phone?: string;
+    role?: string;
+  };
 }
 
 export interface InsuranceVerifyOtpBody {

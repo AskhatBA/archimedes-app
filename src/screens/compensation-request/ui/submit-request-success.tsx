@@ -13,10 +13,16 @@ export const SubmitRequestSuccess: FC = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.backgroundMain }]}>
+    <View
+      style={[styles.container, { backgroundColor: colors.backgroundMain }]}
+    >
       <View style={styles.content}>
-        <View style={[styles.iconRing, { backgroundColor: colors.blue['100'] }]}>
-          <View style={[styles.iconCircle, { backgroundColor: colors.blue['150'] }]}>
+        <View
+          style={[styles.iconRing, { backgroundColor: colors.blue['100'] }]}
+        >
+          <View
+            style={[styles.iconCircle, { backgroundColor: colors.blue['150'] }]}
+          >
             <SuccessCheckIcon width={56} height={56} color={colors.primary} />
           </View>
         </View>
@@ -25,7 +31,8 @@ export const SubmitRequestSuccess: FC = () => {
           Заявка отправлена
         </Text>
         <Text style={[styles.subtitle, { color: colors.gray['500'] }]}>
-          Ваша заявка на возмещение успешно принята. Мы рассмотрим её в ближайшее время.
+          Ваша заявка на возмещение успешно принята. Мы рассмотрим её в
+          ближайшее время.
         </Text>
       </View>
 

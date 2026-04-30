@@ -9,7 +9,14 @@
  * ---------------------------------------------------------------
  */
 
-import { RequestOTPBody, RequestOTPResponse, VerifyOTPBody, VerifyOTPResponse } from './data-contracts';
+import {
+  ChangePhoneBody,
+  ChangePhoneResponse,
+  RequestOTPBody,
+  RequestOTPResponse,
+  VerifyOTPBody,
+  VerifyOTPResponse,
+} from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
 
 export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
@@ -49,6 +56,28 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
   verifyOtpCreate = (data: VerifyOTPBody, params: RequestParams = {}) =>
     this.request<VerifyOTPResponse, void>({
       path: `/auth/verify-otp`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Auth
+   * @name ChangePhoneCreate
+   * @summary Update authenticated user's phone number
+   * @request POST:/auth/change-phone
+   * @secure
+   * @response `200` `ChangePhoneResponse` Phone updated
+   * @response `400` `void` Invalid phone or already in use
+   * @response `401` `void` Unauthorized
+   */
+  changePhoneCreate = (data: ChangePhoneBody, params: RequestParams = {}) =>
+    this.request<ChangePhoneResponse, void>({
+      path: `/auth/change-phone`,
       method: 'POST',
       body: data,
       secure: true,
