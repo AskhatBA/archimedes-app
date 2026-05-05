@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import { FC, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { CalendarIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
 
 import { Appointments } from './appointments';

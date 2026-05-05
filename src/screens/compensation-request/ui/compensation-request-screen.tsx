@@ -1,11 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { FC, useState } from 'react';
 import {
-  Text,
-  StyleSheet,
-  ScrollView,
-  View,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -72,17 +74,24 @@ export const CompensationRequestScreen: FC = () => {
 
   return (
     <>
-      <ScrollView
-        contentContainerStyle={[
-          styles.container,
-          { paddingBottom: deviceInsets.bottom + 32 },
-        ]}
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <Text style={[styles.heading, { color: colors.primary }]}>
-          Заявка на возмещение
-        </Text>
-        <CompensationRequestForm onSubmit={submitCompensationRequest} />
-      </ScrollView>
+        <ScrollView
+          contentContainerStyle={[
+            styles.container,
+            { paddingBottom: deviceInsets.bottom + 32 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+        >
+          <Text style={[styles.heading, { color: colors.primary }]}>
+            Заявка на возмещение
+          </Text>
+          <CompensationRequestForm onSubmit={submitCompensationRequest} />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {compensationRequestMutation.isPending && (
         <View style={[styles.loaderBackdrop, { top: -deviceInsets.top - 54 }]}>
@@ -94,6 +103,9 @@ export const CompensationRequestScreen: FC = () => {
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   container: {
     gap: 32,
     paddingHorizontal: 16,

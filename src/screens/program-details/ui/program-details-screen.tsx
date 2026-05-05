@@ -30,7 +30,19 @@ import {
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useNavigation, routes } from '@/shared/navigation';
-import { useTheme } from '@/shared/theme';
+import { fonts, useTheme } from '@/shared/theme';
+
+const formatAmount = (n: number) =>
+  String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+const pickLimitColor = (
+  usedRatio: number,
+  palette: { ok: string; warn: string; danger: string },
+) => {
+  if (usedRatio < 0.5) return palette.ok;
+  if (usedRatio < 0.8) return palette.warn;
+  return palette.danger;
+};
 
 interface RouteParams {
   programId: string;
@@ -194,38 +206,83 @@ export const ProgramDetailsScreen: FC = () => {
         <View style={{ marginTop: 24 }}>
           <FamilyMembers programId={programId} />
         </View>
-        <View style={{ marginTop: 24 }}>
-          <Text style={[styles.limitTitle, { color: colors.blue['370'] }]}>
-            Использования лимитов
+        <View style={styles.limitsSection}>
+          <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
+            Использование лимитов
           </Text>
-          {program?.subLimits.map(limit => (
-            <View
-              key={limit.name}
-              style={[
-                styles.limitContainer,
-                {
-                  backgroundColor: colors.blue['100'],
-                  borderColor: colors.primary,
-                },
-              ]}
-            >
-              <Text style={[styles.limitName, { color: colors.primary }]}>
-                {limit.name}
-              </Text>
-              <View
-                style={[
-                  styles.limitPrices,
-                  { backgroundColor: colors.blue['300'] },
-                ]}
-              >
-                <Text
-                  style={[styles.limitPricesText, { color: colors.primary }]}
+          <View style={styles.limitsList}>
+            {program?.subLimits.map(limit => {
+              const total = limit.limit ?? 0;
+              const remaining = limit.currentLimit ?? 0;
+              const used = Math.max(0, total - remaining);
+              const usedRatio = total > 0 ? Math.min(1, used / total) : 0;
+              const remainingPct = Math.round((1 - usedRatio) * 100);
+              const fillColor = pickLimitColor(usedRatio, {
+                ok: colors.blue['400'],
+                warn: colors.gold['500'],
+                danger: colors.red['500'],
+              });
+
+              return (
+                <View
+                  key={limit.name}
+                  style={[
+                    styles.limitCard,
+                    {
+                      backgroundColor: colors.white,
+                      borderColor: colors.blue['200'],
+                    },
+                  ]}
                 >
-                  Осталось {limit.currentLimit}тг из {limit.limit}тг
-                </Text>
-              </View>
-            </View>
-          ))}
+                  <View style={styles.limitHeader}>
+                    <Text
+                      style={[styles.limitName, { color: colors.gray['700'] }]}
+                      numberOfLines={2}
+                    >
+                      {limit.name}
+                    </Text>
+                    <Text style={[styles.limitPct, { color: fillColor }]}>
+                      {remainingPct}%
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.progressTrack,
+                      { backgroundColor: colors.gray['200'] },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.progressFill,
+                        {
+                          width: `${usedRatio * 100}%`,
+                          backgroundColor: fillColor,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <View style={styles.limitFooter}>
+                    <Text
+                      style={[
+                        styles.limitFooterMain,
+                        { color: colors.gray['700'] },
+                      ]}
+                    >
+                      {formatAmount(remaining)} ₸
+                    </Text>
+                    <Text
+                      style={[
+                        styles.limitFooterSub,
+                        { color: colors.gray['500'] },
+                      ]}
+                    >
+                      из {formatAmount(total)} ₸
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
         </View>
       </ScrollView>
       <BottomDrawer
@@ -282,25 +339,63 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 600,
   },
-  limitContainer: {
+  limitsSection: {
+    marginTop: 24,
+  },
+  limitsTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
+    marginBottom: 12,
+  },
+  limitsList: {
+    gap: 10,
+  },
+  limitCard: {
     borderWidth: 1,
-    borderRadius: 18,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    gap: 8,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 10,
+  },
+  limitHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
   },
   limitName: {
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+    flex: 1,
   },
-  limitPrices: {
-    borderRadius: 16,
-    padding: 8,
+  limitPct: {
+    fontSize: 13,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
   },
-  limitPricesText: {},
-  limitTitle: {
-    fontSize: 16,
-    fontWeight: 600,
-    marginBottom: 12,
+  progressTrack: {
+    height: 6,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  limitFooter: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 6,
+  },
+  limitFooterMain: {
+    fontSize: 15,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
+  },
+  limitFooterSub: {
+    fontSize: 12,
+    fontFamily: fonts.SFPro.Regular,
   },
 });

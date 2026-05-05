@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointmentHistory } from '@/api';
@@ -12,6 +12,10 @@ export const Appointments: FC<{ startDate: string }> = () => {
   const { colors } = useTheme();
   const { appointmentsHistory, loadingAppointmentsHistory } =
     useAppointmentsHistory();
+
+  useEffect(() => {
+    console.log('appointmentsHistory', appointmentsHistory);
+  }, [appointmentsHistory]);
 
   const separatorColors = {
     blue: colors.blue['500'],

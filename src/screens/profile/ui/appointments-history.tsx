@@ -73,17 +73,19 @@ export const AppointmentHistory: FC = () => {
       {open && (
         <View style={[styles.tests]}>
           {appointmentsHistory?.length > 0 ? (
-            appointmentsHistory.map(appointment => (
-              <HistoryCard
-                key={appointment.id}
-                color="blue"
-                subtitle={appointment.doctor.name}
-                name={`${appointment.doctor.specialtyName} - ${formatDate(appointment.actualStartTime || appointment.startTime, 'DD.MM.YYYY')}`}
-                onPress={() =>
-                  onOpenAppointment(appointment as MISAppointmentHistory)
-                }
-              />
-            ))
+            appointmentsHistory
+              .filter(appointment => appointment.status === 'completed')
+              .map(appointment => (
+                <HistoryCard
+                  key={appointment.id}
+                  color="blue"
+                  subtitle={appointment.doctor.name}
+                  name={`${appointment.doctor.specialtyName} - ${formatDate(appointment.actualStartTime || appointment.startTime, 'DD.MM.YYYY')}`}
+                  onPress={() =>
+                    onOpenAppointment(appointment as MISAppointmentHistory)
+                  }
+                />
+              ))
           ) : (
             <View
               style={[
