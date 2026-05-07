@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointmentHistory } from '@/api';
@@ -8,14 +8,18 @@ import { useTheme } from '@/shared/theme';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 
-export const Appointments: FC<{ startDate: string }> = () => {
+interface AppointmentsProps {
+  mode?: 'upcoming' | 'past';
+  emptyText?: string;
+}
+
+export const Appointments: FC<AppointmentsProps> = ({
+  mode = 'upcoming',
+  emptyText,
+}) => {
   const { colors } = useTheme();
   const { appointmentsHistory, loadingAppointmentsHistory } =
     useAppointmentsHistory();
-
-  useEffect(() => {
-    console.log('appointmentsHistory', appointmentsHistory);
-  }, [appointmentsHistory]);
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -32,17 +36,26 @@ export const Appointments: FC<{ startDate: string }> = () => {
       </View>
     );
 
-  if (!appointmentsHistory?.length)
+  const now = dayjs();
+  const filtered = (appointmentsHistory ?? []).filter(appointment => {
+    const isPast = dayjs(appointment.startTime).isBefore(now);
+    return mode === 'past' ? isPast : !isPast;
+  });
+
+  if (!filtered.length) {
+    const fallback =
+      emptyText ??
+      (mode === 'past'
+        ? 'История записей пуста'
+        : 'Нет предстоящих записей на прием');
     return (
       <View style={styles.noAppointmentsContainer}>
-        <Text style={styles.noAppointmentsText}>
-          Записи на прием отсутствуют
-        </Text>
+        <Text style={styles.noAppointmentsText}>{fallback}</Text>
       </View>
     );
+  }
 
-  const now = dayjs();
-  const groupedAppointments = appointmentsHistory.reduce(
+  const groupedAppointments = filtered.reduce(
     (acc, appointment) => {
       const day = dayjs(appointment.startTime).format('DD MMM YYYY');
       if (!acc[day]) {
@@ -116,10 +129,7 @@ export const Appointments: FC<{ startDate: string }> = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 16,
-    marginHorizontal: 16,
-  },
+  container: {},
   appointments: {
     gap: 8,
   },

@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { useTheme } from '@/shared/theme';
@@ -7,18 +6,18 @@ import { useTheme } from '@/shared/theme';
 import { Appointments } from './appointments';
 
 export const MyAppointments: FC = () => {
-  const [date, setDate] = useState(dayjs());
   const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={[styles.title, { color: colors.gray['700'] }]}>
-          История записей
+          Предстоящие записи
         </Text>
-        {/* <CalendarIcon /> */}
       </View>
-      <Appointments startDate={date.format('YYYY-MM-DD')} />
+      <View style={styles.appointments}>
+        <Appointments mode="upcoming" />
+      </View>
     </View>
   );
 };
@@ -26,17 +25,19 @@ export const MyAppointments: FC = () => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 8,
-    marginHorizontal: -32,
+    marginHorizontal: -16,
   },
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
   },
   title: {
     fontWeight: '700',
     fontSize: 18,
     lineHeight: 22,
+  },
+  appointments: {
+    marginTop: 16,
   },
 });

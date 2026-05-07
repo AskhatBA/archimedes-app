@@ -4,6 +4,7 @@ export const routes = {
   TabNavigation: 'tab-navigation',
   AppointmentsMain: 'appointments-main',
   AppointmentDetails: 'appointment-details',
+  AppointmentHistory: 'appointment-history',
   Programs: 'programs',
   ProgramDetails: 'program-details',
   Notifications: 'notifications',

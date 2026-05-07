@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
 import { AppointmentDetailsScreen } from '@/screens/appointment-details';
+import { AppointmentHistoryScreen } from '@/screens/appointment-history';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
@@ -109,6 +110,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.AppointmentDetails}
           component={AppointmentDetailsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.AppointmentHistory}
+          component={AppointmentHistoryScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
       </RootStack.Navigator>
