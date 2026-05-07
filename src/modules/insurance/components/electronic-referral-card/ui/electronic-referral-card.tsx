@@ -1,15 +1,23 @@
 import { FC, useState } from 'react';
 import {
   Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  StyleSheet,
 } from 'react-native';
 
 import { ElectronicReferralItem } from '@/api';
 import { Button } from '@/shared/components/button';
 import { Radio } from '@/shared/components/radio';
+import {
+  CalendarIcon,
+  ClipboardListIcon,
+  HospitalIcon,
+  SelectCaretIcon,
+  StethoscopeIcon,
+} from '@/shared/icons';
+import { formatDate } from '@/shared/lib/date';
 import { useTheme } from '@/shared/theme';
 
 import { REFERRAL_OPTIONS } from '../../../constants';
@@ -20,6 +28,13 @@ interface ElectronicReferralCardProps {
   onCardPress?: (electronicReferralId: number) => void;
   isExpanded?: boolean;
 }
+
+const formatAmount = (amount?: number, currency?: string) => {
+  if (amount == null) return '';
+  const formatted = amount.toLocaleString('ru-RU');
+  if (!currency) return formatted;
+  return currency === 'KZT' ? `${formatted} ₸` : `${formatted} ${currency}`;
+};
 
 export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
   electronicReferralItem,
@@ -32,91 +47,198 @@ export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
+  const totalAmount = formatAmount(
+    electronicReferralItem.amount,
+    electronicReferralItem.currency,
+  );
+
+  const services = electronicReferralItem.appointmentDetail ?? [];
+
   return (
     <TouchableOpacity
-      onPress={() => onCardPress?.(electronicReferralItem.id)}
+      activeOpacity={0.85}
+      onPress={() =>
+        electronicReferralItem.id != null &&
+        onCardPress?.(electronicReferralItem.id)
+      }
       style={[
         styles.card,
         {
-          backgroundColor: colors.gray['200'],
-          borderColor: colors.gray['300'],
+          backgroundColor: colors.blue['100'],
+          borderColor: colors.blue['200'],
         },
       ]}
     >
-      {!!electronicReferralItem.date && (
-        <Text style={[styles.date, { color: colors.gray['500'] }]}>
-          {electronicReferralItem.date}
-        </Text>
-      )}
-
-      {!!electronicReferralItem.name && (
-        <Text style={[styles.title, { color: colors.textMain }]}>
-          {electronicReferralItem.name}
-        </Text>
-      )}
-
-      {!!electronicReferralItem.medical_institution && (
-        <Text style={[styles.subtitle, { color: colors.gray['500'] }]}>
-          {electronicReferralItem.medical_institution}
-        </Text>
-      )}
-
-      {!!electronicReferralItem.diagnosis && (
-        <Text style={[styles.subtitle, { color: colors.gray['500'] }]}>
-          Диагноз: {electronicReferralItem.diagnosis}
-        </Text>
-      )}
-
-      {(electronicReferralItem.amount != null ||
-        electronicReferralItem.currency) && (
-        <Text style={[styles.amount, { color: colors.primary }]}>
-          {electronicReferralItem.amount != null
-            ? electronicReferralItem.amount
-            : ''}
-          {electronicReferralItem.currency
-            ? ` ${electronicReferralItem.currency}`
-            : ''}
-        </Text>
-      )}
-
-      {!!electronicReferralItem.appointmentDetail?.length && (
-        <View style={{ marginTop: 8, gap: 4 }}>
-          {electronicReferralItem.appointmentDetail.map(detail => (
+      <View style={styles.header}>
+        <View style={[styles.avatar, { backgroundColor: colors.blue['150'] }]}>
+          <ClipboardListIcon
+            width={22}
+            height={22}
+            color={colors.blue['400']}
+          />
+        </View>
+        <View style={styles.headerTexts}>
+          {!!electronicReferralItem.name && (
             <Text
-              key={`${electronicReferralItem.id}-${detail.id}-${detail.service}`}
-              style={{ color: colors.gray['500'], fontSize: 12 }}
+              numberOfLines={2}
+              style={[styles.title, { color: colors.blue['400'] }]}
             >
-              {detail.service}
-              {detail.amount != null ? ` — ${detail.amount}` : ''}
+              {electronicReferralItem.name}
             </Text>
+          )}
+          {!!electronicReferralItem.medical_institution && (
+            <View style={styles.headerInfoRow}>
+              <HospitalIcon width={14} height={14} color={colors.blue['500']} />
+              <Text
+                numberOfLines={2}
+                style={[styles.headerSubtitle, { color: colors.gray['600'] }]}
+              >
+                {electronicReferralItem.medical_institution}
+              </Text>
+            </View>
+          )}
+        </View>
+        <View style={[styles.chevron, isExpanded && styles.chevronExpanded]}>
+          <SelectCaretIcon color={colors.blue['400']} />
+        </View>
+      </View>
+
+      <View style={[styles.divider, { backgroundColor: colors.blue['200'] }]} />
+
+      <View style={styles.metaRows}>
+        {!!electronicReferralItem.date && (
+          <View style={styles.metaRow}>
+            <CalendarIcon width={16} height={16} color={colors.gray['500']} />
+            <Text style={[styles.metaLabel, { color: colors.gray['500'] }]}>
+              Дата выдачи
+            </Text>
+            <Text style={[styles.metaValue, { color: colors.textMain }]}>
+              {formatDate(electronicReferralItem.date, 'DD.MM.YYYY')}
+            </Text>
+          </View>
+        )}
+
+        {!!electronicReferralItem.diagnosis && (
+          <View style={styles.metaRow}>
+            <StethoscopeIcon
+              width={16}
+              height={16}
+              color={colors.blue['400']}
+            />
+            <Text style={[styles.metaLabel, { color: colors.gray['500'] }]}>
+              Диагноз
+            </Text>
+            <Text
+              numberOfLines={2}
+              style={[styles.metaValue, { color: colors.textMain }]}
+            >
+              {electronicReferralItem.diagnosis}
+            </Text>
+          </View>
+        )}
+      </View>
+
+      {services.length > 0 && (
+        <View
+          style={[
+            styles.servicesBlock,
+            { backgroundColor: colors.gray['200'] },
+          ]}
+        >
+          <Text style={[styles.sectionLabel, { color: colors.gray['600'] }]}>
+            Услуги
+          </Text>
+          {services.map(detail => (
+            <View
+              key={`${electronicReferralItem.id}-${detail.id}-${detail.service}`}
+              style={styles.serviceRow}
+            >
+              <View
+                style={[
+                  styles.serviceDot,
+                  { backgroundColor: colors.blue['400'] },
+                ]}
+              />
+              <Text
+                style={[styles.serviceName, { color: colors.textMain }]}
+                numberOfLines={2}
+              >
+                {detail.service}
+              </Text>
+              {detail.amount != null && (
+                <Text
+                  style={[styles.serviceAmount, { color: colors.gray['600'] }]}
+                >
+                  {formatAmount(detail.amount, electronicReferralItem.currency)}
+                </Text>
+              )}
+            </View>
           ))}
+        </View>
+      )}
+
+      {!!totalAmount && (
+        <View style={styles.totalRow}>
+          <Text style={[styles.totalLabel, { color: colors.gray['600'] }]}>
+            Итого
+          </Text>
+          <Text style={[styles.totalValue, { color: colors.blue['400'] }]}>
+            {totalAmount}
+          </Text>
         </View>
       )}
 
       {isExpanded && (
         <View style={styles.expandedContent}>
-          <Text style={[styles.instructionText, { color: colors.textMain }]}>
+          <View
+            style={[styles.divider, { backgroundColor: colors.blue['200'] }]}
+          />
+
+          <Text style={[styles.instructionText, { color: colors.gray['600'] }]}>
             Направление считается действительным в течение 10 дней с даты
             выписки
           </Text>
 
           <View style={styles.radioGroup}>
-            {REFERRAL_OPTIONS.map(option => (
-              <Pressable
-                key={option.id}
-                style={styles.radioItem}
-                onPress={() => setSelectedOption(option.id)}
-              >
-                <Radio
-                  checked={selectedOption === option.id}
-                  onChange={() => setSelectedOption(option.id)}
-                  value={`${option.id}`}
-                />
-                <Text style={[styles.radioLabel, { color: colors.primary }]}>
-                  {option.label}
-                </Text>
-              </Pressable>
-            ))}
+            {REFERRAL_OPTIONS.map(option => {
+              const isSelected = selectedOption === option.id;
+              return (
+                <Pressable
+                  key={option.id}
+                  onPress={() => setSelectedOption(option.id)}
+                  style={[
+                    styles.radioItem,
+                    {
+                      backgroundColor: isSelected
+                        ? colors.blue['150']
+                        : colors.gray['200'],
+                      borderColor: isSelected
+                        ? colors.blue['400']
+                        : 'transparent',
+                    },
+                  ]}
+                >
+                  <Radio
+                    checked={isSelected}
+                    onChange={() => setSelectedOption(option.id)}
+                    value={`${option.id}`}
+                  />
+                  <Text
+                    style={[
+                      styles.radioLabel,
+                      {
+                        color: isSelected
+                          ? colors.blue['400']
+                          : colors.textMain,
+                        fontWeight: isSelected ? '600' : '500',
+                      },
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
 
           <Button
@@ -140,50 +262,139 @@ export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 16,
+    padding: 16,
     borderWidth: 1,
+    gap: 14,
   },
-  date: {
-    fontSize: 12,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  headerTexts: {
+    flex: 1,
+    gap: 4,
   },
   title: {
-    marginTop: 4,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
+    lineHeight: 20,
   },
-  subtitle: {
-    marginTop: 2,
+  headerInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  headerSubtitle: {
+    flex: 1,
     fontSize: 13,
+    lineHeight: 17,
   },
-  amount: {
-    marginTop: 6,
-    fontSize: 14,
+  chevron: {
+    paddingTop: 4,
+  },
+  chevronExpanded: {
+    transform: [{ rotate: '180deg' }],
+  },
+  divider: {
+    height: 1,
+    width: '100%',
+  },
+  metaRows: {
+    gap: 10,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  metaLabel: {
+    fontSize: 13,
+    fontWeight: '400',
+  },
+  metaValue: {
+    flex: 1,
+    fontSize: 13,
     fontWeight: '600',
+    textAlign: 'right',
+  },
+  servicesBlock: {
+    borderRadius: 12,
+    padding: 12,
+    gap: 8,
+  },
+  sectionLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  serviceDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  serviceName: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 17,
+  },
+  serviceAmount: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  totalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  totalLabel: {
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: '700',
   },
   expandedContent: {
-    marginTop: 16,
+    gap: 14,
+  },
+  instructionText: {
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: 'center',
+    paddingHorizontal: 8,
   },
   radioGroup: {
-    gap: 16,
-    marginBottom: 20,
+    gap: 8,
   },
   radioItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1,
   },
   radioLabel: {
     fontSize: 14,
   },
   confirmButton: {
     paddingVertical: 12,
-  },
-  instructionText: {
-    fontSize: 13,
-    textAlign: 'center',
-    marginVertical: 16,
-    paddingHorizontal: 16,
-    lineHeight: 18,
   },
 });

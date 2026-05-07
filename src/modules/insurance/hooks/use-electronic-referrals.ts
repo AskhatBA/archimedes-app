@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { insuranceApi } from '@/api';
 import { GET_INSURANCE_ELECTRONIC_REFERRALS } from '@/shared/constants';
 
+import { electronicReferralsMock } from './mocks/electronic-referrals-mock';
+
 export const useElectronicReferrals = (programId: string) => {
   const { data: electronicReferrals, isLoading: loadingElectronicReferrals } =
     useQuery({
@@ -14,7 +16,7 @@ export const useElectronicReferrals = (programId: string) => {
     });
 
   return {
-    electronicReferrals,
+    electronicReferrals: electronicReferralsMock,
     loadingElectronicReferrals,
   };
 };

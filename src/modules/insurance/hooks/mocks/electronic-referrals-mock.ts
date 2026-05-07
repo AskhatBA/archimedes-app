@@ -3,7 +3,7 @@ import { ElectronicReferralItem } from '@/api/generated/data-contracts';
 export const electronicReferralsMock: ElectronicReferralItem[] = [
   {
     id: 1,
-    date: '15.01.2026',
+    date: '2026-01-15T00:00:00.000Z',
     name: 'Иванов Иван Иванович',
     medical_institution: 'Алматы, ТОО Архимедес',
     diagnosis: 'Остеохондроз',
@@ -24,7 +24,7 @@ export const electronicReferralsMock: ElectronicReferralItem[] = [
   },
   {
     id: 2,
-    date: '20.01.2026',
+    date: '2026-01-20T00:00:00.000Z',
     name: 'Петров Петр Петрович',
     medical_institution: 'Астана, МЦ Здоровье',
     diagnosis: 'ОРВИ',
