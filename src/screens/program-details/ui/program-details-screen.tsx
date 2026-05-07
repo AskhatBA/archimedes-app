@@ -27,6 +27,8 @@ import {
   InfoIcon,
   FileTextIcon,
   HeartIcon,
+  ShieldPlusIcon,
+  CalendarIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useNavigation, routes } from '@/shared/navigation';
@@ -82,11 +84,64 @@ export const ProgramDetailsScreen: FC = () => {
     );
   }
 
+  const periodText =
+    program?.dateStart && program?.dateEnd
+      ? `${formatDate(program.dateStart, 'DD.MM.YYYY')} — ${formatDate(
+          program.dateEnd,
+          'DD.MM.YYYY',
+        )}`
+      : '';
+
+  const totalLimit = program?.limit ?? 0;
+  const totalRemaining = program?.currentLimit ?? 0;
+  const totalUsed = Math.max(0, totalLimit - totalRemaining);
+  const totalRatio = totalLimit > 0 ? Math.min(1, totalUsed / totalLimit) : 0;
+  const totalRemainingPct = Math.round((1 - totalRatio) * 100);
+
+  const navTiles: {
+    key: string;
+    label: string;
+    icon: FC<{ width: number; height: number; color: string }>;
+    onPress: () => void;
+  }[] = [
+    {
+      key: 'certificate',
+      label: 'Сертификат',
+      icon: ClipIcon,
+      onPress: () =>
+        navigate(routes.DocumentViewer, {
+          uri: INSURANCE_CERTIFICATE_URL.replace(':programId', program?.id),
+        }),
+    },
+    {
+      key: 'about',
+      label: 'О программе',
+      icon: InfoIcon,
+      onPress: () =>
+        navigate(routes.DocumentViewer, { uri: program?.programUrl }),
+    },
+    {
+      key: 'network',
+      label: 'Мед. сеть',
+      icon: HospitalIcon,
+      onPress: () => navigate(routes.MedicalNetwork, { programId }),
+    },
+    {
+      key: 'referrals',
+      label: 'Направления',
+      icon: FileTextIcon,
+      onPress: () => navigate(routes.ElectronicReferrals, { programId }),
+    },
+  ];
+
   return (
     <>
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ paddingBottom: deviceInsets.bottom + 32 }}
+        contentContainerStyle={{
+          paddingBottom: deviceInsets.bottom + 32,
+          gap: 20,
+        }}
         refreshControl={
           <RefreshControl
             refreshing={!!isFetchingProgram}
@@ -94,196 +149,327 @@ export const ProgramDetailsScreen: FC = () => {
           />
         }
       >
-        <Text style={[styles.userName, { color: colors.primary }]}>
-          {user.fullName}
-        </Text>
-        <Text style={[styles.insuranceType, { color: colors.textMain }]}>
-          {program.title}
-        </Text>
+        {/* HERO */}
         <View
-          style={[styles.mainInfo, { backgroundColor: colors.blue['100'] }]}
+          style={[
+            styles.hero,
+            {
+              backgroundColor: colors.blue['100'],
+              borderColor: colors.blue['200'],
+            },
+          ]}
         >
-          <View style={{ gap: 4 }}>
-            <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Компания
-            </Text>
-            <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
-              {program.insuranceCompany}
-            </Text>
-          </View>
-          <View style={{ gap: 4 }}>
-            <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Номер карты
-            </Text>
-            <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
-              {program.cardNo}
-            </Text>
-          </View>
-          <View style={{ gap: 4 }}>
-            <Text style={[styles.mainInfoLabel, { color: colors.primary }]}>
-              Период программы
-            </Text>
-            <Text style={[styles.mainInfoLabel, { color: colors.textMain }]}>
-              {program?.dateStart &&
-                formatDate(program.dateStart, 'DD.MM.YYYY')}{' '}
-              - {program?.dateEnd && formatDate(program.dateEnd, 'DD.MM.YYYY')}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.documents}>
-          <TouchableOpacity
-            onPress={() =>
-              navigate(routes.DocumentViewer, {
-                uri: INSURANCE_CERTIFICATE_URL.replace(
-                  ':programId',
-                  program?.id,
-                ),
-              })
-            }
-            style={[
-              styles.documentItem,
-              { backgroundColor: colors.gray['200'] },
-            ]}
-          >
-            <ClipIcon width={24} height={24} color={colors.primary} />
-            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              Сертификат программы
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              navigate(routes.DocumentViewer, {
-                uri: program?.programUrl,
-              })
-            }
-            style={[
-              styles.documentItem,
-              { backgroundColor: colors.gray['200'] },
-            ]}
-          >
-            <InfoIcon width={24} height={24} color={colors.primary} />
-            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              О программе
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigate(routes.MedicalNetwork, { programId })}
-            style={[
-              styles.documentItem,
-              { backgroundColor: colors.gray['200'] },
-            ]}
-          >
-            <HospitalIcon width={24} height={24} color={colors.primary} />
-            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              Медицинская сеть
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigate(routes.ElectronicReferrals, { programId })}
-            style={[
-              styles.documentItem,
-              { backgroundColor: colors.gray['200'] },
-            ]}
-          >
-            <FileTextIcon width={24} height={24} color={colors.primary} />
-            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              Электронные направления
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => openSupport()}
-            style={[
-              styles.documentItem,
-              { backgroundColor: colors.gray['200'] },
-            ]}
-          >
-            <HeartIcon width={24} height={24} color={colors.primary} />
-            <Text style={[styles.documentItemText, { color: colors.textMain }]}>
-              Поддержка
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginTop: 24 }}>
-          <FamilyMembers programId={programId} />
-        </View>
-        <View style={styles.limitsSection}>
-          <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
-            Использование лимитов
-          </Text>
-          <View style={styles.limitsList}>
-            {program?.subLimits.map(limit => {
-              const total = limit.limit ?? 0;
-              const remaining = limit.currentLimit ?? 0;
-              const used = Math.max(0, total - remaining);
-              const usedRatio = total > 0 ? Math.min(1, used / total) : 0;
-              const remainingPct = Math.round((1 - usedRatio) * 100);
-              const fillColor = pickLimitColor(usedRatio, {
-                ok: colors.blue['400'],
-                warn: colors.gold['500'],
-                danger: colors.red['500'],
-              });
-
-              return (
-                <View
-                  key={limit.name}
-                  style={[
-                    styles.limitCard,
-                    {
-                      backgroundColor: colors.white,
-                      borderColor: colors.blue['200'],
-                    },
-                  ]}
+          <View style={styles.heroTopRow}>
+            <View
+              style={[
+                styles.heroBadge,
+                { backgroundColor: colors.blue['400'] },
+              ]}
+            >
+              <ShieldPlusIcon width={18} height={18} color={colors.white} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.heroEyebrow, { color: colors.blue['500'] }]}>
+                Компания
+              </Text>
+              {!!program?.insuranceCompany && (
+                <Text
+                  style={[styles.heroCompany, { color: colors.blue['400'] }]}
                 >
-                  <View style={styles.limitHeader}>
-                    <Text
-                      style={[styles.limitName, { color: colors.gray['700'] }]}
-                      numberOfLines={2}
-                    >
-                      {limit.name}
-                    </Text>
-                    <Text style={[styles.limitPct, { color: fillColor }]}>
-                      {remainingPct}%
-                    </Text>
-                  </View>
-                  <View
+                  {program.insuranceCompany}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          <Text
+            numberOfLines={2}
+            style={[styles.heroTitle, { color: colors.textMain }]}
+          >
+            {program?.title}
+          </Text>
+
+          <View
+            style={[
+              styles.heroDivider,
+              { backgroundColor: colors.blue['200'] },
+            ]}
+          />
+
+          <View style={{ gap: 4 }}>
+            <Text
+              numberOfLines={1}
+              style={[styles.heroUserName, { color: colors.textMain }]}
+            >
+              {user.fullName}
+            </Text>
+          </View>
+
+          <View style={styles.heroChipsRow}>
+            {!!program?.cardNo && (
+              <View
+                style={[
+                  styles.heroChip,
+                  {
+                    backgroundColor: colors.white,
+                    borderColor: colors.blue['200'],
+                  },
+                ]}
+              >
+                <Text
+                  style={[styles.heroChipLabel, { color: colors.gray['500'] }]}
+                >
+                  Карта №
+                </Text>
+                <Text
+                  style={[styles.heroChipValue, { color: colors.blue['400'] }]}
+                >
+                  {program.cardNo}
+                </Text>
+              </View>
+            )}
+            {!!periodText && (
+              <View
+                style={[
+                  styles.heroChip,
+                  {
+                    backgroundColor: colors.white,
+                    borderColor: colors.blue['200'],
+                  },
+                ]}
+              >
+                <View style={styles.heroChipHeader}>
+                  <CalendarIcon
+                    width={12}
+                    height={12}
+                    color={colors.gray['500']}
+                  />
+                  <Text
                     style={[
-                      styles.progressTrack,
-                      { backgroundColor: colors.gray['200'] },
+                      styles.heroChipLabel,
+                      { color: colors.gray['500'] },
                     ]}
                   >
-                    <View
-                      style={[
-                        styles.progressFill,
-                        {
-                          width: `${usedRatio * 100}%`,
-                          backgroundColor: fillColor,
-                        },
-                      ]}
-                    />
-                  </View>
-                  <View style={styles.limitFooter}>
-                    <Text
-                      style={[
-                        styles.limitFooterMain,
-                        { color: colors.gray['700'] },
-                      ]}
-                    >
-                      {formatAmount(remaining)} ₸
-                    </Text>
-                    <Text
-                      style={[
-                        styles.limitFooterSub,
-                        { color: colors.gray['500'] },
-                      ]}
-                    >
-                      из {formatAmount(total)} ₸
-                    </Text>
-                  </View>
+                    Период
+                  </Text>
                 </View>
-              );
-            })}
+                <Text
+                  style={[styles.heroChipValue, { color: colors.blue['400'] }]}
+                >
+                  {periodText}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
+
+        {/* QUICK ACTIONS */}
+        <View style={styles.tilesGrid}>
+          {navTiles.map(tile => {
+            const Icon = tile.icon;
+            return (
+              <TouchableOpacity
+                key={tile.key}
+                activeOpacity={0.85}
+                onPress={tile.onPress}
+                style={[
+                  styles.tile,
+                  {
+                    backgroundColor: colors.gray['200'],
+                    borderColor: colors.blue['200'],
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.tileIconWrap,
+                    { backgroundColor: colors.blue['150'] },
+                  ]}
+                >
+                  <Icon width={22} height={22} color={colors.blue['400']} />
+                </View>
+                <Text
+                  numberOfLines={2}
+                  style={[styles.tileLabel, { color: colors.textMain }]}
+                >
+                  {tile.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={openSupport}
+          style={[styles.supportTile, { backgroundColor: colors.blue['100'] }]}
+        >
+          <View
+            style={[
+              styles.supportIconWrap,
+              { backgroundColor: colors.blue['400'] },
+            ]}
+          >
+            <HeartIcon width={22} height={22} color={colors.white} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.supportTitle, { color: colors.blue['400'] }]}>
+              Поддержка
+            </Text>
+            <Text
+              style={[styles.supportSubtitle, { color: colors.gray['600'] }]}
+            >
+              Свяжитесь с нами по любым вопросам
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* FAMILY */}
+        <View>
+          <FamilyMembers programId={programId} />
+        </View>
+
+        {/* TOTAL LIMIT */}
+        {totalLimit > 0 && (
+          <View
+            style={[
+              styles.totalLimitCard,
+              {
+                backgroundColor: colors.blue['100'],
+                borderColor: colors.blue['200'],
+              },
+            ]}
+          >
+            <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
+              Общий лимит
+            </Text>
+            <View style={styles.totalLimitRow}>
+              <Text
+                style={[styles.totalLimitMain, { color: colors.blue['400'] }]}
+              >
+                {formatAmount(totalRemaining)} ₸
+              </Text>
+              <Text
+                style={[styles.totalLimitSub, { color: colors.gray['500'] }]}
+              >
+                из {formatAmount(totalLimit)} ₸
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.progressTrack,
+                { backgroundColor: colors.blue['200'] },
+              ]}
+            >
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${totalRatio * 100}%`,
+                    backgroundColor: colors.blue['400'],
+                  },
+                ]}
+              />
+            </View>
+            <Text
+              style={[styles.totalLimitFooter, { color: colors.gray['600'] }]}
+            >
+              Доступно {totalRemainingPct}% от программы
+            </Text>
+          </View>
+        )}
+
+        {/* SUB LIMITS */}
+        {!!program?.subLimits?.length && (
+          <View>
+            <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
+              Использование лимитов
+            </Text>
+            <View style={styles.limitsList}>
+              {program.subLimits.map(limit => {
+                const total = limit.limit ?? 0;
+                const remaining = limit.currentLimit ?? 0;
+                const used = Math.max(0, total - remaining);
+                const usedRatio = total > 0 ? Math.min(1, used / total) : 0;
+                const remainingPct = Math.round((1 - usedRatio) * 100);
+                const fillColor = pickLimitColor(usedRatio, {
+                  ok: colors.blue['400'],
+                  warn: colors.gold['500'],
+                  danger: colors.red['500'],
+                });
+
+                return (
+                  <View
+                    key={limit.name}
+                    style={[
+                      styles.limitCard,
+                      {
+                        backgroundColor: colors.white,
+                        borderColor: colors.blue['200'],
+                      },
+                    ]}
+                  >
+                    <View style={styles.limitHeader}>
+                      <Text
+                        style={[
+                          styles.limitName,
+                          { color: colors.gray['700'] },
+                        ]}
+                        numberOfLines={2}
+                      >
+                        {limit.name}
+                      </Text>
+                      <View
+                        style={[
+                          styles.limitPctBadge,
+                          { backgroundColor: `${fillColor}1A` },
+                        ]}
+                      >
+                        <Text style={[styles.limitPct, { color: fillColor }]}>
+                          {remainingPct}%
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={[
+                        styles.progressTrack,
+                        { backgroundColor: colors.gray['200'] },
+                      ]}
+                    >
+                      <View
+                        style={[
+                          styles.progressFill,
+                          {
+                            width: `${usedRatio * 100}%`,
+                            backgroundColor: fillColor,
+                          },
+                        ]}
+                      />
+                    </View>
+                    <View style={styles.limitFooter}>
+                      <Text
+                        style={[
+                          styles.limitFooterMain,
+                          { color: colors.gray['700'] },
+                        ]}
+                      >
+                        {formatAmount(remaining)} ₸
+                      </Text>
+                      <Text
+                        style={[
+                          styles.limitFooterSub,
+                          { color: colors.gray['500'] },
+                        ]}
+                      >
+                        из {formatAmount(total)} ₸
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
       </ScrollView>
       <BottomDrawer
         visible={openInformation}
@@ -299,48 +485,157 @@ export const ProgramDetailsScreen: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  userName: {
-    fontSize: 24,
-    fontWeight: 700,
-  },
-  insuranceType: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: 600,
-  },
-  mainInfo: {
-    borderRadius: 16,
+  // Hero
+  hero: {
+    borderRadius: 20,
     padding: 18,
-    gap: 16,
-    marginTop: 16,
+    gap: 14,
+    overflow: 'hidden',
+    borderWidth: 1,
   },
-  mainInfoLabel: {
-    fontWeight: 300,
-    fontSize: 16,
-  },
-  mainInfoValue: {
-    fontWeight: 300,
-    fontSize: 16,
-  },
-  documents: {
-    marginTop: 24,
-    gap: 16,
-  },
-  documentItem: {
-    padding: 18,
+  heroTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: 12,
+  },
+  heroBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heroEyebrow: {
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+  },
+  heroCompany: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  heroTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    lineHeight: 28,
+    fontFamily: fonts.SFPro.Bold,
+  },
+  heroDivider: {
+    height: 1,
+  },
+  heroLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  heroUserName: {
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  heroChipsRow: {
+    flexDirection: 'column',
+    gap: 10,
+  },
+  heroChip: {
+    minWidth: 140,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 4,
+    borderWidth: 1,
+  },
+  heroChipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  heroChipLabel: {
+    fontSize: 11,
+    fontWeight: '500',
+  },
+  heroChipValue: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  // Tiles grid
+  tilesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  tile: {
+    width: '48%',
     borderRadius: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 14,
+    gap: 12,
+    borderWidth: 1,
   },
-  documentItemText: {
+  tileIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tileLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+  },
+  // Support tile
+  supportTile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    borderRadius: 16,
+    padding: 16,
+  },
+  supportIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  supportTitle: {
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: '700',
   },
-  limitsSection: {
-    marginTop: 24,
+  supportSubtitle: {
+    marginTop: 2,
+    fontSize: 13,
+  },
+  // Limits
+  totalLimitCard: {
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    gap: 10,
+  },
+  totalLimitRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 8,
+  },
+  totalLimitMain: {
+    fontSize: 24,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
+  },
+  totalLimitSub: {
+    fontSize: 13,
+    fontFamily: fonts.SFPro.Regular,
+  },
+  totalLimitFooter: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   limitsTitle: {
     fontSize: 18,
@@ -370,8 +665,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.SFPro.Semibold,
     flex: 1,
   },
+  limitPctBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
   limitPct: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
     fontFamily: fonts.SFPro.Bold,
   },
