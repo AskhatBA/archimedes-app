@@ -15,6 +15,7 @@ interface SelectFieldProps {
   onChange?: (value: string) => void;
   value?: string;
   error?: string;
+  emptyText?: string;
 }
 
 export const SelectField: FC<SelectFieldProps> = ({
@@ -24,6 +25,7 @@ export const SelectField: FC<SelectFieldProps> = ({
   onChange,
   value,
   error,
+  emptyText,
 }) => {
   const [selected, setSelected] = useState<string>();
   const [optionsOpened, setOptionsOpened] = useState(false);
@@ -110,6 +112,7 @@ export const SelectField: FC<SelectFieldProps> = ({
         selected={selected}
         setSelected={setSelected}
         onChange={handleChange}
+        emptyText={emptyText}
       />
     </>
   );
