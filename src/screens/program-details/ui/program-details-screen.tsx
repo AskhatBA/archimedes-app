@@ -430,22 +430,6 @@ export const ProgramDetailsScreen: FC = () => {
                         </Text>
                       </View>
                     </View>
-                    <View
-                      style={[
-                        styles.progressTrack,
-                        { backgroundColor: colors.gray['200'] },
-                      ]}
-                    >
-                      <View
-                        style={[
-                          styles.progressFill,
-                          {
-                            width: `${usedRatio * 100}%`,
-                            backgroundColor: fillColor,
-                          },
-                        ]}
-                      />
-                    </View>
                     <View style={styles.limitFooter}>
                       <Text
                         style={[
