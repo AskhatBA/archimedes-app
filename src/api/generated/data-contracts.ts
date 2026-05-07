@@ -426,6 +426,25 @@ export interface UpdateElectronicReferralServiceStatusBody {
   serviceStatus: ElectronicReferralServiceStatus;
 }
 
+export interface InsuranceNewsItem {
+  /**
+   * Base64-encoded image content
+   * @example "/9j/4AAQSkZJRgABAQEBLAEsAAD..."
+   */
+  image: string;
+  /** @example "Объявление касательно рассылки результатов анализов" */
+  title: string;
+  /**
+   * @format date-time
+   * @example "2025-08-27T00:00:00"
+   */
+  date: string;
+  /** @example "Уважаемые клиенты! ..." */
+  message: string;
+  /** @example "https://archimedes.kz/" */
+  url: string;
+}
+
 export interface CreateMeetingBody {
   /** @example "Patient Consultation" */
   topic: string;

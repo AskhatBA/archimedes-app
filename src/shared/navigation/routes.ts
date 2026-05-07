@@ -5,6 +5,7 @@ export const routes = {
   AppointmentsMain: 'appointments-main',
   AppointmentDetails: 'appointment-details',
   AppointmentHistory: 'appointment-history',
+  NewsDetails: 'news-details',
   Programs: 'programs',
   ProgramDetails: 'program-details',
   Notifications: 'notifications',

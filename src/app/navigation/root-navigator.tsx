@@ -10,6 +10,7 @@ import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { ElectronicReferralsScreen } from '@/screens/electronic-referrals';
 import { MedbotChatScreen } from '@/screens/medbot-chat';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
+import { NewsDetailsScreen } from '@/screens/news-details';
 import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
 import { ProgramDetailsScreen } from '@/screens/program-details';
@@ -115,6 +116,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.AppointmentHistory}
           component={AppointmentHistoryScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.NewsDetails}
+          component={NewsDetailsScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
       </RootStack.Navigator>

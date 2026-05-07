@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { News } from '@/modules/insurance';
 import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner';
 import { MainLayout } from '@/shared/layout/main-layout';
 
@@ -15,6 +16,7 @@ export const HomeScreen: FC = () => {
           <SearchField />
           <FindSpecialistBanner />
           <CurrentAppointments />
+          <News />
         </View>
       </MainLayout>
     </ScrollView>

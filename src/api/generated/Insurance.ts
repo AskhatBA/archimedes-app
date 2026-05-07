@@ -15,6 +15,7 @@ import {
   ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
+  InsuranceNewsItem,
   InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
@@ -484,6 +485,36 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       path: `/insurance/check-iin`,
       method: 'GET',
       query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name NewsList
+ * @summary Get list of news from insurance service
+ * @request GET:/insurance/news
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    news?: (InsuranceNewsItem)[],
+
+}` Response
+ */
+  newsList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        news?: InsuranceNewsItem[];
+      },
+      any
+    >({
+      path: `/insurance/news`,
+      method: 'GET',
       secure: true,
       format: 'json',
       ...params,

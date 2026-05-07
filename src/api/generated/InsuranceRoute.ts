@@ -15,6 +15,7 @@ import {
   ContactInfo,
   ElectronicReferralItem,
   InsuranceFamilyResponse,
+  InsuranceNewsItem,
   InsuranceProgramResponse,
   InsuranceProgramsResponse,
   InsuranceRefundRequestsResponse,
@@ -419,6 +420,32 @@ export namespace Insurance {
       phone?: string;
       /** @example "Пользователь не найден" */
       message?: string;
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name NewsList
+ * @summary Get list of news from insurance service
+ * @request GET:/insurance/news
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    news?: (InsuranceNewsItem)[],
+
+}` Response
+*/
+  export namespace NewsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      news?: InsuranceNewsItem[];
     };
   }
 }
