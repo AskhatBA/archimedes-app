@@ -424,6 +424,11 @@ export enum ElectronicReferralServiceStatus {
 export interface UpdateElectronicReferralServiceStatusBody {
   /** Service status */
   serviceStatus: ElectronicReferralServiceStatus;
+  /**
+   * User-provided satisfaction level for the appointment
+   * @example "5"
+   */
+  satisfactionLevel: string;
 }
 
 export interface InsuranceNewsItem {

@@ -329,56 +329,6 @@ export const ProgramDetailsScreen: FC = () => {
           <FamilyMembers programId={programId} />
         </View>
 
-        {/* TOTAL LIMIT */}
-        {totalLimit > 0 && (
-          <View
-            style={[
-              styles.totalLimitCard,
-              {
-                backgroundColor: colors.blue['100'],
-                borderColor: colors.blue['200'],
-              },
-            ]}
-          >
-            <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
-              Общий лимит
-            </Text>
-            <View style={styles.totalLimitRow}>
-              <Text
-                style={[styles.totalLimitMain, { color: colors.blue['400'] }]}
-              >
-                {formatAmount(totalRemaining)} ₸
-              </Text>
-              <Text
-                style={[styles.totalLimitSub, { color: colors.gray['500'] }]}
-              >
-                из {formatAmount(totalLimit)} ₸
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.progressTrack,
-                { backgroundColor: colors.blue['200'] },
-              ]}
-            >
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${totalRatio * 100}%`,
-                    backgroundColor: colors.blue['400'],
-                  },
-                ]}
-              />
-            </View>
-            <Text
-              style={[styles.totalLimitFooter, { color: colors.gray['600'] }]}
-            >
-              Доступно {totalRemainingPct}% от программы
-            </Text>
-          </View>
-        )}
-
         {/* SUB LIMITS */}
         {!!program?.subLimits?.length && (
           <View>

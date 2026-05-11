@@ -1,6 +1,6 @@
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { FC, useState } from 'react';
-import { View, StyleSheet, Platform, Text } from 'react-native';
+import { View, StyleSheet, Platform, Text, Keyboard } from 'react-native';
 
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
 import { Button } from '@/shared/components/button';
@@ -34,11 +34,11 @@ export const Datepicker: FC<DateTimePickerProps> = ({
   const { colors } = useTheme();
 
   const openPicker = () => {
-    console.log('open picker');
     if (Platform.OS === 'android') {
       setAndroidPickerOpened(true);
     }
     if (Platform.OS === 'ios') {
+      Keyboard.dismiss();
       setIosPickerOpened(true);
     }
   };

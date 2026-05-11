@@ -23,7 +23,10 @@ export const useNewVersionDrawer = () => {
   });
 
   const latestVersion = data?.latestVersion;
-  const storeUrl = platform === 'ios' ? data?.iosUrl : data?.androidUrl;
+  const storeUrl =
+    platform === 'ios'
+      ? 'https://apps.apple.com/app/id6760126406'
+      : 'https://play.google.com/store/apps/details?id=com.archimedesapp';
   const isNewVersionAvailable =
     !!latestVersion && compareVersions(latestVersion, currentVersion) > 0;
 

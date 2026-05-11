@@ -1,5 +1,11 @@
 import { FC, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Keyboard,
+} from 'react-native';
 
 import { SelectCaretIcon } from '@/shared/icons';
 import { useTheme } from '@/shared/theme';
@@ -48,6 +54,7 @@ export const SelectField: FC<SelectFieldProps> = ({
 
   const onOpen = () => {
     setOptionsOpened(true);
+    Keyboard.dismiss();
     if (value) setSelected(value);
   };
 
@@ -91,7 +98,10 @@ export const SelectField: FC<SelectFieldProps> = ({
               {selectedOption?.label || placeholder}
             </Text>
             {selectedOption?.subtitle && (
-              <Text numberOfLines={1} style={[styles.subtitle, { color: colors.gray['500'] }]}>
+              <Text
+                numberOfLines={1}
+                style={[styles.subtitle, { color: colors.gray['500'] }]}
+              >
                 {selectedOption.subtitle}
               </Text>
             )}

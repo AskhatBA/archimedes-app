@@ -77,6 +77,7 @@ export const CompensationRequestScreen: FC = () => {
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        accessible={false}
       >
         <ScrollView
           contentContainerStyle={[

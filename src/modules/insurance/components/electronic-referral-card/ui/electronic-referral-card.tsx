@@ -23,6 +23,8 @@ import { useTheme } from '@/shared/theme';
 import { REFERRAL_OPTIONS } from '../../../constants';
 import { useElectronicReferralStatusUpdate } from '../../../hooks/use-electronic-referral-status-update';
 
+import { SatisfactionRating } from './satisfaction-rating';
+
 interface ElectronicReferralCardProps {
   electronicReferralItem: ElectronicReferralItem;
   onCardPress?: (electronicReferralId: number) => void;
@@ -46,6 +48,11 @@ export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
   const { colors } = useTheme();
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [satisfactionLevel, setSatisfactionLevel] = useState<number | null>(
+    null,
+  );
+
+  const canSubmit = typeof selectedOption === 'number';
 
   const totalAmount = formatAmount(
     electronicReferralItem.amount,
@@ -199,6 +206,21 @@ export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
             выписки
           </Text>
 
+          <View
+            style={[
+              styles.ratingBlock,
+              {
+                backgroundColor: colors.white,
+                borderColor: colors.blue['200'],
+              },
+            ]}
+          >
+            <SatisfactionRating
+              value={satisfactionLevel}
+              onChange={setSatisfactionLevel}
+            />
+          </View>
+
           <View style={styles.radioGroup}>
             {REFERRAL_OPTIONS.map(option => {
               const isSelected = selectedOption === option.id;
@@ -247,10 +269,11 @@ export const ElectronicReferralCard: FC<ElectronicReferralCardProps> = ({
               updateElectronicReferralStatus({
                 electronicReferralId: `${electronicReferralItem.id}`,
                 status: selectedOption,
+                satisfactionLevel,
               })
             }
             isLoading={isLoading}
-            disabled={typeof selectedOption !== 'number'}
+            disabled={!canSubmit}
           >
             Подтвердить
           </Button>
@@ -396,5 +419,10 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     paddingVertical: 12,
+  },
+  ratingBlock: {
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
   },
 });

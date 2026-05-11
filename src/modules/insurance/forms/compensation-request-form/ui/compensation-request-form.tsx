@@ -138,7 +138,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       <Datepicker
         value={values.date}
         placeholder="DD.MM.YYYY"
-        label="Дата наступления страхового случая"
+        label="Дата наступления случая"
         onChange={value => handleChange('date')(value)}
         error={errors.date}
         maxDate={new Date()}
