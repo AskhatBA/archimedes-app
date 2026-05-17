@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { MaskedTextInput, MaskedTextInputProps } from 'react-native-mask-text';
 
-import { useTheme } from '@/shared/theme';
+import { fonts, useTheme } from '@/shared/theme';
 
 interface TextFieldProps extends TextInputProps {
   label?: string;
@@ -30,31 +30,30 @@ export const TextField: FC<TextFieldProps> = ({
   const [focused, setFocused] = useState(false);
 
   const hasValue = !!value || !!props.defaultValue;
+  const isTinted = focused || hasValue;
 
-  const containerBg = () => {
+  const containerBg = (() => {
     if (error) return colors.red['100'];
-    if (focused || hasValue) return colors.blue['100'];
+    if (isTinted) return colors.blue['100'];
     return colors.gray['200'];
-  };
+  })();
 
-  const borderColor = () => {
+  const borderColor = (() => {
     if (error) return colors.error;
     if (focused) return colors.blue['400'];
-    if (hasValue) return colors.blue['350'];
+    if (hasValue) return colors.blue['200'];
     return colors.gray['250'];
-  };
+  })();
 
-  const textColor = () => {
+  const textColor = (() => {
     if (error) return colors.error;
-    if (focused || hasValue) return colors.blue['400'];
-    return colors.gray['500'];
-  };
+    if (isTinted) return colors.blue['400'];
+    return colors.gray['700'];
+  })();
 
-  const inputStyle = [
-    styles.field,
-    style,
-    { color: textColor(), fontWeight: '600' as const },
-  ];
+  const placeholderColor = error ? colors.red['300'] : colors.gray['500'];
+
+  const inputStyle = [styles.field, style, { color: textColor }];
 
   const handleFocus: TextInputProps['onFocus'] = e => {
     setFocused(true);
@@ -69,16 +68,21 @@ export const TextField: FC<TextFieldProps> = ({
   return (
     <View style={styles.wrapper}>
       {label && (
-        <Text style={[styles.label, { color: colors.blue['370'] }]}>
+        <Text style={[styles.label, { color: colors.gray['600'] }]}>
           {label}
         </Text>
       )}
-      <View style={[styles.container, { backgroundColor: containerBg(), borderColor: borderColor() }]}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: containerBg, borderColor },
+        ]}
+      >
         {mask ? (
           <MaskedTextInput
             {...(props as MaskedTextInputProps)}
             value={value}
-            placeholderTextColor={colors.blue['350']}
+            placeholderTextColor={placeholderColor}
             mask={mask === 'currency' ? undefined : mask}
             type={mask === 'currency' ? mask : undefined}
             options={
@@ -94,7 +98,7 @@ export const TextField: FC<TextFieldProps> = ({
           <TextInput
             {...props}
             value={value}
-            placeholderTextColor={colors.blue['350']}
+            placeholderTextColor={placeholderColor}
             onFocus={handleFocus}
             onBlur={handleBlur}
             style={inputStyle}
@@ -113,18 +117,22 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   container: {
-    borderRadius: 15,
-    borderWidth: 1.5,
-    paddingHorizontal: 18,
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingHorizontal: 16,
   },
   field: {
-    paddingVertical: 16,
-    fontSize: 18,
+    paddingVertical: 14,
+    fontSize: 16,
     lineHeight: 22,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 13,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+    paddingHorizontal: 4,
   },
   error: {
     fontSize: 12,

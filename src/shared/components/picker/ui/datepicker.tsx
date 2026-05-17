@@ -46,7 +46,7 @@ export const Datepicker: FC<DateTimePickerProps> = ({
   return (
     <View style={styles.wrapper}>
       {label && (
-        <Text style={[styles.label, { color: colors.blue['370'] }]}>
+        <Text style={[styles.label, { color: colors.gray['600'] }]}>
           {label}
         </Text>
       )}
@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 13,
+    fontWeight: '600',
+    paddingHorizontal: 4,
   },
 });
