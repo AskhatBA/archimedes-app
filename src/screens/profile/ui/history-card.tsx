@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { useTheme } from '@/shared/theme';
+import { ClipboardListIcon, StethoscopeIcon } from '@/shared/icons';
+import { fonts, useTheme } from '@/shared/theme';
 
 interface HistoryCardProps {
   name: string;
@@ -18,77 +19,104 @@ export const HistoryCard: FC<HistoryCardProps> = ({
 }) => {
   const { colors } = useTheme();
 
-  const background = {
-    orange: colors.orange['50'],
-    blue: colors.blue['100'],
-  };
+  const palette = {
+    blue: {
+      background: colors.blue['100'],
+      border: colors.blue['200'],
+      accent: colors.blue['400'],
+      text: colors.textMain,
+    },
+    orange: {
+      background: colors.orange['50'],
+      border: colors.orange['300'],
+      accent: colors.orange['600'],
+      text: colors.textMain,
+    },
+  }[color];
 
-  const secondary = {
-    orange: colors.orange['600'],
-    blue: colors.primary,
-  };
+  const Icon = color === 'blue' ? StethoscopeIcon : ClipboardListIcon;
 
   return (
-    <View style={[styles.container, { backgroundColor: background[color] }]}>
-      <View style={styles.textContainer}>
-        <Text
-          numberOfLines={1}
-          style={[styles.name, { color: secondary[color] }]}
-        >
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={onPress}
+      accessibilityRole="button"
+      style={[
+        styles.card,
+        {
+          backgroundColor: palette.background,
+          borderColor: palette.border,
+        },
+      ]}
+    >
+      <View style={[styles.iconBadge, { backgroundColor: palette.accent }]}>
+        <Icon width={20} height={20} color={colors.white} />
+      </View>
+
+      <View style={styles.content}>
+        <Text numberOfLines={2} style={[styles.name, { color: palette.text }]}>
           {name}
         </Text>
-        {subtitle && (
+        {!!subtitle && (
           <Text
             numberOfLines={1}
-            style={[styles.subtitle, { color: secondary[color] }]}
+            style={[styles.subtitle, { color: colors.gray['500'] }]}
           >
             {subtitle}
           </Text>
         )}
       </View>
-      <TouchableOpacity
-        onPress={onPress}
-        accessibilityRole="button"
-        style={[styles.openButton, { backgroundColor: secondary[color] }]}
-      >
-        <Text style={[styles.openButtonLabel, { color: colors.white }]}>
-          Открыть
-        </Text>
-      </TouchableOpacity>
-    </View>
+
+      <View style={[styles.chevron, { backgroundColor: colors.white }]}>
+        <Text style={[styles.chevronGlyph, { color: palette.accent }]}>›</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 24,
-    paddingVertical: 19,
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 15,
+    gap: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    borderRadius: 16,
+    borderWidth: 1,
   },
-  textContainer: {
+  iconBadge: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
     flex: 1,
+    gap: 2,
   },
   name: {
-    fontSize: 16,
-    fontWeight: 600,
-    lineHeight: 25,
+    fontSize: 15,
+    fontWeight: '700',
+    lineHeight: 20,
+    fontFamily: fonts.SFPro.Semibold,
   },
   subtitle: {
-    fontSize: 13,
-    fontWeight: 500,
+    fontSize: 12,
+    fontWeight: '500',
     lineHeight: 16,
-    marginTop: 2,
   },
-  openButton: {
-    paddingHorizontal: 12,
-    borderRadius: 20,
+  chevron: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  openButtonLabel: {
-    fontSize: 13,
-    lineHeight: 25,
-    fontWeight: 600,
+  chevronGlyph: {
+    fontSize: 18,
+    lineHeight: 18,
+    fontWeight: '700',
+    marginTop: -2,
   },
 });

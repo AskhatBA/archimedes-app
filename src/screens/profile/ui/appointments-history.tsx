@@ -34,8 +34,15 @@ export const AppointmentHistory: FC = () => {
   const { appointmentsHistory } = useAppointmentsHistory();
   const { colors } = useTheme();
 
+  const completedCount = (appointmentsHistory || []).filter(
+    appointment => appointment.status === 'completed',
+  ).length;
+
   const headerBg = open ? colors.blue['100'] : colors.gray['200'];
+  const headerBorder = open ? colors.blue['200'] : colors.gray['250'];
   const headerText = open ? colors.blue['400'] : colors.gray['700'];
+  const badgeBg = open ? colors.blue['400'] : colors.gray['300'];
+  const badgeIcon = open ? colors.white : colors.gray['700'];
   const caretColor = open ? colors.blue['400'] : colors.gray['700'];
 
   const onOpenAppointment = (appointment: MISAppointmentHistory) => {
@@ -56,19 +63,42 @@ export const AppointmentHistory: FC = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        activeOpacity={0.85}
         onPress={() => setOpen(prev => !prev)}
-        style={[styles.fieldContainer, { backgroundColor: headerBg }]}
+        style={[
+          styles.fieldContainer,
+          { backgroundColor: headerBg, borderColor: headerBorder },
+        ]}
         accessibilityRole="button"
         accessibilityState={{ expanded: open }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-          <HistoryIcon color={headerText} />
+        <View style={[styles.headerBadge, { backgroundColor: badgeBg }]}>
+          <HistoryIcon color={badgeIcon} width={20} height={20} />
+        </View>
+        <View style={styles.headerTexts}>
+          <Text style={[styles.headerEyebrow, { color: colors.gray['500'] }]}>
+            Медицинская карта
+          </Text>
           <Text numberOfLines={1} style={[styles.value, { color: headerText }]}>
             История обращений
           </Text>
+          <Text style={[styles.headerCount, { color: colors.gray['500'] }]}>
+            {completedCount > 0
+              ? `${completedCount} ${
+                  completedCount === 1 ? 'запись' : 'записей'
+                }`
+              : 'Нет записей'}
+          </Text>
         </View>
-
-        <SelectCaretIcon color={caretColor} />
+        <View
+          style={[
+            styles.caretChip,
+            { backgroundColor: open ? colors.white : colors.gray['50'] },
+            { transform: [{ rotate: open ? '180deg' : '0deg' }] },
+          ]}
+        >
+          <SelectCaretIcon color={caretColor} />
+        </View>
       </TouchableOpacity>
       {open && (
         <View style={[styles.tests]}>
@@ -305,14 +335,45 @@ const styles = StyleSheet.create({
   fieldContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 15,
-    padding: 18,
+    gap: 14,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    borderWidth: 1,
+  },
+  headerBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTexts: {
+    flex: 1,
+    gap: 1,
+  },
+  headerEyebrow: {
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
   },
   value: {
-    fontSize: 18,
+    fontSize: 17,
     lineHeight: 22,
-    fontWeight: 600,
+    fontWeight: '700',
+  },
+  headerCount: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  caretChip: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tests: {
     marginTop: 8,

@@ -18,6 +18,7 @@ import {
   CompensationCategoryEnum,
 } from '@/modules/insurance';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
+import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 import { convertUriToBase64 } from '@/shared/utils/convert-uri-to-base64';
@@ -33,7 +34,14 @@ export const CompensationRequestScreen: FC = () => {
   const compensationRequestMutation = useMutation({
     mutationFn: async (data: RefundRequestBody) =>
       (await insuranceApi.refundRequestCreate(data)).data,
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      logAnalyticsEvent(AnalyticsEvents.CompensationRequestCreated, {
+        program_id: variables.programId,
+        person_id: variables.personId,
+        category: variables.category,
+        amount: variables.amount,
+        files_count: variables.files?.length,
+      });
       setIsSuccess(true);
     },
     onError: () => {

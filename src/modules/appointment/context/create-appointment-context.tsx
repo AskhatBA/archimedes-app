@@ -15,6 +15,7 @@ import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slo
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
+import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
@@ -111,11 +112,18 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         isTelemedicine: payload.isTelemedicine,
       });
     },
-    onSuccess: async () => {
+    onSuccess: async (_data, variables) => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['appointments-history'] }),
         queryClient.invalidateQueries({ queryKey: ['appointment-requests'] }),
       ]);
+      logAnalyticsEvent(AnalyticsEvents.AppointmentCreated, {
+        branch_id: variables.branchId,
+        specialization_id: variables.specializationId,
+        doctor_id: variables.doctorId,
+        program_id: variables.programId,
+        is_telemedicine: variables.isTelemedicine,
+      });
       setSuccess(true);
     },
     onError: (error: any) => {
