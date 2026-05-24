@@ -18,18 +18,17 @@ import { useMisPatient, useUser } from '@/modules/user';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { MainLayout } from '@/shared/layout/main-layout';
 import { useAuth } from '@/shared/lib/auth';
+import { parseIin } from '@/shared/lib/iin';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation, routes } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
-
-import { SupportDetails } from './support-details';
 
 export const CreateUserScreen: FC = () => {
   const { colors } = useTheme();
   const { misPatient, loadingMisPatient } = useMisPatient();
   const { resetNavigation } = useNavigation();
   const { user, refreshUserData } = useUser();
-  const { logout } = useAuth();
+  const { logout, loginIin } = useAuth();
   const { showToast } = useToast();
   const deviceInsets = useSafeAreaInsets();
 
@@ -37,6 +36,9 @@ export const CreateUserScreen: FC = () => {
     !!misPatient?.patient?.lastName &&
     !!misPatient?.patient?.firstName &&
     !!misPatient?.patient?.iin;
+
+  const iin = misPatient?.patient?.iin || loginIin;
+  const parsedIin = parseIin(iin);
 
   const saveUserProfileMutation = useMutation({
     mutationFn: (values: CreateUserPayload) =>
@@ -95,51 +97,42 @@ export const CreateUserScreen: FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
     >
-      <MainLayout>
-        <ScrollView
-          contentContainerStyle={{
-            paddingTop: deviceInsets.top,
-            paddingBottom: 32,
-          }}
-        >
-          <View style={styles.container}>
-            <Text style={[styles.title, { color: colors.blue['400'] }]}>
-              {isUserExistsInMis ? 'Данные пациента' : 'Служба поддержки'}
-            </Text>
-            {isUserExistsInMis ? (
-              <CreateUserForm
-                submitButtonText={
-                  isUserExistsInMis ? 'Продолжить' : 'Сохранить'
-                }
-                isLoading={
-                  saveUserProfileMutation.isPending ||
-                  misProfileMutation.isPending
-                }
-                initialValues={{
-                  firstName: misPatient?.patient?.firstName,
-                  lastName: misPatient?.patient?.lastName,
-                  birthDate: misPatient?.patient?.birthDate,
-                  patronymic: misPatient?.patient?.patronymic,
-                  iin: misPatient?.patient?.iin,
-                  gender: misPatient?.patient?.gender,
-                }}
-                onSubmit={async formValues => {
-                  if (!isUserExistsInMis) {
-                    await misProfileMutation.mutateAsync(formValues);
-                  }
-                  await saveUserProfileMutation.mutateAsync(formValues);
-                }}
-              />
-            ) : (
-              <SupportDetails />
-            )}
-
-            <TouchableOpacity style={styles.logoutContainer} onPress={onLogout}>
-              <Text style={styles.logoutText}>Отменить и выйти</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </MainLayout>
+      <ScrollView
+        contentContainerStyle={{
+          paddingTop: deviceInsets.top + 16,
+          paddingBottom: deviceInsets.bottom + 32,
+          paddingHorizontal: 16,
+        }}
+      >
+        <View style={styles.container}>
+          <Text style={[styles.title, { color: colors.blue['400'] }]}>
+            Данные пациента
+          </Text>
+          <CreateUserForm
+            submitButtonText={isUserExistsInMis ? 'Продолжить' : 'Сохранить'}
+            isLoading={
+              saveUserProfileMutation.isPending || misProfileMutation.isPending
+            }
+            initialValues={{
+              firstName: misPatient?.patient?.firstName,
+              lastName: misPatient?.patient?.lastName,
+              birthDate: misPatient?.patient?.birthDate || parsedIin?.birthDate,
+              patronymic: misPatient?.patient?.patronymic,
+              iin,
+              gender: misPatient?.patient?.gender || parsedIin?.gender,
+            }}
+            onSubmit={async formValues => {
+              if (!isUserExistsInMis) {
+                await misProfileMutation.mutateAsync(formValues);
+              }
+              await saveUserProfileMutation.mutateAsync(formValues);
+            }}
+          />
+          <TouchableOpacity style={styles.logoutContainer} onPress={onLogout}>
+            <Text style={styles.logoutText}>Отменить и выйти</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

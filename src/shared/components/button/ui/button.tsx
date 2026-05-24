@@ -145,7 +145,7 @@ export const Button: FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 100,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

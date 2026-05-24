@@ -46,9 +46,11 @@ export const SignInForm: FC = () => {
           setPrivacyPolicyError('TERMS');
           return;
         }
-        checkIinMutation.mutate({
-          iin: formValues.iin,
+
+        setLoginIin(formValues.iin);
+        requestOtp({
           phone: formatPhoneNumber(formValues.phone),
+          iin: formValues.iin,
         });
       },
       validateOnChange: false,
@@ -75,7 +77,6 @@ export const SignInForm: FC = () => {
         return;
       }
       setLoginIin(iin);
-      requestOtp({ phone, iin });
     },
     onError: () => {
       showToast({

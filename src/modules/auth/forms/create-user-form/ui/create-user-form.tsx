@@ -7,6 +7,7 @@ import { Datepicker } from '@/shared/components/picker';
 import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
 import { formatDate } from '@/shared/lib/date';
+import { parseIin } from '@/shared/lib/iin';
 import { useTheme } from '@/shared/theme';
 
 import { CreateUserPayload, UserGender } from '../types';
@@ -48,27 +49,43 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
   onSubmit,
   submitButtonText,
 }) => {
-  const { values, handleChange, errors, handleSubmit, setFieldError } =
-    useFormik<CreateUserPayload>({
-      initialValues: {
-        lastName: initialValues?.lastName || '',
-        firstName: initialValues?.firstName || '',
-        patronymic: initialValues?.patronymic || '',
-        iin: initialValues?.iin || '',
-        birthDate: initialValues?.birthDate || '',
-        gender: initialValues?.gender,
-      },
-      onSubmit: formValues => {
-        onSubmit(formValues);
-      },
-      validateOnChange: false,
-      validateOnBlur: false,
-      validationSchema,
-    });
+  const {
+    values,
+    handleChange,
+    errors,
+    handleSubmit,
+    setFieldError,
+    setFieldValue,
+  } = useFormik<CreateUserPayload>({
+    initialValues: {
+      lastName: initialValues?.lastName || '',
+      firstName: initialValues?.firstName || '',
+      patronymic: initialValues?.patronymic || '',
+      iin: initialValues?.iin || '',
+      birthDate: initialValues?.birthDate || '',
+      gender: initialValues?.gender,
+    },
+    onSubmit: formValues => {
+      onSubmit(formValues);
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema,
+  });
 
   const onChangeField = (fieldName: string, fieldValue: string) => {
     setFieldError(fieldName, undefined);
     handleChange(fieldName)(fieldValue);
+
+    if (fieldName === 'iin') {
+      const parsed = parseIin(fieldValue);
+      if (parsed) {
+        setFieldError('birthDate', undefined);
+        setFieldError('gender', undefined);
+        setFieldValue('birthDate', parsed.birthDate);
+        setFieldValue('gender', parsed.gender);
+      }
+    }
   };
 
   const textFields = [
@@ -86,7 +103,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
     },
     {
       fieldName: 'patronymic',
-      initialValue: initialValues?.patronymic || '-',
+      initialValue: initialValues?.patronymic,
       label: 'Отчество',
       placeholder: 'Введите отчество',
     },
