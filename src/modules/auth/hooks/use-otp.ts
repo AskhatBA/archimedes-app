@@ -1,12 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { authApi, RequestOTPBody, VerifyOTPBody } from '@/api';
+import { useUser } from '@/modules/user';
 import { useAuth } from '@/shared/lib/auth';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 
 export const useOtp = () => {
   const { showToast } = useToast();
+  const { refreshUserData } = useUser();
   const { navigate } = useNavigation();
   const { authenticate } = useAuth();
 
@@ -29,6 +31,7 @@ export const useOtp = () => {
     mutationFn: async (body: VerifyOTPBody) =>
       (await authApi.verifyOtpCreate(body)).data,
     onSuccess: async data => {
+      await refreshUserData();
       await authenticate(data);
     },
     onError: () => {
