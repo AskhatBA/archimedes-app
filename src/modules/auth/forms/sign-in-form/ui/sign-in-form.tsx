@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { FC, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { insuranceApi } from '@/api';
+import { userApi } from '@/api';
 import { useOtp } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
@@ -16,9 +16,12 @@ import { colors } from '@/shared/theme';
 
 import { validationSchema } from './validation-schema';
 
+const PHONE_MISMATCH_ERROR =
+  'Номер телефона не совпадает с данными в системе. Пожалуйста, свяжитесь с колл-центром по номеру 2828.';
+
 export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
-  const { requestOtp, isPending } = useOtp();
+  const { requestOtp, isPending: isOtpPending } = useOtp();
   const { navigate } = useNavigation();
   const { showToast } = useToast();
 
@@ -31,13 +34,24 @@ export const SignInForm: FC = () => {
     return phoneString.replace(/\D/g, '');
   };
 
+  const checkAccountMutation = useMutation({
+    mutationFn: ({ iin, phone }: { iin: string; phone: string }) =>
+      userApi.checkAccountList({ iin, phone }).then(r => r.data),
+    onError: () => {
+      showToast({
+        type: 'error',
+        message: 'Не удалось проверить данные. Попробуйте снова',
+      });
+    },
+  });
+
   const { values, handleChange, errors, handleSubmit, setFieldError } =
     useFormik({
       initialValues: {
         phone: '',
         iin: loginIin,
       },
-      onSubmit: formValues => {
+      onSubmit: async formValues => {
         if (!userAgreement) {
           setUserAgreementError('TERMS');
           return;
@@ -47,44 +61,24 @@ export const SignInForm: FC = () => {
           return;
         }
 
-        setLoginIin(formValues.iin);
-        requestOtp({
-          phone: formatPhoneNumber(formValues.phone),
-          iin: formValues.iin,
-        });
+        const phone = formatPhoneNumber(formValues.phone);
+        const { iin } = formValues;
+
+        const result = await checkAccountMutation.mutateAsync({ iin, phone });
+        const { existsInDb, existsInInsurance, isPhoneMatch } = result;
+
+        if (!existsInDb && existsInInsurance && !isPhoneMatch) {
+          setFieldError('phone', PHONE_MISMATCH_ERROR);
+          return;
+        }
+
+        setLoginIin(iin);
+        requestOtp({ phone, iin });
       },
       validateOnChange: false,
       validateOnBlur: false,
       validationSchema,
     });
-
-  const checkIinMutation = useMutation({
-    mutationFn: ({ iin }: { iin: string; phone: string }) =>
-      insuranceApi.checkIinList({ iin }).then(r => r.data),
-    onSuccess: (data, { iin, phone }) => {
-      if (!data.phone) {
-        setFieldError(
-          'iin',
-          `${data.message || 'ИИН не найден в системе'}. Пожалуйста, свяжитесь с колл-центром по номеру 2828.`,
-        );
-        return;
-      }
-      if (data.phone !== phone) {
-        setFieldError(
-          'phone',
-          'Номер телефона не совпадает с данными в системе. Пожалуйста, свяжитесь с колл-центром по номеру 2828.',
-        );
-        return;
-      }
-      setLoginIin(iin);
-    },
-    onError: () => {
-      showToast({
-        type: 'error',
-        message: 'Не удалось проверить ИИН. Попробуйте снова',
-      });
-    },
-  });
 
   return (
     <View>
@@ -163,7 +157,7 @@ export const SignInForm: FC = () => {
         </View>
       </View>
       <Button
-        isLoading={checkIinMutation.isPending || isPending}
+        isLoading={checkAccountMutation.isPending || isOtpPending}
         style={{ marginTop: 50 }}
         onPress={() => {
           handleSubmit();
