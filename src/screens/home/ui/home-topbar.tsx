@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { MapPinnedIcon, SelectCaretIcon, UserFilledIcon } from '@/shared/icons';
+import { UserFilledIcon } from '@/shared/icons';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
@@ -15,7 +15,7 @@ export const HomeTopbar: FC = () => {
       <View style={styles.side} />
 
       <View style={styles.titleBlock}>
-        <Text style={styles.title}>Мое здоровье</Text>
+        <Text style={styles.title}>Личный кабинет</Text>
       </View>
 
       <TouchableOpacity

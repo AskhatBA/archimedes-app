@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
+import { usePrograms } from '@/modules/insurance';
 import { useUser } from '@/modules/user';
 import {
   ClipboardListIcon,
@@ -11,7 +12,7 @@ import {
   UserFilledIcon,
 } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
-import { useToast } from '@/shared/lib/toast';
+import { formatDate } from '@/shared/lib/date';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
@@ -22,6 +23,24 @@ const formatAge = (years: number) => {
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
     return `${years} года`;
   return `${years} лет`;
+};
+
+const formatAppointmentsCount = (count: number) => {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${count} запись`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
+    return `${count} записи`;
+  return `${count} записей`;
+};
+
+const formatExtraPrograms = (count: number) => {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return `ещё ${count} программа`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
+    return `ещё ${count} программы`;
+  return `ещё ${count} программ`;
 };
 
 const ChevronRight: FC<{ color?: string; size?: number }> = ({
@@ -35,16 +54,18 @@ const ChevronRight: FC<{ color?: string; size?: number }> = ({
 
 export const ProfileCard: FC = () => {
   const { user } = useUser();
-  const { loginIin } = useAuth();
   const { appointments } = useAppointments();
+  const { programs } = usePrograms();
   const { navigate } = useNavigation();
-  const { showToast } = useToast();
 
-  const age = user?.birthDate ? dayjs().diff(user.birthDate, 'year') : null;
+  const userIin = (user as unknown as { iin: string })?.iin;
   const appointmentsCount = appointments?.length ?? 0;
-  const appointmentsLabel = appointmentsCount
-    ? `${appointmentsCount} ${appointmentsCount === 1 ? 'запись' : 'записи'}`
-    : 'Нет записей';
+  const singleAppointment =
+    appointmentsCount === 1 ? appointments?.[0] : undefined;
+
+  const activePrograms = programs.filter(p => p.status !== 'EXPIRED');
+  const activeProgram = activePrograms[0];
+  const extraProgramsCount = Math.max(0, activePrograms.length - 1);
 
   return (
     <View style={styles.container}>
@@ -62,10 +83,7 @@ export const ProfileCard: FC = () => {
       </TouchableOpacity>
 
       <View style={styles.idPill}>
-        <Text style={styles.idText}>
-          {loginIin}
-          {age !== null ? `  •  ${formatAge(age)}` : ''}
-        </Text>
+        <Text style={styles.idText}>{userIin}</Text>
       </View>
 
       <View style={styles.statsRow}>
@@ -81,7 +99,30 @@ export const ProfileCard: FC = () => {
             />
             <Text style={styles.statLabel}>Мои записи</Text>
           </View>
-          <Text style={styles.statValue}>{appointmentsLabel}</Text>
+          {singleAppointment ? (
+            <View style={styles.appointmentPreview}>
+              {singleAppointment.start_time ? (
+                <Text style={styles.appointmentDate}>
+                  {formatDate(singleAppointment.start_time, 'D MMMM, HH:mm')}
+                </Text>
+              ) : null}
+              {singleAppointment.doctor_name ? (
+                <Text
+                  style={styles.appointmentDoctor}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {singleAppointment.doctor_name}
+                </Text>
+              ) : null}
+            </View>
+          ) : (
+            <Text style={styles.statValue}>
+              {appointmentsCount === 0
+                ? 'Нет записей'
+                : formatAppointmentsCount(appointmentsCount)}
+            </Text>
+          )}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -92,10 +133,34 @@ export const ProfileCard: FC = () => {
             <ShieldPlusIcon width={18} height={18} color={colors.blue['400']} />
             <Text style={styles.statLabel}>Мои программы</Text>
           </View>
-          <View style={styles.statValueRow}>
-            <Text style={styles.statValue}>Открыть</Text>
-            <ChevronRight />
-          </View>
+          {activeProgram ? (
+            <View style={styles.programPreview}>
+              <Text
+                style={styles.programTitle}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {activeProgram.title}
+              </Text>
+              <Text
+                style={styles.programMeta}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {extraProgramsCount > 0
+                  ? `и ${formatExtraPrograms(extraProgramsCount)}`
+                  : `Действует до ${formatDate(activeProgram.dateEnd, 'DD.MM.YYYY')}`}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.programPreview}>
+              <Text style={styles.statValue}>Нет активных программ</Text>
+              <View style={styles.programCtaRow}>
+                <Text style={styles.programCta}>Подключить</Text>
+                <ChevronRight color={colors.green['600']} />
+              </View>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -182,6 +247,52 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 18,
     color: colors.blue['500'],
+    fontFamily: fonts.SFPro.Semibold,
+    fontWeight: '600',
+  },
+  appointmentPreview: {
+    gap: 2,
+  },
+  appointmentDate: {
+    fontSize: 15,
+    lineHeight: 18,
+    color: colors.blue['500'],
+    fontFamily: fonts.SFPro.Semibold,
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+  appointmentDoctor: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.blue['400'],
+    fontFamily: fonts.SFPro.Regular,
+  },
+  programPreview: {
+    gap: 2,
+  },
+  programTitle: {
+    fontSize: 15,
+    lineHeight: 18,
+    color: colors.blue['500'],
+    fontFamily: fonts.SFPro.Semibold,
+    fontWeight: '600',
+  },
+  programMeta: {
+    fontSize: 12,
+    lineHeight: 16,
+    color: colors.blue['400'],
+    fontFamily: fonts.SFPro.Regular,
+  },
+  programCtaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+  },
+  programCta: {
+    fontSize: 13,
+    lineHeight: 16,
+    color: colors.green['600'],
     fontFamily: fonts.SFPro.Semibold,
     fontWeight: '600',
   },
