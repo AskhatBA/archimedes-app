@@ -1,34 +1,43 @@
 import { FC } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { News } from '@/modules/insurance';
-import { FindSpecialistBanner } from '@/shared/components/find-specialist-banner';
-import { MainLayout } from '@/shared/layout/main-layout';
+import { colors } from '@/shared/theme';
 
-import { CurrentAppointments } from './current-appointments';
-import { SearchField } from './search-field';
+import { HomeTopbar } from './home-topbar';
+import { ProfileCard } from './profile-card';
+import { QuickActions } from './quick-actions';
 
 export const HomeScreen: FC = () => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView>
-      <MainLayout>
-        <View style={styles.content}>
-          <SearchField />
-          <FindSpecialistBanner />
-          <CurrentAppointments />
-          <News />
-        </View>
-      </MainLayout>
-    </ScrollView>
+    <View style={styles.wrapper}>
+      <HomeTopbar />
+      <ScrollView
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: insets.bottom + 24 },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        <ProfileCard />
+        <QuickActions />
+        <News />
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    backgroundColor: colors.backgroundMain,
   },
-  content: {
-    flex: 1,
-    gap: 24,
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    gap: 14,
   },
 });

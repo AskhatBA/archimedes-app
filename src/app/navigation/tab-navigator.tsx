@@ -23,7 +23,7 @@ export const TabNavigator: FC = () => {
       <Tab.Screen
         name={routes.Home}
         component={HomeScreen}
-        options={{ header: () => <TabTopBar variant="greeting" /> }}
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name={routes.AppointmentsMain}
