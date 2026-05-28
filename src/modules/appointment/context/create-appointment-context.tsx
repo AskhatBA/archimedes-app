@@ -128,6 +128,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     },
     onError: (error: any) => {
       if (error.response?.data?.message) {
+        console.log('error.response.data.message', error.response.data.message);
         showToast({
           type: 'error',
           message: error.response.data.message,

@@ -19,10 +19,20 @@ export const useOtp = () => {
       console.log('otp: ', (data as { otp: string }).otp);
       navigate(routes.OtpVerification, { phone: data.phone });
     },
-    onError: () => {
+    onError: err => {
+      let errorMessage = 'Не удалось отправить код. Попробуйте снова';
+
+      if (
+        (err as any)?.response?.data.message ===
+        'INSURANCE_PHONE_IS_NOT_MATCHED'
+      ) {
+        errorMessage =
+          'Вы указали неверный номер телефона. Проверьте правильность введённых данных.';
+      }
+
       showToast({
         type: 'error',
-        message: 'Не удалось отправить код. Попробуйте снова',
+        message: errorMessage,
       });
     },
   });

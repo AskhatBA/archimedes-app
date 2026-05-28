@@ -108,7 +108,7 @@ export const CreateAppointmentForm: FC = () => {
         </View>
       )}
 
-      {formValues.programId && <ChooseBranch />}
+      <ChooseBranch />
 
       {formValues.branchId && (
         <View>
