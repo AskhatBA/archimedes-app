@@ -1,0 +1,51 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "continue": "Continue",
+    "confirm": "Confirm",
+    "close": "Close",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "search": "Search",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Connection error. Check your internet.",
+    "unauthorized": "Your session has expired. Please sign in again.",
+    "required": "Required field"
+  },
+  "tabs": {
+    "home": "Home",
+    "appointments": "Appointments",
+    "programs": "Programs",
+    "compensation": "Compensation",
+    "profile": "Profile"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "phoneNumber": "Phone number",
+    "enterPhoneNumber": "Enter your phone number",
+    "otpTitle": "Verification code",
+    "otpSubtitle": "Enter the code we sent to {{phone}}",
+    "resendCode": "Resend code",
+    "resendIn": "Resend in {{seconds}}s",
+    "createAccount": "Create account",
+    "iin": "IIN"
+  },
+  "language": {
+    "title": "Language",
+    "selectLanguage": "Select language",
+    "kk": "Kazakh",
+    "ru": "Russian",
+    "en": "English"
+  }
+}

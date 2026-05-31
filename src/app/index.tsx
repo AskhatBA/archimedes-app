@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { UserContextProvider } from '@/modules/user';
 import { AuthContextProvider } from '@/shared/lib/auth';
+import '@/shared/lib/i18n';
 import { OneSignalProvider } from '@/shared/lib/one-signal';
 import { ToastProvider } from '@/shared/lib/toast';
 import { NavigationProvider } from '@/shared/navigation';
