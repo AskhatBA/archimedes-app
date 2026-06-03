@@ -9,6 +9,7 @@
     "next": "Next",
     "continue": "Continue",
     "confirm": "Confirm",
+    "confirmation": "Confirmation",
     "close": "Close",
     "retry": "Retry",
     "loading": "Loading...",
@@ -40,7 +41,9 @@
     "resendCode": "Resend code",
     "resendIn": "Resend in {{seconds}}s",
     "createAccount": "Create account",
-    "iin": "IIN"
+    "iin": "IIN",
+    "logoutConfirmMessage": "Are you sure you want to sign out?",
+    "logoutAccessibility": "Sign out"
   },
   "language": {
     "title": "Language",
@@ -80,5 +83,9 @@
       "count_one": "{{count}} record",
       "count_other": "{{count}} records"
     }
+  },
+  "home": {
+    "greeting": "Good afternoon,",
+    "openNotifications": "Open notifications"
   }
 }

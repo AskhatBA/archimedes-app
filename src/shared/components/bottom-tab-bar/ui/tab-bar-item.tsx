@@ -2,6 +2,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
 import { navigationItems } from '../constants';
@@ -20,8 +21,9 @@ export const TabBarItem: FC<TabBarItemProps> = ({
   tabIndex,
   navigation,
 }) => {
+  const { t } = useTranslation();
   const isActive = state.index === tabIndex;
-  const { Icon, label } = navigationItems[route.name];
+  const { Icon, labelKey } = navigationItems[route.name];
 
   const onTabPress = (): void => {
     const event = navigation.emit({
@@ -61,7 +63,7 @@ export const TabBarItem: FC<TabBarItemProps> = ({
           },
         ]}
       >
-        {label}
+        {t(labelKey)}
       </Text>
     </TouchableOpacity>
   );

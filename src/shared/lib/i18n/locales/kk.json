@@ -9,6 +9,7 @@
     "next": "Келесі",
     "continue": "Жалғастыру",
     "confirm": "Растау",
+    "confirmation": "Растау",
     "close": "Жабу",
     "retry": "Қайталау",
     "loading": "Жүктелуде...",
@@ -40,7 +41,9 @@
     "resendCode": "Кодты қайта жіберу",
     "resendIn": "{{seconds}} сек кейін қайталау",
     "createAccount": "Аккаунт жасау",
-    "iin": "ЖСН"
+    "iin": "ЖСН",
+    "logoutConfirmMessage": "Аккаунттан шынымен шыққыңыз келе ме?",
+    "logoutAccessibility": "Аккаунттан шығу"
   },
   "language": {
     "title": "Тіл",
@@ -80,5 +83,9 @@
       "count_one": "{{count}} жазба",
       "count_other": "{{count}} жазба"
     }
+  },
+  "home": {
+    "greeting": "Қайырлы күн,",
+    "openNotifications": "Хабарландыруларды ашу"
   }
 }

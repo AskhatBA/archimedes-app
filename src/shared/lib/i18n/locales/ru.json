@@ -9,6 +9,7 @@
     "next": "Далее",
     "continue": "Продолжить",
     "confirm": "Подтвердить",
+    "confirmation": "Подтверждение",
     "close": "Закрыть",
     "retry": "Повторить",
     "loading": "Загрузка...",
@@ -40,7 +41,9 @@
     "resendCode": "Отправить код повторно",
     "resendIn": "Повторить через {{seconds}} с",
     "createAccount": "Создать аккаунт",
-    "iin": "ИИН"
+    "iin": "ИИН",
+    "logoutConfirmMessage": "Вы действительно хотите выйти из аккаунта?",
+    "logoutAccessibility": "Выйти из аккаунта"
   },
   "language": {
     "title": "Язык",
@@ -84,5 +87,9 @@
       "count_many": "{{count}} записей",
       "count_other": "{{count}} записи"
     }
+  },
+  "home": {
+    "greeting": "Добрый день,",
+    "openNotifications": "Открыть уведомления"
   }
 }

@@ -27,6 +27,7 @@ const NAMESPACES = [
   'auth',
   'language',
   'profile',
+  'home',
 ] as const;
 
 console.log('hello');

@@ -5,6 +5,7 @@ import UserIcon from '@/assets/icons/user-filled.svg';
 import { useUser } from '@/modules/user';
 import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
@@ -12,14 +13,23 @@ export const GreetUser: FC = () => {
   const { user } = useUser();
   const { logout } = useAuth();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   const goToNotifications = () => navigate(routes.Notifications);
 
   const confirmLogout = () =>
-    Alert.alert('Подтверждение', 'Вы действительно хотите выйти из аккаунта?', [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Выйти', style: 'destructive', onPress: logout },
-    ]);
+    Alert.alert(
+      t('common:confirmation'),
+      t('auth:logoutConfirmMessage'),
+      [
+        { text: t('common:cancel'), style: 'cancel' },
+        {
+          text: t('auth:signOut'),
+          style: 'destructive',
+          onPress: logout,
+        },
+      ],
+    );
 
   return (
     <View style={styles.wrapper}>
@@ -28,7 +38,7 @@ export const GreetUser: FC = () => {
           <UserIcon color={colors.primary} />
         </View>
         <View>
-          <Text style={styles.text1}>Добрый день,</Text>
+          <Text style={styles.text1}>{t('home:greeting')}</Text>
           <Text style={styles.text2}>
             {user?.firstName} {user?.lastName}
           </Text>
@@ -37,7 +47,7 @@ export const GreetUser: FC = () => {
       <View style={styles.actions}>
         <TouchableOpacity
           onPress={goToNotifications}
-          accessibilityLabel="Открыть уведомления"
+          accessibilityLabel={t('home:openNotifications')}
         >
           <TabBarNotificationsIcon
             color={colors.primary}
@@ -47,7 +57,7 @@ export const GreetUser: FC = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={confirmLogout}
-          accessibilityLabel="Выйти из аккаунта"
+          accessibilityLabel={t('auth:logoutAccessibility')}
         >
           <LogoutIcon width={30} height={30} color={colors.primary} />
         </TouchableOpacity>

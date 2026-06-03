@@ -12,22 +12,22 @@ import { TabBarItemType } from './types';
 export const navigationItems: Record<string, TabBarItemType> = {
   [routes.Home]: {
     Icon: TabBarHomeIcon,
-    label: 'Главная',
+    labelKey: 'tabs:home',
   },
   [routes.AppointmentsMain]: {
     Icon: TabBarAppointmentsIcon,
-    label: 'Записи',
+    labelKey: 'tabs:appointments',
   },
   [routes.Programs]: {
     Icon: ShieldPlusIcon,
-    label: 'Программы',
+    labelKey: 'tabs:programs',
   },
   [routes.Compensation]: {
     Icon: BanknoteArrowDown,
-    label: 'Возмещение',
+    labelKey: 'tabs:compensation',
   },
   [routes.Profile]: {
     Icon: TabBarProfileIcon,
-    label: 'Профиль',
+    labelKey: 'tabs:profile',
   },
 };
