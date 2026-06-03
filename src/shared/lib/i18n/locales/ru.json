@@ -17,6 +17,7 @@
     "no": "Нет"
   },
   "errors": {
+    "title": "Ошибка",
     "generic": "Что-то пошло не так. Попробуйте еще раз.",
     "network": "Ошибка соединения. Проверьте интернет.",
     "unauthorized": "Сессия истекла. Войдите снова.",
@@ -47,5 +48,41 @@
     "kk": "Казахский",
     "ru": "Русский",
     "en": "Английский"
+  },
+  "profile": {
+    "version": "Версия {{version}}-beta",
+    "betaWarning": "Приложение находится в стадии бета-тестирования. Если вы обнаружили ошибку, пожалуйста, сообщите об этом в службу поддержки: {{email}}",
+    "tests": {
+      "eyebrow": "Лаборатория",
+      "title": "Мои анализы",
+      "empty": "Нет результатов",
+      "emptyList": "Нет записей",
+      "details": "Детали",
+      "department": "Отделение",
+      "registrationDate": "Дата регистрации",
+      "resultPdf": "Результат анализа (PDF)",
+      "pdfUnavailable": "PDF недоступен",
+      "pdfError": "Не удалось открыть PDF",
+      "count_one": "{{count}} результат",
+      "count_few": "{{count}} результата",
+      "count_many": "{{count}} результатов",
+      "count_other": "{{count}} результата"
+    },
+    "history": {
+      "eyebrow": "Медицинская карта",
+      "title": "История обращений",
+      "empty": "Нет записей",
+      "emptyList": "Нет записей",
+      "appointmentFallback": "Прием",
+      "noDocuments": "Документы отсутствуют",
+      "position": "Должность",
+      "branch": "Филиал",
+      "duration": "Длительность приёма",
+      "durationValue": "{{count}} мин",
+      "count_one": "{{count}} запись",
+      "count_few": "{{count}} записи",
+      "count_many": "{{count}} записей",
+      "count_other": "{{count}} записи"
+    }
   }
 }

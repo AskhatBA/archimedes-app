@@ -3,12 +3,17 @@ import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import { MainLayout } from '@/shared/layout/main-layout';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors } from '@/shared/theme';
 
 import { AppointmentHistory } from './appointments-history';
+import { LanguageSwitcher } from './language-switcher';
 import { MyTests } from './my-tests';
 
+const SUPPORT_EMAIL = 'archimedes.medical.group.kaz@gmail.com';
+
 export const ProfileScreen: FC = () => {
+  const { t } = useTranslation();
   const currentVersion = DeviceInfo.getVersion();
 
   return (
@@ -17,14 +22,13 @@ export const ProfileScreen: FC = () => {
         <View style={styles.main}>
           <MyTests />
           <AppointmentHistory />
+          <LanguageSwitcher />
           <View style={{ gap: 8 }}>
             <Text style={[styles.version, { color: colors.textMain }]}>
-              Версия {currentVersion}-beta
+              {t('profile:version', { version: currentVersion })}
             </Text>
             <Text style={[styles.warning, { color: colors.gray['500'] }]}>
-              Приложение находится в стадии бета-тестирования. Если вы
-              обнаружили ошибку, пожалуйста, сообщите об этом в службу
-              поддержки: archimedes.medical.group.kaz@gmail.com
+              {t('profile:betaWarning', { email: SUPPORT_EMAIL })}
             </Text>
           </View>
         </View>

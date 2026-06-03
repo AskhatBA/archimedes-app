@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 import { misApi } from '@/api';
 import { useAuth } from '@/shared/lib/auth';

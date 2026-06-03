@@ -17,6 +17,7 @@
     "no": "No"
   },
   "errors": {
+    "title": "Error",
     "generic": "Something went wrong. Please try again.",
     "network": "Connection error. Check your internet.",
     "unauthorized": "Your session has expired. Please sign in again.",
@@ -47,5 +48,37 @@
     "kk": "Kazakh",
     "ru": "Russian",
     "en": "English"
+  },
+  "profile": {
+    "version": "Version {{version}}-beta",
+    "betaWarning": "The app is in beta. If you spot a bug, please let us know at: {{email}}",
+    "tests": {
+      "eyebrow": "Laboratory",
+      "title": "My tests",
+      "empty": "No results",
+      "emptyList": "No records",
+      "details": "Details",
+      "department": "Department",
+      "registrationDate": "Registration date",
+      "resultPdf": "Test result (PDF)",
+      "pdfUnavailable": "PDF is unavailable",
+      "pdfError": "Failed to open PDF",
+      "count_one": "{{count}} result",
+      "count_other": "{{count}} results"
+    },
+    "history": {
+      "eyebrow": "Medical record",
+      "title": "Visit history",
+      "empty": "No records",
+      "emptyList": "No records",
+      "appointmentFallback": "Visit",
+      "noDocuments": "No documents",
+      "position": "Position",
+      "branch": "Branch",
+      "duration": "Visit duration",
+      "durationValue": "{{count}} min",
+      "count_one": "{{count}} record",
+      "count_other": "{{count}} records"
+    }
   }
 }

@@ -19,3 +19,9 @@ export const LANGUAGE_SHORT_LABELS: Record<SupportedLanguage, string> = {
   ru: 'RU',
   en: 'EN',
 };
+
+export const LANGUAGE_FLAGS: Record<SupportedLanguage, string> = {
+  kk: '🇰🇿',
+  ru: '🇷🇺',
+  en: '🇬🇧',
+};

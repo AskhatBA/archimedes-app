@@ -19,6 +19,7 @@ import {
   FileTextIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { HistoryCard } from './history-card';
@@ -30,6 +31,7 @@ export const MyTests: FC = () => {
   const [selected, setSelected] = useState<MISLaboratoryResult | null>(null);
   const { colors } = useTheme();
   const { medicalTests } = useMedicalTests();
+  const { t } = useTranslation();
 
   const testsCount = medicalTests?.length || 0;
 
@@ -46,7 +48,7 @@ export const MyTests: FC = () => {
   const openPdf = async (fileName: string, base64?: string) => {
     try {
       if (!base64) {
-        Alert.alert('Ошибка', 'PDF недоступен');
+        Alert.alert(t('errors:title'), t('profile:tests.pdfUnavailable'));
         return;
       }
 
@@ -73,7 +75,7 @@ export const MyTests: FC = () => {
       });
     } catch (e) {
       console.log('file upload error: ', e.toString());
-      Alert.alert('Ошибка', 'Не удалось открыть PDF');
+      Alert.alert(t('errors:title'), t('profile:tests.pdfError'));
     }
   };
 
@@ -94,17 +96,15 @@ export const MyTests: FC = () => {
         </View>
         <View style={styles.headerTexts}>
           <Text style={[styles.headerEyebrow, { color: colors.gray['500'] }]}>
-            Лаборатория
+            {t('profile:tests.eyebrow')}
           </Text>
           <Text numberOfLines={1} style={[styles.value, { color: headerText }]}>
-            Мои анализы
+            {t('profile:tests.title')}
           </Text>
           <Text style={[styles.headerCount, { color: colors.gray['500'] }]}>
             {testsCount > 0
-              ? `${testsCount} ${
-                  testsCount === 1 ? 'результат' : 'результатов'
-                }`
-              : 'Нет результатов'}
+              ? t('profile:tests.count', { count: testsCount })
+              : t('profile:tests.empty')}
           </Text>
         </View>
         <View
@@ -137,7 +137,7 @@ export const MyTests: FC = () => {
               ]}
             >
               <Text style={[styles.cardTitle, { color: colors.gray['600'] }]}>
-                Нет записей
+                {t('profile:tests.emptyList')}
               </Text>
             </View>
           )}
@@ -155,16 +155,17 @@ export const MyTests: FC = () => {
               style={[styles.card, { backgroundColor: colors.gray['200'] }]}
             >
               <Text style={[styles.cardTitle, { color: colors.textMain }]}>
-                Детали
+                {t('profile:tests.details')}
               </Text>
               {!!selected.departmentName && (
                 <Text style={{ color: colors.gray['700'], marginTop: 4 }}>
-                  Отделение: {selected.departmentName}
+                  {t('profile:tests.department')}: {selected.departmentName}
                 </Text>
               )}
               {!!selected.registrationDate && (
                 <Text style={{ color: colors.gray['700'], marginTop: 4 }}>
-                  Дата регистрации: {selected.registrationDate}
+                  {t('profile:tests.registrationDate')}:{' '}
+                  {selected.registrationDate}
                 </Text>
               )}
             </View>
@@ -190,7 +191,7 @@ export const MyTests: FC = () => {
                   style={[styles.cardTitle, { color: colors.textMain }]}
                   numberOfLines={2}
                 >
-                  Результат анализа (PDF)
+                  {t('profile:tests.resultPdf')}
                 </Text>
               </View>
             </TouchableOpacity>

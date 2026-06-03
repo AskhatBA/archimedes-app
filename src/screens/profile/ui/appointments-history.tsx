@@ -20,6 +20,7 @@ import {
   ClockIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { HistoryCard } from './history-card';
@@ -33,6 +34,7 @@ export const AppointmentHistory: FC = () => {
   const [selected, setSelected] = useState<MISAppointmentHistory | null>(null);
   const { appointmentsHistory } = useAppointmentsHistory();
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const completedCount = (appointmentsHistory || []).filter(
     appointment => appointment.status === 'completed',
@@ -77,17 +79,15 @@ export const AppointmentHistory: FC = () => {
         </View>
         <View style={styles.headerTexts}>
           <Text style={[styles.headerEyebrow, { color: colors.gray['500'] }]}>
-            Медицинская карта
+            {t('profile:history.eyebrow')}
           </Text>
           <Text numberOfLines={1} style={[styles.value, { color: headerText }]}>
-            История обращений
+            {t('profile:history.title')}
           </Text>
           <Text style={[styles.headerCount, { color: colors.gray['500'] }]}>
             {completedCount > 0
-              ? `${completedCount} ${
-                  completedCount === 1 ? 'запись' : 'записей'
-                }`
-              : 'Нет записей'}
+              ? t('profile:history.count', { count: completedCount })
+              : t('profile:history.empty')}
           </Text>
         </View>
         <View
@@ -124,7 +124,7 @@ export const AppointmentHistory: FC = () => {
               ]}
             >
               <Text style={[styles.cardTitle, { color: colors.gray['600'] }]}>
-                Нет записей
+                {t('profile:history.emptyList')}
               </Text>
             </View>
           )}
@@ -135,7 +135,13 @@ export const AppointmentHistory: FC = () => {
         {selected && (
           <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
             <Text style={[styles.drawerTitle, { color: colors.textMain }]}>
-              {`${selected.appointmentTypeDisplay ?? 'Прием'} • ${formatDate(selected.startTime || selected.actualStartTime, 'DD/MM/YYYY HH:mm')}`}
+              {`${
+                selected.appointmentTypeDisplay ??
+                t('profile:history.appointmentFallback')
+              } • ${formatDate(
+                selected.startTime || selected.actualStartTime,
+                'DD/MM/YYYY HH:mm',
+              )}`}
             </Text>
 
             {/* Documents section */}
@@ -176,7 +182,7 @@ export const AppointmentHistory: FC = () => {
               </View>
             ) : (
               <Text style={{ color: colors.gray['600'] }}>
-                Документы отсутствуют
+                {t('profile:history.noDocuments')}
               </Text>
             )}
 
@@ -252,7 +258,7 @@ export const AppointmentHistory: FC = () => {
                             { color: colors.gray['500'] },
                           ]}
                         >
-                          Должность
+                          {t('profile:history.position')}
                         </Text>
                         <Text
                           style={[
@@ -279,7 +285,7 @@ export const AppointmentHistory: FC = () => {
                             { color: colors.gray['500'] },
                           ]}
                         >
-                          Филиал
+                          {t('profile:history.branch')}
                         </Text>
                         <Text
                           style={[
@@ -307,7 +313,7 @@ export const AppointmentHistory: FC = () => {
                             { color: colors.gray['500'] },
                           ]}
                         >
-                          Длительность приёма
+                          {t('profile:history.duration')}
                         </Text>
                         <Text
                           style={[
@@ -315,7 +321,9 @@ export const AppointmentHistory: FC = () => {
                             { color: colors.textMain },
                           ]}
                         >
-                          {selected.doctor.appointmentDurationMinutes} мин
+                          {t('profile:history.durationValue', {
+                            count: selected.doctor.appointmentDurationMinutes,
+                          })}
                         </Text>
                       </View>
                     </View>

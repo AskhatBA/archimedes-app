@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  LANGUAGE_FLAGS,
   LANGUAGE_LABELS,
   LANGUAGE_SHORT_LABELS,
   SUPPORTED_LANGUAGES,
@@ -12,6 +13,7 @@ interface LanguageOption {
   code: SupportedLanguage;
   label: string;
   shortLabel: string;
+  flag: string;
 }
 
 interface UseLanguageResult {
@@ -32,10 +34,11 @@ export const useLanguage = (): UseLanguageResult => {
     [i18n],
   );
 
-  const options: LanguageOption[] = SUPPORTED_LANGUAGES.map((code) => ({
+  const options: LanguageOption[] = SUPPORTED_LANGUAGES.map(code => ({
     code,
     label: LANGUAGE_LABELS[code],
     shortLabel: LANGUAGE_SHORT_LABELS[code],
+    flag: LANGUAGE_FLAGS[code],
   }));
 
   const isCurrent = useCallback(

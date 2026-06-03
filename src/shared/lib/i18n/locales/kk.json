@@ -17,6 +17,7 @@
     "no": "Жоқ"
   },
   "errors": {
+    "title": "Қате",
     "generic": "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
     "network": "Байланыс қатесі. Интернетті тексеріңіз.",
     "unauthorized": "Сессия мерзімі аяқталды. Қайта кіріңіз.",
@@ -47,5 +48,37 @@
     "kk": "Қазақ",
     "ru": "Орыс",
     "en": "Ағылшын"
+  },
+  "profile": {
+    "version": "{{version}}-beta нұсқасы",
+    "betaWarning": "Қосымша бета-тестілеу сатысында. Қате тапсаңыз, қолдау қызметіне хабарлаңыз: {{email}}",
+    "tests": {
+      "eyebrow": "Зертхана",
+      "title": "Менің талдауларым",
+      "empty": "Нәтижелер жоқ",
+      "emptyList": "Жазбалар жоқ",
+      "details": "Толық ақпарат",
+      "department": "Бөлімше",
+      "registrationDate": "Тіркеу күні",
+      "resultPdf": "Талдау нәтижесі (PDF)",
+      "pdfUnavailable": "PDF қолжетімсіз",
+      "pdfError": "PDF-ті ашу мүмкін болмады",
+      "count_one": "{{count}} нәтиже",
+      "count_other": "{{count}} нәтиже"
+    },
+    "history": {
+      "eyebrow": "Медициналық карта",
+      "title": "Қабылдау тарихы",
+      "empty": "Жазбалар жоқ",
+      "emptyList": "Жазбалар жоқ",
+      "appointmentFallback": "Қабылдау",
+      "noDocuments": "Құжаттар жоқ",
+      "position": "Лауазымы",
+      "branch": "Филиал",
+      "duration": "Қабылдау ұзақтығы",
+      "durationValue": "{{count}} мин",
+      "count_one": "{{count}} жазба",
+      "count_other": "{{count}} жазба"
+    }
   }
 }
