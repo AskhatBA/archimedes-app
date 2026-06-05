@@ -1,5 +1,4 @@
-import dayjs from 'dayjs';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
@@ -11,37 +10,10 @@ import {
   ShieldPlusIcon,
   UserFilledIcon,
 } from '@/shared/icons';
-import { useAuth } from '@/shared/lib/auth';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
-
-const formatAge = (years: number) => {
-  const mod10 = years % 10;
-  const mod100 = years % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${years} год`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
-    return `${years} года`;
-  return `${years} лет`;
-};
-
-const formatAppointmentsCount = (count: number) => {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${count} запись`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
-    return `${count} записи`;
-  return `${count} записей`;
-};
-
-const formatExtraPrograms = (count: number) => {
-  const mod10 = count % 10;
-  const mod100 = count % 100;
-  if (mod10 === 1 && mod100 !== 11) return `ещё ${count} программа`;
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
-    return `ещё ${count} программы`;
-  return `ещё ${count} программ`;
-};
 
 const ChevronRight: FC<{ color?: string; size?: number }> = ({
   color = colors.blue['400'],
@@ -57,6 +29,7 @@ export const ProfileCard: FC = () => {
   const { appointments } = useAppointments();
   const { programs } = usePrograms();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   const userIin = (user as unknown as { iin: string })?.iin;
   const appointmentsCount = appointments?.length ?? 0;
@@ -76,9 +49,11 @@ export const ProfileCard: FC = () => {
       <TouchableOpacity
         style={styles.nameRow}
         onPress={() => navigate(routes.Profile)}
-        accessibilityLabel="Открыть профиль"
+        accessibilityLabel={t('home:openProfile')}
       >
-        <Text style={styles.name}>{user?.lastName || 'Профиль'}</Text>
+        <Text style={styles.name}>
+          {user?.lastName || t('home:profileFallback')}
+        </Text>
         <ChevronRight color={colors.blue['500']} size={16} />
       </TouchableOpacity>
 
@@ -97,7 +72,7 @@ export const ProfileCard: FC = () => {
               height={18}
               color={colors.blue['400']}
             />
-            <Text style={styles.statLabel}>Мои записи</Text>
+            <Text style={styles.statLabel}>{t('home:myAppointments')}</Text>
           </View>
           {singleAppointment ? (
             <View style={styles.appointmentPreview}>
@@ -119,8 +94,8 @@ export const ProfileCard: FC = () => {
           ) : (
             <Text style={styles.statValue}>
               {appointmentsCount === 0
-                ? 'Нет записей'
-                : formatAppointmentsCount(appointmentsCount)}
+                ? t('home:noAppointments')
+                : t('home:appointmentsCount', { count: appointmentsCount })}
             </Text>
           )}
         </TouchableOpacity>
@@ -131,7 +106,7 @@ export const ProfileCard: FC = () => {
         >
           <View style={styles.statHeader}>
             <ShieldPlusIcon width={18} height={18} color={colors.blue['400']} />
-            <Text style={styles.statLabel}>Мои программы</Text>
+            <Text style={styles.statLabel}>{t('home:myPrograms')}</Text>
           </View>
           {activeProgram ? (
             <View style={styles.programPreview}>
@@ -148,15 +123,19 @@ export const ProfileCard: FC = () => {
                 ellipsizeMode="tail"
               >
                 {extraProgramsCount > 0
-                  ? `и ${formatExtraPrograms(extraProgramsCount)}`
-                  : `Действует до ${formatDate(activeProgram.dateEnd, 'DD.MM.YYYY')}`}
+                  ? t('home:extraPrograms', { count: extraProgramsCount })
+                  : t('home:programValidUntil', {
+                      date: formatDate(activeProgram.dateEnd, 'DD.MM.YYYY'),
+                    })}
               </Text>
             </View>
           ) : (
             <View style={styles.programPreview}>
-              <Text style={styles.statValue}>Нет активных программ</Text>
+              <Text style={styles.statValue}>{t('home:noActivePrograms')}</Text>
               <View style={styles.programCtaRow}>
-                <Text style={styles.programCta}>Подключить</Text>
+                <Text style={styles.programCta}>
+                  {t('home:connectProgram')}
+                </Text>
                 <ChevronRight color={colors.green['600']} />
               </View>
             </View>

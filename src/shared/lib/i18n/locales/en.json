@@ -33,6 +33,7 @@
   },
   "auth": {
     "signIn": "Sign in",
+    "signInTitle": "Sign in to the app",
     "signOut": "Sign out",
     "phoneNumber": "Phone number",
     "enterPhoneNumber": "Enter your phone number",
@@ -42,6 +43,13 @@
     "resendIn": "Resend in {{seconds}}s",
     "createAccount": "Create account",
     "iin": "IIN",
+    "enterIin": "Enter your IIN",
+    "agreeUserAgreement": "I agree to the terms of the <link>User Agreement</link>",
+    "agreePrivacyPolicy": "I agree to the terms of the <link>Privacy Policy</link>",
+    "phoneMismatch": "The phone number doesn't match our records. Please contact the call center at {{phone}}.",
+    "checkAccountError": "Couldn't verify your details. Please try again",
+    "invalidPhoneFormat": "Invalid phone number format",
+    "iinLength": "IIN must contain 12 digits",
     "logoutConfirmMessage": "Are you sure you want to sign out?",
     "logoutAccessibility": "Sign out"
   },
@@ -86,6 +94,59 @@
   },
   "home": {
     "greeting": "Good afternoon,",
-    "openNotifications": "Open notifications"
+    "openNotifications": "Open notifications",
+    "topbarTitle": "Personal account",
+    "openProfile": "Open profile",
+    "profileFallback": "Profile",
+    "myAppointments": "My appointments",
+    "myPrograms": "My programs",
+    "noAppointments": "No appointments",
+    "appointmentsCount_one": "{{count}} appointment",
+    "appointmentsCount_other": "{{count}} appointments",
+    "noActivePrograms": "No active programs",
+    "connectProgram": "Connect",
+    "programValidUntil": "Valid until {{date}}",
+    "extraPrograms_one": "and {{count}} more program",
+    "extraPrograms_other": "and {{count}} more programs",
+    "bookAppointment": "Book an appointment",
+    "news": "News",
+    "noNews": "No news yet"
+  },
+  "user": {
+    "loading": "Loading your data..."
+  },
+  "programs": {
+    "loading": "Loading your programs...",
+    "emptyTitle": "You have no active programs yet",
+    "emptySubtitle": "Active programs will appear here automatically. Pull down to refresh the list.\n\nIf the data looks wrong, please contact our call center at <phone>{{phone}}</phone>.",
+    "card": {
+      "eyebrow": "Program",
+      "cardNumber": "Card №",
+      "activeUntil": "Active until",
+      "details": "Details"
+    },
+    "details": {
+      "company": "Company",
+      "period": "Period",
+      "tiles": {
+        "certificate": "Certificate",
+        "about": "About program",
+        "network": "Medical network",
+        "referrals": "Referrals"
+      },
+      "support": {
+        "title": "Support",
+        "subtitle": "Contact us with any questions"
+      },
+      "limits": {
+        "title": "Limits usage",
+        "of": "of {{amount}} ₸"
+      },
+      "family": {
+        "title": "Attached family members",
+        "count_one": "{{count}} person",
+        "count_other": "{{count}} people"
+      }
+    }
   }
 }

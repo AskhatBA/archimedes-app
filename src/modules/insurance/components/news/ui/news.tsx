@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { getNewsKey, useNews } from '@/modules/insurance/hooks/use-news';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { globalStyles, useTheme } from '@/shared/theme';
 
@@ -22,6 +23,7 @@ export const News: FC = () => {
   const { navigate } = useNavigation();
   const { width } = useWindowDimensions();
   const { news, loadingNews } = useNews();
+  const { t } = useTranslation();
 
   const cardWidth = Math.round(width - HORIZONTAL_PADDING * 2 - 48);
 
@@ -38,7 +40,7 @@ export const News: FC = () => {
       return (
         <View style={styles.emptyContainer}>
           <Text style={[styles.emptyText, { color: colors.gray['500'] }]}>
-            Новостей пока нет
+            {t('home:noNews')}
           </Text>
         </View>
       );
@@ -70,7 +72,9 @@ export const News: FC = () => {
 
   return (
     <View style={styles.wrapper}>
-      <Text style={[globalStyles.sectionHeading, styles.heading]}>Новости</Text>
+      <Text style={[globalStyles.sectionHeading, styles.heading]}>
+        {t('home:news')}
+      </Text>
       {renderContent()}
     </View>
   );

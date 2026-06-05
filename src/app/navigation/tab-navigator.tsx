@@ -7,6 +7,7 @@ import { ProfileScreen } from '@/screens/profile';
 import { ProgramsScreen } from '@/screens/programs';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
 import { TabTopBar } from '@/shared/components/tab-top-bar';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes } from '@/shared/navigation';
 
 import type { FC } from 'react';
@@ -14,6 +15,8 @@ import type { FC } from 'react';
 const Tab = createBottomTabNavigator();
 
 export const TabNavigator: FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
       id={undefined}
@@ -28,17 +31,23 @@ export const TabNavigator: FC = () => {
       <Tab.Screen
         name={routes.AppointmentsMain}
         component={AppointmentsScreen}
-        options={{ header: () => <TabTopBar title="Записи" /> }}
+        options={{
+          header: () => <TabTopBar title={t('tabs:appointments')} />,
+        }}
       />
       <Tab.Screen
         name={routes.Programs}
         component={ProgramsScreen}
-        options={{ header: () => <TabTopBar title="Программы" /> }}
+        options={{
+          header: () => <TabTopBar title={t('tabs:programs')} />,
+        }}
       />
       <Tab.Screen
         name={routes.Compensation}
         component={CompensationScreen}
-        options={{ header: () => <TabTopBar title="Возмещение" /> }}
+        options={{
+          header: () => <TabTopBar title={t('tabs:compensation')} />,
+        }}
       />
       <Tab.Screen
         name={routes.Profile}

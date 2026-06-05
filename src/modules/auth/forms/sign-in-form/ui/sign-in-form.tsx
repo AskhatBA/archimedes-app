@@ -1,29 +1,34 @@
 import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
-import { FC, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { FC, useMemo, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { userApi } from '@/api';
 import { useOtp } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
-import { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from '@/shared/constants';
+import {
+  CALL_CENTER_PHONE,
+  PRIVACY_POLICY_FILE,
+  USER_AGREEMENT_FILE,
+} from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
+import { Trans, useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
-import { validationSchema } from './validation-schema';
-
-const PHONE_MISMATCH_ERROR =
-  'Номер телефона не совпадает с данными в системе. Пожалуйста, свяжитесь с колл-центром по номеру 2828.';
+import { createValidationSchema } from './validation-schema';
 
 export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
   const { requestOtp, isPending: isOtpPending } = useOtp();
   const { navigate } = useNavigation();
   const { showToast } = useToast();
+  const { t } = useTranslation();
+
+  const validationSchema = useMemo(() => createValidationSchema(t), [t]);
 
   const [userAgreement, setUserAgreement] = useState(false);
   const [privacyPolicy, setPrivacyPolicy] = useState(false);
@@ -40,7 +45,7 @@ export const SignInForm: FC = () => {
     onError: () => {
       showToast({
         type: 'error',
-        message: 'Не удалось проверить данные. Попробуйте снова',
+        message: t('auth:checkAccountError'),
       });
     },
   });
@@ -68,7 +73,10 @@ export const SignInForm: FC = () => {
         const { existsInDb, existsInInsurance, isPhoneMatch } = result;
 
         if (!existsInDb && existsInInsurance && !isPhoneMatch) {
-          setFieldError('phone', PHONE_MISMATCH_ERROR);
+          setFieldError(
+            'phone',
+            t('auth:phoneMismatch', { phone: CALL_CENTER_PHONE }),
+          );
           return;
         }
 
@@ -85,8 +93,8 @@ export const SignInForm: FC = () => {
       <View style={{ gap: 24 }}>
         <TextField
           keyboardType="phone-pad"
-          label="Номер телефона"
-          placeholder="Введите номер телефона"
+          label={t('auth:phoneNumber')}
+          placeholder={t('auth:enterPhoneNumber')}
           mask="+7 (999) 999-99-99"
           value={values.phone}
           error={errors.phone}
@@ -97,8 +105,8 @@ export const SignInForm: FC = () => {
         />
         <TextField
           keyboardType="phone-pad"
-          label="ИИН"
-          placeholder="Введите свой ИИН"
+          label={t('auth:iin')}
+          placeholder={t('auth:enterIin')}
           mask="999999999999"
           value={values.iin}
           error={errors.iin}
@@ -119,17 +127,22 @@ export const SignInForm: FC = () => {
             error={userAgreementError}
           />
           <Text style={styles.text}>
-            Я соглашаюсь с условиями{' '}
-            <Pressable
-              onPress={() => {
-                navigate(routes.DocumentViewer, {
-                  uri: USER_AGREEMENT_FILE,
-                  isOnlyUrl: true,
-                });
+            <Trans
+              i18nKey="auth:agreeUserAgreement"
+              components={{
+                link: (
+                  <Text
+                    style={styles.link}
+                    onPress={() => {
+                      navigate(routes.DocumentViewer, {
+                        uri: USER_AGREEMENT_FILE,
+                        isOnlyUrl: true,
+                      });
+                    }}
+                  />
+                ),
               }}
-            >
-              <Text style={styles.link}>Пользовательского соглашения</Text>
-            </Pressable>
+            />
           </Text>
         </View>
         <View style={styles.container}>
@@ -142,17 +155,23 @@ export const SignInForm: FC = () => {
             error={privacyPolicyError}
           />
           <Text style={styles.text}>
-            Я соглашаюсь с условиями{' '}
-            <Pressable
-              onPress={() => {
-                navigate(routes.DocumentViewer, {
-                  uri: PRIVACY_POLICY_FILE,
-                  isOnlyUrl: true,
-                });
+            <Trans
+              i18nKey="auth:agreePrivacyPolicy"
+              components={{
+                link: (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigate(routes.DocumentViewer, {
+                        uri: PRIVACY_POLICY_FILE,
+                        isOnlyUrl: true,
+                      });
+                    }}
+                  >
+                    <Text style={styles.link} />
+                  </TouchableOpacity>
+                ),
               }}
-            >
-              <Text style={styles.link}>Политики конфиденциальности</Text>
-            </Pressable>
+            />
           </Text>
         </View>
       </View>
@@ -163,7 +182,7 @@ export const SignInForm: FC = () => {
           handleSubmit();
         }}
       >
-        Войти
+        {t('auth:signIn')}
       </Button>
     </View>
   );

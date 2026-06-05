@@ -3,25 +3,27 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { UserFilledIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
 export const HomeTopbar: FC = () => {
   const insets = useSafeAreaInsets();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 6 }]}>
       <View style={styles.side} />
 
       <View style={styles.titleBlock}>
-        <Text style={styles.title}>Личный кабинет</Text>
+        <Text style={styles.title}>{t('home:topbarTitle')}</Text>
       </View>
 
       <TouchableOpacity
         style={styles.profileButton}
         onPress={() => navigate(routes.Profile)}
-        accessibilityLabel="Открыть профиль"
+        accessibilityLabel={t('home:openProfile')}
       >
         <View style={styles.avatarThumb}>
           <UserFilledIcon width={18} height={18} color={colors.primary} />

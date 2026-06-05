@@ -9,6 +9,7 @@ import {
 
 import { ArrowBackIcon as CaretIcon, FamilyIcon } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useFamily } from '@/shared/lib/insurance';
 import { fonts, useTheme } from '@/shared/theme';
 
@@ -24,19 +25,10 @@ const getInitials = (fullName: string) =>
     .map(part => part[0]?.toUpperCase() ?? '')
     .join('');
 
-const pluralizeMember = (n: number) => {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return 'человек';
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
-    return 'человека';
-  }
-  return 'человек';
-};
-
 export const FamilyMembers: FC<FamilyMembersProps> = ({ programId }) => {
   const [show, setShow] = useState(false);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { family, loadingFamily } = useFamily(programId);
 
   if (loadingFamily) {
@@ -63,13 +55,13 @@ export const FamilyMembers: FC<FamilyMembersProps> = ({ programId }) => {
           </View>
           <View style={styles.triggerTextWrap}>
             <Text style={[styles.triggerTitle, { color: colors.blue['500'] }]}>
-              Прикрепленные члены семьи
+              {t('programs:details.family.title')}
             </Text>
             {count > 0 ? (
               <Text
                 style={[styles.triggerCount, { color: colors.gray['500'] }]}
               >
-                {count} {pluralizeMember(count)}
+                {t('programs:details.family.count', { count })}
               </Text>
             ) : null}
           </View>

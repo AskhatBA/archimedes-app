@@ -33,6 +33,7 @@
   },
   "auth": {
     "signIn": "Кіру",
+    "signInTitle": "Қосымшаға кіру",
     "signOut": "Шығу",
     "phoneNumber": "Телефон нөмірі",
     "enterPhoneNumber": "Телефон нөміріңізді енгізіңіз",
@@ -42,6 +43,13 @@
     "resendIn": "{{seconds}} сек кейін қайталау",
     "createAccount": "Аккаунт жасау",
     "iin": "ЖСН",
+    "enterIin": "ЖСН-іңізді енгізіңіз",
+    "agreeUserAgreement": "Мен <link>Пайдаланушы келісімінің</link> шарттарымен келісемін",
+    "agreePrivacyPolicy": "Мен <link>Құпиялылық саясатының</link> шарттарымен келісемін",
+    "phoneMismatch": "Телефон нөмірі жүйедегі деректермен сәйкес келмейді. {{phone}} нөмірі бойынша колл-орталыққа хабарласыңыз.",
+    "checkAccountError": "Деректерді тексеру мүмкін болмады. Қайталап көріңіз",
+    "invalidPhoneFormat": "Телефон форматы дұрыс емес",
+    "iinLength": "ЖСН 12 саннан тұруы керек",
     "logoutConfirmMessage": "Аккаунттан шынымен шыққыңыз келе ме?",
     "logoutAccessibility": "Аккаунттан шығу"
   },
@@ -86,6 +94,59 @@
   },
   "home": {
     "greeting": "Қайырлы күн,",
-    "openNotifications": "Хабарландыруларды ашу"
+    "openNotifications": "Хабарландыруларды ашу",
+    "topbarTitle": "Жеке кабинет",
+    "openProfile": "Профильді ашу",
+    "profileFallback": "Профиль",
+    "myAppointments": "Менің жазбаларым",
+    "myPrograms": "Менің бағдарламаларым",
+    "noAppointments": "Жазбалар жоқ",
+    "appointmentsCount_one": "{{count}} жазба",
+    "appointmentsCount_other": "{{count}} жазба",
+    "noActivePrograms": "Белсенді бағдарламалар жоқ",
+    "connectProgram": "Қосылу",
+    "programValidUntil": "{{date}} дейін жарамды",
+    "extraPrograms_one": "және тағы {{count}} бағдарлама",
+    "extraPrograms_other": "және тағы {{count}} бағдарлама",
+    "bookAppointment": "Қабылдауға жазылу",
+    "news": "Жаңалықтар",
+    "noNews": "Жаңалықтар әзірге жоқ"
+  },
+  "user": {
+    "loading": "Деректеріңіз жүктелуде..."
+  },
+  "programs": {
+    "loading": "Бағдарламаларыңыз жүктелуде...",
+    "emptyTitle": "Сізде әзірге белсенді бағдарламалар жоқ",
+    "emptySubtitle": "Белсенді бағдарламалар осында автоматты түрде көрсетіледі. Тізімді жаңарту үшін төмен қарай тартыңыз.\n\nДеректер дұрыс көрсетілмесе, колл-орталыққа хабарласыңыз: <phone>{{phone}}</phone>.",
+    "card": {
+      "eyebrow": "Бағдарлама",
+      "cardNumber": "Карта №",
+      "activeUntil": "Дейін белсенді",
+      "details": "Толығырақ"
+    },
+    "details": {
+      "company": "Компания",
+      "period": "Кезең",
+      "tiles": {
+        "certificate": "Сертификат",
+        "about": "Бағдарлама туралы",
+        "network": "Мед. желі",
+        "referrals": "Жолдамалар"
+      },
+      "support": {
+        "title": "Қолдау",
+        "subtitle": "Кез келген сұрақ бойынша бізге хабарласыңыз"
+      },
+      "limits": {
+        "title": "Лимиттерді пайдалану",
+        "of": "{{amount}} ₸-ден"
+      },
+      "family": {
+        "title": "Тіркелген отбасы мүшелері",
+        "count_one": "{{count}} адам",
+        "count_other": "{{count}} адам"
+      }
+    }
   }
 }

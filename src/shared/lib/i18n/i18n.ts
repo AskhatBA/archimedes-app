@@ -28,6 +28,7 @@ const NAMESPACES = [
   'language',
   'profile',
   'home',
+  'programs',
 ] as const;
 
 console.log('hello');
@@ -76,14 +77,6 @@ if (!i18n.isInitialized) {
       useSuspense: false,
     },
   });
-
-  AsyncStorage.getItem(LANGUAGE_STORAGE_KEY)
-    .then(stored => {
-      if (isSupported(stored) && stored !== i18n.language) {
-        i18n.changeLanguage(stored);
-      }
-    })
-    .catch(() => undefined);
 
   i18n.on('languageChanged', lng => {
     if (isSupported(lng)) {

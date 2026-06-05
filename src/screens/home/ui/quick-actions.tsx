@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { StethoscopeIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
@@ -51,10 +52,11 @@ const ActionTile: FC<ActionTileProps> = ({
 
 export const QuickActions: FC = () => {
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <ActionTile
-      title="Записаться на прием"
+      title={t('home:bookAppointment')}
       icon={
         <StethoscopeIcon width={48} height={48} color={colors.blue['400']} />
       }

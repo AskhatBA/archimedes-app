@@ -33,6 +33,7 @@
   },
   "auth": {
     "signIn": "Войти",
+    "signInTitle": "Войти в приложение",
     "signOut": "Выйти",
     "phoneNumber": "Номер телефона",
     "enterPhoneNumber": "Введите номер телефона",
@@ -42,6 +43,13 @@
     "resendIn": "Повторить через {{seconds}} с",
     "createAccount": "Создать аккаунт",
     "iin": "ИИН",
+    "enterIin": "Введите свой ИИН",
+    "agreeUserAgreement": "Я соглашаюсь с условиями <link>Пользовательского соглашения</link>",
+    "agreePrivacyPolicy": "Я соглашаюсь с условиями <link>Политики конфиденциальности</link>",
+    "phoneMismatch": "Номер телефона не совпадает с данными в системе. Пожалуйста, свяжитесь с колл-центром по номеру {{phone}}.",
+    "checkAccountError": "Не удалось проверить данные. Попробуйте снова",
+    "invalidPhoneFormat": "Некорректный формат телефона",
+    "iinLength": "ИИН должен содержать 12 цифр",
     "logoutConfirmMessage": "Вы действительно хотите выйти из аккаунта?",
     "logoutAccessibility": "Выйти из аккаунта"
   },
@@ -90,6 +98,65 @@
   },
   "home": {
     "greeting": "Добрый день,",
-    "openNotifications": "Открыть уведомления"
+    "openNotifications": "Открыть уведомления",
+    "topbarTitle": "Личный кабинет",
+    "openProfile": "Открыть профиль",
+    "profileFallback": "Профиль",
+    "myAppointments": "Мои записи",
+    "myPrograms": "Мои программы",
+    "noAppointments": "Нет записей",
+    "appointmentsCount_one": "{{count}} запись",
+    "appointmentsCount_few": "{{count}} записи",
+    "appointmentsCount_many": "{{count}} записей",
+    "appointmentsCount_other": "{{count}} записи",
+    "noActivePrograms": "Нет активных программ",
+    "connectProgram": "Подключить",
+    "programValidUntil": "Действует до {{date}}",
+    "extraPrograms_one": "и ещё {{count}} программа",
+    "extraPrograms_few": "и ещё {{count}} программы",
+    "extraPrograms_many": "и ещё {{count}} программ",
+    "extraPrograms_other": "и ещё {{count}} программы",
+    "bookAppointment": "Записаться на прием",
+    "news": "Новости",
+    "noNews": "Новостей пока нет"
+  },
+  "user": {
+    "loading": "Загружаем ваши данные..."
+  },
+  "programs": {
+    "loading": "Загружаем ваши программы...",
+    "emptyTitle": "У вас пока нет активных программ",
+    "emptySubtitle": "Активные программы появятся здесь автоматически. Потяните вниз, чтобы обновить список.\n\nЕсли данные отображаются некорректно, обратитесь в колл-центр по номеру <phone>{{phone}}</phone>.",
+    "card": {
+      "eyebrow": "Программа",
+      "cardNumber": "Карта №",
+      "activeUntil": "Активен до",
+      "details": "Подробнее"
+    },
+    "details": {
+      "company": "Компания",
+      "period": "Период",
+      "tiles": {
+        "certificate": "Сертификат",
+        "about": "О программе",
+        "network": "Мед. сеть",
+        "referrals": "Направления"
+      },
+      "support": {
+        "title": "Поддержка",
+        "subtitle": "Свяжитесь с нами по любым вопросам"
+      },
+      "limits": {
+        "title": "Использование лимитов",
+        "of": "из {{amount}} ₸"
+      },
+      "family": {
+        "title": "Прикрепленные члены семьи",
+        "count_one": "{{count}} человек",
+        "count_few": "{{count}} человека",
+        "count_many": "{{count}} человек",
+        "count_other": "{{count}} человека"
+      }
+    }
   }
 }

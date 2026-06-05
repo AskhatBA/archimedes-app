@@ -31,6 +31,7 @@ import {
   CalendarIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
 import { fonts, useTheme } from '@/shared/theme';
 
@@ -58,6 +59,7 @@ export const ProgramDetailsScreen: FC = () => {
   const { colors } = useTheme();
   const { user } = useUser();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
   const { program, loadingProgram } = useProgramById(programId);
   const queryClient = useQueryClient();
   const isFetchingProgram = useIsFetching({
@@ -106,7 +108,7 @@ export const ProgramDetailsScreen: FC = () => {
   }[] = [
     {
       key: 'certificate',
-      label: 'Сертификат',
+      label: t('programs:details.tiles.certificate'),
       icon: ClipIcon,
       onPress: () =>
         navigate(routes.DocumentViewer, {
@@ -115,20 +117,20 @@ export const ProgramDetailsScreen: FC = () => {
     },
     {
       key: 'about',
-      label: 'О программе',
+      label: t('programs:details.tiles.about'),
       icon: InfoIcon,
       onPress: () =>
         navigate(routes.DocumentViewer, { uri: program?.programUrl }),
     },
     {
       key: 'network',
-      label: 'Мед. сеть',
+      label: t('programs:details.tiles.network'),
       icon: HospitalIcon,
       onPress: () => navigate(routes.MedicalNetwork, { programId }),
     },
     {
       key: 'referrals',
-      label: 'Направления',
+      label: t('programs:details.tiles.referrals'),
       icon: FileTextIcon,
       onPress: () => navigate(routes.ElectronicReferrals, { programId }),
     },
@@ -170,7 +172,7 @@ export const ProgramDetailsScreen: FC = () => {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={[styles.heroEyebrow, { color: colors.blue['500'] }]}>
-                Компания
+                {t('programs:details.company')}
               </Text>
               {!!program?.insuranceCompany && (
                 <Text
@@ -219,7 +221,7 @@ export const ProgramDetailsScreen: FC = () => {
                 <Text
                   style={[styles.heroChipLabel, { color: colors.gray['500'] }]}
                 >
-                  Карта №
+                  {t('programs:card.cardNumber')}
                 </Text>
                 <Text
                   style={[styles.heroChipValue, { color: colors.blue['400'] }]}
@@ -250,7 +252,7 @@ export const ProgramDetailsScreen: FC = () => {
                       { color: colors.gray['500'] },
                     ]}
                   >
-                    Период
+                    {t('programs:details.period')}
                   </Text>
                 </View>
                 <Text
@@ -314,12 +316,12 @@ export const ProgramDetailsScreen: FC = () => {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={[styles.supportTitle, { color: colors.blue['400'] }]}>
-              Поддержка
+              {t('programs:details.support.title')}
             </Text>
             <Text
               style={[styles.supportSubtitle, { color: colors.gray['600'] }]}
             >
-              Свяжитесь с нами по любым вопросам
+              {t('programs:details.support.subtitle')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -333,7 +335,7 @@ export const ProgramDetailsScreen: FC = () => {
         {!!program?.subLimits?.length && (
           <View>
             <Text style={[styles.limitsTitle, { color: colors.gray['700'] }]}>
-              Использование лимитов
+              {t('programs:details.limits.title')}
             </Text>
             <View style={styles.limitsList}>
               {program.subLimits.map(limit => {
@@ -395,7 +397,9 @@ export const ProgramDetailsScreen: FC = () => {
                           { color: colors.gray['500'] },
                         ]}
                       >
-                        из {formatAmount(total)} ₸
+                        {t('programs:details.limits.of', {
+                          amount: formatAmount(total),
+                        })}
                       </Text>
                     </View>
                   </View>

@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { UserContextProvider } from '@/modules/user';
 import { AuthContextProvider } from '@/shared/lib/auth';
+import { LanguageGate } from '@/shared/lib/i18n';
 import { OneSignalProvider } from '@/shared/lib/one-signal';
 import { ToastProvider } from '@/shared/lib/toast';
 import { NavigationProvider } from '@/shared/navigation';
@@ -25,20 +26,22 @@ function App() {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <ToastProvider>
               <ThemeProvider>
-                <AuthContextProvider>
-                  <UserContextProvider>
-                    <BottomSheetModalProvider>
-                      <OneSignalProvider>
-                        <StatusBar
-                          barStyle="dark-content"
-                          backgroundColor="white"
-                          translucent={false}
-                        />
-                        <RootNavigator />
-                      </OneSignalProvider>
-                    </BottomSheetModalProvider>
-                  </UserContextProvider>
-                </AuthContextProvider>
+                <LanguageGate>
+                  <AuthContextProvider>
+                    <UserContextProvider>
+                      <BottomSheetModalProvider>
+                        <OneSignalProvider>
+                          <StatusBar
+                            barStyle="dark-content"
+                            backgroundColor="white"
+                            translucent={false}
+                          />
+                          <RootNavigator />
+                        </OneSignalProvider>
+                      </BottomSheetModalProvider>
+                    </UserContextProvider>
+                  </AuthContextProvider>
+                </LanguageGate>
               </ThemeProvider>
             </ToastProvider>
           </GestureHandlerRootView>

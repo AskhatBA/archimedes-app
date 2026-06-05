@@ -13,15 +13,17 @@ import { ProgramCard } from '@/modules/insurance';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { CALL_CENTER_PHONE } from '@/shared/constants';
 import { ShieldX } from '@/shared/icons';
+import { Trans, useTranslation } from '@/shared/lib/i18n';
 import { usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
 export const ProgramsScreen: FC = () => {
   const { programs, loadingPrograms, refetchPrograms } = usePrograms();
   const deviceInsets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   if (loadingPrograms) {
-    return <ScreenLoader text="Загружаем ваши программы..." />;
+    return <ScreenLoader text={t('programs:loading')} />;
   }
 
   if (
@@ -60,21 +62,21 @@ export const ProgramsScreen: FC = () => {
             <ShieldX width={56} height={56} color={colors.blue['400']} />
           </View>
           <Text style={[styles.emptyTitle, { color: colors.textMain }]}>
-            У вас пока нет активных программ
+            {t('programs:emptyTitle')}
           </Text>
           <Text style={[styles.emptySubtitle, { color: colors.gray['500'] }]}>
-            Активные программы появятся здесь автоматически. Потяните вниз,
-            чтобы обновить список.
-            {'\n\n'}
-            Если данные отображаются некорректно, обратитесь в колл-центр по
-            номеру{' '}
-            <Text
-              style={[styles.emptyPhone, { color: colors.blue['400'] }]}
-              onPress={() => Linking.openURL(`tel:${CALL_CENTER_PHONE}`)}
-            >
-              {CALL_CENTER_PHONE}
-            </Text>
-            .
+            <Trans
+              i18nKey="programs:emptySubtitle"
+              values={{ phone: CALL_CENTER_PHONE }}
+              components={{
+                phone: (
+                  <Text
+                    style={[styles.emptyPhone, { color: colors.blue['400'] }]}
+                    onPress={() => Linking.openURL(`tel:${CALL_CENTER_PHONE}`)}
+                  />
+                ),
+              }}
+            />
           </Text>
         </View>
       </ScrollView>

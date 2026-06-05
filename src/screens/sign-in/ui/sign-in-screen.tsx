@@ -12,6 +12,7 @@ import {
 
 import { SignInForm } from '@/modules/auth';
 import { SCREEN_WIDTH } from '@/shared/constants';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -19,6 +20,7 @@ const logoImage = require('@/assets/images/main-logo.png');
 
 export const SignInScreen: FC = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -34,7 +36,7 @@ export const SignInScreen: FC = () => {
               resizeMode="contain"
             />
             <Text style={[styles.title, { color: colors.blue['400'] }]}>
-              Войти в приложение
+              {t('auth:signInTitle')}
             </Text>
             <View style={styles.formContainer}>
               <SignInForm />

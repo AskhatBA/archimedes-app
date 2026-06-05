@@ -13,6 +13,7 @@ import { patientApi, GetPatientProfileResponse } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { GET_USER_INFO_QUERY } from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 
 type User = GetPatientProfileResponse['patient'];
@@ -36,6 +37,7 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
 }): ReactElement | null => {
   const { isAuthenticated } = useAuth();
   const { resetNavigation } = useNavigation();
+  const { t } = useTranslation();
 
   const {
     data: user,
@@ -62,7 +64,7 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
     [user, loadingUser],
   );
 
-  if (loadingUser) return <ScreenLoader text="Загружаем ваши данные..." />;
+  if (loadingUser) return <ScreenLoader text={t('user:loading')} />;
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { CalendarIcon, ShieldPlusIcon } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
 import { fonts, useTheme } from '@/shared/theme';
 
@@ -23,6 +24,7 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
 }) => {
   const { colors } = useTheme();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   const palette = levelColors[level] || levelColors.Standard;
 
@@ -46,7 +48,7 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
         </View>
         <View style={{ flex: 1 }}>
           <Text style={[styles.eyebrow, { color: palette.text, opacity: 0.7 }]}>
-            Программа
+            {t('programs:card.eyebrow')}
           </Text>
           <Text
             numberOfLines={1}
@@ -67,7 +69,7 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
           ]}
         >
           <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-            Карта №
+            {t('programs:card.cardNumber')}
           </Text>
           <Text
             numberOfLines={1}
@@ -85,7 +87,7 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
           <View style={styles.chipHeader}>
             <CalendarIcon width={12} height={12} color={colors.gray['500']} />
             <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-              Активен до
+              {t('programs:card.activeUntil')}
             </Text>
           </View>
           <Text style={[styles.chipValue, { color: palette.text }]}>
@@ -97,7 +99,7 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
       <View style={styles.ctaRow}>
         <View style={[styles.cta, { backgroundColor: palette.button }]}>
           <Text style={[styles.ctaText, { color: palette.text }]}>
-            Подробнее
+            {t('programs:card.details')}
           </Text>
           <Text style={[styles.ctaArrow, { color: palette.text }]}>›</Text>
         </View>
