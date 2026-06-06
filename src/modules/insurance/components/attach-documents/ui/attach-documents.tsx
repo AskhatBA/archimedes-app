@@ -12,9 +12,10 @@ import {
 import { useMediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { SelectDrawer } from '@/shared/components/select-field';
 import { FileIcon, UploadFileIcon, CloseIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
-import { documentTypes } from '../constants';
+import { documentTypes, getDocumentTypeLabelKey } from '../constants';
 
 interface AttachDocumentsProps {
   files: MediaFile[];
@@ -34,8 +35,19 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   requiredDocumentTypes,
 }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [showDocumentType, setShowDocumentType] = useState(false);
   const { openTypePicker, removeFile } = useMediaPicker();
+
+  const translateDocumentType = (value: string) => {
+    const key = getDocumentTypeLabelKey(value);
+    return key ? t(key) : value;
+  };
+
+  const drawerOptions = documentTypes.map(item => ({
+    value: item.value,
+    label: t(item.labelKey),
+  }));
 
   const onCloseDrawer = () => {
     setShowDocumentType(false);
@@ -46,9 +58,9 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
       ios: () =>
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            title: 'Удаление файла',
-            message: 'Вы действительно хотите удалить этот файл?',
-            options: ['Отмена', 'Удалить'],
+            title: t('compensation:request.deleteFileTitle'),
+            message: t('compensation:request.deleteFileMessage'),
+            options: [t('common:cancel'), t('common:delete')],
             cancelButtonIndex: 0,
             destructiveButtonIndex: 1,
           },
@@ -61,15 +73,15 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
         ),
       android: () =>
         Alert.alert(
-          'Удаление файла',
-          'Вы действительно хотите удалить этот файл?',
+          t('compensation:request.deleteFileTitle'),
+          t('compensation:request.deleteFileMessage'),
           [
             {
-              text: 'Отмена',
+              text: t('common:cancel'),
               style: 'cancel',
             },
             {
-              text: 'Удалить',
+              text: t('common:delete'),
               onPress: () => onRemove(file),
               style: 'destructive',
             },
@@ -86,7 +98,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   return (
     <View>
       <Text style={[styles.label, { color: colors.blue['370'] }]}>
-        Прикрепить документы
+        {t('compensation:request.attachDocuments')}
       </Text>
       <View style={styles.attachedFiles}>
         {files.map(file => (
@@ -107,7 +119,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
                     { color: colors.blue['400'] },
                   ]}
                 >
-                  {file.localFileType}
+                  {translateDocumentType(file.localFileType)}
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -137,18 +149,18 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
         >
           <UploadFileIcon width={24} height={24} color={colors.primary} />
           <Text style={[styles.uploadButtonText, { color: colors.primary }]}>
-            Добавить файл
+            {t('compensation:request.addFile')}
           </Text>
         </TouchableOpacity>
       </View>
       {showError && missingRequiredTypes.length > 0 && (
         <View style={styles.errorContainer}>
           <Text style={[styles.error, { color: colors.error }]}>
-            Необходимо прикрепить следующие документы:
+            {t('compensation:request.missingDocuments')}
           </Text>
           {missingRequiredTypes.map(type => (
             <Text key={type} style={[styles.error, { color: colors.error }]}>
-              • {type}
+              • {translateDocumentType(type)}
             </Text>
           ))}
         </View>
@@ -165,7 +177,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
           setDocumentType(value);
         }}
         onClose={onCloseDrawer}
-        options={documentTypes}
+        options={drawerOptions}
       />
     </View>
   );

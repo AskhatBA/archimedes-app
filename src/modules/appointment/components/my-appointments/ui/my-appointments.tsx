@@ -1,18 +1,20 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { Appointments } from './appointments';
 
 export const MyAppointments: FC = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={[styles.title, { color: colors.gray['700'] }]}>
-          Предстоящие записи
+          {t('appointments:upcomingTitle')}
         </Text>
       </View>
       <View style={styles.appointments}>

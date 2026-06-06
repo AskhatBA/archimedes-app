@@ -19,6 +19,7 @@ import {
 } from '@/modules/insurance';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@/shared/constants';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 import { convertUriToBase64 } from '@/shared/utils/convert-uri-to-base64';
@@ -28,6 +29,7 @@ import { SubmitRequestSuccess } from './submit-request-success';
 export const CompensationRequestScreen: FC = () => {
   const { colors } = useTheme();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const deviceInsets = useSafeAreaInsets();
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -47,7 +49,7 @@ export const CompensationRequestScreen: FC = () => {
     onError: () => {
       showToast({
         type: 'error',
-        message: 'Произошла ошибка. Пожалуйста обратитесь в поддержку',
+        message: t('compensation:request.submitError'),
       });
     },
   });
@@ -96,7 +98,7 @@ export const CompensationRequestScreen: FC = () => {
           automaticallyAdjustKeyboardInsets
         >
           <Text style={[styles.heading, { color: colors.primary }]}>
-            Заявка на возмещение
+            {t('compensation:request.heading')}
           </Text>
           <CompensationRequestForm onSubmit={submitCompensationRequest} />
         </ScrollView>

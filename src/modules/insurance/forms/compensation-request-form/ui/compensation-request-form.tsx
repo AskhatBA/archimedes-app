@@ -2,12 +2,16 @@ import { useFormik } from 'formik';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { REQUIRED_DOCUMENT_TYPES } from '@/modules/insurance/components/attach-documents/constants';
+import {
+  DENTAL_WORK_ORDER_TYPE,
+  REQUIRED_DOCUMENT_TYPES,
+} from '@/modules/insurance/components/attach-documents/constants';
 import { Button } from '@/shared/components/button';
 import { MediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { Datepicker } from '@/shared/components/picker';
 import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
+import { useTranslation } from '@/shared/lib/i18n';
 import { usePrograms, useFamily } from '@/shared/lib/insurance';
 
 import { AttachDocuments } from '../../../components/attach-documents';
@@ -28,6 +32,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [documentType, setDocumentType] = useState('');
   const [showFilesError, setShowFilesError] = useState(false);
+  const { t } = useTranslation();
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -43,7 +48,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       const currentRequiredTypes = [...REQUIRED_DOCUMENT_TYPES];
 
       if (+formValues.category === CompensationCategoryEnum.Dentistry) {
-        currentRequiredTypes.push('Стоматологический заказ-наряд');
+        currentRequiredTypes.push(DENTAL_WORK_ORDER_TYPE);
       }
 
       const missingRequiredTypes = currentRequiredTypes.filter(
@@ -78,7 +83,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
   const requiredTypes = useMemo(() => {
     const types = [...REQUIRED_DOCUMENT_TYPES];
     if (+values.category === CompensationCategoryEnum.Dentistry) {
-      types.push('Стоматологический заказ-наряд');
+      types.push(DENTAL_WORK_ORDER_TYPE);
     }
     return types;
   }, [values.category]);
@@ -100,7 +105,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
             label: program.title,
             subtitle: program.cardNo,
           }))}
-          placeholder="Выберите программу"
+          placeholder={t('compensation:request.selectProgram')}
           error={errors.program}
         />
       )}
@@ -113,7 +118,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
             label: item.fullName,
             subtitle: item.cardNo,
           }))}
-          placeholder="За кого осуществляется"
+          placeholder={t('compensation:request.selectPerson')}
           error={errors.person}
         />
       )}
@@ -122,14 +127,14 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
         onChange={value => handleChange('category')(value)}
         options={compensationCategories.map(item => ({
           value: item.id.toString(),
-          label: item.title,
+          label: t(item.titleKey),
         }))}
-        placeholder="Категория"
+        placeholder={t('compensation:request.selectCategory')}
         error={errors.category}
       />
       <TextField
         placeholder="0"
-        label="Сумма возмещения в тенге"
+        label={t('compensation:request.amountLabel')}
         keyboardType="number-pad"
         value={values.amount}
         error={errors.amount}
@@ -138,14 +143,14 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
       <Datepicker
         value={values.date}
         placeholder="DD.MM.YYYY"
-        label="Дата наступления случая"
+        label={t('compensation:request.dateLabel')}
         onChange={value => handleChange('date')(value)}
         error={errors.date}
         maxDate={new Date()}
       />
       <TextField
-        placeholder="Введите комментарий"
-        label="Комментарий"
+        placeholder={t('compensation:request.commentPlaceholder')}
+        label={t('compensation:request.commentLabel')}
         value={values.comments}
         error={errors.comments}
         onChangeText={value => handleChange('comments')(value)}
@@ -180,7 +185,9 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           requiredDocumentTypes={requiredTypes}
         />
       </MediaPicker>
-      <Button onPress={() => handleSubmit()}>Отправить заявку</Button>
+      <Button onPress={() => handleSubmit()}>
+        {t('compensation:request.submit')}
+      </Button>
     </View>
   );
 };

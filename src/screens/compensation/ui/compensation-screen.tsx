@@ -7,11 +7,13 @@ import { Button } from '@/shared/components/button';
 import { GET_COMPENSATION_REQUESTS_QUERY } from '@/shared/constants';
 import { FilePenIcon } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
 export const CompensationScreen: FC = () => {
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const isFetchingCompensations = useIsFetching({
     queryKey: [GET_COMPENSATION_REQUESTS_QUERY],
@@ -41,7 +43,7 @@ export const CompensationScreen: FC = () => {
           icon={<FilePenIcon width={22} height={22} color={colors.white} />}
           onPress={() => navigate(routes.CompensationRequest)}
         >
-          Заявка на возмещение
+          {t('compensation:requestButton')}
         </Button>
       </View>
     </>

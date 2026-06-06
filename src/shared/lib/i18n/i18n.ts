@@ -29,6 +29,8 @@ const NAMESPACES = [
   'profile',
   'home',
   'programs',
+  'appointments',
+  'compensation',
 ] as const;
 
 console.log('hello');

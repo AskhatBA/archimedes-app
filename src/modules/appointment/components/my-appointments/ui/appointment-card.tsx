@@ -20,6 +20,7 @@ import {
   MapPinnedIcon,
 } from '@/shared/icons';
 import { getTimeOfDay, formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
@@ -48,6 +49,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   isPast = false,
 }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { navigate } = useNavigation();
   const { showToast } = useToast();
@@ -56,12 +58,15 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     mutationFn: () => misApi.appointmentsDelete(appointmentId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments-history'] });
-      showToast({ type: 'success', message: 'Запись успешно отменена' });
+      showToast({
+        type: 'success',
+        message: t('appointments:cancelSuccess'),
+      });
     },
     onError: () => {
       showToast({
         type: 'error',
-        message: 'Не удалось отменить запись. Попробуйте снова',
+        message: t('appointments:cancelError'),
       });
     },
   });
@@ -90,7 +95,10 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['Отменить запись', 'Отмена'],
+          options: [
+            t('appointments:cancelAppointment'),
+            t('common:cancel'),
+          ],
           destructiveButtonIndex: 0,
         },
         buttonIndex => {
@@ -100,17 +108,21 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
         },
       );
     } else {
-      Alert.alert('Отменить запись', 'Вы уверены?', [
-        {
-          text: 'Отмена',
-          style: 'cancel',
-        },
-        {
-          text: 'Отменить запись',
-          style: 'destructive',
-          onPress: () => cancelAppointmentMutation.mutate(),
-        },
-      ]);
+      Alert.alert(
+        t('appointments:cancelAppointment'),
+        t('appointments:cancelConfirm'),
+        [
+          {
+            text: t('common:cancel'),
+            style: 'cancel',
+          },
+          {
+            text: t('appointments:cancelAppointment'),
+            style: 'destructive',
+            onPress: () => cancelAppointmentMutation.mutate(),
+          },
+        ],
+      );
     }
   };
 
@@ -133,13 +145,15 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
       )}
       {isPast && (
         <View style={styles.pastLabel}>
-          <Text style={styles.pastLabelText}>Завершена</Text>
+          <Text style={styles.pastLabelText}>
+            {t('appointments:completed')}
+          </Text>
         </View>
       )}
       <View style={{ flex: 1 }}>
         <View style={styles.dateContainer}>
           <Text style={[styles.timeOfDay, { color: fontColor[color] }]}>
-            {getTimeOfDay(date)}
+            {t(`appointments:timeOfDay.${getTimeOfDay(date)}`)}
           </Text>
           <Text style={[styles.time, { color: fontColor[color] }]}>
             {formatDate(date, 'HH:mm')}
@@ -165,7 +179,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
             <Text
               style={[styles.specializationName, { color: fontColor[color] }]}
             >
-              {isTelemedicine ? 'Онлайн' : branchAddress}
+              {isTelemedicine ? t('appointments:online') : branchAddress}
             </Text>
           </View>
         )}
@@ -182,7 +196,9 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
           <Text
             style={[styles.appointmentTypeText, { color: fontColor[color] }]}
           >
-            {isTelemedicine ? 'Телемедицина' : 'Обычный прием'}
+            {isTelemedicine
+              ? t('appointments:telemedicine')
+              : t('appointments:inPerson')}
           </Text>
         </View>
       </View>

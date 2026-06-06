@@ -9,6 +9,7 @@ import {
 
 import { useAppointmentRequests } from '@/modules/appointment/hooks/use-appointment-requests';
 import { SelectCaretIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors } from '@/shared/theme';
 
 import { AppointmentRequestCard } from './appointment-request-card';
@@ -16,6 +17,7 @@ import { AppointmentRequestCard } from './appointment-request-card';
 export const AppointmentRequests: FC = () => {
   const { appointmentRequests, isLoading } = useAppointmentRequests();
   const [isOpen, setIsOpen] = useState(true);
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
@@ -37,7 +39,7 @@ export const AppointmentRequests: FC = () => {
         activeOpacity={0.7}
       >
         <Text style={[styles.title, { color: colors.gray['700'] }]}>
-          Заявки на запись
+          {t('appointments:requestsTitle')}
         </Text>
         <View style={[styles.caretWrapper, isOpen && styles.caretWrapperOpen]}>
           <SelectCaretIcon />

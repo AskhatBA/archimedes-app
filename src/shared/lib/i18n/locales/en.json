@@ -115,6 +115,85 @@
   "user": {
     "loading": "Loading your data..."
   },
+  "appointments": {
+    "history": "Appointment history",
+    "bookAppointment": "Book an appointment",
+    "requestsTitle": "Appointment requests",
+    "upcomingTitle": "Upcoming appointments",
+    "emptyUpcoming": "No upcoming appointments",
+    "emptyHistory": "Appointment history is empty",
+    "completed": "Completed",
+    "online": "Online",
+    "telemedicine": "Telemedicine",
+    "inPerson": "In-person",
+    "cancelAppointment": "Cancel appointment",
+    "cancelConfirm": "Are you sure?",
+    "cancelSuccess": "Appointment cancelled successfully",
+    "cancelError": "Couldn't cancel the appointment. Please try again",
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "approved": "Approved",
+      "confirmed": "Confirmed",
+      "rejected": "Rejected"
+    },
+    "timeOfDay": {
+      "morning": "Morning",
+      "day": "Afternoon",
+      "evening": "Evening",
+      "night": "Night"
+    }
+  },
+  "compensation": {
+    "requestButton": "Reimbursement request",
+    "empty": "You don't have any reimbursement requests yet",
+    "amount": "Amount",
+    "requestNumber": "Request №",
+    "comment": "Comment",
+    "statuses": {
+      "pending": "Under review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "request": {
+      "heading": "Reimbursement request",
+      "selectProgram": "Select a program",
+      "selectPerson": "Who is it for",
+      "selectCategory": "Category",
+      "amountLabel": "Reimbursement amount in tenge",
+      "dateLabel": "Date of the event",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submit": "Submit request",
+      "submitError": "Something went wrong. Please contact support",
+      "successTitle": "Request submitted",
+      "successSubtitle": "Your reimbursement request has been accepted. We'll review it shortly.",
+      "successButton": "Back",
+      "attachDocuments": "Attach documents",
+      "addFile": "Add file",
+      "missingDocuments": "The following documents are required:",
+      "deleteFileTitle": "Delete file",
+      "deleteFileMessage": "Are you sure you want to delete this file?"
+    },
+    "categories": {
+      "outpatientCare": "Outpatient care",
+      "dentistry": "Dentistry",
+      "medications": "Medications",
+      "inpatientTreatment": "Inpatient treatment"
+    },
+    "documents": {
+      "fiscalReceipt": "Fiscal receipt",
+      "idCard": "ID document",
+      "birthCertificate": "Birth certificate",
+      "invoice": "Service invoice",
+      "salesReceipt": "Sales receipt",
+      "consultativeOpinion": "Consultation report (referral)",
+      "medicalHistoryExtract": "Medical history extract",
+      "dentalWorkOrder": "Dental work order",
+      "studyResults": "Study results",
+      "ibanReference": "IBAN account reference"
+    }
+  },
   "programs": {
     "loading": "Loading your programs...",
     "emptyTitle": "You have no active programs yet",

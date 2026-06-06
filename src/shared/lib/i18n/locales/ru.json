@@ -28,7 +28,7 @@
     "home": "Главная",
     "appointments": "Записи",
     "programs": "Программы",
-    "compensation": "Компенсация",
+    "compensation": "Возмещение",
     "profile": "Профиль"
   },
   "auth": {
@@ -122,6 +122,85 @@
   },
   "user": {
     "loading": "Загружаем ваши данные..."
+  },
+  "appointments": {
+    "history": "История записей",
+    "bookAppointment": "Записаться на прием",
+    "requestsTitle": "Заявки на запись",
+    "upcomingTitle": "Предстоящие записи",
+    "emptyUpcoming": "Нет предстоящих записей на прием",
+    "emptyHistory": "История записей пуста",
+    "completed": "Завершена",
+    "online": "Онлайн",
+    "telemedicine": "Телемедицина",
+    "inPerson": "Обычный прием",
+    "cancelAppointment": "Отменить запись",
+    "cancelConfirm": "Вы уверены?",
+    "cancelSuccess": "Запись успешно отменена",
+    "cancelError": "Не удалось отменить запись. Попробуйте снова",
+    "statuses": {
+      "pending": "Ожидает",
+      "processing": "Обрабатывается",
+      "approved": "Подтверждено",
+      "confirmed": "Подтверждено",
+      "rejected": "Отклонено"
+    },
+    "timeOfDay": {
+      "morning": "Утро",
+      "day": "День",
+      "evening": "Вечер",
+      "night": "Ночь"
+    }
+  },
+  "compensation": {
+    "requestButton": "Заявка на возмещение",
+    "empty": "У вас пока нет заявок на возмещение",
+    "amount": "Сумма",
+    "requestNumber": "№ заявки",
+    "comment": "Комментарий",
+    "statuses": {
+      "pending": "На рассмотрении",
+      "approved": "Одобрено",
+      "rejected": "Отклонено"
+    },
+    "request": {
+      "heading": "Заявка на возмещение",
+      "selectProgram": "Выберите программу",
+      "selectPerson": "За кого осуществляется",
+      "selectCategory": "Категория",
+      "amountLabel": "Сумма возмещения в тенге",
+      "dateLabel": "Дата наступления случая",
+      "commentLabel": "Комментарий",
+      "commentPlaceholder": "Введите комментарий",
+      "submit": "Отправить заявку",
+      "submitError": "Произошла ошибка. Пожалуйста обратитесь в поддержку",
+      "successTitle": "Заявка отправлена",
+      "successSubtitle": "Ваша заявка на возмещение успешно принята. Мы рассмотрим её в ближайшее время.",
+      "successButton": "Вернуться",
+      "attachDocuments": "Прикрепить документы",
+      "addFile": "Добавить файл",
+      "missingDocuments": "Необходимо прикрепить следующие документы:",
+      "deleteFileTitle": "Удаление файла",
+      "deleteFileMessage": "Вы действительно хотите удалить этот файл?"
+    },
+    "categories": {
+      "outpatientCare": "АПП (амбулаторно-поликлиническая помощь)",
+      "dentistry": "Стоматология",
+      "medications": "Медикаменты",
+      "inpatientTreatment": "Стационарное лечение"
+    },
+    "documents": {
+      "fiscalReceipt": "Фискальный чек",
+      "idCard": "Удостоверение личности",
+      "birthCertificate": "Свидетельство о рождении",
+      "invoice": "Счет-фактура на оплату услуг",
+      "salesReceipt": "Товарный чек",
+      "consultativeOpinion": "Консультативное заключение (направление)",
+      "medicalHistoryExtract": "Выписка из истории болезни",
+      "dentalWorkOrder": "Стоматологический заказ-наряд",
+      "studyResults": "Результаты исследований",
+      "ibanReference": "Справка о номере счета получателя IBAN"
+    }
   },
   "programs": {
     "loading": "Загружаем ваши программы...",

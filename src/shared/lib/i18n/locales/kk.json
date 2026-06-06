@@ -115,6 +115,85 @@
   "user": {
     "loading": "Деректеріңіз жүктелуде..."
   },
+  "appointments": {
+    "history": "Жазбалар тарихы",
+    "bookAppointment": "Қабылдауға жазылу",
+    "requestsTitle": "Жазылу өтінімдері",
+    "upcomingTitle": "Алдағы жазбалар",
+    "emptyUpcoming": "Алдағы жазбалар жоқ",
+    "emptyHistory": "Жазбалар тарихы бос",
+    "completed": "Аяқталды",
+    "online": "Онлайн",
+    "telemedicine": "Телемедицина",
+    "inPerson": "Қарапайым қабылдау",
+    "cancelAppointment": "Жазбаны болдырмау",
+    "cancelConfirm": "Сенімдісіз бе?",
+    "cancelSuccess": "Жазба сәтті болдырылмады",
+    "cancelError": "Жазбаны болдырмау мүмкін болмады. Қайталап көріңіз",
+    "statuses": {
+      "pending": "Күтуде",
+      "processing": "Өңделуде",
+      "approved": "Расталды",
+      "confirmed": "Расталды",
+      "rejected": "Қабылданбады"
+    },
+    "timeOfDay": {
+      "morning": "Таң",
+      "day": "Күн",
+      "evening": "Кеш",
+      "night": "Түн"
+    }
+  },
+  "compensation": {
+    "requestButton": "Өтемақыға өтінім",
+    "empty": "Сізде әзірге өтемақыға өтінімдер жоқ",
+    "amount": "Сома",
+    "requestNumber": "Өтінім №",
+    "comment": "Түсініктеме",
+    "statuses": {
+      "pending": "Қаралуда",
+      "approved": "Мақұлданды",
+      "rejected": "Қабылданбады"
+    },
+    "request": {
+      "heading": "Өтемақыға өтінім",
+      "selectProgram": "Бағдарламаны таңдаңыз",
+      "selectPerson": "Кімге арналған",
+      "selectCategory": "Санат",
+      "amountLabel": "Өтемақы сомасы (теңге)",
+      "dateLabel": "Оқиға болған күн",
+      "commentLabel": "Түсініктеме",
+      "commentPlaceholder": "Түсініктеме енгізіңіз",
+      "submit": "Өтінімді жіберу",
+      "submitError": "Қате пайда болды. Қолдау қызметіне хабарласыңыз",
+      "successTitle": "Өтінім жіберілді",
+      "successSubtitle": "Өтемақыға өтініміңіз сәтті қабылданды. Жақын арада қарастырамыз.",
+      "successButton": "Артқа қайту",
+      "attachDocuments": "Құжаттарды тіркеу",
+      "addFile": "Файл қосу",
+      "missingDocuments": "Келесі құжаттарды тіркеу қажет:",
+      "deleteFileTitle": "Файлды жою",
+      "deleteFileMessage": "Бұл файлды шынымен жойғыңыз келе ме?"
+    },
+    "categories": {
+      "outpatientCare": "АПК (амбулаториялық-емханалық көмек)",
+      "dentistry": "Стоматология",
+      "medications": "Дәрі-дәрмектер",
+      "inpatientTreatment": "Стационарлық емдеу"
+    },
+    "documents": {
+      "fiscalReceipt": "Фискалдық чек",
+      "idCard": "Жеке куәлік",
+      "birthCertificate": "Туу туралы куәлік",
+      "invoice": "Қызмет көрсету шот-фактурасы",
+      "salesReceipt": "Тауар чегі",
+      "consultativeOpinion": "Кеңестік қорытынды (жолдама)",
+      "medicalHistoryExtract": "Ауру тарихынан үзінді",
+      "dentalWorkOrder": "Стоматологиялық тапсырыс-нарядт",
+      "studyResults": "Зерттеу нәтижелері",
+      "ibanReference": "IBAN шот нөмірі туралы анықтама"
+    }
+  },
   "programs": {
     "loading": "Бағдарламаларыңыз жүктелуде...",
     "emptyTitle": "Сізде әзірге белсенді бағдарламалар жоқ",

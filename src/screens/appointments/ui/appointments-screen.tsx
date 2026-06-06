@@ -17,12 +17,14 @@ import {
   SelectCaretIcon,
 } from '@/shared/icons';
 import { MainLayout } from '@/shared/layout/main-layout';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
 import { colors, useTheme } from '@/shared/theme';
 
 export const AppointmentsScreen: FC = () => {
   const { navigate } = useNavigation();
   const { colors: themeColors } = useTheme();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const isFetchingAppointments = useIsFetching({ queryKey: ['appointments'] });
 
@@ -70,7 +72,7 @@ export const AppointmentsScreen: FC = () => {
                   { color: themeColors.blue['400'] },
                 ]}
               >
-                История записей
+                {t('appointments:history')}
               </Text>
             </View>
             <View style={styles.historyCaret}>
@@ -90,7 +92,7 @@ export const AppointmentsScreen: FC = () => {
             navigate(routes.CreateAppointment);
           }}
         >
-          Записаться на прием
+          {t('appointments:bookAppointment')}
         </Button>
       </View>
     </>

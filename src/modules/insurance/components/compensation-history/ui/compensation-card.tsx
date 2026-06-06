@@ -3,35 +3,33 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { InsuranceRefundRequest } from '@/api';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors as themeColors, useTheme } from '@/shared/theme';
 
 type CompensationCardProps = InsuranceRefundRequest;
 
-const STATUS_MAP: Record<string, { label: string; bg: string; text: string }> =
-  {
-    pending: {
-      label: 'На рассмотрении',
-      bg: themeColors.orange['200'],
-      text: themeColors.orange['600'],
-    },
-    approved: {
-      label: 'Одобрено',
-      bg: themeColors.green['100'],
-      text: themeColors.green['600'],
-    },
-    rejected: {
-      label: 'Отклонено',
-      bg: themeColors.red['100'],
-      text: themeColors.red['500'],
-    },
-  };
+const STATUS_MAP: Record<string, { bg: string; text: string }> = {
+  pending: {
+    bg: themeColors.orange['200'],
+    text: themeColors.orange['600'],
+  },
+  approved: {
+    bg: themeColors.green['100'],
+    text: themeColors.green['600'],
+  },
+  rejected: {
+    bg: themeColors.red['100'],
+    text: themeColors.red['500'],
+  },
+};
 
-const getStatus = (status: string) =>
-  STATUS_MAP[status.toLowerCase()] ?? {
-    label: status,
-    bg: themeColors.gray['200'],
-    text: themeColors.gray['600'],
-  };
+const DEFAULT_STATUS_STYLE = {
+  bg: themeColors.gray['200'],
+  text: themeColors.gray['600'],
+};
+
+const getStatusStyle = (status: string) =>
+  STATUS_MAP[status.toLowerCase()] ?? DEFAULT_STATUS_STYLE;
 
 export const CompensationCard: FC<CompensationCardProps> = ({
   id,
@@ -42,7 +40,14 @@ export const CompensationCard: FC<CompensationCardProps> = ({
   comments,
 }) => {
   const { colors } = useTheme();
-  const statusStyle = getStatus(status);
+  const { t, i18n } = useTranslation();
+  const statusStyle = getStatusStyle(status);
+
+  const statusKey = status?.toLowerCase();
+  const statusLabel =
+    statusKey && i18n.exists(`compensation:statuses.${statusKey}`)
+      ? t(`compensation:statuses.${statusKey}`)
+      : status;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.blue['100'] }]}>
@@ -60,7 +65,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
         </View>
         <View style={[styles.badge, { backgroundColor: statusStyle.bg }]}>
           <Text style={[styles.badgeText, { color: statusStyle.text }]}>
-            {statusStyle.label}
+            {statusLabel}
           </Text>
         </View>
       </View>
@@ -70,7 +75,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
       <View style={styles.footer}>
         <View>
           <Text style={[styles.amountLabel, { color: colors.gray['500'] }]}>
-            Сумма
+            {t('compensation:amount')}
           </Text>
           <Text style={[styles.amount, { color: colors.primary }]}>
             {amount.toLocaleString('ru-RU')}₸
@@ -78,7 +83,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
         </View>
         <View style={styles.idContainer}>
           <Text style={[styles.idLabel, { color: colors.gray['500'] }]}>
-            № заявки
+            {t('compensation:requestNumber')}
           </Text>
           <Text style={[styles.idValue, { color: colors.blue['400'] }]}>
             {id}
@@ -91,7 +96,7 @@ export const CompensationCard: FC<CompensationCardProps> = ({
           style={[styles.commentsBox, { backgroundColor: colors.blue['150'] }]}
         >
           <Text style={[styles.commentsLabel, { color: colors.gray['500'] }]}>
-            Комментарий
+            {t('compensation:comment')}
           </Text>
           <Text style={[styles.commentsText, { color: colors.textMain }]}>
             {comments}

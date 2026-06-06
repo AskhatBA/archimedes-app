@@ -4,12 +4,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
 import { SuccessCheckIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 export const SubmitRequestSuccess: FC = () => {
   const { colors } = useTheme();
   const { goBack } = useNavigation();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
   return (
@@ -28,17 +30,16 @@ export const SubmitRequestSuccess: FC = () => {
         </View>
 
         <Text style={[styles.title, { color: colors.textMain }]}>
-          Заявка отправлена
+          {t('compensation:request.successTitle')}
         </Text>
         <Text style={[styles.subtitle, { color: colors.gray['500'] }]}>
-          Ваша заявка на возмещение успешно принята. Мы рассмотрим её в
-          ближайшее время.
+          {t('compensation:request.successSubtitle')}
         </Text>
       </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 16 }]}>
         <Button style={styles.button} onPress={() => goBack()}>
-          Вернуться
+          {t('compensation:request.successButton')}
         </Button>
       </View>
     </View>

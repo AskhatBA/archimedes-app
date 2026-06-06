@@ -4,6 +4,7 @@ import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointmentHistory } from '@/api';
 import { useAppointmentsHistory } from '@/modules/appointment';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
@@ -18,6 +19,7 @@ export const Appointments: FC<AppointmentsProps> = ({
   emptyText,
 }) => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { appointmentsHistory, loadingAppointmentsHistory } =
     useAppointmentsHistory();
 
@@ -46,8 +48,8 @@ export const Appointments: FC<AppointmentsProps> = ({
     const fallback =
       emptyText ??
       (mode === 'past'
-        ? 'История записей пуста'
-        : 'Нет предстоящих записей на прием');
+        ? t('appointments:emptyHistory')
+        : t('appointments:emptyUpcoming'));
     return (
       <View style={styles.noAppointmentsContainer}>
         <Text style={styles.noAppointmentsText}>{fallback}</Text>

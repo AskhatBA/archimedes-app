@@ -10,67 +10,48 @@ import {
   VideoIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 interface AppointmentRequestCardProps {
   request: MISAppointmentRequest;
 }
 
-const STATUS_STYLES: Record<
-  string,
-  { bg: string; text: string; label: string }
-> = {
-  pending: {
-    bg: '#FCF1E2',
-    text: '#CF8E52',
-    label: 'Ожидает',
-  },
-  processing: {
-    bg: '#FCF1E2',
-    text: '#CF8E52',
-    label: 'Обрабатывается',
-  },
-  approved: {
-    bg: '#F4F9E9',
-    text: '#69914F',
-    label: 'Подтверждено',
-  },
-  confirmed: {
-    bg: '#F4F9E9',
-    text: '#69914F',
-    label: 'Подтверждено',
-  },
-  rejected: {
-    bg: '#F8E2E1',
-    text: '#e25853',
-    label: 'Отклонено',
-  },
+const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
+  pending: { bg: '#FCF1E2', text: '#CF8E52' },
+  processing: { bg: '#FCF1E2', text: '#CF8E52' },
+  approved: { bg: '#F4F9E9', text: '#69914F' },
+  confirmed: { bg: '#F4F9E9', text: '#69914F' },
+  rejected: { bg: '#F8E2E1', text: '#e25853' },
 };
+
+const DEFAULT_STATUS_STYLE = { bg: '#F0F6FC', text: '#295D87' };
 
 const getStatusStyle = (status?: string) => {
   if (!status) return STATUS_STYLES.pending;
-  return (
-    STATUS_STYLES[status.toLowerCase()] ?? {
-      bg: '#F0F6FC',
-      text: '#295D87',
-      label: status,
-    }
-  );
+  return STATUS_STYLES[status.toLowerCase()] ?? DEFAULT_STATUS_STYLE;
 };
 
 export const AppointmentRequestCard: FC<AppointmentRequestCardProps> = ({
   request,
 }) => {
   const { colors } = useTheme();
+  const { t, i18n } = useTranslation();
   const statusStyle = getStatusStyle(request.status);
   const isTelemedicine = request.appointment_type === 'telemedicine';
+
+  const statusKey = request.status?.toLowerCase();
+  const statusFallback =
+    statusKey && i18n.exists(`appointments:statuses.${statusKey}`)
+      ? t(`appointments:statuses.${statusKey}`)
+      : (request.status ?? t('appointments:statuses.pending'));
 
   return (
     <View style={[styles.container, { backgroundColor: colors.blue['100'] }]}>
       <View style={styles.header}>
         <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
           <Text style={[styles.statusText, { color: statusStyle.text }]}>
-            {request.status_display || statusStyle.label}
+            {request.status_display || statusFallback}
           </Text>
         </View>
         {request.start_time && (
@@ -113,7 +94,9 @@ export const AppointmentRequestCard: FC<AppointmentRequestCardProps> = ({
         )}
         <Text style={[styles.infoText, { color: colors.gray['500'] }]}>
           {request.appointment_type_display ||
-            (isTelemedicine ? 'Телемедицина' : 'Обычный прием')}
+            (isTelemedicine
+              ? t('appointments:telemedicine')
+              : t('appointments:inPerson'))}
         </Text>
       </View>
 

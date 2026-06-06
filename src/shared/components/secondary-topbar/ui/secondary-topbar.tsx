@@ -4,6 +4,7 @@ import { TouchableOpacity, View, StyleSheet, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ArrowBackIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
@@ -16,13 +17,14 @@ export const SecondaryTopbar: FC<SecondaryTopbarProps> = ({ title }) => {
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const { goBack } = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 16 }]}>
       <TouchableOpacity style={styles.backButton} onPress={goBack}>
         <ArrowBackIcon width={18} height={18} color={colors.primary} />
         <Text style={[styles.backButtonLabel, { color: colors.blue['400'] }]}>
-          Назад
+          {t('common:back')}
         </Text>
       </TouchableOpacity>
       <Text

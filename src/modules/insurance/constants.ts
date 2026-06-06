@@ -6,19 +6,19 @@ export const INSURANCE_CERTIFICATE_URL =
 export const compensationCategories = [
   {
     id: CompensationCategoryEnum.OutpatientCare,
-    title: 'АПП (амбулаторно-поликлиническая помощь)',
+    titleKey: 'compensation:categories.outpatientCare',
   },
   {
     id: CompensationCategoryEnum.Dentistry,
-    title: 'Стоматология',
+    titleKey: 'compensation:categories.dentistry',
   },
   {
     id: CompensationCategoryEnum.Medications,
-    title: 'Медикаменты',
+    titleKey: 'compensation:categories.medications',
   },
   {
     id: CompensationCategoryEnum.InpatientTreatment,
-    title: 'Стационарное лечение',
+    titleKey: 'compensation:categories.inpatientTreatment',
   },
 ];
 
