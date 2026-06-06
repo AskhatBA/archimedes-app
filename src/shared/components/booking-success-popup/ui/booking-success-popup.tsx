@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import UserIcon from '@/assets/icons/user-outlined.svg';
 import { SCREEN_HEIGHT } from '@/shared/constants';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 interface BookingSuccessPopupProps {
@@ -30,6 +31,7 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
   const translateY = useRef(new Animated.Value(sheetHeight - 20)).current;
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   const openSheet = () => {
     Animated.timing(translateY, {
@@ -83,13 +85,16 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
                 <UserIcon color={colors.primary} />
               </View>
               <Text style={styles.title}>
-                Запись на прием к {'\n'}
+                {t('appointments:create.success.title')} {'\n'}
                 <Text style={styles.bold}>{doctorName}</Text>
               </Text>
 
               <Text style={styles.subtitle}>
-                Колл-центр свяжется с Вами для подтверждения записи{'\n\n'}
-                Запись на {appointmentDate}
+                {t('appointments:create.success.subtitle')}
+                {'\n\n'}
+                {t('appointments:create.success.dateLine', {
+                  date: appointmentDate,
+                })}
               </Text>
             </View>
             <TouchableOpacity
@@ -97,7 +102,7 @@ export const BookingSuccessPopup: FC<BookingSuccessPopupProps> = ({
               onPress={onClose}
             >
               <Text style={[styles.buttonText, { color: colors.primary }]}>
-                Отлично!
+                {t('appointments:create.success.button')}
               </Text>
             </TouchableOpacity>
           </View>

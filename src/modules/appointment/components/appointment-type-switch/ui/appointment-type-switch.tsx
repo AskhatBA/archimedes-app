@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { ClipboardClockIcon, VideoIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors } from '@/shared/theme';
 
 import { AppointmentTypeSwitchTab } from '../types';
@@ -15,6 +16,8 @@ export const AppointmentTypeSwitch: FC<AppointmentTypeSwitchProps> = ({
   appointmentType,
   changeAppointmentType,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.tabContainer}>
       <TouchableOpacity
@@ -36,7 +39,7 @@ export const AppointmentTypeSwitch: FC<AppointmentTypeSwitchProps> = ({
             appointmentType === 'regular' && styles.activeTabText,
           ]}
         >
-          Обычный прием
+          {t('appointments:inPerson')}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -61,7 +64,7 @@ export const AppointmentTypeSwitch: FC<AppointmentTypeSwitchProps> = ({
             appointmentType === 'telemedicine' && styles.activeTabText,
           ]}
         >
-          Телемедицина
+          {t('appointments:telemedicine')}
         </Text>
       </TouchableOpacity>
     </View>

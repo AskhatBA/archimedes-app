@@ -6,9 +6,11 @@ import {
   CreateAppointmentForm,
 } from '@/modules/appointment';
 import { usePageHeader } from '@/shared/hooks';
+import { useTranslation } from '@/shared/lib/i18n';
 
 export const CreateAppointmentScreen: FC = () => {
-  usePageHeader({ title: 'Запись на прием' });
+  const { t } = useTranslation();
+  usePageHeader({ title: t('appointments:create.pageTitle') });
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

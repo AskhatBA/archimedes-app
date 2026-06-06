@@ -5,6 +5,7 @@ import { useUser } from '@/modules/user';
 import { Button } from '@/shared/components/button';
 import { SelectField } from '@/shared/components/select-field';
 import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useFamily, usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
@@ -28,6 +29,7 @@ export const CreateAppointmentForm: FC = () => {
   const { programs } = usePrograms();
   const { user } = useUser();
   const { family } = useFamily(formValues.programId);
+  const { t } = useTranslation();
 
   const availablePrograms = useMemo(
     () => programs?.filter(p => p.status !== 'EXPIRED'),
@@ -66,12 +68,12 @@ export const CreateAppointmentForm: FC = () => {
             { color: colors.gray['500'] },
           ]}
         >
-          Выберите программу
+          {t('appointments:create.selectProgramLabel')}
         </Text>
         <SelectField
           value={formValues.programId || ''}
           onChange={value => changeFormValues('programId', value)}
-          placeholder="Программа"
+          placeholder={t('appointments:create.selectProgramPlaceholder')}
           options={(availablePrograms || []).map(p => ({
             value: p.id,
             label: p.title,
@@ -88,14 +90,14 @@ export const CreateAppointmentForm: FC = () => {
               { color: colors.gray['500'] },
             ]}
           >
-            Выберите пациента
+            {t('appointments:create.selectPatientLabel')}
           </Text>
           <SelectField
             value={formValues.patientId || ''}
             onChange={value => changeFormValues('patientId', value)}
-            placeholder="Пациент"
+            placeholder={t('appointments:create.selectPatientPlaceholder')}
             options={[
-              { value: '', label: 'Оформить на себя' },
+              { value: '', label: t('appointments:create.selfPatient') },
               ...family
                 .filter(member => member.benId !== user.misPatientId)
                 .map(member => ({
@@ -118,12 +120,14 @@ export const CreateAppointmentForm: FC = () => {
               { color: colors.gray['500'] },
             ]}
           >
-            Выберите специализацию
+            {t('appointments:create.selectSpecializationLabel')}
           </Text>
           <SelectField
             value={formValues.specializationId}
             onChange={value => changeFormValues('specializationId', value)}
-            placeholder="Список специализаций"
+            placeholder={t(
+              'appointments:create.selectSpecializationPlaceholder',
+            )}
             options={specializations.map(item => ({
               value: item.id,
               label: item.name,
@@ -140,12 +144,12 @@ export const CreateAppointmentForm: FC = () => {
               { color: colors.gray['500'] },
             ]}
           >
-            Выберите врача
+            {t('appointments:create.selectDoctorLabel')}
           </Text>
           <SelectField
             value={formValues.doctorId}
             onChange={value => changeFormValues('doctorId', value)}
-            placeholder="Любой врач"
+            placeholder={t('appointments:create.selectDoctorPlaceholder')}
             options={doctors.map(item => ({
               value: item.id,
               label: item.name,
@@ -173,7 +177,7 @@ export const CreateAppointmentForm: FC = () => {
       )}
       {formValues.doctorId && availableSlotList.length === 0 && (
         <Text style={[styles.noSlots, { color: colors.gray['500'] }]}>
-          Нет доступных слотов для записи
+          {t('appointments:create.noSlots')}
         </Text>
       )}
 
@@ -182,7 +186,7 @@ export const CreateAppointmentForm: FC = () => {
         disabled={!isBookingEnabled}
         onPress={bookAppointment}
       >
-        Записаться на прием
+        {t('appointments:create.submit')}
       </Button>
     </View>
   );

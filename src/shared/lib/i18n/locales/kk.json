@@ -15,7 +15,10 @@
     "loading": "Жүктелуде...",
     "search": "Іздеу",
     "yes": "Иә",
-    "no": "Жоқ"
+    "no": "Жоқ",
+    "today": "бүгін",
+    "tomorrow": "ертең",
+    "other": "Басқа"
   },
   "errors": {
     "title": "Қате",
@@ -142,6 +145,30 @@
       "day": "Күн",
       "evening": "Кеш",
       "night": "Түн"
+    },
+    "create": {
+      "pageTitle": "Қабылдауға жазылу",
+      "selectProgramLabel": "Бағдарламаны таңдаңыз",
+      "selectProgramPlaceholder": "Бағдарлама",
+      "selectPatientLabel": "Пациентті таңдаңыз",
+      "selectPatientPlaceholder": "Пациент",
+      "selfPatient": "Өзіме жазылу",
+      "selectBranchLabel": "Филиалды таңдаңыз",
+      "selectBranchPlaceholder": "Филиал",
+      "selectSpecializationLabel": "Мамандықты таңдаңыз",
+      "selectSpecializationPlaceholder": "Мамандықтар тізімі",
+      "selectDoctorLabel": "Дәрігерді таңдаңыз",
+      "selectDoctorPlaceholder": "Кез келген дәрігер",
+      "noSlots": "Қолжетімді уақыт жоқ",
+      "submit": "Қабылдауға жазылу",
+      "errorUnknown": "Белгісіз қате. Бір минуттан кейін қайталап көріңіз",
+      "errorTooLate": "Қабылдауға 1 сағаттан аз қалғанда жазылу мүмкін емес",
+      "success": {
+        "title": "Қабылдауға жазылу:",
+        "subtitle": "Растау үшін колл-орталық сізбен хабарласады",
+        "dateLine": "Жазылу күні: {{date}}",
+        "button": "Тамаша!"
+      }
     }
   },
   "compensation": {

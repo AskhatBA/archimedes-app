@@ -15,7 +15,10 @@
     "loading": "Загрузка...",
     "search": "Поиск",
     "yes": "Да",
-    "no": "Нет"
+    "no": "Нет",
+    "today": "сегодня",
+    "tomorrow": "завтра",
+    "other": "Прочее"
   },
   "errors": {
     "title": "Ошибка",
@@ -150,6 +153,30 @@
       "day": "День",
       "evening": "Вечер",
       "night": "Ночь"
+    },
+    "create": {
+      "pageTitle": "Запись на прием",
+      "selectProgramLabel": "Выберите программу",
+      "selectProgramPlaceholder": "Программа",
+      "selectPatientLabel": "Выберите пациента",
+      "selectPatientPlaceholder": "Пациент",
+      "selfPatient": "Оформить на себя",
+      "selectBranchLabel": "Выберите филиал",
+      "selectBranchPlaceholder": "Филиал",
+      "selectSpecializationLabel": "Выберите специализацию",
+      "selectSpecializationPlaceholder": "Список специализаций",
+      "selectDoctorLabel": "Выберите врача",
+      "selectDoctorPlaceholder": "Любой врач",
+      "noSlots": "Нет доступных слотов для записи",
+      "submit": "Записаться на прием",
+      "errorUnknown": "Неизвестная ошибка. Попробуйте еще раз через минуту",
+      "errorTooLate": "Нельзя записаться менее чем за 1 час до приема",
+      "success": {
+        "title": "Запись на прием к",
+        "subtitle": "Колл-центр свяжется с Вами для подтверждения записи",
+        "dateLine": "Запись на {{date}}",
+        "button": "Отлично!"
+      }
     }
   },
   "compensation": {

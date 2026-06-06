@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { SelectField } from '@/shared/components/select-field/ui/select-field';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { useCreateAppointment } from '../../../context/create-appointment-context';
@@ -16,6 +17,7 @@ const BRANCHES_TO_SHOW = [
 
 export const ChooseBranch: FC = () => {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { branches, loadingBranches } = useBranches();
   const { changeFormValues, formValues } = useCreateAppointment();
 
@@ -24,10 +26,11 @@ export const ChooseBranch: FC = () => {
       BRANCHES_TO_SHOW.includes(clinic.name),
     );
 
+    const otherLabel = t('common:other');
     const getCity = (address?: string) => {
-      if (!address) return 'Прочее';
+      if (!address) return otherLabel;
       const firstPart = address.split(',')[0] || '';
-      return firstPart.replace(/^г\.?\s*/i, '').trim() || 'Прочее';
+      return firstPart.replace(/^г\.?\s*/i, '').trim() || otherLabel;
     };
 
     const citiesMap = new Map<
@@ -47,7 +50,7 @@ export const ChooseBranch: FC = () => {
       });
     }
     return Array.from(citiesMap.values());
-  }, [branches]);
+  }, [branches, t]);
 
   if (loadingBranches) return null;
 
@@ -59,12 +62,12 @@ export const ChooseBranch: FC = () => {
           { color: colors.gray['500'] },
         ]}
       >
-        Выберите филиал
+        {t('appointments:create.selectBranchLabel')}
       </Text>
       <SelectField
         sections={sectionsByCity}
         value={formValues.branchId ? String(formValues.branchId) : ''}
-        placeholder="Филиал"
+        placeholder={t('appointments:create.selectBranchPlaceholder')}
         onChange={value => {
           changeFormValues('branchId', value as never);
         }}

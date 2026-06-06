@@ -3,6 +3,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { ArrowBackIcon } from '@/shared/icons';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
 import { TimeSlot, DaySlots } from '../types';
@@ -26,6 +27,7 @@ export const TimeSlotPicker: FC<TimeSlotPickerProps> = ({
   maxDays = 14,
 }) => {
   const [startIndex, setStartIndex] = useState(0);
+  const { t } = useTranslation();
   const DAYS_PER_PAGE = 4;
 
   // Use useEffect to reset startIndex if it goes out of bounds when maxDays changes
@@ -85,9 +87,9 @@ export const TimeSlotPicker: FC<TimeSlotPickerProps> = ({
       const dateLabel = d.format('D MMM').replace('.', '');
 
       if (isToday) {
-        dayLabel = 'сегодня';
+        dayLabel = t('common:today');
       } else if (isTomorrow) {
-        dayLabel = 'завтра';
+        dayLabel = t('common:tomorrow');
       }
 
       return {
@@ -96,7 +98,7 @@ export const TimeSlotPicker: FC<TimeSlotPickerProps> = ({
         dateLabel,
       };
     });
-  }, [visibleDays]);
+  }, [visibleDays, t]);
 
   const renderSlot = (slot: TimeSlot, date: string) => {
     const isSelected = selectedDate === date && selectedTime === slot.time;

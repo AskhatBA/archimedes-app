@@ -15,7 +15,10 @@
     "loading": "Loading...",
     "search": "Search",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "other": "Other"
   },
   "errors": {
     "title": "Error",
@@ -142,6 +145,30 @@
       "day": "Afternoon",
       "evening": "Evening",
       "night": "Night"
+    },
+    "create": {
+      "pageTitle": "Book an appointment",
+      "selectProgramLabel": "Select a program",
+      "selectProgramPlaceholder": "Program",
+      "selectPatientLabel": "Select a patient",
+      "selectPatientPlaceholder": "Patient",
+      "selfPatient": "Book for myself",
+      "selectBranchLabel": "Select a branch",
+      "selectBranchPlaceholder": "Branch",
+      "selectSpecializationLabel": "Select a specialization",
+      "selectSpecializationPlaceholder": "List of specializations",
+      "selectDoctorLabel": "Select a doctor",
+      "selectDoctorPlaceholder": "Any doctor",
+      "noSlots": "No available time slots",
+      "submit": "Book an appointment",
+      "errorUnknown": "Unknown error. Please try again in a minute",
+      "errorTooLate": "You cannot book less than 1 hour before the appointment",
+      "success": {
+        "title": "Appointment booked with",
+        "subtitle": "Our call center will contact you to confirm",
+        "dateLine": "Appointment on {{date}}",
+        "button": "Great!"
+      }
     }
   },
   "compensation": {

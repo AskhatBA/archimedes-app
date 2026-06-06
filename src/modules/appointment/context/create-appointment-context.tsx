@@ -17,6 +17,7 @@ import { useSpecializations } from '@/modules/appointment/hooks/use-specializati
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 
@@ -57,6 +58,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   const { goBack } = useNavigation();
+  const { t } = useTranslation();
 
   const [success, setSuccess] = useState(false);
   const [formValues, setFormValues] =
@@ -137,7 +139,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       }
       showToast({
         type: 'error',
-        message: 'Неизвестная ошибка. Попробуйте еще раз через минуту',
+        message: t('appointments:create.errorUnknown'),
       });
     },
   });
@@ -148,7 +150,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       if (!slotDateTime.isAfter(dayjs().add(1, 'hour'))) {
         showToast({
           type: 'error',
-          message: 'Нельзя записаться менее чем за 1 час до приема',
+          message: t('appointments:create.errorTooLate'),
         });
         return;
       }
