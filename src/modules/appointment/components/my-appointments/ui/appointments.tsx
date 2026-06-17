@@ -114,9 +114,9 @@ export const Appointments: FC<AppointmentsProps> = ({
                       key={appointment.id}
                       appointmentId={appointment.id}
                       date={appointment.startTime}
-                      doctorName={appointment.doctor.name}
-                      branchName={appointment.branch.name}
-                      branchAddress={appointment.branch.address}
+                      doctorName={appointment.doctor?.name}
+                      branchName={appointment.branch?.name}
+                      branchAddress={appointment.branch?.address}
                       appointmentType={appointment.appointmentType}
                       isPast={isAppointmentPast}
                     />

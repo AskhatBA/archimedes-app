@@ -113,7 +113,26 @@
     "extraPrograms_other": "және тағы {{count}} бағдарлама",
     "bookAppointment": "Қабылдауға жазылу",
     "news": "Жаңалықтар",
-    "noNews": "Жаңалықтар әзірге жоқ"
+    "noNews": "Жаңалықтар әзірге жоқ",
+    "referralsTitle": "Жолдамалар",
+    "referralsSubtitle": "Белсенді жолдамалар",
+    "noReferrals": "Белсенді жолдамалар жоқ",
+    "referralsCount_one": "{{count}} жолдама",
+    "referralsCount_other": "{{count}} жолдама",
+    "scanQr": "QR сканерлеу"
+  },
+  "qrScanner": {
+    "title": "QR сканерлеу",
+    "instruction": "Камераны жолдаманың QR-кодына бағыттаңыз",
+    "noCamera": "Бұл құрылғыда камера қолжетімсіз",
+    "permissionTitle": "Камераға рұқсат қажет",
+    "permissionMessage": "QR-кодтарды сканерлеу үшін камераға рұқсат беріңіз",
+    "grantPermission": "Рұқсат беру",
+    "openSettings": "Параметрлерді ашу",
+    "scannedTitle": "QR-код танылды",
+    "rescan": "Қайта сканерлеу",
+    "invalidQr": "QR-код танылмады",
+    "invalidQrMessage": "QR-код жолдама туралы деректерді қамтымайды. Қайталап көріңіз."
   },
   "user": {
     "loading": "Деректеріңіз жүктелуде..."

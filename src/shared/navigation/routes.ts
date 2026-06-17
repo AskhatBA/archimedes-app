@@ -20,6 +20,8 @@ export const routes = {
   CompensationsHistory: 'compensations-history',
   MedicalNetwork: 'medical-network',
   ElectronicReferrals: 'electronic-referrals',
+  QrScanner: 'qr-scanner',
+  QrReferrals: 'qr-referrals',
   ProgramSupport: 'program-support',
   DocumentViewer: 'document-viewer',
 } as const;

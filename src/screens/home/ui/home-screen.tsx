@@ -8,6 +8,7 @@ import { colors } from '@/shared/theme';
 import { HomeTopbar } from './home-topbar';
 import { ProfileCard } from './profile-card';
 import { QuickActions } from './quick-actions';
+import { ReferralsBlock } from './referrals-block';
 
 export const HomeScreen: FC = () => {
   const insets = useSafeAreaInsets();
@@ -24,6 +25,7 @@ export const HomeScreen: FC = () => {
       >
         <ProfileCard />
         <QuickActions />
+        <ReferralsBlock />
         <News />
       </ScrollView>
     </View>

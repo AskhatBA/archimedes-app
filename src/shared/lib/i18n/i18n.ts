@@ -31,6 +31,7 @@ const NAMESPACES = [
   'programs',
   'appointments',
   'compensation',
+  'qrScanner',
 ] as const;
 
 console.log('hello');

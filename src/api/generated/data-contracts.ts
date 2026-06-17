@@ -431,6 +431,38 @@ export interface UpdateElectronicReferralServiceStatusBody {
   satisfactionLevel: string;
 }
 
+export interface QrAppointmentDetail {
+  /** @example 8066666 */
+  id?: number;
+  /** @example "Рентгенография поясничного отдела позвоночника" */
+  service?: string;
+  /** @example 6000 */
+  amount?: number;
+}
+
+export interface QrAppointmentItem {
+  /** @example 2115523 */
+  id?: number;
+  /** @example 0 */
+  code?: number;
+  /**
+   * @format date-time
+   * @example "2026-06-16T00:00:00"
+   */
+  date?: string;
+  /** @example "Тохтаев Расул Русланович" */
+  name?: string;
+  /** @example "Алматы, ТОО "Orhun Medical" (Орхун Медикал), апп" */
+  medical_institution?: string;
+  /** @example "Остеохондроз позвоночника" */
+  diagnosis?: string;
+  /** @example 6000 */
+  amount?: number;
+  /** @example "KZT" */
+  currency?: string;
+  appointmentDetail?: QrAppointmentDetail[];
+}
+
 export interface InsuranceNewsItem {
   /**
    * Base64-encoded image content

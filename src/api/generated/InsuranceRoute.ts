@@ -22,6 +22,7 @@ import {
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
+  QrAppointmentItem,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
@@ -383,6 +384,68 @@ export namespace Insurance {
     export type ResponseBody = {
       /** @example true */
       success?: boolean;
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name QrAppointmentsList
+ * @summary Get QR appointments for a clinic
+ * @request GET:/insurance/qr/appointments
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: (QrAppointmentItem)[],
+
+}` Response
+*/
+  export namespace QrAppointmentsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Clinic ID (GUID)
+       * @format uuid
+       */
+      clinicId: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      data?: QrAppointmentItem[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name QrSubmitAppointmentList
+ * @summary Submit a QR appointment for hardcoded test clinic
+ * @request GET:/insurance/qr/submit-appointment
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: object,
+
+}` Response
+ * @response `400` `void` appCode is required
+*/
+  export namespace QrSubmitAppointmentList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Appointment code */
+      appCode: number;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      data?: object;
     };
   }
 

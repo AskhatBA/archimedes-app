@@ -121,7 +121,28 @@
     "extraPrograms_other": "и ещё {{count}} программы",
     "bookAppointment": "Записаться на прием",
     "news": "Новости",
-    "noNews": "Новостей пока нет"
+    "noNews": "Новостей пока нет",
+    "referralsTitle": "Направления",
+    "referralsSubtitle": "Активных направлений",
+    "noReferrals": "Нет активных направлений",
+    "referralsCount_one": "{{count}} направление",
+    "referralsCount_few": "{{count}} направления",
+    "referralsCount_many": "{{count}} направлений",
+    "referralsCount_other": "{{count}} направления",
+    "scanQr": "Сканировать QR"
+  },
+  "qrScanner": {
+    "title": "Сканировать QR",
+    "instruction": "Наведите камеру на QR-код направления",
+    "noCamera": "Камера недоступна на этом устройстве",
+    "permissionTitle": "Нужен доступ к камере",
+    "permissionMessage": "Разрешите доступ к камере, чтобы сканировать QR-коды направлений",
+    "grantPermission": "Разрешить доступ",
+    "openSettings": "Открыть настройки",
+    "scannedTitle": "QR-код распознан",
+    "rescan": "Сканировать ещё раз",
+    "invalidQr": "Нераспознанный QR-код",
+    "invalidQrMessage": "QR-код не содержит данных о направлении. Попробуйте ещё раз."
   },
   "user": {
     "loading": "Загружаем ваши данные..."

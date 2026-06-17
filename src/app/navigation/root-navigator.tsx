@@ -15,6 +15,8 @@ import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
 import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
+import { QrReferralsScreen } from '@/screens/qr-referrals';
+import { QrScannerScreen } from '@/screens/qr-scanner';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { NewVersionDrawer } from '@/shared/components/new-version-drawer';
@@ -91,6 +93,16 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.ElectronicReferrals}
           component={ElectronicReferralsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.QrScanner}
+          component={QrScannerScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name={routes.QrReferrals}
+          component={QrReferralsScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen

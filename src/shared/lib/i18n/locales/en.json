@@ -113,7 +113,26 @@
     "extraPrograms_other": "and {{count}} more programs",
     "bookAppointment": "Book an appointment",
     "news": "News",
-    "noNews": "No news yet"
+    "noNews": "No news yet",
+    "referralsTitle": "Referrals",
+    "referralsSubtitle": "Active referrals",
+    "noReferrals": "No active referrals",
+    "referralsCount_one": "{{count}} referral",
+    "referralsCount_other": "{{count}} referrals",
+    "scanQr": "Scan QR"
+  },
+  "qrScanner": {
+    "title": "Scan QR",
+    "instruction": "Point the camera at the referral QR code",
+    "noCamera": "No camera available on this device",
+    "permissionTitle": "Camera access required",
+    "permissionMessage": "Please grant camera access to scan referral QR codes",
+    "grantPermission": "Grant access",
+    "openSettings": "Open settings",
+    "scannedTitle": "QR code scanned",
+    "rescan": "Scan again",
+    "invalidQr": "Unrecognized QR code",
+    "invalidQrMessage": "This QR code does not contain referral data. Please try again."
   },
   "user": {
     "loading": "Loading your data..."

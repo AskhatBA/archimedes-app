@@ -17,6 +17,7 @@ import InfoIcon from '@/assets/icons/info.svg';
 import LogoutIcon from '@/assets/icons/logout.svg';
 import MapPinnedIcon from '@/assets/icons/map-pinned.svg';
 import PhoneIcon from '@/assets/icons/phone.svg';
+import QrCodeIcon from '@/assets/icons/qr-code.svg';
 import SearchIcon from '@/assets/icons/search.svg';
 import SelectCaretIcon from '@/assets/icons/select-caret.svg';
 import SelectIndicator from '@/assets/icons/select-indicator.svg';
@@ -72,4 +73,5 @@ export {
   UserOutlinedIcon,
   WhatsAppIcon,
   PhoneIcon,
+  QrCodeIcon,
 };

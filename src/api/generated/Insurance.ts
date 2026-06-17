@@ -22,6 +22,7 @@ import {
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
+  QrAppointmentItem,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
@@ -441,6 +442,84 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       body: data,
       secure: true,
       type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name QrAppointmentsList
+ * @summary Get QR appointments for a clinic
+ * @request GET:/insurance/qr/appointments
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: (QrAppointmentItem)[],
+
+}` Response
+ */
+  qrAppointmentsList = (
+    query: {
+      /**
+       * Clinic ID (GUID)
+       * @format uuid
+       */
+      clinicId: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        data?: QrAppointmentItem[];
+      },
+      any
+    >({
+      path: `/insurance/qr/appointments`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name QrSubmitAppointmentList
+ * @summary Submit a QR appointment for hardcoded test clinic
+ * @request GET:/insurance/qr/submit-appointment
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    data?: object,
+
+}` Response
+ * @response `400` `void` appCode is required
+ */
+  qrSubmitAppointmentList = (
+    query: {
+      /** Appointment code */
+      appCode: number;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        data?: object;
+      },
+      void
+    >({
+      path: `/insurance/qr/submit-appointment`,
+      method: 'GET',
+      query: query,
+      secure: true,
       format: 'json',
       ...params,
     });
