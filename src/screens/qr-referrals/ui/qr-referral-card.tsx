@@ -1,11 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { insuranceApi, resolveErrorMessage } from '@/api';
 import { QrAppointmentItem } from '@/api/generated/data-contracts';
 import { Button } from '@/shared/components/button';
 import {
@@ -16,13 +13,14 @@ import {
   StethoscopeIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 
 interface QrReferralCardProps {
   item: QrAppointmentItem;
+  clinicId: string;
   isExpanded: boolean;
   onPress: (id: number) => void;
-  onConfirm: (id: number) => void;
 }
 
 const formatAmount = (amount?: number, currency?: string) => {
@@ -34,11 +32,29 @@ const formatAmount = (amount?: number, currency?: string) => {
 
 export const QrReferralCard: FC<QrReferralCardProps> = ({
   item,
+  clinicId,
   isExpanded,
   onPress,
-  onConfirm,
 }) => {
   const { colors } = useTheme();
+  const { showToast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { mutate: submitAppointment, isPending } = useMutation({
+    mutationFn: () =>
+      insuranceApi.qrSubmitAppointmentList({
+        clinicId,
+        appCode: item.id!,
+      }),
+    onSuccess: () => {
+      showToast({ message: 'Направление подтверждено', type: 'success' });
+      queryClient.invalidateQueries({
+        queryKey: ['qr-appointments', clinicId],
+      });
+    },
+    onError: error =>
+      showToast({ message: resolveErrorMessage(error), type: 'error' }),
+  });
 
   return (
     <TouchableOpacity
@@ -46,12 +62,19 @@ export const QrReferralCard: FC<QrReferralCardProps> = ({
       onPress={() => item.id != null && onPress(item.id)}
       style={[
         styles.card,
-        { backgroundColor: colors.blue['100'], borderColor: colors.blue['200'] },
+        {
+          backgroundColor: colors.blue['100'],
+          borderColor: colors.blue['200'],
+        },
       ]}
     >
       <View style={styles.header}>
         <View style={[styles.avatar, { backgroundColor: colors.blue['150'] }]}>
-          <ClipboardListIcon width={22} height={22} color={colors.blue['400']} />
+          <ClipboardListIcon
+            width={22}
+            height={22}
+            color={colors.blue['400']}
+          />
         </View>
         <View style={styles.headerTexts}>
           {!!item.diagnosis && (
@@ -85,7 +108,11 @@ export const QrReferralCard: FC<QrReferralCardProps> = ({
 
         {item.amount != null && (
           <View style={styles.metaRow}>
-            <StethoscopeIcon width={16} height={16} color={colors.blue['400']} />
+            <StethoscopeIcon
+              width={16}
+              height={16}
+              color={colors.blue['400']}
+            />
             <Text style={[styles.metaLabel, { color: colors.gray['500'] }]}>
               Итого
             </Text>
@@ -173,7 +200,17 @@ export const QrReferralCard: FC<QrReferralCardProps> = ({
 
       <View style={[styles.divider, { backgroundColor: colors.blue['200'] }]} />
 
-      <Button size="sm" onPress={() => item.id != null && onConfirm(item.id)}>
+      <Button
+        size="sm"
+        onPress={() =>
+          Alert.alert('Подтверждение', 'Подтвердить направление?', [
+            { text: 'Отмена', style: 'cancel' },
+            { text: 'Подтвердить', onPress: () => submitAppointment() },
+          ])
+        }
+        isLoading={isPending}
+        disabled={item.id == null}
+      >
         Подтвердить
       </Button>
     </TouchableOpacity>

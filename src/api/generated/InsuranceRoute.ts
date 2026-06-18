@@ -437,6 +437,11 @@ export namespace Insurance {
   export namespace QrSubmitAppointmentList {
     export type RequestParams = {};
     export type RequestQuery = {
+      /**
+       * Clinic ID (GUID)
+       * @format uuid
+       */
+      clinicId: string;
       /** Appointment code */
       appCode: number;
     };

@@ -503,6 +503,11 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
  */
   qrSubmitAppointmentList = (
     query: {
+      /**
+       * Clinic ID (GUID)
+       * @format uuid
+       */
+      clinicId: string;
       /** Appointment code */
       appCode: number;
     },

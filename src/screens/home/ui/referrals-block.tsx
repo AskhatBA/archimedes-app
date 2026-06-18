@@ -24,8 +24,8 @@ export const ReferralsBlock: FC = () => {
         </View>
         <View style={styles.textBlock}>
           <Text style={styles.title}>{t('home:referralsTitle')}</Text>
-          <Text style={styles.count}>{countLabel}</Text>
-          <Text style={styles.subtitle}>{t('home:referralsSubtitle')}</Text>
+          {/* <Text style={styles.count}>{countLabel}</Text> */}
+          {/* <Text style={styles.subtitle}>{t('home:referralsSubtitle')}</Text> */}
         </View>
       </View>
 

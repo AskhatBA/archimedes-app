@@ -2,7 +2,6 @@ import { useRoute } from '@react-navigation/native';
 import { FC, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -35,12 +34,6 @@ export const QrReferralsScreen: FC = () => {
     setExpandedId(prev => (prev === id ? null : id));
   };
 
-  const handleConfirm = (id: number) => {
-    Alert.alert('Подтверждение', `Подтвердить направление #${id}?`, [
-      { text: 'Отмена', style: 'cancel' },
-      { text: 'Подтвердить', onPress: () => {} },
-    ]);
-  };
 
   if (isLoading) {
     return (
@@ -97,9 +90,9 @@ export const QrReferralsScreen: FC = () => {
       renderItem={({ item }) => (
         <QrReferralCard
           item={item}
+          clinicId={clinicId}
           isExpanded={expandedId === item.id}
           onPress={handleCardPress}
-          onConfirm={handleConfirm}
         />
       )}
     />
