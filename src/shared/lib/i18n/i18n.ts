@@ -34,8 +34,6 @@ const NAMESPACES = [
   'qrScanner',
 ] as const;
 
-console.log('hello');
-
 const isSupported = (code?: string | null): code is SupportedLanguage =>
   !!code && (SUPPORTED_LANGUAGES as readonly string[]).includes(code);
 

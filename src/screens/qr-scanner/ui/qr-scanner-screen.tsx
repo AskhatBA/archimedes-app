@@ -7,19 +7,15 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  Camera,
-  isScannedCode,
-  useCameraDevice,
-  useCameraPermission,
-  useObjectOutput,
-} from 'react-native-vision-camera';
+import { useCameraPermission } from 'react-native-vision-camera';
 
 import { usePageHeader } from '@/shared/hooks';
 import { CloseIcon, QrCodeIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
+
+import { QrCamera } from './qr-camera';
 
 export const QrScannerScreen: FC = () => {
   const { t } = useTranslation();
@@ -29,8 +25,6 @@ export const QrScannerScreen: FC = () => {
   usePageHeader({ title: t('qrScanner:title') });
 
   const { hasPermission, requestPermission } = useCameraPermission();
-  const device = useCameraDevice('back');
-
   const [scanError, setScanError] = useState(false);
   const isLocked = useRef(false);
 
@@ -63,24 +57,12 @@ export const QrScannerScreen: FC = () => {
         } else {
           setScanError(true);
         }
-      } catch {
+      } catch (error) {
         setScanError(true);
       }
     },
     [navigate],
   );
-
-  const objectOutput = useObjectOutput({
-    types: ['qr'],
-    onObjectsScanned: objects => {
-      const scannedCode = objects.find(
-        object => isScannedCode(object) && !!object.value,
-      );
-      if (scannedCode && isScannedCode(scannedCode) && scannedCode.value) {
-        handleScanned(scannedCode.value);
-      }
-    },
-  });
 
   const handleRescan = () => {
     setScanError(false);
@@ -116,22 +98,9 @@ export const QrScannerScreen: FC = () => {
     );
   }
 
-  if (!device) {
-    return (
-      <View style={styles.fallback}>
-        <Text style={styles.fallbackTitle}>{t('qrScanner:noCamera')}</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.wrapper}>
-      <Camera
-        style={StyleSheet.absoluteFill}
-        device={device}
-        isActive={!scanError}
-        outputs={[objectOutput]}
-      />
+      <QrCamera isActive={!scanError} onScanned={handleScanned} />
 
       <View style={styles.overlay} pointerEvents="box-none">
         <View style={styles.dimRow} />
