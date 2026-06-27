@@ -34,6 +34,16 @@ target 'archimedesapp' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 passes -enable-default-cmo to swift-frontend which triggers an
+    # LLVM verifier crash in VisionCamera. Compiling per-file sidesteps CMO entirely.
+    installer.pods_project.targets.each do |target|
+      if target.name == 'VisionCamera'
+        target.build_configurations.each do |config|
+          config.build_settings['SWIFT_COMPILATION_MODE'] = 'singlefile'
+        end
+      end
+    end
   end
 end
 

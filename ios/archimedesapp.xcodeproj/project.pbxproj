@@ -460,12 +460,12 @@
 				INFOPLIST_FILE = archimedesapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Archimedes;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -497,12 +497,12 @@
 				INFOPLIST_FILE = archimedesapp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Archimedes;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.medical";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
