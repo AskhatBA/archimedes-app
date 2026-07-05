@@ -39,25 +39,11 @@ export const QrScannerScreen: FC = () => {
       if (isLocked.current) return;
       isLocked.current = true;
 
-      try {
-        const parsed = JSON.parse(value) as unknown;
-        const obj =
-          parsed !== null && typeof parsed === 'object'
-            ? (parsed as Record<string, unknown>)
-            : null;
-
-        const clinicId =
-          obj && typeof obj.clinicId === 'string' ? obj.clinicId : null;
-        const clinicName =
-          obj && typeof obj.clinicName === 'string' ? obj.clinicName : '';
-
-        if (clinicId) {
-          navigate(routes.QrReferrals, { clinicId, clinicName });
-          isLocked.current = false;
-        } else {
-          setScanError(true);
-        }
-      } catch (error) {
+      const clinicId = value.trim();
+      if (clinicId) {
+        navigate(routes.QrReferrals, { clinicId });
+        isLocked.current = false;
+      } else {
         setScanError(true);
       }
     },

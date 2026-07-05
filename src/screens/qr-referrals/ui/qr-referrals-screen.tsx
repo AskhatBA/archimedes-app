@@ -23,17 +23,19 @@ interface RouteParams {
 export const QrReferralsScreen: FC = () => {
   const route = useRoute();
   const { colors } = useTheme();
-  const { clinicId, clinicName } = route.params as RouteParams;
+  const { clinicId } = route.params as RouteParams;
 
   usePageHeader({ title: 'Направления' });
 
   const { appointments, isLoading } = useQrAppointments(clinicId);
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const clinicName = appointments?.length
+    ? appointments[0].medical_institution
+    : '';
 
   const handleCardPress = (id: number) => {
     setExpandedId(prev => (prev === id ? null : id));
   };
-
 
   if (isLoading) {
     return (
