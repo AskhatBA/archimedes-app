@@ -14,12 +14,38 @@ import {
   USER_AGREEMENT_FILE,
 } from '@/shared/constants';
 import { useAuth } from '@/shared/lib/auth';
-import { Trans, useTranslation } from '@/shared/lib/i18n';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors } from '@/shared/theme';
 
 import { createValidationSchema } from './validation-schema';
+
+type AgreementTextProps = {
+  i18nKey: string;
+  onLinkPress: () => void;
+};
+
+const AgreementText: FC<AgreementTextProps> = ({ i18nKey, onLinkPress }) => {
+  const { t } = useTranslation();
+  const raw = t(i18nKey);
+  const match = raw.match(/^(.*?)<link>(.*?)<\/link>(.*)$/s);
+
+  if (!match) {
+    return <Text style={styles.text}>{raw}</Text>;
+  }
+
+  const [, before, linkText, after] = match;
+  return (
+    <View style={styles.agreementText}>
+      {before ? <Text style={styles.text}>{before}</Text> : null}
+      <TouchableOpacity activeOpacity={0.7} onPress={onLinkPress}>
+        <Text style={styles.link}>{linkText}</Text>
+      </TouchableOpacity>
+      {after ? <Text style={styles.text}>{after}</Text> : null}
+    </View>
+  );
+};
 
 export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
@@ -126,24 +152,15 @@ export const SignInForm: FC = () => {
             }}
             error={userAgreementError}
           />
-          <Text style={styles.text}>
-            <Trans
-              i18nKey="auth:agreeUserAgreement"
-              components={{
-                link: (
-                  <Text
-                    style={styles.link}
-                    onPress={() => {
-                      navigate(routes.DocumentViewer, {
-                        uri: USER_AGREEMENT_FILE,
-                        isOnlyUrl: true,
-                      });
-                    }}
-                  />
-                ),
-              }}
-            />
-          </Text>
+          <AgreementText
+            i18nKey="auth:agreeUserAgreement"
+            onLinkPress={() =>
+              navigate(routes.DocumentViewer, {
+                uri: USER_AGREEMENT_FILE,
+                isOnlyUrl: true,
+              })
+            }
+          />
         </View>
         <View style={styles.container}>
           <Checkbox
@@ -154,25 +171,15 @@ export const SignInForm: FC = () => {
             }}
             error={privacyPolicyError}
           />
-          <Text style={styles.text}>
-            <Trans
-              i18nKey="auth:agreePrivacyPolicy"
-              components={{
-                link: (
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigate(routes.DocumentViewer, {
-                        uri: PRIVACY_POLICY_FILE,
-                        isOnlyUrl: true,
-                      });
-                    }}
-                  >
-                    <Text style={styles.link} />
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-          </Text>
+          <AgreementText
+            i18nKey="auth:agreePrivacyPolicy"
+            onLinkPress={() =>
+              navigate(routes.DocumentViewer, {
+                uri: PRIVACY_POLICY_FILE,
+                isOnlyUrl: true,
+              })
+            }
+          />
         </View>
       </View>
       <Button
@@ -193,6 +200,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  agreementText: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   text: {
     fontSize: 12,
