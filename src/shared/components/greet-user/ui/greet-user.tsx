@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
+import { authApi } from '@/api';
 import UserIcon from '@/assets/icons/user-filled.svg';
 import { useUser } from '@/modules/user';
 import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
@@ -18,18 +19,17 @@ export const GreetUser: FC = () => {
   const goToNotifications = () => navigate(routes.Notifications);
 
   const confirmLogout = () =>
-    Alert.alert(
-      t('common:confirmation'),
-      t('auth:logoutConfirmMessage'),
-      [
-        { text: t('common:cancel'), style: 'cancel' },
-        {
-          text: t('auth:signOut'),
-          style: 'destructive',
-          onPress: logout,
+    Alert.alert(t('common:confirmation'), t('auth:logoutConfirmMessage'), [
+      { text: t('common:cancel'), style: 'cancel' },
+      {
+        text: t('auth:signOut'),
+        style: 'destructive',
+        onPress: async () => {
+          await authApi.logoutCreate();
+          await logout();
         },
-      ],
-    );
+      },
+    ]);
 
   return (
     <View style={styles.wrapper}>

@@ -74,4 +74,29 @@ export namespace Auth {
     export type RequestHeaders = {};
     export type ResponseBody = ChangePhoneResponse;
   }
+
+  /**
+ * No description
+ * @tags Auth
+ * @name LogoutCreate
+ * @summary Invalidate the current session by clearing the refresh token
+ * @request POST:/auth/logout
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Logged out successfully
+ * @response `401` `void` Unauthorized
+*/
+  export namespace LogoutCreate {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+    };
+  }
 }

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { patientApi, misApi } from '@/api';
+import { patientApi, misApi, authApi } from '@/api';
 import { CreateUserForm, CreateUserPayload } from '@/modules/auth';
 import { useMisPatient, useUser } from '@/modules/user';
 import { ScreenLoader } from '@/shared/components/screen-loader';
@@ -83,7 +83,10 @@ export const CreateUserScreen: FC = () => {
       },
       {
         text: 'Выйти',
-        onPress: logout,
+        onPress: async () => {
+          await authApi.logoutCreate();
+          await logout();
+        },
         style: 'destructive',
       },
     ]);

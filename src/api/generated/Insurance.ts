@@ -490,7 +490,7 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
  *
  * @tags Insurance
  * @name QrSubmitAppointmentList
- * @summary Submit a QR appointment for hardcoded test clinic
+ * @summary Submit a QR appointment
  * @request GET:/insurance/qr/submit-appointment
  * @secure
  * @response `200` `{

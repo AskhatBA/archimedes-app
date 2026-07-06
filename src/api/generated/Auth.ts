@@ -85,4 +85,33 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
       format: 'json',
       ...params,
     });
+  /**
+ * No description
+ *
+ * @tags Auth
+ * @name LogoutCreate
+ * @summary Invalidate the current session by clearing the refresh token
+ * @request POST:/auth/logout
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+
+}` Logged out successfully
+ * @response `401` `void` Unauthorized
+ */
+  logoutCreate = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+      },
+      void
+    >({
+      path: `/auth/logout`,
+      method: 'POST',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
 }

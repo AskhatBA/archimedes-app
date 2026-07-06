@@ -886,3 +886,38 @@ export interface CreatePatientBody {
   iin: string;
   gender: 'M' | 'F';
 }
+
+export interface InitPaymentBody {
+  /**
+   * Payment amount in KZT (must be greater than 0)
+   * @example 5000
+   */
+  amount: number;
+  /**
+   * Payment description shown to the payer
+   * @example "Balance replenishment"
+   */
+  description?: string;
+}
+
+export interface InitPaymentResponse {
+  /**
+   * Internal payment record ID
+   * @format uuid
+   */
+  paymentId?: string;
+  /** FreedomPay redirect URL to open in the payment WebView */
+  paymentUrl?: string;
+}
+
+export interface Payment {
+  /** @format uuid */
+  id?: string;
+  amount?: number;
+  description?: string;
+  status?: 'PENDING' | 'SUCCESS' | 'FAILED';
+  /** FreedomPay transaction ID */
+  pgPaymentId?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+}
