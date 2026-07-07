@@ -7,7 +7,7 @@ import { Mis } from './generated/Mis';
 import { Notifications } from './generated/Notifications';
 import { Patient } from './generated/Patient';
 import { User } from './generated/User';
-import { AuthUtils } from './utils';
+import { AuthUtils, UnauthorizedHandlers } from './utils';
 
 const authApi = new Auth(apiConfig);
 const misApi = new Mis(apiConfig);
@@ -38,15 +38,15 @@ const notificationsUtils = new AuthUtils(notificationsApi);
 const userUtils = new AuthUtils(userApi);
 const appUtils = new AuthUtils(appApi);
 
-export const setApiErrorHandler = (callback: () => void) => {
-  authUtils.setUnauthorizedErrorHandler(callback);
-  misUtils.setUnauthorizedErrorHandler(callback);
-  patientUtils.setUnauthorizedErrorHandler(callback);
-  insuranceUtils.setUnauthorizedErrorHandler(callback);
-  meetingsUtils.setUnauthorizedErrorHandler(callback);
-  notificationsUtils.setUnauthorizedErrorHandler(callback);
-  userUtils.setUnauthorizedErrorHandler(callback);
-  appUtils.setUnauthorizedErrorHandler(callback);
+export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
+  authUtils.setUnauthorizedErrorHandler(handlers);
+  misUtils.setUnauthorizedErrorHandler(handlers);
+  patientUtils.setUnauthorizedErrorHandler(handlers);
+  insuranceUtils.setUnauthorizedErrorHandler(handlers);
+  meetingsUtils.setUnauthorizedErrorHandler(handlers);
+  notificationsUtils.setUnauthorizedErrorHandler(handlers);
+  userUtils.setUnauthorizedErrorHandler(handlers);
+  appUtils.setUnauthorizedErrorHandler(handlers);
 };
 
 authUtils.initToken();

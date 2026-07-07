@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
+import { AppLockScreen } from '@/screens/app-lock';
 import { AppointmentDetailsScreen } from '@/screens/appointment-details';
 import { AppointmentHistoryScreen } from '@/screens/appointment-history';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
@@ -17,6 +18,7 @@ import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
 import { QrReferralsScreen } from '@/screens/qr-referrals';
 import { QrScannerScreen } from '@/screens/qr-scanner';
+import { SetPinScreen } from '@/screens/set-pin';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
 import { NewVersionDrawer } from '@/shared/components/new-version-drawer';
@@ -31,7 +33,7 @@ import { TabNavigator } from './tab-navigator';
 const RootStack = createStackNavigator();
 
 export const RootNavigator: FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isLocked } = useAuth();
   const newVersion = useNewVersionDrawer();
 
   const initialRoute = useMemo((): string => {
@@ -74,6 +76,11 @@ export const RootNavigator: FC = () => {
           name={routes.CreateUser}
           component={CreateUserScreen}
           options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name={routes.SetPin}
+          component={SetPinScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen
           name={routes.CompensationRequest}
@@ -142,6 +149,7 @@ export const RootNavigator: FC = () => {
         onUpdate={newVersion.onUpdate}
         latestVersion={newVersion.latestVersion}
       />
+      {isAuthenticated && isLocked && <AppLockScreen />}
     </>
   );
 };

@@ -9,20 +9,13 @@ import { HttpClient } from './generated/http-client';
 
 type Api = HttpClient;
 
-let isRefreshing = false;
-let failedQueue: any = [];
-
-const preserveProcessQueue = (error: any, token: any = null) => {
-  failedQueue.forEach((requestPromise: any) => {
-    if (error) {
-      requestPromise.reject(error);
-    } else {
-      requestPromise.resolve(token);
-    }
-  });
-
-  failedQueue = [];
-};
+export interface UnauthorizedHandlers {
+  // Access token expired: lock the session and let the user re-auth with
+  // biometrics/PIN (Variant B). The request is rejected, not retried.
+  onSessionExpired: () => void;
+  // Session is genuinely gone (revoked / superseded / invalid token): log out.
+  onLogout: () => void;
+}
 
 export class AuthUtils {
   api = {} as Api;
@@ -48,38 +41,22 @@ export class AuthUtils {
     );
   }
 
-  setUnauthorizedErrorHandler(deleteSessionCallback: () => void): void {
+  setUnauthorizedErrorHandler(handlers: UnauthorizedHandlers): void {
     this.api.instance.interceptors.response.use(
       response => response,
       async (error: any) => {
         const isUnauthorized = error.response?.status === 401;
 
-        if (isUnauthorized && !error.response.config._retry) {
-          if (isRefreshing) {
-            return new Promise((resolve, reject) => {
-              failedQueue.push({ resolve, reject });
-            })
-              .then(token => {
-                error.response.headers.Authorization = `Bearer ${token}`;
-                return this.api.instance(error.response);
-              })
-              .catch(err => Promise.reject(err));
+        if (isUnauthorized) {
+          const code = error.response?.data?.message;
+
+          if (code === 'TOKEN_EXPIRED') {
+            handlers.onSessionExpired();
+          } else {
+            handlers.onLogout();
           }
-
-          error.response.config._retry = true;
-          isRefreshing = true;
-
-          try {
-            deleteSessionCallback();
-          } catch (err) {
-            preserveProcessQueue(err, null);
-            deleteSessionCallback();
-          } finally {
-            isRefreshing = false;
-          }
-
-          return this.api.instance(error.response.config);
         }
+
         throw error;
       },
     );

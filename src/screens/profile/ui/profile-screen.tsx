@@ -9,6 +9,7 @@ import { colors } from '@/shared/theme';
 import { AppointmentHistory } from './appointments-history';
 import { LanguageSwitcher } from './language-switcher';
 import { MyTests } from './my-tests';
+import { SecuritySettings } from './security-settings';
 
 const SUPPORT_EMAIL = 'archimedes.medical.group.kaz@gmail.com';
 
@@ -22,6 +23,7 @@ export const ProfileScreen: FC = () => {
         <View style={styles.main}>
           <MyTests />
           <AppointmentHistory />
+          <SecuritySettings />
           <LanguageSwitcher />
           <View style={{ gap: 8 }}>
             <Text style={[styles.version, { color: colors.textMain }]}>

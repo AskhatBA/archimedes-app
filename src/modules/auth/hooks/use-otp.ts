@@ -40,9 +40,9 @@ export const useOtp = () => {
   const verifyOtpMutation = useMutation({
     mutationFn: async (body: VerifyOTPBody) =>
       (await authApi.verifyOtpCreate(body)).data,
-    onSuccess: async data => {
+    onSuccess: async (data, variables) => {
       await refreshUserData();
-      await authenticate(data);
+      await authenticate(data, variables.phone);
     },
     onError: () => {
       showToast({

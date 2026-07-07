@@ -14,6 +14,7 @@ export const routes = {
   MedbotChat: 'medbot-chat',
   OtpVerification: 'otp-verification',
   CreateUser: 'create-user',
+  SetPin: 'set-pin',
   Compensation: 'compensation',
   CompensationRequest: 'compensation-request',
   CompensationOtpVerification: 'compensation-otp-verification',
