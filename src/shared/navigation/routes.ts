@@ -15,6 +15,8 @@ export const routes = {
   OtpVerification: 'otp-verification',
   CreateUser: 'create-user',
   SetPin: 'set-pin',
+  BiometricSetup: 'biometric-setup',
+  SessionHistory: 'session-history',
   Compensation: 'compensation',
   CompensationRequest: 'compensation-request',
   CompensationOtpVerification: 'compensation-otp-verification',

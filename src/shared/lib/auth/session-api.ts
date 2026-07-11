@@ -58,3 +58,31 @@ export const setBiometricRequest = async (enabled: boolean): Promise<void> => {
     { headers: await authHeader() },
   );
 };
+
+export interface SessionHistoryItem {
+  id: string;
+  method: 'OTP' | 'PIN';
+  ipAddress: string | null;
+  userAgent: string | null;
+  createdAt: string;
+}
+
+interface SessionHistoryResponse {
+  success?: boolean;
+  data?: SessionHistoryItem[];
+}
+
+/**
+ * Read-only login (session) history for the current user, most recent first
+ * (requires a valid access token).
+ */
+export const getSessionHistory = async (params?: {
+  limit?: number;
+  offset?: number;
+}): Promise<SessionHistoryItem[]> => {
+  const { data } = await client.get<SessionHistoryResponse>('/auth/sessions', {
+    headers: await authHeader(),
+    params: { limit: params?.limit ?? 50, offset: params?.offset ?? 0 },
+  });
+  return data?.data ?? [];
+};

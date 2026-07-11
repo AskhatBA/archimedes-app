@@ -26,6 +26,7 @@ import {
   getAuthToken,
   getAuthPhone,
   getBiometricEnabledFlag,
+  getBiometricPromptedFlag,
   getPinConfiguredFlag,
   getRefreshToken,
   removeAuthMeta,
@@ -33,6 +34,7 @@ import {
   setAuthPhone,
   setAuthToken,
   setBiometricEnabledFlag,
+  setBiometricPromptedFlag,
   setPinConfiguredFlag,
 } from './utils';
 
@@ -52,6 +54,7 @@ interface AuthContextProps {
   unlockWithPin: (pin: string) => Promise<void>;
   enableBiometric: () => Promise<boolean>;
   disableBiometric: () => Promise<void>;
+  dismissBiometricOffer: () => Promise<void>;
   setPin: (pin: string) => Promise<void>;
 }
 
@@ -70,6 +73,7 @@ const initialValues: AuthContextProps = {
   unlockWithPin: async () => {},
   enableBiometric: async () => false,
   disableBiometric: async () => {},
+  dismissBiometricOffer: async () => {},
   setPin: async () => {},
 };
 
@@ -101,14 +105,31 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     setPinConfiguredState(value);
   };
 
+  // Offer to enable biometrics right after login — once per device, only if the
+  // hardware is available and biometrics aren't already on.
+  const shouldOfferBiometric = async (): Promise<boolean> => {
+    if (biometricRef.current) return false;
+    if (await getBiometricPromptedFlag()) return false;
+    return isBiometricAvailable();
+  };
+
   const authenticate = async (tokens: VerifyOTPResponse, phone?: string) => {
     setIsLoading(true);
     await setAuthToken(tokens);
     if (phone) await setAuthPhone(phone);
     setIsLocked(false);
     setIsAuthenticated(true);
+
+    const offerBiometric = await shouldOfferBiometric();
     setIsLoading(false);
-    resetNavigation(routes.TabNavigation);
+
+    resetNavigation(
+      offerBiometric ? routes.BiometricSetup : routes.TabNavigation,
+    );
+  };
+
+  const dismissBiometricOffer = async () => {
+    await setBiometricPromptedFlag(true);
   };
 
   const initializeAuth = async () => {
@@ -225,6 +246,7 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
       unlockWithPin,
       enableBiometric,
       disableBiometric,
+      dismissBiometricOffer,
       setPin,
     }),
     [isAuthenticated, isLoading, isLocked, biometricEnabled, pinConfigured],

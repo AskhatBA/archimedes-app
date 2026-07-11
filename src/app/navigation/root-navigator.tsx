@@ -4,6 +4,7 @@ import { type FC, useMemo } from 'react';
 import { AppLockScreen } from '@/screens/app-lock';
 import { AppointmentDetailsScreen } from '@/screens/appointment-details';
 import { AppointmentHistoryScreen } from '@/screens/appointment-history';
+import { BiometricSetupScreen } from '@/screens/biometric-setup';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
@@ -18,6 +19,7 @@ import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
 import { QrReferralsScreen } from '@/screens/qr-referrals';
 import { QrScannerScreen } from '@/screens/qr-scanner';
+import { SessionHistoryScreen } from '@/screens/session-history';
 import { SetPinScreen } from '@/screens/set-pin';
 import { SignInScreen } from '@/screens/sign-in';
 import { MedBotTopbar } from '@/shared/components/med-bot-topbar';
@@ -83,6 +85,11 @@ export const RootNavigator: FC = () => {
           options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen
+          name={routes.BiometricSetup}
+          component={BiometricSetupScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
           name={routes.CompensationRequest}
           component={CompensationRequestScreen}
           options={{ header: () => <SecondaryTopbar /> }}
@@ -140,6 +147,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.NewsDetails}
           component={NewsDetailsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.SessionHistory}
+          component={SessionHistoryScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
       </RootStack.Navigator>

@@ -23,6 +23,7 @@ import SelectCaretIcon from '@/assets/icons/select-caret.svg';
 import SelectIndicator from '@/assets/icons/select-indicator.svg';
 import ShieldPlusIcon from '@/assets/icons/shield-plus.svg';
 import ShieldX from '@/assets/icons/shield-x.svg';
+import SmartphoneIcon from '@/assets/icons/smartphone.svg';
 import StethoscopeIcon from '@/assets/icons/stethoscope.svg';
 import SuccessCheckIcon from '@/assets/icons/success-check.svg';
 import TabBarAppointmentsIcon from '@/assets/icons/tab-bar-appointments.svg';
@@ -74,4 +75,5 @@ export {
   WhatsAppIcon,
   PhoneIcon,
   QrCodeIcon,
+  SmartphoneIcon,
 };

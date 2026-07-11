@@ -58,6 +58,17 @@ export const SecuritySettings: FC = () => {
           <Text style={styles.label}>PIN-код</Text>
           <Text style={styles.action}>Изменить</Text>
         </TouchableOpacity>
+
+        <View style={styles.divider} />
+
+        <TouchableOpacity
+          activeOpacity={0.85}
+          style={styles.row}
+          onPress={() => navigate(routes.SessionHistory)}
+        >
+          <Text style={styles.label}>История входов</Text>
+          <Text style={styles.action}>Открыть</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
