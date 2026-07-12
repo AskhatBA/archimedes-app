@@ -52,7 +52,7 @@ export const ProfileCard: FC = () => {
         accessibilityLabel={t('home:openProfile')}
       >
         <Text style={styles.name}>
-          {user?.lastName || t('home:profileFallback')}
+          {user?.firstName || t('home:profileFallback')}
         </Text>
         <ChevronRight color={colors.blue['500']} size={16} />
       </TouchableOpacity>
