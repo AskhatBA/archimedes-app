@@ -35,8 +35,17 @@ import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
 import { fonts, useTheme } from '@/shared/theme';
 
-const formatAmount = (n: number) =>
-  String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+const formatAmount = (n: number) => {
+  const rounded = Math.round(n);
+  const sign = rounded < 0 ? '-' : '';
+  const digits = Math.abs(rounded).toString();
+  let out = '';
+  for (let i = 0; i < digits.length; i++) {
+    if (i > 0 && (digits.length - i) % 3 === 0) out += ' ';
+    out += digits[i];
+  }
+  return sign + out;
+};
 
 const pickLimitColor = (
   usedRatio: number,
