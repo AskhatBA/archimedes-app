@@ -93,6 +93,20 @@
       "durationValue": "{{count}} мин",
       "count_one": "{{count}} жазба",
       "count_other": "{{count}} жазба"
+    },
+    "insurance": {
+      "eyebrow": "Сақтандыру",
+      "priceList": "Клиникалар прейскуранты",
+      "open": "Ашу"
+    },
+    "security": {
+      "eyebrow": "Қауіпсіздік",
+      "biometric": "Биометрия арқылы кіру",
+      "biometricUnavailable": "Биометрия қолжетімсіз немесе кіру расталмаған",
+      "pin": "PIN-код",
+      "change": "Өзгерту",
+      "sessionHistory": "Кіру тарихы",
+      "open": "Ашу"
     }
   },
   "home": {

@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import { useAuth } from '@/shared/lib/auth';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
@@ -10,6 +11,7 @@ export const SecuritySettings: FC = () => {
   const { biometricEnabled, enableBiometric, disableBiometric } = useAuth();
   const { showToast } = useToast();
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
   const [isToggling, setIsToggling] = useState(false);
 
   const handleToggle = async (value: boolean) => {
@@ -20,7 +22,7 @@ export const SecuritySettings: FC = () => {
         if (!ok) {
           showToast({
             type: 'error',
-            message: 'Биометрия недоступна или вход не подтверждён',
+            message: t('profile:security.biometricUnavailable'),
           });
         }
       } else {
@@ -33,11 +35,11 @@ export const SecuritySettings: FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.eyebrow}>Безопасность</Text>
+      <Text style={styles.eyebrow}>{t('profile:security.eyebrow')}</Text>
 
       <View style={styles.card}>
         <View style={styles.row}>
-          <Text style={styles.label}>Вход по биометрии</Text>
+          <Text style={styles.label}>{t('profile:security.biometric')}</Text>
           <Switch
             value={biometricEnabled}
             disabled={isToggling}
@@ -55,8 +57,8 @@ export const SecuritySettings: FC = () => {
           style={styles.row}
           onPress={() => navigate(routes.SetPin)}
         >
-          <Text style={styles.label}>PIN-код</Text>
-          <Text style={styles.action}>Изменить</Text>
+          <Text style={styles.label}>{t('profile:security.pin')}</Text>
+          <Text style={styles.action}>{t('profile:security.change')}</Text>
         </TouchableOpacity>
 
         <View style={styles.divider} />
@@ -66,8 +68,8 @@ export const SecuritySettings: FC = () => {
           style={styles.row}
           onPress={() => navigate(routes.SessionHistory)}
         >
-          <Text style={styles.label}>История входов</Text>
-          <Text style={styles.action}>Открыть</Text>
+          <Text style={styles.label}>{t('profile:security.sessionHistory')}</Text>
+          <Text style={styles.action}>{t('profile:security.open')}</Text>
         </TouchableOpacity>
       </View>
     </View>

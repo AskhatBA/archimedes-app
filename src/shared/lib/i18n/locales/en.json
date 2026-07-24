@@ -93,6 +93,20 @@
       "durationValue": "{{count}} min",
       "count_one": "{{count}} record",
       "count_other": "{{count}} records"
+    },
+    "insurance": {
+      "eyebrow": "Insurance",
+      "priceList": "Clinic price list",
+      "open": "Open"
+    },
+    "security": {
+      "eyebrow": "Security",
+      "biometric": "Biometric login",
+      "biometricUnavailable": "Biometrics unavailable or login not confirmed",
+      "pin": "PIN code",
+      "change": "Change",
+      "sessionHistory": "Login history",
+      "open": "Open"
     }
   },
   "home": {

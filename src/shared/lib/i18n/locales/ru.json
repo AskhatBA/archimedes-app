@@ -97,6 +97,20 @@
       "count_few": "{{count}} записи",
       "count_many": "{{count}} записей",
       "count_other": "{{count}} записи"
+    },
+    "insurance": {
+      "eyebrow": "Страхование",
+      "priceList": "Прейскурант клиник",
+      "open": "Открыть"
+    },
+    "security": {
+      "eyebrow": "Безопасность",
+      "biometric": "Вход по биометрии",
+      "biometricUnavailable": "Биометрия недоступна или вход не подтверждён",
+      "pin": "PIN-код",
+      "change": "Изменить",
+      "sessionHistory": "История входов",
+      "open": "Открыть"
     }
   },
   "home": {

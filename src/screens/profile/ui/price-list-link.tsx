@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
 export const PriceListLink: FC = () => {
   const { navigate } = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.eyebrow}>Страхование</Text>
+      <Text style={styles.eyebrow}>{t('profile:insurance.eyebrow')}</Text>
 
       <View style={styles.card}>
         <TouchableOpacity
@@ -17,8 +19,8 @@ export const PriceListLink: FC = () => {
           style={styles.row}
           onPress={() => navigate(routes.PriceList)}
         >
-          <Text style={styles.label}>Прейскурант клиник</Text>
-          <Text style={styles.action}>Открыть</Text>
+          <Text style={styles.label}>{t('profile:insurance.priceList')}</Text>
+          <Text style={styles.action}>{t('profile:insurance.open')}</Text>
         </TouchableOpacity>
       </View>
     </View>
