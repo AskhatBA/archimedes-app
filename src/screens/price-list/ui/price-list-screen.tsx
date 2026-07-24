@@ -10,10 +10,13 @@ import {
 import { useClinicsMo, usePriceList } from '@/modules/insurance';
 import { SelectField } from '@/shared/components/select-field/ui/select-field';
 import { usePageHeader } from '@/shared/hooks';
+import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
 export const PriceListScreen: FC = () => {
-  usePageHeader({ title: 'Прейскурант' });
+  const { t } = useTranslation();
+
+  usePageHeader({ title: t('priceList:title') });
 
   const [selectedClinicId, setSelectedClinicId] = useState<string | null>(null);
 
@@ -28,9 +31,9 @@ export const PriceListScreen: FC = () => {
       <SelectField
         options={clinicOptions}
         value={selectedClinicId ?? ''}
-        placeholder="Выберите клинику"
+        placeholder={t('priceList:selectClinic')}
         onChange={value => setSelectedClinicId(value || null)}
-        emptyText="Клиники не найдены"
+        emptyText={t('priceList:clinicsEmpty')}
       />
 
       {isLoading && (
@@ -40,11 +43,11 @@ export const PriceListScreen: FC = () => {
       )}
 
       {!loadingClinics && !selectedClinicId && (
-        <Text style={styles.hint}>Выберите клинику, чтобы увидеть прейскурант</Text>
+        <Text style={styles.hint}>{t('priceList:hint')}</Text>
       )}
 
       {!isLoading && selectedClinicId && priceList.length === 0 && (
-        <Text style={styles.empty}>Прейскурант отсутствует</Text>
+        <Text style={styles.empty}>{t('priceList:empty')}</Text>
       )}
 
       {!isLoading && priceList.length > 0 && (

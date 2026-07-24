@@ -254,6 +254,13 @@
       "ibanReference": "IBAN account reference"
     }
   },
+  "priceList": {
+    "title": "Price list",
+    "selectClinic": "Select a clinic",
+    "clinicsEmpty": "No clinics found",
+    "hint": "Select a clinic to view the price list",
+    "empty": "No price list available"
+  },
   "programs": {
     "loading": "Loading your programs...",
     "emptyTitle": "You have no active programs yet",
