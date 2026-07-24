@@ -11,6 +11,7 @@
 
 import {
   AvailableInsuranceCity,
+  ClinicMO,
   ClinicType,
   ContactInfo,
   ElectronicReferralItem,
@@ -22,6 +23,7 @@ import {
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
+  PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
@@ -514,6 +516,69 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       news?: InsuranceNewsItem[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name ClinicsMoList
+ * @summary Get list of MO clinics
+ * @request GET:/insurance/clinics-mo
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinicsMO?: (ClinicMO)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace ClinicsMoList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      clinicsMO?: ClinicMO[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name PriceListList
+ * @summary Get price list for a clinic
+ * @request GET:/insurance/price-list
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    priceList?: (PriceListItem)[],
+
+}` Response
+ * @response `400` `void` clinicId is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace PriceListList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Clinic OID (from getClinicsMO)
+       * @format uuid
+       */
+      clinicId: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      priceList?: PriceListItem[];
     };
   }
 }

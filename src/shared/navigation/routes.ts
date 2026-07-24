@@ -27,4 +27,5 @@ export const routes = {
   QrReferrals: 'qr-referrals',
   ProgramSupport: 'program-support',
   DocumentViewer: 'document-viewer',
+  PriceList: 'price-list',
 } as const;

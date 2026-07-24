@@ -5,7 +5,8 @@ import { insuranceApi } from '@/api';
 export const useReferralsSummary = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['qr-appointments'],
-    queryFn: async () => (await insuranceApi.qrAppointmentsList()).data,
+    queryFn: async () =>
+      (await insuranceApi.qrAppointmentsList({ clinicId: '' })).data,
   });
 
   return {

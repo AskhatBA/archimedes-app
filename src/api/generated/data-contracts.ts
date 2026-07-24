@@ -157,6 +157,56 @@ export interface ChangePhoneResponse {
   };
 }
 
+export interface RefreshBody {
+  /** The refresh token stored in the device's secure storage, released after biometric unlock. */
+  refreshToken: string;
+}
+
+export interface RefreshResponse {
+  success?: boolean;
+  /** New 15-minute access token */
+  accessToken?: string;
+  /** New refresh token (the previous one is rotated out and revoked) */
+  refreshToken?: string;
+}
+
+export interface SetPinBody {
+  /**
+   * 4-6 digit PIN. Trivial PINs (repeated or sequential digits) are rejected.
+   * @example "8302"
+   */
+  pin: string;
+}
+
+export interface VerifyPinBody {
+  /** @example "77771400962" */
+  phone: string;
+  /** @example "8302" */
+  pin: string;
+}
+
+export interface SetBiometricBody {
+  /** Whether biometric login is enabled for this account. */
+  enabled: boolean;
+}
+
+export interface SessionHistoryItem {
+  /** @format uuid */
+  id?: string;
+  /** How this session was started. */
+  method?: 'OTP' | 'PIN';
+  ipAddress?: string | null;
+  /** Raw User-Agent of the device that logged in. */
+  userAgent?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+}
+
+export interface SessionHistoryResponse {
+  success?: boolean;
+  data?: SessionHistoryItem[];
+}
+
 export interface InsuranceVerifyOtpBody {
   otp?: string;
 }
@@ -480,6 +530,23 @@ export interface InsuranceNewsItem {
   message: string;
   /** @example "https://archimedes.kz/" */
   url: string;
+}
+
+export interface ClinicMO {
+  /**
+   * @format uuid
+   * @example "0692b3af-793b-48c9-9d2d-406d06f8b182"
+   */
+  oid: string;
+  /** @example "Актау, ТОО "Еркемед" МЦ "Акерке"" */
+  name: string;
+}
+
+export interface PriceListItem {
+  /** @example "Определение бетта-2 микроглобулина в сыворотке крови ИФА-методом" */
+  service: string;
+  /** @example 6405 */
+  price: number;
 }
 
 export interface CreateMeetingBody {

@@ -11,6 +11,7 @@
 
 import {
   AvailableInsuranceCity,
+  ClinicMO,
   ClinicType,
   ContactInfo,
   ElectronicReferralItem,
@@ -22,6 +23,7 @@ import {
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
+  PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
   UpdateElectronicReferralServiceStatusBody,
@@ -599,6 +601,81 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
     >({
       path: `/insurance/news`,
       method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name ClinicsMoList
+ * @summary Get list of MO clinics
+ * @request GET:/insurance/clinics-mo
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    clinicsMO?: (ClinicMO)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  clinicsMoList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        clinicsMO?: ClinicMO[];
+      },
+      void
+    >({
+      path: `/insurance/clinics-mo`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name PriceListList
+ * @summary Get price list for a clinic
+ * @request GET:/insurance/price-list
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    priceList?: (PriceListItem)[],
+
+}` Response
+ * @response `400` `void` clinicId is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  priceListList = (
+    query: {
+      /**
+       * Clinic OID (from getClinicsMO)
+       * @format uuid
+       */
+      clinicId: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        priceList?: PriceListItem[];
+      },
+      void
+    >({
+      path: `/insurance/price-list`,
+      method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,

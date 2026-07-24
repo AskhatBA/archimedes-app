@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { useReferralsSummary } from '@/modules/insurance';
 import { FileTextIcon, QrCodeIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -10,11 +9,11 @@ import { colors, fonts } from '@/shared/theme';
 export const ReferralsBlock: FC = () => {
   const { t } = useTranslation();
   const { navigate } = useNavigation();
-  const { summary } = useReferralsSummary();
+  // const { summary } = useReferralsSummary();
 
-  const count = summary.activeCount;
-  const countLabel =
-    count === 0 ? t('home:noReferrals') : t('home:referralsCount', { count });
+  // const count = summary.activeCount;
+  // const countLabel =
+  //   count === 0 ? t('home:noReferrals') : t('home:referralsCount', { count });
 
   return (
     <View style={styles.container}>

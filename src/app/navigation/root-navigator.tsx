@@ -19,6 +19,7 @@ import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
 import { QrReferralsScreen } from '@/screens/qr-referrals';
 import { QrScannerScreen } from '@/screens/qr-scanner';
+import { PriceListScreen } from '@/screens/price-list';
 import { SessionHistoryScreen } from '@/screens/session-history';
 import { SetPinScreen } from '@/screens/set-pin';
 import { SignInScreen } from '@/screens/sign-in';
@@ -152,6 +153,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.SessionHistory}
           component={SessionHistoryScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.PriceList}
+          component={PriceListScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
       </RootStack.Navigator>
