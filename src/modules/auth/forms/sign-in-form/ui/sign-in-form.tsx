@@ -68,7 +68,8 @@ export const SignInForm: FC = () => {
   const checkAccountMutation = useMutation({
     mutationFn: ({ iin, phone }: { iin: string; phone: string }) =>
       userApi.checkAccountList({ iin, phone }).then(r => r.data),
-    onError: () => {
+    onError: errr => {
+      console.log('errr', errr.response);
       showToast({
         type: 'error',
         message: t('auth:checkAccountError'),

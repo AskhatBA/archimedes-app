@@ -11,6 +11,7 @@ import {
   BIOMETRIC_ENABLED_KEY,
   BIOMETRIC_PROMPTED_KEY,
   PIN_CONFIGURED_KEY,
+  QUICK_AUTH_SNOOZE_UNTIL_KEY,
 } from './constants';
 import {
   saveRefreshTokenSecure,
@@ -107,4 +108,15 @@ export const removeAuthMeta = async () => {
   await removeFromLocalStorage(AUTH_PHONE_KEY);
   await removeFromLocalStorage(BIOMETRIC_ENABLED_KEY);
   await removeFromLocalStorage(PIN_CONFIGURED_KEY);
+};
+
+export const setQuickAuthSnoozeUntil = async (timestamp: number) => {
+  await saveToLocalStorage(QUICK_AUTH_SNOOZE_UNTIL_KEY, timestamp);
+};
+
+export const getQuickAuthSnoozeUntil = async (): Promise<number> => {
+  const value = await getFromLocalStorage(QUICK_AUTH_SNOOZE_UNTIL_KEY, {
+    convertToJSON: true,
+  });
+  return typeof value === 'number' ? value : 0;
 };

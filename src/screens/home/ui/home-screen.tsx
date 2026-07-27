@@ -8,6 +8,7 @@ import { colors } from '@/shared/theme';
 import { HomeTopbar } from './home-topbar';
 import { ProfileCard } from './profile-card';
 import { QuickActions } from './quick-actions';
+import { QuickAuthPrompt } from './quick-auth-prompt';
 import { ReferralsBlock } from './referrals-block';
 
 export const HomeScreen: FC = () => {
@@ -28,6 +29,7 @@ export const HomeScreen: FC = () => {
         <ReferralsBlock />
         <News />
       </ScrollView>
+      <QuickAuthPrompt />
     </View>
   );
 };
