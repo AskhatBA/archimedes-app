@@ -53,6 +53,7 @@
     "checkAccountError": "Couldn't verify your details. Please try again",
     "invalidPhoneFormat": "Invalid phone number format",
     "iinLength": "IIN must contain 12 digits",
+    "iinInvalid": "Invalid IIN format. Please check the digits you entered",
     "logoutConfirmMessage": "Are you sure you want to sign out?",
     "logoutAccessibility": "Sign out"
   },

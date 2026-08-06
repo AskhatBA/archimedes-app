@@ -21,13 +21,17 @@ export const useOtp = () => {
     },
     onError: err => {
       let errorMessage = 'Не удалось отправить код. Попробуйте снова';
+      const code = (err as any)?.response?.data?.message;
 
-      if (
-        (err as any)?.response?.data.message ===
-        'INSURANCE_PHONE_IS_NOT_MATCHED'
-      ) {
+      if (code === 'INSURANCE_PHONE_IS_NOT_MATCHED') {
         errorMessage =
           'Вы указали неверный номер телефона. Проверьте правильность введённых данных.';
+      }
+
+      // Backstop for older builds without client-side IIN validation.
+      if (code === 'INVALID_IIN') {
+        errorMessage =
+          'Неверный формат ИИН. Проверьте правильность введённых данных.';
       }
 
       showToast({

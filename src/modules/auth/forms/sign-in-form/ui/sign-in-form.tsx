@@ -68,7 +68,11 @@ export const SignInForm: FC = () => {
   const checkAccountMutation = useMutation({
     mutationFn: ({ iin, phone }: { iin: string; phone: string }) =>
       userApi.checkAccountList({ iin, phone }).then(r => r.data),
-    onError: errr => {
+    onError: async errr => {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const dd = await response.json();
+
+      console.log(dd);
       console.log('errr', errr.response);
       showToast({
         type: 'error',
