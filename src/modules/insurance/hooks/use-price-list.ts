@@ -5,8 +5,13 @@ import { insuranceApi } from '@/api';
 export const usePriceList = (clinicId: string | null) => {
   const { data, isLoading } = useQuery({
     queryKey: ['insurance', 'price-list', clinicId],
-    queryFn: async () =>
-      (await insuranceApi.priceListList({ clinicId: clinicId! })).data?.priceList || [],
+    queryFn: async () => {
+      const list =
+        (await insuranceApi.priceListList({ clinicId: clinicId! })).data
+          ?.priceList || [];
+
+      return list.filter(item => item.price > 0);
+    },
     enabled: !!clinicId,
     staleTime: 1000 * 60 * 5,
   });
