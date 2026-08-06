@@ -1,10 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import { FC, useMemo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import { userApi } from '@/api';
 import { useOtp } from '@/modules/auth';
+import { ConfirmCredentialsDrawer } from '@/modules/auth/components/confirm-credentials-drawer';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
@@ -60,6 +67,7 @@ export const SignInForm: FC = () => {
   const [privacyPolicy, setPrivacyPolicy] = useState(false);
   const [userAgreementError, setUserAgreementError] = useState('');
   const [privacyPolicyError, setPrivacyPolicyError] = useState('');
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   const formatPhoneNumber = (phoneString: string) => {
     return phoneString.replace(/\D/g, '');
@@ -87,7 +95,7 @@ export const SignInForm: FC = () => {
         phone: '',
         iin: loginIin,
       },
-      onSubmit: async formValues => {
+      onSubmit: () => {
         if (!userAgreement) {
           setUserAgreementError('TERMS');
           return;
@@ -97,27 +105,45 @@ export const SignInForm: FC = () => {
           return;
         }
 
-        const phone = formatPhoneNumber(formValues.phone);
-        const { iin } = formValues;
-
-        const result = await checkAccountMutation.mutateAsync({ iin, phone });
-        const { existsInDb, existsInInsurance, isPhoneMatch } = result;
-
-        if (!existsInDb && existsInInsurance && !isPhoneMatch) {
-          setFieldError(
-            'phone',
-            t('auth:phoneMismatch', { phone: CALL_CENTER_PHONE }),
-          );
-          return;
-        }
-
-        setLoginIin(iin);
-        requestOtp({ phone, iin });
+        // The user confirms the phone/IIN in a drawer before we send the OTP —
+        // a typo here creates an account with the wrong identity.
+        Keyboard.dismiss();
+        setConfirmVisible(true);
       },
       validateOnChange: false,
       validateOnBlur: false,
       validationSchema,
     });
+
+  const isSubmitting = checkAccountMutation.isPending || isOtpPending;
+
+  const handleConfirm = async () => {
+    const phone = formatPhoneNumber(values.phone);
+    const { iin } = values;
+
+    let result;
+    try {
+      result = await checkAccountMutation.mutateAsync({ iin, phone });
+    } catch {
+      setConfirmVisible(false);
+      return;
+    }
+
+    const { existsInDb, existsInInsurance, isPhoneMatch } = result;
+
+    if (!existsInDb && existsInInsurance && !isPhoneMatch) {
+      setConfirmVisible(false);
+      setFieldError(
+        'phone',
+        t('auth:phoneMismatch', { phone: CALL_CENTER_PHONE }),
+      );
+      return;
+    }
+
+    setConfirmVisible(false);
+    setLoginIin(iin);
+    requestOtp({ phone, iin });
+  };
 
   return (
     <View>
@@ -188,7 +214,7 @@ export const SignInForm: FC = () => {
         </View>
       </View>
       <Button
-        isLoading={checkAccountMutation.isPending || isOtpPending}
+        isLoading={isSubmitting}
         style={{ marginTop: 50 }}
         onPress={() => {
           handleSubmit();
@@ -196,6 +222,15 @@ export const SignInForm: FC = () => {
       >
         {t('auth:signIn')}
       </Button>
+
+      <ConfirmCredentialsDrawer
+        visible={confirmVisible}
+        phone={values.phone}
+        iin={values.iin}
+        isLoading={isSubmitting}
+        onConfirm={handleConfirm}
+        onClose={() => setConfirmVisible(false)}
+      />
     </View>
   );
 };
