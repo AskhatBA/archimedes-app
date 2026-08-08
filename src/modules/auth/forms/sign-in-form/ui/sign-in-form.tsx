@@ -1,16 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useFormik } from 'formik';
 import { FC, useMemo, useState } from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 
 import { userApi } from '@/api';
 import { useOtp } from '@/modules/auth';
+import { AgreementText } from '@/modules/auth/components/agreement-text';
 import { ConfirmCredentialsDrawer } from '@/modules/auth/components/confirm-credentials-drawer';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
@@ -24,35 +19,8 @@ import { useAuth } from '@/shared/lib/auth';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
-import { colors } from '@/shared/theme';
 
 import { createValidationSchema } from './validation-schema';
-
-type AgreementTextProps = {
-  i18nKey: string;
-  onLinkPress: () => void;
-};
-
-const AgreementText: FC<AgreementTextProps> = ({ i18nKey, onLinkPress }) => {
-  const { t } = useTranslation();
-  const raw = t(i18nKey);
-  const match = raw.match(/^(.*?)<link>(.*?)<\/link>(.*)$/s);
-
-  if (!match) {
-    return <Text style={styles.text}>{raw}</Text>;
-  }
-
-  const [, before, linkText, after] = match;
-  return (
-    <View style={styles.agreementText}>
-      {before ? <Text style={styles.text}>{before}</Text> : null}
-      <TouchableOpacity activeOpacity={0.7} onPress={onLinkPress}>
-        <Text style={styles.link}>{linkText}</Text>
-      </TouchableOpacity>
-      {after ? <Text style={styles.text}>{after}</Text> : null}
-    </View>
-  );
-};
 
 export const SignInForm: FC = () => {
   const { loginIin, setLoginIin } = useAuth();
@@ -76,12 +44,7 @@ export const SignInForm: FC = () => {
   const checkAccountMutation = useMutation({
     mutationFn: ({ iin, phone }: { iin: string; phone: string }) =>
       userApi.checkAccountList({ iin, phone }).then(r => r.data),
-    onError: async errr => {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const dd = await response.json();
-
-      console.log(dd);
-      console.log('errr', errr.response);
+    onError: () => {
       showToast({
         type: 'error',
         message: t('auth:checkAccountError'),
@@ -137,6 +100,15 @@ export const SignInForm: FC = () => {
         'phone',
         t('auth:phoneMismatch', { phone: CALL_CENTER_PHONE }),
       );
+      return;
+    }
+
+    // Signing in no longer provisions an account — send newcomers to
+    // registration with what they already typed.
+    if (!existsInDb) {
+      setConfirmVisible(false);
+      showToast({ type: 'info', message: t('auth:accountNotFound') });
+      navigate(routes.Register, { phone, iin });
       return;
     }
 
@@ -223,6 +195,20 @@ export const SignInForm: FC = () => {
         {t('auth:signIn')}
       </Button>
 
+      <Button
+        variant="secondary"
+        style={{ marginTop: 12 }}
+        disabled={isSubmitting}
+        onPress={() =>
+          navigate(routes.Register, {
+            phone: formatPhoneNumber(values.phone),
+            iin: values.iin,
+          })
+        }
+      >
+        {t('auth:register')}
+      </Button>
+
       <ConfirmCredentialsDrawer
         visible={confirmVisible}
         phone={values.phone}
@@ -240,20 +226,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-  },
-  agreementText: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 12,
-    color: colors.textMain,
-  },
-  link: {
-    fontSize: 12,
-    color: colors.primary,
-    textDecorationLine: 'underline',
   },
 });

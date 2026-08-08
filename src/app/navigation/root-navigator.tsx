@@ -15,11 +15,13 @@ import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { NewsDetailsScreen } from '@/screens/news-details';
 import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
+import { PriceListScreen } from '@/screens/price-list';
 import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
 import { QrReferralsScreen } from '@/screens/qr-referrals';
 import { QrScannerScreen } from '@/screens/qr-scanner';
-import { PriceListScreen } from '@/screens/price-list';
+import { RegisterScreen } from '@/screens/register';
+import { RegisterProfileScreen } from '@/screens/register-profile';
 import { SessionHistoryScreen } from '@/screens/session-history';
 import { SetPinScreen } from '@/screens/set-pin';
 import { SignInScreen } from '@/screens/sign-in';
@@ -69,6 +71,16 @@ export const RootNavigator: FC = () => {
           name={routes.MedbotChat}
           component={MedbotChatScreen}
           options={{ header: () => <MedBotTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.Register}
+          component={RegisterScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.RegisterProfile}
+          component={RegisterProfileScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen
           name={routes.OtpVerification}

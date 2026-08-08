@@ -15,16 +15,18 @@ import { validationSchema } from '../validation-schema';
 
 interface CreateUserFormProps {
   initialValues?: {
-    lastName: string;
-    firstName: string;
+    lastName?: string;
+    firstName?: string;
     patronymic?: string;
-    iin: string;
-    birthDate: string;
-    gender: UserGender;
+    iin?: string;
+    birthDate?: string;
+    gender?: UserGender;
   };
   isLoading?: boolean;
   onSubmit: (payload: CreateUserPayload) => void;
   submitButtonText: string;
+  /** Banner shown above the fields, e.g. "these values came from MIS". */
+  notice?: string;
 }
 
 const FieldPlaceholder: FC<{ label: string; value: string }> = ({
@@ -48,7 +50,9 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
   isLoading,
   onSubmit,
   submitButtonText,
+  notice,
 }) => {
+  const { colors } = useTheme();
   const {
     values,
     handleChange,
@@ -118,6 +122,22 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
 
   return (
     <View style={styles.container}>
+      {notice ? (
+        <View
+          style={[
+            styles.notice,
+            {
+              backgroundColor: colors.blue['100'],
+              borderColor: colors.blue['200'],
+            },
+          ]}
+        >
+          <Text style={[styles.noticeText, { color: colors.blue['400'] }]}>
+            {notice}
+          </Text>
+        </View>
+      ) : null}
+
       {textFields.map(field => {
         if (field.initialValue)
           return (
@@ -141,7 +161,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
         );
       })}
 
-      {initialValues.birthDate ? (
+      {initialValues?.birthDate ? (
         <FieldPlaceholder
           label="День рождения"
           value={formatDate(initialValues.birthDate, 'DD.MM.YYYY')}
@@ -155,7 +175,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({
         />
       )}
 
-      {initialValues.gender ? (
+      {initialValues?.gender ? (
         <FieldPlaceholder
           label="Пол"
           value={initialValues.gender === 'M' ? 'Мужской' : 'Женский'}
@@ -198,5 +218,15 @@ const styles = StyleSheet.create({
   valueDisabled: {
     fontSize: 16,
     fontWeight: 700,
+  },
+  notice: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  noticeText: {
+    fontSize: 13,
+    lineHeight: 18,
   },
 });

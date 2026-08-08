@@ -102,7 +102,7 @@ export interface RequestOTPBody {
    */
   phone: string;
   /**
-   * Optional 12-digit IIN. When supplied, the authoritative phone is fetched from the insurance service and the local user's phone is synced if it has changed.
+   * Optional 12-digit Kazakhstan IIN, validated for birth date, century/gender digit and control digit. When supplied, the authoritative phone is fetched from the insurance service and the local user's phone is synced if it has changed.
    * @example "630301350211"
    */
   iin?: string;
@@ -116,6 +116,61 @@ export interface RequestOTPResponse {
   id?: string;
   /** Phone number */
   phone?: string;
+}
+
+export interface RegisterStartBody {
+  /**
+   * Phone number starting with 7 followed by 10 digits.
+   * @example "77771400962"
+   */
+  phone: string;
+  /**
+   * 12-digit Kazakhstan IIN.
+   * @example "630301350211"
+   */
+  iin: string;
+}
+
+export interface RegisterStartResponse {
+  success?: boolean;
+  /** Phone number the code was sent to. */
+  phone?: string;
+}
+
+export interface RegisterVerifyOtpBody {
+  /** @example "77771400962" */
+  phone: string;
+  /** @example "630301350211" */
+  iin: string;
+  /** @example "1234" */
+  otp: string;
+}
+
+export interface RegisterVerifyOtpResponse {
+  success?: boolean;
+  /** Short-lived (15 min) token pinning the verified phone/IIN pair. Required by `/auth/register/complete`. It is not a session token and is rejected as a Bearer credential. */
+  registrationToken?: string;
+  /** Whether MIS already holds a record for this IIN. When true, `patient` carries the data to pre-fill the form with. */
+  existsInMis?: boolean;
+  patient?: {
+    firstName?: string;
+    lastName?: string;
+    patronymic?: string;
+    birthDate?: string;
+    gender?: 'M' | 'F';
+    iin?: string;
+  } | null;
+}
+
+export interface RegisterCompleteBody {
+  /** Token returned by `/auth/register/verify-otp`. */
+  registrationToken: string;
+  firstName: string;
+  lastName: string;
+  patronymic?: string;
+  /** @example "1963-03-01" */
+  birthDate: string;
+  gender: 'M' | 'F';
 }
 
 export interface VerifyOTPBody {
@@ -950,6 +1005,10 @@ export interface CreatePatientBody {
   patronymic?: string;
   /** @format date */
   birthDate: string;
+  /**
+   * 12-digit Kazakhstan IIN. Validated for birth date, century/gender digit and control digit.
+   * @pattern ^\d{12}$
+   */
   iin: string;
   gender: 'M' | 'F';
 }

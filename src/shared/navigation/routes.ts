@@ -14,6 +14,8 @@ export const routes = {
   MedbotChat: 'medbot-chat',
   OtpVerification: 'otp-verification',
   CreateUser: 'create-user',
+  Register: 'register',
+  RegisterProfile: 'register-profile',
   SetPin: 'set-pin',
   BiometricSetup: 'biometric-setup',
   SessionHistory: 'session-history',

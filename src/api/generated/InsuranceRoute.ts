@@ -472,13 +472,16 @@ export namespace Insurance {
     message?: string,
 
 }` IIN check result
- * @response `400` `void` IIN is required
+ * @response `400` `void` `INVALID_IIN` — missing or malformed IIN
  * @response `401` `void` User not found or unauthorized
 */
   export namespace CheckIinList {
     export type RequestParams = {};
     export type RequestQuery = {
-      /** Individual Identification Number */
+      /**
+       * 12-digit Kazakhstan IIN. Validated for birth date, century/gender digit and control digit.
+       * @pattern ^\d{12}$
+       */
       iin: string;
     };
     export type RequestBody = never;

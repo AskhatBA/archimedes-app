@@ -61,16 +61,15 @@ export namespace Patient {
    * @request GET:/patient/by-iin/{iin}
    * @secure
    * @response `200` `GetPatientByIinResponse` Patient found
-   * @response `400` `void` Invalid IIN
+   * @response `400` `void` `INVALID_IIN` — malformed IIN
    * @response `401` `void` Unauthorized
    * @response `404` `void` Patient not found
    */
   export namespace ByIinDetail {
     export type RequestParams = {
       /**
-       * 12-digit IIN
-       * @minLength 12
-       * @maxLength 12
+       * 12-digit Kazakhstan IIN. Validated for birth date, century/gender digit and control digit.
+       * @pattern ^\d{12}$
        */
       iin: string;
     };

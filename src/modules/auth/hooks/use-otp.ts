@@ -19,7 +19,7 @@ export const useOtp = () => {
       console.log('otp: ', (data as { otp: string }).otp);
       navigate(routes.OtpVerification, { phone: data.phone });
     },
-    onError: err => {
+    onError: (err, variables) => {
       let errorMessage = 'Не удалось отправить код. Попробуйте снова';
       const code = (err as any)?.response?.data?.message;
 
@@ -32,6 +32,19 @@ export const useOtp = () => {
       if (code === 'INVALID_IIN') {
         errorMessage =
           'Неверный формат ИИН. Проверьте правильность введённых данных.';
+      }
+
+      // Signing in no longer creates accounts — this identity has to register.
+      if (code === 'ACCOUNT_NOT_FOUND') {
+        showToast({
+          type: 'info',
+          message: 'Аккаунт не найден. Пройдите регистрацию',
+        });
+        navigate(routes.Register, {
+          phone: variables.phone,
+          iin: variables.iin,
+        });
+        return;
       }
 
       showToast({

@@ -60,7 +60,20 @@
     "confirmDataConfirm": "Всё верно, продолжить",
     "confirmDataEdit": "Изменить данные",
     "logoutConfirmMessage": "Вы действительно хотите выйти из аккаунта?",
-    "logoutAccessibility": "Выйти из аккаунта"
+    "logoutAccessibility": "Выйти из аккаунта",
+    "register": "Регистрация",
+    "registerTitle": "Регистрация",
+    "registerStepOneSubtitle": "Укажите номер телефона и ИИН — мы проверим, есть ли у вас аккаунт.",
+    "registerProfileTitle": "Данные пациента",
+    "registerSubmit": "Зарегистрироваться",
+    "registerFailed": "Не удалось завершить регистрацию. Попробуйте снова",
+    "misDataNotice": "Данные получены из МИС",
+    "accountNotFound": "Аккаунт не найден. Пройдите регистрацию",
+    "accountAlreadyExists": "Аккаунт с такими данными уже существует. Войдите в приложение",
+    "alreadyHaveAccount": "У меня уже есть аккаунт",
+    "continue": "Продолжить",
+    "otpInvalid": "Похоже вы ввели неверный код. Попробуйте снова",
+    "otpResendFailed": "Не удалось отправить код. Попробуйте снова"
   },
   "language": {
     "title": "Язык",

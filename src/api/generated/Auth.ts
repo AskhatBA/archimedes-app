@@ -14,6 +14,11 @@ import {
   ChangePhoneResponse,
   RefreshBody,
   RefreshResponse,
+  RegisterCompleteBody,
+  RegisterStartBody,
+  RegisterStartResponse,
+  RegisterVerifyOtpBody,
+  RegisterVerifyOtpResponse,
   RequestOTPBody,
   RequestOTPResponse,
   SessionHistoryResponse,
@@ -27,19 +32,87 @@ import { ContentType, HttpClient, RequestParams } from './http-client';
 
 export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
   /**
-   * No description
+   * @description Login only — this endpoint never creates an account. If no account matches the phone/IIN it returns 404 `ACCOUNT_NOT_FOUND` and the client should send the user through `/auth/register/*`.
    *
    * @tags Auth
    * @name RequestOtpCreate
-   * @summary Request OTP code for phone verification
+   * @summary Request an OTP code to sign in to an existing account
    * @request POST:/auth/request-otp
    * @secure
    * @response `200` `RequestOTPResponse` OTP code generated successfully
-   * @response `400` `void` Invalid phone number format
+   * @response `400` `void` Invalid input — `INVALID_PHONE`, `INVALID_IIN` or `INSURANCE_PHONE_IS_NOT_MATCHED`
+   * @response `404` `void` No account exists for this phone/IIN — `ACCOUNT_NOT_FOUND`
    */
   requestOtpCreate = (data: RequestOTPBody, params: RequestParams = {}) =>
     this.request<RequestOTPResponse, void>({
       path: `/auth/request-otp`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Auth
+   * @name RegisterStartCreate
+   * @summary Registration step 1 — check the identity is new and send a confirmation code
+   * @request POST:/auth/register/start
+   * @secure
+   * @response `200` `RegisterStartResponse` Confirmation code sent
+   * @response `400` `void` Invalid input — `INVALID_PHONE`, `INVALID_IIN`, or `INSURANCE_PHONE_IS_NOT_MATCHED` when the insurance record for this IIN holds a different number
+   * @response `409` `void` An account already exists — `ACCOUNT_ALREADY_EXISTS`. The user should sign in instead.
+   */
+  registerStartCreate = (data: RegisterStartBody, params: RequestParams = {}) =>
+    this.request<RegisterStartResponse, void>({
+      path: `/auth/register/start`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Auth
+   * @name RegisterVerifyOtpCreate
+   * @summary Registration step 2 — verify the code and get the MIS data to pre-fill the form
+   * @request POST:/auth/register/verify-otp
+   * @secure
+   * @response `200` `RegisterVerifyOtpResponse` Code verified
+   * @response `400` `void` Invalid or expired code — `INVALID_OTP` / `OTP_EXPIRED`
+   * @response `409` `void` An account already exists — `ACCOUNT_ALREADY_EXISTS`
+   */
+  registerVerifyOtpCreate = (data: RegisterVerifyOtpBody, params: RequestParams = {}) =>
+    this.request<RegisterVerifyOtpResponse, void>({
+      path: `/auth/register/verify-otp`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Creates the MIS patient when one does not exist yet, then creates the user and patient profile in a single transaction and returns a session.
+   *
+   * @tags Auth
+   * @name RegisterCompleteCreate
+   * @summary Registration step 3 — create the account and sign the user in
+   * @request POST:/auth/register/complete
+   * @secure
+   * @response `201` `VerifyOTPResponse` Account created; tokens issued
+   * @response `400` `void` Invalid profile data, or the patient could not be created in MIS
+   * @response `401` `void` Missing, malformed or expired registration token — `INVALID_REGISTRATION_TOKEN`
+   * @response `409` `void` An account already exists — `ACCOUNT_ALREADY_EXISTS`
+   */
+  registerCompleteCreate = (data: RegisterCompleteBody, params: RequestParams = {}) =>
+    this.request<VerifyOTPResponse, void>({
+      path: `/auth/register/complete`,
       method: 'POST',
       body: data,
       secure: true,

@@ -10,10 +10,9 @@ export const useNavigation = () => {
     goBack: nativeGoBack,
   } = useReactNativeNavigation();
 
-  const navigate = (
-    routeName: Routes,
-    params?: Record<string, string | number | boolean>,
-  ) => {
+  // Params are structured data, not just scalars — screens like the second
+  // registration step receive a whole prefill object.
+  const navigate = (routeName: Routes, params?: Record<string, unknown>) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     nativeNavigate(routeName as never, params as never);

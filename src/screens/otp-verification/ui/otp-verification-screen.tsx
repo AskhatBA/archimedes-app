@@ -9,19 +9,46 @@ import {
 } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
 
-import { useOtp } from '@/modules/auth';
+import { useOtp, useRegistration } from '@/modules/auth';
 import { Button } from '@/shared/components/button';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
   phone: string;
+  /** Registration verifies its code against a pending signup, not an account. */
+  mode?: 'login' | 'register';
+  iin?: string;
 }
 
 export const OtpVerificationScreen: FC = () => {
   const route = useRoute();
-  const { phone } = route.params as RouteParams;
+  const { phone, mode = 'login', iin } = route.params as RouteParams;
   const { colors } = useTheme();
   const { requestOtp, verifyOtp, isPending } = useOtp();
+  const registration = useRegistration();
+
+  const isRegistration = mode === 'register';
+  const isBusy = isRegistration
+    ? registration.isResendPending || registration.isVerifyOtpPending
+    : isPending;
+
+  const resendCode = () => {
+    if (isRegistration && iin) {
+      registration.resendOtp({ phone, iin });
+      return;
+    }
+
+    requestOtp({ phone });
+  };
+
+  const submitCode = (otp: string) => {
+    if (isRegistration && iin) {
+      registration.verifyOtp({ phone, iin, otp });
+      return;
+    }
+
+    verifyOtp({ otp, phone });
+  };
 
   const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
   const [otpCode, setOtpCode] = useState<string>();
@@ -49,7 +76,7 @@ export const OtpVerificationScreen: FC = () => {
     if (canResend) {
       setTimer(60);
       setCanResend(false);
-      requestOtp({ phone });
+      resendCode();
     }
   }, [canResend]);
 
@@ -105,9 +132,9 @@ export const OtpVerificationScreen: FC = () => {
         </TouchableOpacity>
 
         <Button
-          isLoading={isPending}
+          isLoading={isBusy}
           onPress={() => {
-            if (otpCode.length === 4) verifyOtp({ otp: otpCode, phone });
+            if (otpCode?.length === 4) submitCode(otpCode);
           }}
         >
           Подтвердить

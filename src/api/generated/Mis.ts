@@ -40,11 +40,15 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     patient?: MISPatient,
 
 }` Patient found successfully
+ * @response `400` `void` `INVALID_IIN` — missing or malformed IIN
  * @response `401` `void` User not found or unauthorized
  */
   findPatientList = (
     query: {
-      /** Individual Identification Number */
+      /**
+       * 12-digit Kazakhstan IIN. Validated for birth date, century/gender digit and control digit.
+       * @pattern ^\d{12}$
+       */
       iin: string;
     },
     params: RequestParams = {},

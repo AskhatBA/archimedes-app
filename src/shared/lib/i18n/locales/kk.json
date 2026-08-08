@@ -60,7 +60,20 @@
     "confirmDataConfirm": "Бәрі дұрыс, жалғастыру",
     "confirmDataEdit": "Деректерді өзгерту",
     "logoutConfirmMessage": "Аккаунттан шынымен шыққыңыз келе ме?",
-    "logoutAccessibility": "Аккаунттан шығу"
+    "logoutAccessibility": "Аккаунттан шығу",
+    "register": "Тіркелу",
+    "registerTitle": "Тіркелу",
+    "registerStepOneSubtitle": "Телефон нөміріңіз бен ЖСН-іңізді енгізіңіз — аккаунтыңыз бар-жоғын тексереміз.",
+    "registerProfileTitle": "Пациент деректері",
+    "registerSubmit": "Тіркелу",
+    "registerFailed": "Тіркелуді аяқтау мүмкін болмады. Қайталап көріңіз",
+    "misDataNotice": "Деректер МАЖ-дан алынды",
+    "accountNotFound": "Аккаунт табылмады. Тіркелуден өтіңіз",
+    "accountAlreadyExists": "Мұндай деректермен аккаунт бұрыннан бар. Қосымшаға кіріңіз",
+    "alreadyHaveAccount": "Менде аккаунт бар",
+    "continue": "Жалғастыру",
+    "otpInvalid": "Код қате енгізілген сияқты. Қайталап көріңіз",
+    "otpResendFailed": "Кодты жіберу мүмкін болмады. Қайталап көріңіз"
   },
   "language": {
     "title": "Тіл",

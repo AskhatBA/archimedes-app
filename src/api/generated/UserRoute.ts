@@ -26,15 +26,14 @@ export namespace User {
     isPhoneMatch?: boolean,
 
 }` Account check result
- * @response `400` `void` Invalid input
+ * @response `400` `void` Invalid input — `INVALID_IIN` when the IIN is malformed
 */
   export namespace CheckAccountList {
     export type RequestParams = {};
     export type RequestQuery = {
       /**
-       * 12-digit IIN
-       * @minLength 12
-       * @maxLength 12
+       * 12-digit Kazakhstan IIN. Validated for birth date, century/gender digit and control digit.
+       * @pattern ^\d{12}$
        */
       iin: string;
       /** Phone number (optional, improves DB and MIS lookup) */
