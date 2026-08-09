@@ -21,6 +21,16 @@ const fileImage = require('@/assets/images/files-ios.png');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const galleryImage = require('@/assets/images/photos-ios.png');
 
+// Attached photos are uploaded as base64 inside a JSON body, so full-resolution
+// originals (5-8 MB each) blow up memory when several are attached at once.
+// This is still far above what a receipt or an ID scan needs to be readable.
+const PHOTO_OPTIONS = {
+  mediaType: 'photo',
+  maxWidth: 2000,
+  maxHeight: 2000,
+  quality: 0.8,
+} as const;
+
 export const ChooseMediaType: FC = () => {
   const { isTypePickerOpen, closeTypePicker, changeFiles } = useMediaPicker();
 
@@ -61,7 +71,7 @@ export const ChooseMediaType: FC = () => {
   };
 
   const pickPhotoFromGallery = async () => {
-    const result = await launchImageLibrary({ mediaType: 'photo' });
+    const result = await launchImageLibrary(PHOTO_OPTIONS);
     putPhotoToFiles(result);
   };
 
@@ -72,7 +82,7 @@ export const ChooseMediaType: FC = () => {
           style={styles.mediaTypeItem}
           onPress={() =>
             launchCamera(
-              { cameraType: 'back', mediaType: 'photo' },
+              { cameraType: 'back', ...PHOTO_OPTIONS },
               photoResponse => {
                 putPhotoToFiles(photoResponse);
               },

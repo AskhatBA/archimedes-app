@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import {
   DENTAL_WORK_ORDER_TYPE,
@@ -13,6 +13,7 @@ import { SelectField } from '@/shared/components/select-field';
 import { TextField } from '@/shared/components/text-field';
 import { useTranslation } from '@/shared/lib/i18n';
 import { usePrograms, useFamily } from '@/shared/lib/insurance';
+import { useTheme } from '@/shared/theme';
 
 import { AttachDocuments } from '../../../components/attach-documents';
 import { compensationCategories } from '../../../constants';
@@ -23,7 +24,7 @@ import {
 import { validationSchema } from '../validation-schema';
 
 interface CompensationRequestFormProps {
-  onSubmit: (values: CompensationRequestFormValues) => void;
+  onSubmit: (values: CompensationRequestFormValues) => void | Promise<void>;
 }
 
 export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
@@ -33,45 +34,49 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
   const [documentType, setDocumentType] = useState('');
   const [showFilesError, setShowFilesError] = useState(false);
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
-  const { values, handleChange, handleSubmit, errors } = useFormik({
-    initialValues: {
-      program: '',
-      person: '',
-      date: '',
-      amount: '',
-      category: '',
-      comments: '',
-    },
-    onSubmit: formValues => {
-      const attachedTypes = files.map(f => f.localFileType);
-      const currentRequiredTypes = [...REQUIRED_DOCUMENT_TYPES];
+  const { values, handleChange, handleSubmit, errors, isSubmitting } =
+    useFormik({
+      initialValues: {
+        program: '',
+        person: '',
+        date: '',
+        amount: '',
+        category: '',
+        comments: '',
+      },
+      onSubmit: async formValues => {
+        const attachedTypes = files.map(f => f.localFileType);
+        const currentRequiredTypes = [...REQUIRED_DOCUMENT_TYPES];
 
-      if (+formValues.category === CompensationCategoryEnum.Dentistry) {
-        currentRequiredTypes.push(DENTAL_WORK_ORDER_TYPE);
-      }
+        if (+formValues.category === CompensationCategoryEnum.Dentistry) {
+          currentRequiredTypes.push(DENTAL_WORK_ORDER_TYPE);
+        }
 
-      const missingRequiredTypes = currentRequiredTypes.filter(
-        type => !attachedTypes.includes(type),
-      );
+        const missingRequiredTypes = currentRequiredTypes.filter(
+          type => !attachedTypes.includes(type),
+        );
 
-      if (missingRequiredTypes.length > 0) {
-        setShowFilesError(true);
-        return;
-      }
+        if (missingRequiredTypes.length > 0) {
+          setShowFilesError(true);
+          return;
+        }
 
-      onSubmit({
-        date: formValues.date,
-        amount: +formValues.amount.replace(/₸/g, ''),
-        files,
-        personId: formValues.person,
-        programId: formValues.program,
-        category: +formValues.category,
-        comments: formValues.comments,
-      });
-    },
-    validationSchema,
-  });
+        // Awaited so that formik's isSubmitting stays true for the whole
+        // submit, and the button can show progress instead of looking dead.
+        await onSubmit({
+          date: formValues.date,
+          amount: +formValues.amount.replace(/₸/g, ''),
+          files,
+          personId: formValues.person,
+          programId: formValues.program,
+          category: +formValues.category,
+          comments: formValues.comments,
+        });
+      },
+      validationSchema,
+    });
 
   const { programs, loadingPrograms } = usePrograms();
   const { family, loadingFamily } = useFamily(values.program);
@@ -96,32 +101,46 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
 
   return (
     <View style={styles.container}>
-      {!loadingPrograms && programs?.length && (
-        <SelectField
-          value={values.program}
-          onChange={value => handleChange('program')(value)}
-          options={activePrograms.map(program => ({
-            value: program.id,
-            label: program.title,
-            subtitle: program.cardNo,
-          }))}
-          placeholder={t('compensation:request.selectProgram')}
-          error={errors.program}
-        />
-      )}
-      {!loadingFamily && family?.length && (
-        <SelectField
-          value={values.person}
-          onChange={value => handleChange('person')(value)}
-          options={family.map(item => ({
-            value: item.id,
-            label: item.fullName,
-            subtitle: item.cardNo,
-          }))}
-          placeholder={t('compensation:request.selectPerson')}
-          error={errors.person}
-        />
-      )}
+      {/* Both selects are required by the validation schema, so they must never
+          be silently hidden — otherwise submit fails with an error the user
+          cannot see anywhere on the screen. */}
+      {!loadingPrograms &&
+        (activePrograms.length > 0 ? (
+          <SelectField
+            value={values.program}
+            onChange={value => handleChange('program')(value)}
+            options={activePrograms.map(program => ({
+              value: program.id,
+              label: program.title,
+              subtitle: program.cardNo,
+            }))}
+            placeholder={t('compensation:request.selectProgram')}
+            error={errors.program}
+          />
+        ) : (
+          <Text style={[styles.emptyState, { color: colors.error }]}>
+            {t('compensation:request.noActivePrograms')}
+          </Text>
+        ))}
+      {!!values.program &&
+        !loadingFamily &&
+        (family?.length ? (
+          <SelectField
+            value={values.person}
+            onChange={value => handleChange('person')(value)}
+            options={family.map(item => ({
+              value: item.id,
+              label: item.fullName,
+              subtitle: item.cardNo,
+            }))}
+            placeholder={t('compensation:request.selectPerson')}
+            error={errors.person}
+          />
+        ) : (
+          <Text style={[styles.emptyState, { color: colors.error }]}>
+            {t('compensation:request.noFamilyMembers')}
+          </Text>
+        ))}
       <SelectField
         value={values.category}
         onChange={value => handleChange('category')(value)}
@@ -185,7 +204,7 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           requiredDocumentTypes={requiredTypes}
         />
       </MediaPicker>
-      <Button onPress={() => handleSubmit()}>
+      <Button isLoading={isSubmitting} onPress={() => handleSubmit()}>
         {t('compensation:request.submit')}
       </Button>
     </View>
@@ -195,5 +214,9 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
 const styles = StyleSheet.create({
   container: {
     gap: 32,
+  },
+  emptyState: {
+    fontSize: 14,
+    fontWeight: '500',
   },
 });

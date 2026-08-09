@@ -22,7 +22,10 @@ import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
-import { convertUriToBase64 } from '@/shared/utils/convert-uri-to-base64';
+import {
+  convertUriToBase64,
+  FileReadError,
+} from '@/shared/utils/convert-uri-to-base64';
 
 import { SubmitRequestSuccess } from './submit-request-success';
 
@@ -32,6 +35,9 @@ export const CompensationRequestScreen: FC = () => {
   const { t } = useTranslation();
   const deviceInsets = useSafeAreaInsets();
   const [isSuccess, setIsSuccess] = useState(false);
+  // Covers the whole submit flow, including reading the attached files —
+  // mutation.isPending only starts once the request is already in flight.
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const compensationRequestMutation = useMutation({
     mutationFn: async (data: RefundRequestBody) =>
@@ -46,38 +52,53 @@ export const CompensationRequestScreen: FC = () => {
       });
       setIsSuccess(true);
     },
-    onError: () => {
-      showToast({
-        type: 'error',
-        message: t('compensation:request.submitError'),
-      });
-    },
   });
 
   const submitCompensationRequest = async (
     formValues: CompensationRequestFormValues,
   ) => {
-    const promises = formValues.files.map(async file => {
-      const base64Content = await convertUriToBase64(file.uri);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-      return {
-        fileType: file.localFileType,
-        fileName: file.name,
-        content: base64Content,
-      };
-    });
+    try {
+      // Sequentially, not via Promise.all: every file is fully loaded into
+      // memory as base64, and converting a batch of large scans at once can
+      // exhaust memory on weaker devices.
+      const convertedFiles: NonNullable<RefundRequestBody['files']> = [];
 
-    const convertedFiles = await Promise.all(promises);
+      /* eslint-disable no-restricted-syntax, no-await-in-loop -- the
+         sequential await is the point: it keeps only one file in memory. */
+      for (const file of formValues.files) {
+        convertedFiles.push({
+          fileType: file.localFileType,
+          fileName: file.name,
+          content: await convertUriToBase64(file.uri),
+        });
+      }
+      /* eslint-enable no-restricted-syntax, no-await-in-loop */
 
-    compensationRequestMutation.mutate({
-      programId: formValues.programId,
-      personId: formValues.personId,
-      date: formValues.date,
-      amount: +formValues.amount,
-      files: convertedFiles,
-      category: formValues.category as CompensationCategoryEnum,
-      comments: formValues.comments,
-    });
+      await compensationRequestMutation.mutateAsync({
+        programId: formValues.programId,
+        personId: formValues.personId,
+        date: formValues.date,
+        amount: +formValues.amount,
+        files: convertedFiles,
+        category: formValues.category as CompensationCategoryEnum,
+        comments: formValues.comments,
+      });
+    } catch (error) {
+      console.warn('Compensation request failed: ', error);
+
+      showToast({
+        type: 'error',
+        message:
+          error instanceof FileReadError
+            ? t('compensation:request.fileReadError')
+            : t('compensation:request.submitError'),
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) return <SubmitRequestSuccess />;
@@ -104,7 +125,7 @@ export const CompensationRequestScreen: FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {compensationRequestMutation.isPending && (
+      {isSubmitting && (
         <View style={[styles.loaderBackdrop, { top: -deviceInsets.top - 54 }]}>
           <ActivityIndicator size="large" color={colors.primary} />
         </View>
