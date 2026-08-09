@@ -202,6 +202,9 @@ export const CompensationRequestForm: FC<CompensationRequestFormProps> = ({
           }}
           showError={showFilesError}
           requiredDocumentTypes={requiredTypes}
+          // The required set depends on the category (dentistry adds one), so
+          // the checklist appears as soon as the category is known.
+          showRequirements={!!values.category}
         />
       </MediaPicker>
       <Button isLoading={isSubmitting} onPress={() => handleSubmit()}>

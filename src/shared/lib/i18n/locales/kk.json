@@ -254,6 +254,7 @@
       "attachDocuments": "Құжаттарды тіркеу",
       "addFile": "Файл қосу",
       "missingDocuments": "Келесі құжаттарды тіркеу қажет:",
+      "requiredDocuments": "Таңдалған санат үшін тіркеу қажет:",
       "deleteFileTitle": "Файлды жою",
       "deleteFileMessage": "Бұл файлды шынымен жойғыңыз келе ме?"
     },

@@ -11,7 +11,12 @@ import {
 
 import { useMediaPicker, MediaFile } from '@/shared/components/media-picker';
 import { SelectDrawer } from '@/shared/components/select-field';
-import { FileIcon, UploadFileIcon, CloseIcon } from '@/shared/icons';
+import {
+  FileIcon,
+  UploadFileIcon,
+  CloseIcon,
+  SuccessCheckIcon,
+} from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
@@ -24,6 +29,7 @@ interface AttachDocumentsProps {
   setDocumentType: (docType: string) => void;
   showError?: boolean;
   requiredDocumentTypes: string[];
+  showRequirements?: boolean;
 }
 
 export const AttachDocuments: FC<AttachDocumentsProps> = ({
@@ -33,6 +39,7 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   setDocumentType,
   showError,
   requiredDocumentTypes,
+  showRequirements,
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -94,12 +101,79 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
   const missingRequiredTypes = requiredDocumentTypes.filter(
     type => !attachedTypes.includes(type),
   );
+  const hasError = !!showError && missingRequiredTypes.length > 0;
 
   return (
     <View>
       <Text style={[styles.label, { color: colors.blue['370'] }]}>
         {t('compensation:request.attachDocuments')}
       </Text>
+      {(showRequirements || hasError) && (
+        <View
+          style={[
+            styles.requirements,
+            {
+              backgroundColor: hasError
+                ? colors.red['100']
+                : colors.blue['100'],
+              borderColor: hasError ? colors.error : colors.blue['100'],
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.requirementsTitle,
+              { color: hasError ? colors.error : colors.blue['400'] },
+            ]}
+          >
+            {hasError
+              ? t('compensation:request.missingDocuments')
+              : t('compensation:request.requiredDocuments')}
+          </Text>
+          {requiredDocumentTypes.map(type => {
+            const isAttached = attachedTypes.includes(type);
+
+            const markerBorderColor = (() => {
+              if (isAttached) return colors.primary;
+              if (hasError) return colors.error;
+              return colors.blue['200'];
+            })();
+
+            const textColor = (() => {
+              if (isAttached) return colors.gray['500'];
+              if (hasError) return colors.error;
+              return colors.blue['400'];
+            })();
+
+            return (
+              <View key={type} style={styles.requirementItem}>
+                <View
+                  style={[
+                    styles.requirementMarker,
+                    {
+                      backgroundColor: isAttached
+                        ? colors.primary
+                        : 'transparent',
+                      borderColor: markerBorderColor,
+                    },
+                  ]}
+                >
+                  {isAttached && (
+                    <SuccessCheckIcon
+                      color={colors.white}
+                      width={9}
+                      height={9}
+                    />
+                  )}
+                </View>
+                <Text style={[styles.requirementText, { color: textColor }]}>
+                  {translateDocumentType(type)}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      )}
       <View style={styles.attachedFiles}>
         {files.map(file => (
           <View
@@ -153,18 +227,6 @@ export const AttachDocuments: FC<AttachDocumentsProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
-      {showError && missingRequiredTypes.length > 0 && (
-        <View style={styles.errorContainer}>
-          <Text style={[styles.error, { color: colors.error }]}>
-            {t('compensation:request.missingDocuments')}
-          </Text>
-          {missingRequiredTypes.map(type => (
-            <Text key={type} style={[styles.error, { color: colors.error }]}>
-              • {translateDocumentType(type)}
-            </Text>
-          ))}
-        </View>
-      )}
       <SelectDrawer
         isOpen={showDocumentType}
         onChange={selectedDocumentType => {
@@ -234,12 +296,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
   },
-  error: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 4,
-  },
-  errorContainer: {
+  requirements: {
     marginTop: 8,
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 8,
+  },
+  requirementsTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  requirementItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  requirementMarker: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  requirementText: {
+    fontSize: 13,
+    fontWeight: '400',
+    flex: 1,
   },
 });

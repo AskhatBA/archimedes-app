@@ -254,6 +254,7 @@
       "attachDocuments": "Attach documents",
       "addFile": "Add file",
       "missingDocuments": "The following documents are required:",
+      "requiredDocuments": "Documents required for the selected category:",
       "deleteFileTitle": "Delete file",
       "deleteFileMessage": "Are you sure you want to delete this file?"
     },
