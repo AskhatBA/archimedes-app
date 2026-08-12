@@ -47,7 +47,9 @@ export const ConfirmCredentialsDrawer: FC<ConfirmCredentialsDrawerProps> = ({
   ];
 
   return (
-    <BottomDrawer visible={visible} onClose={onClose}>
+    // Scrollable: with a large system font the content outgrows a short
+    // screen, and a non-scrolling sheet clips the buttons off the bottom.
+    <BottomDrawer visible={visible} onClose={onClose} scrollable>
       <View style={styles.container}>
         <View
           style={[styles.iconOuter, { backgroundColor: colors.orange['200'] }]}
@@ -58,15 +60,21 @@ export const ConfirmCredentialsDrawer: FC<ConfirmCredentialsDrawerProps> = ({
               { backgroundColor: colors.orange['300'] },
             ]}
           >
-            <InfoIcon width={32} height={32} color={colors.orange['600']} />
+            <InfoIcon width={28} height={28} color={colors.orange['600']} />
           </View>
         </View>
 
-        <Text style={[styles.title, { color: colors.gray['700'] }]}>
+        <Text
+          style={[styles.title, { color: colors.gray['700'] }]}
+          maxFontSizeMultiplier={1.3}
+        >
           {t('auth:confirmDataTitle')}
         </Text>
 
-        <Text style={[styles.description, { color: colors.gray['500'] }]}>
+        <Text
+          style={[styles.description, { color: colors.gray['500'] }]}
+          maxFontSizeMultiplier={1.3}
+        >
           {t('auth:confirmDataDescription')}
         </Text>
 
@@ -93,11 +101,13 @@ export const ConfirmCredentialsDrawer: FC<ConfirmCredentialsDrawerProps> = ({
                 <View style={styles.rowTexts}>
                   <Text
                     style={[styles.rowLabel, { color: colors.gray['500'] }]}
+                    maxFontSizeMultiplier={1.3}
                   >
                     {row.label}
                   </Text>
                   <Text
                     style={[styles.rowValue, { color: colors.gray['700'] }]}
+                    maxFontSizeMultiplier={1.3}
                   >
                     {row.value}
                   </Text>
@@ -107,7 +117,10 @@ export const ConfirmCredentialsDrawer: FC<ConfirmCredentialsDrawerProps> = ({
           ))}
         </View>
 
-        <Text style={[styles.hint, { color: colors.gray['500'] }]}>
+        <Text
+          style={[styles.hint, { color: colors.gray['500'] }]}
+          maxFontSizeMultiplier={1.3}
+        >
           {t('auth:confirmDataHint')}
         </Text>
 
@@ -125,7 +138,10 @@ export const ConfirmCredentialsDrawer: FC<ConfirmCredentialsDrawerProps> = ({
           style={styles.secondaryButton}
           activeOpacity={0.6}
         >
-          <Text style={[styles.secondaryText, { color: colors.blue['400'] }]}>
+          <Text
+            style={[styles.secondaryText, { color: colors.blue['400'] }]}
+            maxFontSizeMultiplier={1.3}
+          >
             {t('auth:confirmDataEdit')}
           </Text>
         </TouchableOpacity>
@@ -142,17 +158,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconOuter: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   iconInner: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -168,7 +184,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontFamily: fonts.SFPro.Regular,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
     paddingHorizontal: 8,
   },
   card: {
@@ -184,7 +200,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
   rowIcon: {
     width: 40,
@@ -212,8 +228,8 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     fontFamily: fonts.SFPro.Regular,
     textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 24,
+    marginTop: 14,
+    marginBottom: 20,
     paddingHorizontal: 4,
   },
   primaryButton: {

@@ -25,7 +25,6 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
   children,
   scrollable = false,
 }) => {
-  const Container = scrollable ? BottomSheetScrollView : BottomSheetView;
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const sheetRef = useRef<BottomSheetModal>(null);
@@ -62,6 +61,8 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
     </TouchableOpacity>
   );
 
+  const contentStyle = { paddingBottom: insets.bottom + 16 };
+
   return (
     <BottomSheetModal
       ref={sheetRef}
@@ -72,19 +73,26 @@ export const BottomDrawer: FC<BottomDrawerProps> = ({
       handleComponent={null}
       backgroundStyle={styles.background}
       enableContentPanningGesture={false}
-      topInset={100}
+      // A hard-coded inset burns vertical space on short screens, where it is
+      // exactly the tall content that ends up clipped.
+      topInset={insets.top + 16}
     >
-      {scrollable && renderHeader()}
-      <Container
-        contentContainerStyle={[
-          styles.content,
-          { paddingBottom: insets.bottom + 16 },
-        ]}
-        style={[styles.content, { paddingBottom: insets.bottom + 16 }]}
-      >
-        {!scrollable && renderHeader()}
-        {children}
-      </Container>
+      {scrollable ? (
+        <>
+          {renderHeader()}
+          <BottomSheetScrollView
+            contentContainerStyle={contentStyle}
+            bounces={false}
+          >
+            {children}
+          </BottomSheetScrollView>
+        </>
+      ) : (
+        <BottomSheetView style={contentStyle}>
+          {renderHeader()}
+          {children}
+        </BottomSheetView>
+      )}
     </BottomSheetModal>
   );
 };
@@ -94,7 +102,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
   },
-  content: {},
   handle: {
     alignItems: 'center',
     justifyContent: 'center',
