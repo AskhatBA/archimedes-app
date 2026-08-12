@@ -53,7 +53,6 @@
     "checkAccountError": "Couldn't verify your details. Please try again",
     "invalidPhoneFormat": "Invalid phone number format",
     "iinLength": "IIN must contain 12 digits",
-    "iinInvalid": "Invalid IIN format. Please check the digits you entered",
     "confirmDataTitle": "Check your details",
     "confirmDataDescription": "Make sure you entered the correct details.",
     "confirmDataHint": "Your account will be created with exactly these details. If something is wrong, go back and fix it.",
