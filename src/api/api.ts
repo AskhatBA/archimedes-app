@@ -7,6 +7,7 @@ import { Mis } from './generated/Mis';
 import { Notifications } from './generated/Notifications';
 import { Patient } from './generated/Patient';
 import { User } from './generated/User';
+import { PaymentApi } from './payment-api';
 import { AuthUtils, UnauthorizedHandlers } from './utils';
 
 const authApi = new Auth(apiConfig);
@@ -17,6 +18,7 @@ const meetingsApi = new Meetings(apiConfig);
 const notificationsApi = new Notifications(apiConfig);
 const userApi = new User(apiConfig);
 const appApi = new App(apiConfig);
+const paymentApi = new PaymentApi(apiConfig);
 
 export {
   authApi,
@@ -27,6 +29,7 @@ export {
   notificationsApi,
   userApi,
   appApi,
+  paymentApi,
 };
 
 const authUtils = new AuthUtils(authApi);
@@ -37,6 +40,7 @@ const meetingsUtils = new AuthUtils(meetingsApi);
 const notificationsUtils = new AuthUtils(notificationsApi);
 const userUtils = new AuthUtils(userApi);
 const appUtils = new AuthUtils(appApi);
+const paymentUtils = new AuthUtils(paymentApi);
 
 export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   authUtils.setUnauthorizedErrorHandler(handlers);
@@ -47,6 +51,7 @@ export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   notificationsUtils.setUnauthorizedErrorHandler(handlers);
   userUtils.setUnauthorizedErrorHandler(handlers);
   appUtils.setUnauthorizedErrorHandler(handlers);
+  paymentUtils.setUnauthorizedErrorHandler(handlers);
 };
 
 authUtils.initToken();
@@ -57,3 +62,4 @@ meetingsUtils.initToken();
 notificationsUtils.initToken();
 userUtils.initToken();
 appUtils.initToken();
+paymentUtils.initToken();

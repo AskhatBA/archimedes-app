@@ -129,6 +129,11 @@
       "change": "Изменить",
       "sessionHistory": "История входов",
       "open": "Открыть"
+    },
+    "payment": {
+      "eyebrow": "Оплата",
+      "topUp": "Пополнить на {{amount}} ₸ (тест)",
+      "open": "Открыть"
     }
   },
   "home": {
@@ -161,7 +166,9 @@
     "referralsCount_few": "{{count}} направления",
     "referralsCount_many": "{{count}} направлений",
     "referralsCount_other": "{{count}} направления",
-    "scanQr": "Сканировать QR"
+    "scanQr": "Сканировать QR",
+    "paidProgramsTitle": "Платные программы",
+    "paidProgramsSubtitle": "Мед. планы и чек-апы — оформите онлайн"
   },
   "qrScanner": {
     "title": "Сканировать QR",
@@ -327,6 +334,66 @@
         "count_many": "{{count}} человек",
         "count_other": "{{count}} человека"
       }
+    }
+  },
+  "paidPrograms": {
+    "title": "Платные программы",
+    "empty": "В этой категории пока нет программ",
+    "categories": {
+      "medPlan": "Мед. планы",
+      "checkup": "Чек-ап"
+    },
+    "hints": {
+      "medPlan": "Годовые программы амбулаторного обслуживания для вас и вашей семьи.",
+      "checkup": "Комплексные обследования за один или два визита."
+    },
+    "coverage": {
+      "personal": "Для одного человека",
+      "family": "Для всей семьи"
+    },
+    "card": {
+      "popular": "Хит",
+      "addToCartA11y": "Добавить программу в корзину",
+      "removeFromCartA11y": "Убрать программу из корзины"
+    },
+    "details": {
+      "price": "Стоимость",
+      "duration": "Срок действия",
+      "included": "Что входит в программу",
+      "addToCart": "Добавить в корзину",
+      "removeFromCart": "Убрать из корзины"
+    },
+    "cart": {
+      "title": "Корзина",
+      "empty": "Корзина пуста",
+      "clear": "Очистить",
+      "total": "Итого",
+      "checkout": "Перейти к оплате",
+      "open": "Открыть",
+      "barLabel": "В корзине",
+      "removeA11y": "Удалить программу из корзины",
+      "paymentDescription_one": "Оплата {{count}} программы",
+      "paymentDescription_few": "Оплата {{count}} программ",
+      "paymentDescription_many": "Оплата {{count}} программ",
+      "paymentDescription_other": "Оплата {{count}} программ"
+    },
+    "toast": {
+      "added": "«{{title}}» добавлена в корзину",
+      "removed": "«{{title}}» убрана из корзины"
+    },
+    "history": {
+      "link": "История покупок",
+      "title": "История покупок",
+      "emptyTitle": "Покупок пока нет",
+      "emptySubtitle": "Здесь появятся программы, которые вы оформили, и статус их оплаты.",
+      "total": "Итого",
+      "paymentId": "Платёж: {{id}}",
+      "status": {
+        "PENDING": "В обработке",
+        "SUCCESS": "Оплачено",
+        "FAILED": "Не оплачено"
+      },
+      "deleteA11y": "Удалить запись"
     }
   }
 }

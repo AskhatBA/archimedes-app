@@ -10,3 +10,4 @@ export const GET_APPOINTMENT_DETAILS_QUERY = 'appointment-details';
 export const GET_COMPENSATION_REQUESTS_QUERY = 'compensation-requests';
 export const GET_APP_VERSION_QUERY = 'app-version';
 export const GET_INSURANCE_NEWS_QUERY = 'insurance-news';
+export const GET_PAID_PROGRAMS_QUERY = 'paid-programs';

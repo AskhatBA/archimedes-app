@@ -8,4 +8,6 @@ declare module '*.svg' {
 
 declare module '@env' {
   export const API_URL: string;
+  /** Base URL of the web payment page loaded in the WebView. */
+  export const PAYMENT_WEB_URL: string;
 }

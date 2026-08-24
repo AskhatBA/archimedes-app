@@ -715,6 +715,7 @@ export interface MISSpecialization {
 export interface MISDoctor {
   id?: string;
   name?: string;
+  iin?: string;
   position?: string;
   specialtyName?: string;
   branchName?: string;

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
-import { authApi } from '@/api';
 import UserIcon from '@/assets/icons/user-filled.svg';
 import { useUser } from '@/modules/user';
 import { LogoutIcon, TabBarNotificationsIcon } from '@/shared/icons';
 import { useAuth } from '@/shared/lib/auth';
+import { logoutRequest } from '@/shared/lib/auth/session-api';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
@@ -25,7 +25,7 @@ export const GreetUser: FC = () => {
         text: t('auth:signOut'),
         style: 'destructive',
         onPress: async () => {
-          await authApi.logoutCreate();
+          await logoutRequest();
           await logout();
         },
       },

@@ -29,7 +29,6 @@ export class User<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
     isPhoneMatch?: boolean,
 
 }` Account check result
- * @response `400` `void` Invalid input — `INVALID_IIN` when the IIN is malformed
  */
   checkAccountList = (
     query: {
@@ -52,7 +51,7 @@ export class User<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
         /** True if the provided phone matches the phone returned by the Insurance service for the given IIN */
         isPhoneMatch?: boolean;
       },
-      void
+      any
     >({
       path: `/user/check-account`,
       method: 'GET',

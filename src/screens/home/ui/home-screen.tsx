@@ -6,6 +6,7 @@ import { News } from '@/modules/insurance';
 import { colors } from '@/shared/theme';
 
 import { HomeTopbar } from './home-topbar';
+import { PaidProgramsBanner } from './paid-programs-banner';
 import { ProfileCard } from './profile-card';
 import { QuickActions } from './quick-actions';
 import { QuickAuthPrompt } from './quick-auth-prompt';
@@ -26,6 +27,7 @@ export const HomeScreen: FC = () => {
       >
         <ProfileCard />
         <QuickActions />
+        <PaidProgramsBanner />
         <ReferralsBlock />
         <News />
       </ScrollView>

@@ -70,7 +70,6 @@ export class Patient<SecurityDataType = unknown> extends HttpClient<SecurityData
    * @request GET:/patient/by-iin/{iin}
    * @secure
    * @response `200` `GetPatientByIinResponse` Patient found
-   * @response `400` `void` `INVALID_IIN` — malformed IIN
    * @response `401` `void` Unauthorized
    * @response `404` `void` Patient not found
    */

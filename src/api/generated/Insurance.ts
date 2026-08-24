@@ -547,7 +547,6 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
     message?: string,
 
 }` IIN check result
- * @response `400` `void` `INVALID_IIN` — missing or malformed IIN
  * @response `401` `void` User not found or unauthorized
  */
   checkIinList = (
@@ -677,6 +676,54 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       void
     >({
       path: `/insurance/price-list`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name MedicServiceList
+ * @summary Get services provided by a doctor in a clinic
+ * @request GET:/insurance/medic-service
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    medicServices?: (object)[],
+
+}` Response
+ * @response `400` `void` clinicId or medicIIN is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  medicServiceList = (
+    query: {
+      /**
+       * Clinic OID (from getClinicsMO)
+       * @format uuid
+       */
+      clinicId: string;
+      /**
+       * Doctor IIN
+       * @example "123456789012"
+       */
+      medicIIN: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        medicServices?: object[];
+      },
+      void
+    >({
+      path: `/insurance/medic-service`,
       method: 'GET',
       query: query,
       secure: true,

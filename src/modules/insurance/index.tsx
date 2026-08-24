@@ -1,6 +1,7 @@
 export { useMedicalNetwork } from './hooks/use-medical-network';
 export { useClinicsMo } from './hooks/use-clinics-mo';
 export { usePriceList } from './hooks/use-price-list';
+export { useMedicService } from './hooks/use-medic-service';
 export { useClinicTypes } from './hooks/use-clinic-types';
 export { useMedicalNetworkReducer } from './hooks/use-medical-network-reducer';
 export { useProgramById, usePrograms } from './hooks/use-programs';

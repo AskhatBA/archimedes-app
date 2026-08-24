@@ -125,6 +125,11 @@
       "change": "Өзгерту",
       "sessionHistory": "Кіру тарихы",
       "open": "Ашу"
+    },
+    "payment": {
+      "eyebrow": "Төлем",
+      "topUp": "{{amount}} ₸ толтыру (тест)",
+      "open": "Ашу"
     }
   },
   "home": {
@@ -151,7 +156,9 @@
     "noReferrals": "Белсенді жолдамалар жоқ",
     "referralsCount_one": "{{count}} жолдама",
     "referralsCount_other": "{{count}} жолдама",
-    "scanQr": "QR сканерлеу"
+    "scanQr": "QR сканерлеу",
+    "paidProgramsTitle": "Ақылы бағдарламалар",
+    "paidProgramsSubtitle": "Мед. жоспарлар мен чек-аптар — онлайн рәсімдеңіз"
   },
   "qrScanner": {
     "title": "QR сканерлеу",
@@ -315,6 +322,64 @@
         "count_one": "{{count}} адам",
         "count_other": "{{count}} адам"
       }
+    }
+  },
+  "paidPrograms": {
+    "title": "Ақылы бағдарламалар",
+    "empty": "Бұл санатта әзірге бағдарлама жоқ",
+    "categories": {
+      "medPlan": "Мед. жоспарлар",
+      "checkup": "Чек-ап"
+    },
+    "hints": {
+      "medPlan": "Сізге және отбасыңызға арналған жылдық амбулаториялық қызмет көрсету бағдарламалары.",
+      "checkup": "Бір-екі келуде өтетін кешенді тексерулер."
+    },
+    "coverage": {
+      "personal": "Бір адамға",
+      "family": "Бүкіл отбасына"
+    },
+    "card": {
+      "popular": "Хит",
+      "addToCartA11y": "Бағдарламаны себетке қосу",
+      "removeFromCartA11y": "Бағдарламаны себеттен алып тастау"
+    },
+    "details": {
+      "price": "Құны",
+      "duration": "Қолданылу мерзімі",
+      "included": "Бағдарламаға не кіреді",
+      "addToCart": "Себетке қосу",
+      "removeFromCart": "Себеттен алып тастау"
+    },
+    "cart": {
+      "title": "Себет",
+      "empty": "Себет бос",
+      "clear": "Тазарту",
+      "total": "Барлығы",
+      "checkout": "Төлемге өту",
+      "open": "Ашу",
+      "barLabel": "Себетте",
+      "removeA11y": "Бағдарламаны себеттен жою",
+      "paymentDescription_one": "{{count}} бағдарлама үшін төлем",
+      "paymentDescription_other": "{{count}} бағдарлама үшін төлем"
+    },
+    "toast": {
+      "added": "«{{title}}» себетке қосылды",
+      "removed": "«{{title}}» себеттен алып тасталды"
+    },
+    "history": {
+      "link": "Сатып алу тарихы",
+      "title": "Сатып алу тарихы",
+      "emptyTitle": "Әзірге сатып алулар жоқ",
+      "emptySubtitle": "Мұнда сіз рәсімдеген бағдарламалар мен олардың төлем күйі көрсетіледі.",
+      "total": "Барлығы",
+      "paymentId": "Төлем: {{id}}",
+      "status": {
+        "PENDING": "Өңделуде",
+        "SUCCESS": "Төленді",
+        "FAILED": "Төленбеді"
+      },
+      "deleteA11y": "Жазбаны жою"
     }
   }
 }

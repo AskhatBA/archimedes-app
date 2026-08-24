@@ -1,6 +1,7 @@
 import ArrowBackIcon from '@/assets/icons/arrow-back.svg';
 import BanknoteArrowDown from '@/assets/icons/banknote-arrow-down.svg';
 import CalendarIcon from '@/assets/icons/calendar.svg';
+import CheckCircleIcon from '@/assets/icons/check-circle.svg';
 import ClipIcon from '@/assets/icons/clip.svg';
 import ClipboardClockIcon from '@/assets/icons/clipboard-clock.svg';
 import ClipboardListIcon from '@/assets/icons/clipboard-list.svg';
@@ -10,6 +11,7 @@ import FamilyIcon from '@/assets/icons/family.svg';
 import FilePenIcon from '@/assets/icons/file-pen.svg';
 import FileTextIcon from '@/assets/icons/file-text.svg';
 import FileIcon from '@/assets/icons/file.svg';
+import FolderPlusIcon from '@/assets/icons/folder-plus.svg';
 import HeartIcon from '@/assets/icons/heart.svg';
 import HistoryIcon from '@/assets/icons/history.svg';
 import HospitalIcon from '@/assets/icons/hospital.svg';
@@ -23,6 +25,7 @@ import SelectCaretIcon from '@/assets/icons/select-caret.svg';
 import SelectIndicator from '@/assets/icons/select-indicator.svg';
 import ShieldPlusIcon from '@/assets/icons/shield-plus.svg';
 import ShieldX from '@/assets/icons/shield-x.svg';
+import ShoppingCartPlusIcon from '@/assets/icons/shopping-cart-plus.svg';
 import SmartphoneIcon from '@/assets/icons/smartphone.svg';
 import StethoscopeIcon from '@/assets/icons/stethoscope.svg';
 import SuccessCheckIcon from '@/assets/icons/success-check.svg';
@@ -31,6 +34,7 @@ import TabBarHomeIcon from '@/assets/icons/tab-bar-home.svg';
 import TabBarNotificationsIcon from '@/assets/icons/tab-bar-notifications.svg';
 import TabBarProfileIcon from '@/assets/icons/tab-bar-profile.svg';
 import ThreeDotsIcon from '@/assets/icons/three-dots.svg';
+import TrashIcon from '@/assets/icons/trash.svg';
 import UploadFileIcon from '@/assets/icons/upload-file.svg';
 import UserFilledIcon from '@/assets/icons/user-filled.svg';
 import UserOutlinedIcon from '@/assets/icons/user-outlined.svg';
@@ -76,4 +80,8 @@ export {
   PhoneIcon,
   QrCodeIcon,
   SmartphoneIcon,
+  ShoppingCartPlusIcon,
+  FolderPlusIcon,
+  TrashIcon,
+  CheckCircleIcon,
 };

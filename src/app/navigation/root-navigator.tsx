@@ -15,6 +15,9 @@ import { MedicalNetworkScreen } from '@/screens/medical-network';
 import { NewsDetailsScreen } from '@/screens/news-details';
 import { NotificationsScreen } from '@/screens/notifications';
 import { OtpVerificationScreen } from '@/screens/otp-verification';
+import { PaidProgramsScreen } from '@/screens/paid-programs';
+import { PaidProgramsHistoryScreen } from '@/screens/paid-programs-history';
+import { PaymentScreen } from '@/screens/payment';
 import { PriceListScreen } from '@/screens/price-list';
 import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
@@ -170,6 +173,21 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.PriceList}
           component={PriceListScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.PaidPrograms}
+          component={PaidProgramsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.PaidProgramsHistory}
+          component={PaidProgramsHistoryScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.Payment}
+          component={PaymentScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
       </RootStack.Navigator>

@@ -30,4 +30,7 @@ export const routes = {
   ProgramSupport: 'program-support',
   DocumentViewer: 'document-viewer',
   PriceList: 'price-list',
+  Payment: 'payment',
+  PaidPrograms: 'paid-programs',
+  PaidProgramsHistory: 'paid-programs-history',
 } as const;

@@ -26,7 +26,6 @@ export namespace User {
     isPhoneMatch?: boolean,
 
 }` Account check result
- * @response `400` `void` Invalid input — `INVALID_IIN` when the IIN is malformed
 */
   export namespace CheckAccountList {
     export type RequestParams = {};

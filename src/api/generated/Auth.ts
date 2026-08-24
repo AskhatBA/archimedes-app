@@ -40,7 +40,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @request POST:/auth/request-otp
    * @secure
    * @response `200` `RequestOTPResponse` OTP code generated successfully
-   * @response `400` `void` Invalid input — `INVALID_PHONE`, `INVALID_IIN` or `INSURANCE_PHONE_IS_NOT_MATCHED`
+   * @response `400` `void` Invalid input — `INVALID_PHONE` or `INSURANCE_PHONE_IS_NOT_MATCHED`
    * @response `404` `void` No account exists for this phone/IIN — `ACCOUNT_NOT_FOUND`
    */
   requestOtpCreate = (data: RequestOTPBody, params: RequestParams = {}) =>
@@ -62,7 +62,7 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
    * @request POST:/auth/register/start
    * @secure
    * @response `200` `RegisterStartResponse` Confirmation code sent
-   * @response `400` `void` Invalid input — `INVALID_PHONE`, `INVALID_IIN`, or `INSURANCE_PHONE_IS_NOT_MATCHED` when the insurance record for this IIN holds a different number
+   * @response `400` `void` Invalid input — `INVALID_PHONE`, or `INSURANCE_PHONE_IS_NOT_MATCHED` when the insurance record for this IIN holds a different number
    * @response `409` `void` An account already exists — `ACCOUNT_ALREADY_EXISTS`. The user should sign in instead.
    */
   registerStartCreate = (data: RegisterStartBody, params: RequestParams = {}) =>

@@ -472,7 +472,6 @@ export namespace Insurance {
     message?: string,
 
 }` IIN check result
- * @response `400` `void` `INVALID_IIN` — missing or malformed IIN
  * @response `401` `void` User not found or unauthorized
 */
   export namespace CheckIinList {
@@ -582,6 +581,46 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       priceList?: PriceListItem[];
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name MedicServiceList
+ * @summary Get services provided by a doctor in a clinic
+ * @request GET:/insurance/medic-service
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    medicServices?: (object)[],
+
+}` Response
+ * @response `400` `void` clinicId or medicIIN is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace MedicServiceList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Clinic OID (from getClinicsMO)
+       * @format uuid
+       */
+      clinicId: string;
+      /**
+       * Doctor IIN
+       * @example "123456789012"
+       */
+      medicIIN: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      medicServices?: object[];
     };
   }
 }

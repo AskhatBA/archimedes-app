@@ -32,6 +32,7 @@ const NAMESPACES = [
   'appointments',
   'compensation',
   'qrScanner',
+  'paidPrograms',
 ] as const;
 
 const isSupported = (code?: string | null): code is SupportedLanguage =>

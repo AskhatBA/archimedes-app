@@ -14,6 +14,7 @@ import { MISSpecialization, MISDoctor, MISAvailableSlots, misApi } from '@/api';
 import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slots';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
+import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
@@ -82,6 +83,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const doctorDetails = doctors.find(
     misDoctor => misDoctor.id === formValues.doctorId,
   );
+
+  useMedicService(formValues.branchId, doctorDetails?.iin);
 
   const isBookingEnabled =
     !!formValues.branchId &&

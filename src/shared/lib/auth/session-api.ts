@@ -86,3 +86,19 @@ export const getSessionHistory = async (params?: {
   });
   return data?.data ?? [];
 };
+
+/**
+ * Best-effort server-side session invalidation. Goes through the bare client on
+ * purpose: on an expired access token the shared client's 401 handler would
+ * lock the session (or log out mid-flight) instead of letting the caller finish
+ * signing out. Never throws — the local session is cleared either way.
+ */
+export const logoutRequest = async (): Promise<void> => {
+  try {
+    await client.post('/auth/logout', undefined, {
+      headers: await authHeader(),
+    });
+  } catch {
+    // Nothing to recover: the refresh token expires on its own.
+  }
+};

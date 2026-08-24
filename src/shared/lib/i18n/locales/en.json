@@ -125,6 +125,11 @@
       "change": "Change",
       "sessionHistory": "Login history",
       "open": "Open"
+    },
+    "payment": {
+      "eyebrow": "Payments",
+      "topUp": "Top up {{amount}} ₸ (test)",
+      "open": "Open"
     }
   },
   "home": {
@@ -151,7 +156,9 @@
     "noReferrals": "No active referrals",
     "referralsCount_one": "{{count}} referral",
     "referralsCount_other": "{{count}} referrals",
-    "scanQr": "Scan QR"
+    "scanQr": "Scan QR",
+    "paidProgramsTitle": "Paid programs",
+    "paidProgramsSubtitle": "Med. plans and check-ups — buy online"
   },
   "qrScanner": {
     "title": "Scan QR",
@@ -315,6 +322,64 @@
         "count_one": "{{count}} person",
         "count_other": "{{count}} people"
       }
+    }
+  },
+  "paidPrograms": {
+    "title": "Paid programs",
+    "empty": "No programs in this category yet",
+    "categories": {
+      "medPlan": "Med. plans",
+      "checkup": "Check-up"
+    },
+    "hints": {
+      "medPlan": "Yearly outpatient care programs for you and your family.",
+      "checkup": "Comprehensive screenings completed in one or two visits."
+    },
+    "coverage": {
+      "personal": "For one person",
+      "family": "For the whole family"
+    },
+    "card": {
+      "popular": "Top",
+      "addToCartA11y": "Add program to cart",
+      "removeFromCartA11y": "Remove program from cart"
+    },
+    "details": {
+      "price": "Price",
+      "duration": "Duration",
+      "included": "What the program includes",
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart"
+    },
+    "cart": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "clear": "Clear",
+      "total": "Total",
+      "checkout": "Proceed to payment",
+      "open": "Open",
+      "barLabel": "In cart",
+      "removeA11y": "Remove program from cart",
+      "paymentDescription_one": "Payment for {{count}} program",
+      "paymentDescription_other": "Payment for {{count}} programs"
+    },
+    "toast": {
+      "added": "“{{title}}” added to the cart",
+      "removed": "“{{title}}” removed from the cart"
+    },
+    "history": {
+      "link": "Purchase history",
+      "title": "Purchase history",
+      "emptyTitle": "No purchases yet",
+      "emptySubtitle": "Programs you buy will show up here along with their payment status.",
+      "total": "Total",
+      "paymentId": "Payment: {{id}}",
+      "status": {
+        "PENDING": "Processing",
+        "SUCCESS": "Paid",
+        "FAILED": "Not paid"
+      },
+      "deleteA11y": "Delete record"
     }
   }
 }

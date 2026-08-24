@@ -33,25 +33,31 @@ export namespace Payment {
   }
 
   /**
-   * @description Called by FreedomPay after a payment is processed. Verifies the request signature, updates the payment status, and increments the user's balance on success. Returns a signed XML acknowledgement.
+   * @description Called by FreedomPay after a payment is processed. Must stay public and unauthenticated. Verifies the request signature and the settled amount, then moves the payment out of PENDING exactly once and credits the user's balance on success. Repeated deliveries of the same result are ignored, so the balance is never credited twice. Always answers 200 with a signed XML body — outcomes are reported in `pg_status` (`ok` / `rejected` / `error`), because a non-200 makes FreedomPay retry the callback every 30 minutes for 2 hours.
    * @tags Payment
    * @name CallbackCreate
-   * @summary FreedomPay server-to-server result callback
+   * @summary FreedomPay server-to-server result callback (pg_result_url)
    * @request POST:/payment/callback
    * @secure
    * @response `200` `string` Signed XML acknowledgement
-   * @response `400` `void` Invalid signature or missing payment
    */
   export namespace CallbackCreate {
     export type RequestParams = {};
     export type RequestQuery = {};
     export type RequestBody = {
-      /** @format uuid */
+      /**
+       * Internal payment ID passed as pg_order_id on init
+       * @format uuid
+       */
       pg_order_id?: string;
+      /** FreedomPay transaction ID */
       pg_payment_id?: string;
-      pg_status?: 'ok' | 'error' | 'rejected';
+      /** 1 - success, 0 - failure, 2 - not completed yet (stays PENDING) */
+      pg_result?: '0' | '1' | '2';
+      /** Settled amount; must match the initiated amount */
       pg_amount?: string;
       pg_currency?: string;
+      pg_payment_date?: string;
       pg_salt?: string;
       pg_sig?: string;
     };
@@ -151,7 +157,7 @@ export namespace Payment {
   }
 
   /**
-   * No description
+   * @description Returns the payment record. If the payment is still PENDING more than a minute after creation, its state is re-checked against FreedomPay first — this settles payments whose result callback never arrived. Poll this endpoint after the WebView closes.
    * @tags Payment
    * @name StatusDetail
    * @summary Get a single payment by ID

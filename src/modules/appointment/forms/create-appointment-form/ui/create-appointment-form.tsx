@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useUser } from '@/modules/user';
 import { Button } from '@/shared/components/button';
 import { SelectField } from '@/shared/components/select-field';
+import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useFamily, usePrograms } from '@/shared/lib/insurance';
@@ -26,21 +27,30 @@ export const CreateAppointmentForm: FC = () => {
     isBooking,
     formValues,
   } = useCreateAppointment();
-  const { programs } = usePrograms();
+  const { programs, loadingPrograms } = usePrograms();
   const { user } = useUser();
   const { family } = useFamily(formValues.programId);
   const { t } = useTranslation();
 
   const availablePrograms = useMemo(
-    () => programs?.filter(p => p.status !== 'EXPIRED'),
+    () => programs?.filter(p => p.status !== 'EXPIRED') || [],
     [programs],
   );
 
+  // Пациент без действующих программ — «платный», выбор программы ему не нужен
+  const isPaidPatient = !loadingPrograms && availablePrograms.length === 0;
+
   useEffect(() => {
-    if (availablePrograms?.length === 1) {
+    if (availablePrograms.length === 1) {
       changeFormValues('programId', availablePrograms[0].id);
     }
   }, [availablePrograms]);
+
+  useEffect(() => {
+    if (isPaidPatient && formValues.programId) {
+      changeFormValues('programId', undefined);
+    }
+  }, [isPaidPatient, formValues.programId]);
 
   const availableSlotList = useMemo(
     () => Object.values(availableSlots || {}),
@@ -61,26 +71,39 @@ export const CreateAppointmentForm: FC = () => {
         />
       </View>
 
-      <View>
-        <Text
-          style={[
-            createAppointmentFormStyles.title,
-            { color: colors.gray['500'] },
-          ]}
-        >
-          {t('appointments:create.selectProgramLabel')}
-        </Text>
-        <SelectField
-          value={formValues.programId || ''}
-          onChange={value => changeFormValues('programId', value)}
-          placeholder={t('appointments:create.selectProgramPlaceholder')}
-          options={(availablePrograms || []).map(p => ({
-            value: p.id,
-            label: p.title,
-            subtitle: p.cardNo,
-          }))}
-        />
-      </View>
+      {loadingPrograms && (
+        <View>
+          <SkeletonElement
+            width={180}
+            height={22}
+            style={styles.programTitleSkeleton}
+          />
+          <SkeletonElement height={52} borderRadius={14} />
+        </View>
+      )}
+
+      {!loadingPrograms && !isPaidPatient && (
+        <View>
+          <Text
+            style={[
+              createAppointmentFormStyles.title,
+              { color: colors.gray['500'] },
+            ]}
+          >
+            {t('appointments:create.selectProgramLabel')}
+          </Text>
+          <SelectField
+            value={formValues.programId || ''}
+            onChange={value => changeFormValues('programId', value)}
+            placeholder={t('appointments:create.selectProgramPlaceholder')}
+            options={availablePrograms.map(p => ({
+              value: p.id,
+              label: p.title,
+              subtitle: p.cardNo,
+            }))}
+          />
+        </View>
+      )}
 
       {formValues.programId && family && (
         <View>
@@ -195,6 +218,9 @@ export const CreateAppointmentForm: FC = () => {
 const styles = StyleSheet.create({
   container: {
     gap: 32,
+  },
+  programTitleSkeleton: {
+    marginBottom: 11,
   },
   noSlots: {
     marginVertical: 8,

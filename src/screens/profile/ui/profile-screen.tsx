@@ -9,6 +9,7 @@ import { colors } from '@/shared/theme';
 import { AppointmentHistory } from './appointments-history';
 import { LanguageSwitcher } from './language-switcher';
 import { MyTests } from './my-tests';
+import { PaymentLink } from './payment-link';
 import { PriceListLink } from './price-list-link';
 import { SecuritySettings } from './security-settings';
 
@@ -25,6 +26,7 @@ export const ProfileScreen: FC = () => {
           <MyTests />
           <AppointmentHistory />
           <PriceListLink />
+          <PaymentLink />
           <SecuritySettings />
           <LanguageSwitcher />
           <View style={{ gap: 8 }}>
