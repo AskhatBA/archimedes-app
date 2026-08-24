@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { misApi } from '@/api';
 
+const EXCLUDED_SPECIALIZATIONS = ['УЗИ', 'ВЫЕЗДНАЯ СЛУЖБА', 'МАССАЖ'];
+
 export const useSpecializations = (
   branchId?: string,
   isTelemedicine?: boolean,
@@ -16,10 +18,18 @@ export const useSpecializations = (
     },
   );
 
+  // Записаться на эти услуги через приложение нельзя
+  const availableSpecializations = (specializations || []).filter(
+    spec =>
+      !EXCLUDED_SPECIALIZATIONS.some(excluded =>
+        spec.name.toUpperCase().includes(excluded),
+      ),
+  );
+
   // Оставить только терапевтов если выбрана телемедицина
   const filteredSpecializations = isTelemedicine
-    ? (specializations || []).filter(spec => spec.name.includes('Терапевт'))
-    : specializations || [];
+    ? availableSpecializations.filter(spec => spec.name.includes('Терапевт'))
+    : availableSpecializations;
 
   return {
     specializations: filteredSpecializations,
