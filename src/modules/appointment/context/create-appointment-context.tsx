@@ -10,8 +10,15 @@ import {
   useState,
 } from 'react';
 
-import { MISSpecialization, MISDoctor, MISAvailableSlots, misApi } from '@/api';
+import {
+  MISSpecialization,
+  MISDoctor,
+  MISAvailableSlots,
+  MedicServiceItem,
+  misApi,
+} from '@/api';
 import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slots';
+import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
@@ -35,6 +42,8 @@ interface CreateAppointmentContextProps {
   specializations: MISSpecialization[];
   doctors: MISDoctor[];
   availableSlots: MISAvailableSlots | undefined;
+  medicService: MedicServiceItem | null;
+  loadingMedicService: boolean;
   isBookingEnabled: boolean;
   bookAppointment: () => void;
   isBooking?: boolean;
@@ -46,6 +55,8 @@ const initialValues: CreateAppointmentContextProps = {
   specializations: [],
   doctors: [],
   availableSlots: undefined,
+  medicService: null,
+  loadingMedicService: false,
   isBookingEnabled: false,
   bookAppointment: () => {},
 };
@@ -84,7 +95,16 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     misDoctor => misDoctor.id === formValues.doctorId,
   );
 
-  useMedicService(formValues.branchId, doctorDetails?.iin);
+  const { branches } = useBranches();
+
+  const branchExternalId = branches?.find(
+    branch => branch.id === formValues.branchId,
+  )?.externalId;
+
+  const { medicService, isLoading: loadingMedicService } = useMedicService(
+    branchExternalId,
+    doctorDetails?.iin,
+  );
 
   const isBookingEnabled =
     !!formValues.branchId &&
@@ -174,6 +194,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       availableSlots,
       specializations,
       doctors,
+      medicService,
+      loadingMedicService,
       isBookingEnabled,
       bookAppointment,
       isBooking: createAppointmentMutation.isPending,
@@ -184,6 +206,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       availableSlots,
       specializations,
       doctors,
+      medicService,
+      loadingMedicService,
       isBookingEnabled,
     ],
   );

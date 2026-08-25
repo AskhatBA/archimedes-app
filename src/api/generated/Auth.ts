@@ -10,6 +10,9 @@
  */
 
 import {
+  AdminLoginBody,
+  AdminLoginResponse,
+  AdminUser,
   ChangePhoneBody,
   ChangePhoneResponse,
   RefreshBody,
@@ -308,6 +311,59 @@ export class Auth<SecurityDataType = unknown> extends HttpClient<SecurityDataTyp
       path: `/auth/sessions`,
       method: 'GET',
       query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * @description Dashboard-only login. Accounts without the ADMIN role are rejected with the same generic `INVALID_CREDENTIALS` error as an unknown email, so the response cannot be used to enumerate accounts. Failed attempts are counted per email and locked out for a configurable window. The admin account is provisioned out of band by `npm run db:create-admin` — there is no sign-up endpoint.
+   *
+   * @tags Auth
+   * @name AdminLoginCreate
+   * @summary Sign in to the Archimedes dashboard with email and password
+   * @request POST:/auth/admin/login
+   * @secure
+   * @response `200` `AdminLoginResponse` Signed in
+   * @response `400` `void` Missing email or password — `INVALID_CREDENTIALS`
+   * @response `401` `void` Wrong credentials or a non-admin account — `INVALID_CREDENTIALS`
+   * @response `429` `void` Too many failed attempts — `TOO_MANY_LOGIN_ATTEMPTS`
+   */
+  adminLoginCreate = (data: AdminLoginBody, params: RequestParams = {}) =>
+    this.request<AdminLoginResponse, void>({
+      path: `/auth/admin/login`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * @description Session probe used by the dashboard on load. Requires a valid Bearer token belonging to an ADMIN account — a patient's or doctor's token authenticates but is rejected with 403.
+ *
+ * @tags Auth
+ * @name AdminMeList
+ * @summary Current dashboard admin
+ * @request GET:/auth/admin/me
+ * @secure
+ * @response `200` `{
+    success?: boolean,
+    user?: AdminUser,
+
+}` The signed-in admin
+ * @response `401` `void` Missing, expired or superseded token
+ * @response `403` `void` Authenticated, but not an admin — `FORBIDDEN`
+ */
+  adminMeList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        success?: boolean;
+        user?: AdminUser;
+      },
+      void
+    >({
+      path: `/auth/admin/me`,
+      method: 'GET',
       secure: true,
       format: 'json',
       ...params,

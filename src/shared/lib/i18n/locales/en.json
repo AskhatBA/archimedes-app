@@ -217,6 +217,7 @@
       "selectSpecializationPlaceholder": "List of specializations",
       "selectDoctorLabel": "Select a doctor",
       "selectDoctorPlaceholder": "Any doctor",
+      "priceLabel": "Appointment price",
       "noSlots": "No available time slots",
       "submit": "Book an appointment",
       "errorUnknown": "Unknown error. Please try again in a minute",

@@ -262,6 +262,32 @@ export interface SessionHistoryResponse {
   data?: SessionHistoryItem[];
 }
 
+export interface AdminLoginBody {
+  /**
+   * @format email
+   * @example "admin@archimedes.kz"
+   */
+  email: string;
+  /** @format password */
+  password: string;
+}
+
+export interface AdminLoginResponse {
+  success?: boolean;
+  accessToken?: string;
+  refreshToken?: string;
+  user?: AdminUser;
+}
+
+export interface AdminUser {
+  /** @format uuid */
+  id?: string;
+  /** @format email */
+  email?: string;
+  /** @example "ADMIN" */
+  role?: string;
+}
+
 export interface InsuranceVerifyOtpBody {
   otp?: string;
 }
@@ -604,6 +630,18 @@ export interface PriceListItem {
   price: number;
 }
 
+export interface MedicServiceItem {
+  /**
+   * @format uuid
+   * @example "128e28d0-7431-4300-8592-71def440f16e"
+   */
+  oid: string;
+  /** @example "Консультация: Терапевт" */
+  service: string;
+  /** @example 12000 */
+  price: number;
+}
+
 export interface CreateMeetingBody {
   /** @example "Patient Consultation" */
   topic: string;
@@ -705,6 +743,7 @@ export interface MISBranch {
   id?: string;
   name?: string;
   address?: string;
+  externalId?: string;
 }
 
 export interface MISSpecialization {

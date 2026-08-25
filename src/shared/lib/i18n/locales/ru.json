@@ -227,6 +227,7 @@
       "selectSpecializationPlaceholder": "Список специализаций",
       "selectDoctorLabel": "Выберите врача",
       "selectDoctorPlaceholder": "Любой врач",
+      "priceLabel": "Стоимость приема",
       "noSlots": "Нет доступных слотов для записи",
       "submit": "Записаться на прием",
       "errorUnknown": "Неизвестная ошибка. Попробуйте еще раз через минуту",

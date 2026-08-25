@@ -77,4 +77,87 @@ export namespace Patient {
     export type RequestHeaders = {};
     export type ResponseBody = GetPatientByIinResponse;
   }
+
+  /**
+ * @description Paginated listing of the patient profiles stored on our side, across all users. Requires an ADMIN account — a patient's mobile token authenticates but is rejected with 403. Rows are ordered by IIN: names are encrypted at rest, so the database cannot sort them. A name search is matched after decryption and its results come back in alphabetical order.
+ * @tags Patient
+ * @name AdminPatientsList
+ * @summary List every patient profile (dashboard, admin only)
+ * @request GET:/patient/admin/patients
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    items?: ({
+    id?: string,
+    userId?: string,
+    firstName?: string,
+    lastName?: string,
+    patronymic?: string,
+    fullName?: string,
+    birthDate?: string,
+    gender?: "M" | "F",
+    iin?: string,
+    misPatientId?: string,
+    phone?: string,
+    email?: string | null,
+    appointmentsCount?: number,
+    refundsCount?: number,
+
+})[],
+    total?: number,
+    page?: number,
+    limit?: number,
+    totalPages?: number,
+
+}` A page of patients
+ * @response `400` `void` Invalid pagination or filter values
+ * @response `401` `void` Unauthorized
+ * @response `403` `void` Authenticated, but not an admin
+*/
+  export namespace AdminPatientsList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * @min 1
+       * @default 1
+       */
+      page?: number;
+      /**
+       * @min 1
+       * @max 100
+       * @default 20
+       */
+      limit?: number;
+      /** Matches full name, IIN or phone */
+      search?: string;
+      gender?: 'M' | 'F';
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      items?: {
+        id?: string;
+        userId?: string;
+        firstName?: string;
+        lastName?: string;
+        patronymic?: string;
+        fullName?: string;
+        birthDate?: string;
+        gender?: 'M' | 'F';
+        iin?: string;
+        misPatientId?: string;
+        phone?: string;
+        email?: string | null;
+        appointmentsCount?: number;
+        refundsCount?: number;
+      }[];
+      total?: number;
+      page?: number;
+      limit?: number;
+      totalPages?: number;
+    };
+  }
 }

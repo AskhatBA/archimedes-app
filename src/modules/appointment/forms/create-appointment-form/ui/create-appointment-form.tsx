@@ -13,6 +13,7 @@ import { colors } from '@/shared/theme';
 import { AppointmentTypeSwitch } from '../../../components/appointment-type-switch';
 import { useCreateAppointment } from '../../../context/create-appointment-context';
 
+import { AppointmentPrice } from './appointment-price';
 import { ChooseBranch } from './choose-branch';
 import { createAppointmentFormStyles } from './styles';
 
@@ -180,6 +181,8 @@ export const CreateAppointmentForm: FC = () => {
           />
         </View>
       )}
+
+      <AppointmentPrice />
 
       {formValues.doctorId && availableSlotList.length > 0 && (
         <TimeSlotPicker

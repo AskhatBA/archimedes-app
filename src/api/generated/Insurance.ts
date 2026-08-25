@@ -23,6 +23,7 @@ import {
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
+  MedicServiceItem,
   PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
@@ -693,7 +694,7 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
  * @response `200` `{
   \** @example true *\
     success?: boolean,
-    medicServices?: (object)[],
+    medicService?: MedicServiceItem,
 
 }` Response
  * @response `400` `void` clinicId or medicIIN is required
@@ -719,11 +720,102 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       {
         /** @example true */
         success?: boolean;
-        medicServices?: object[];
+        medicService?: MedicServiceItem;
       },
       void
     >({
       path: `/insurance/medic-service`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * @description Paginated listing of the refund requests stored on our side, across all users. Requires an ADMIN account — a patient's mobile token authenticates but is rejected with 403.
+ *
+ * @tags Insurance
+ * @name AdminRefundRequestsList
+ * @summary List every refund request (dashboard, admin only)
+ * @request GET:/insurance/admin/refund-requests
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    items?: ({
+    id?: string,
+    patientName?: string | null,
+    patientIin?: string | null,
+    patientPhone?: string,
+    category?: number,
+    amount?: number,
+    date?: string,
+    comments?: string | null,
+    filesCount?: number,
+    state?: "accepted" | "failed" | "unknown",
+    createdAt?: string,
+
+})[],
+    total?: number,
+    page?: number,
+    limit?: number,
+    totalPages?: number,
+    totalAmount?: number,
+
+}` A page of refund requests
+ * @response `400` `void` Invalid pagination or filter values
+ * @response `401` `void` Unauthorized
+ * @response `403` `void` Authenticated, but not an admin
+ */
+  adminRefundRequestsList = (
+    query?: {
+      /**
+       * @min 1
+       * @default 1
+       */
+      page?: number;
+      /**
+       * @min 1
+       * @max 100
+       * @default 20
+       */
+      limit?: number;
+      /** Matches patient full name, IIN or phone */
+      search?: string;
+      category?: 0 | 2 | 4 | 5;
+      /** Claim date lower bound, inclusive (YYYY-MM-DD) */
+      dateFrom?: string;
+      /** Claim date upper bound, inclusive (YYYY-MM-DD) */
+      dateTo?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        items?: {
+          id?: string;
+          patientName?: string | null;
+          patientIin?: string | null;
+          patientPhone?: string;
+          category?: number;
+          amount?: number;
+          date?: string;
+          comments?: string | null;
+          filesCount?: number;
+          state?: 'accepted' | 'failed' | 'unknown';
+          createdAt?: string;
+        }[];
+        total?: number;
+        page?: number;
+        limit?: number;
+        totalPages?: number;
+        totalAmount?: number;
+      },
+      void
+    >({
+      path: `/insurance/admin/refund-requests`,
       method: 'GET',
       query: query,
       secure: true,
