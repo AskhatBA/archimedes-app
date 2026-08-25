@@ -220,8 +220,11 @@
       "priceLabel": "Appointment price",
       "noSlots": "No available time slots",
       "submit": "Book an appointment",
+      "submitPaid": "Pay and book",
       "errorUnknown": "Unknown error. Please try again in a minute",
       "errorTooLate": "You cannot book less than 1 hour before the appointment",
+      "errorPaymentInit": "Could not open the payment page. Please try again",
+      "errorPaymentFailed": "The payment did not go through, the appointment was not booked",
       "success": {
         "title": "Appointment booked with",
         "subtitle": "Our call center will contact you to confirm",

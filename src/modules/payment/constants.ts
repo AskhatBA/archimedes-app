@@ -22,5 +22,15 @@ export const PAYMENT_BRIDGE_ACTIONS = {
 export const WEB_AUTH_STORAGE_KEY = 'auth-store';
 export const WEB_AUTH_STORAGE_VERSION = 0;
 
+/**
+ * Paths the provider redirects to when the payer is done (`FREEDOMPAY_SUCCESS_URL` /
+ * `FREEDOMPAY_FAILURE_URL` on the backend). Only the path is matched — the host differs
+ * between environments, and the outcome is confirmed by polling the payment anyway.
+ */
+export const PAYMENT_RETURN_PATHS = {
+  success: '/payment/success',
+  failure: '/payment/failure',
+} as const;
+
 /** Fixed amount used by the profile test entry point until a real top-up UI exists. */
 export const TEST_PAYMENT_AMOUNT = 5102;

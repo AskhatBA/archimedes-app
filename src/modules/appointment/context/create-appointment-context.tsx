@@ -5,6 +5,7 @@ import {
   FC,
   ReactElement,
   ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -16,18 +17,22 @@ import {
   MISAvailableSlots,
   MedicServiceItem,
   misApi,
+  paymentApi,
 } from '@/api';
 import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slots';
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
+import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
+import { usePrograms } from '@/shared/lib/insurance';
 import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
+import { routes } from '@/shared/navigation/routes';
 
 import { CreateAppointmentForm } from '../types';
 
@@ -44,6 +49,8 @@ interface CreateAppointmentContextProps {
   availableSlots: MISAvailableSlots | undefined;
   medicService: MedicServiceItem | null;
   loadingMedicService: boolean;
+  /** No active insurance programme — the visit is paid for per booking. */
+  isPaidPatient: boolean;
   isBookingEnabled: boolean;
   bookAppointment: () => void;
   isBooking?: boolean;
@@ -57,6 +64,7 @@ const initialValues: CreateAppointmentContextProps = {
   availableSlots: undefined,
   medicService: null,
   loadingMedicService: false,
+  isPaidPatient: false,
   isBookingEnabled: false,
   bookAppointment: () => {},
 };
@@ -69,10 +77,12 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 }): ReactElement | null => {
   const queryClient = useQueryClient();
   const { showToast } = useToast();
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const { t } = useTranslation();
 
   const [success, setSuccess] = useState(false);
+  /** Payment a paid patient is currently completing, watched until it settles. */
+  const [pendingPaymentId, setPendingPaymentId] = useState<string | null>(null);
   const [formValues, setFormValues] =
     useState<CreateAppointmentForm>(FORM_INITIAL_VALUES);
 
@@ -106,12 +116,21 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     doctorDetails?.iin,
   );
 
+  const { programs, loadingPrograms } = usePrograms();
+
+  // An expired programme covers nothing, so it does not make the visit insured.
+  const isPaidPatient =
+    !loadingPrograms &&
+    !(programs || []).some(program => program.status !== 'EXPIRED');
+
   const isBookingEnabled =
     !!formValues.branchId &&
     !!formValues.specializationId &&
     !!formValues.doctorId &&
     !!formValues.doctorId &&
-    !!formValues.timeSlot;
+    !!formValues.timeSlot &&
+    // A paid patient cannot be sent to checkout before the price is known.
+    (!isPaidPatient || !!medicService);
 
   const resetFormValues = () => {
     setFormValues(FORM_INITIAL_VALUES);
@@ -121,18 +140,28 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
+  /** Slot boundaries in the format MIS expects, shared by the insured and paid flows. */
+  const slotTimesOf = (payload: CreateAppointmentForm) => {
+    const endTime = availableSlots?.[payload.date]?.timeSlots.find(
+      time => time.startTime === payload.timeSlot,
+    )?.endTime;
+
+    return {
+      startTime: `${payload.date}T${payload.timeSlot}:00+05:00`,
+      endTime: `${payload.date}T${endTime}:00+05:00`,
+    };
+  };
+
   const createAppointmentMutation = useMutation({
     mutationFn: (payload: CreateAppointmentForm) => {
-      const endTime = availableSlots?.[payload.date]?.timeSlots.find(
-        time => time.startTime === payload.timeSlot,
-      )?.endTime;
+      const { startTime, endTime } = slotTimesOf(payload);
 
       return misApi.createAppointmentCreate({
         patientId: payload.patientId,
         branchId: payload.branchId,
         doctorId: payload.doctorId,
-        startTime: `${payload.date}T${payload.timeSlot}:00+05:00`,
-        endTime: `${payload.date}T${endTime}:00+05:00`,
+        startTime,
+        endTime,
         insuranceProgramId: payload.programId,
         isTelemedicine: payload.isTelemedicine,
       });
@@ -167,6 +196,85 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     },
   });
 
+  /**
+   * Starts checkout for a patient without a programme.
+   *
+   * The appointment is *not* created here: the slot travels to the backend as the
+   * payment's metadata, and the visit is booked server-side the moment the payment
+   * settles as SUCCESS — from the provider callback or from the background
+   * reconciliation sweep, so it happens even if the app is closed on the payment page.
+   */
+  const initAppointmentPaymentMutation = useMutation({
+    mutationFn: async (payload: CreateAppointmentForm) => {
+      if (!medicService) {
+        throw new Error('Missing appointment price');
+      }
+
+      const { startTime, endTime } = slotTimesOf(payload);
+
+      const { data } = await paymentApi.initCreate({
+        amount: medicService.price,
+        description: medicService.service,
+        purpose: 'APPOINTMENT',
+        metadata: {
+          doctorId: payload.doctorId,
+          branchId: payload.branchId,
+          startTime,
+          endTime,
+          isTelemedicine: !!payload.isTelemedicine,
+          ...(payload.patientId ? { familyMemberId: payload.patientId } : {}),
+        },
+      });
+
+      return data;
+    },
+    onSuccess: data => {
+      if (!data?.paymentUrl) {
+        showToast({
+          type: 'error',
+          message: t('appointments:create.errorPaymentInit'),
+        });
+        return;
+      }
+
+      setPendingPaymentId(data.paymentId);
+      navigate(routes.Payment, { paymentUrl: data.paymentUrl });
+    },
+    onError: () => {
+      showToast({
+        type: 'error',
+        message: t('appointments:create.errorPaymentInit'),
+      });
+    },
+  });
+
+  // Watches the payment the same way any other flow would; the booking itself already
+  // happened on the backend by the time this reports SUCCESS.
+  usePaymentStatus(pendingPaymentId, {
+    onSuccess: useCallback(async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['appointments-history'] }),
+        queryClient.invalidateQueries({ queryKey: ['appointment-requests'] }),
+      ]);
+      logAnalyticsEvent(AnalyticsEvents.AppointmentCreated, {
+        branch_id: formValues.branchId,
+        specialization_id: formValues.specializationId,
+        doctor_id: formValues.doctorId,
+        program_id: formValues.programId,
+        is_telemedicine: formValues.isTelemedicine,
+        paid: true,
+      });
+      setSuccess(true);
+    }, [queryClient, formValues]),
+    onFailure: useCallback(() => {
+      setPendingPaymentId(null);
+      showToast({
+        type: 'error',
+        message: t('appointments:create.errorPaymentFailed'),
+      });
+    }, [showToast, t]),
+  });
+
   const bookAppointment = () => {
     if (formValues.date && formValues.timeSlot) {
       const slotDateTime = dayjs(`${formValues.date}T${formValues.timeSlot}`);
@@ -178,11 +286,18 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         return;
       }
     }
+
+    if (isPaidPatient) {
+      initAppointmentPaymentMutation.mutate(formValues);
+      return;
+    }
+
     createAppointmentMutation.mutate(formValues);
   };
 
   const finishBooking = () => {
     resetFormValues();
+    setPendingPaymentId(null);
     setSuccess(false);
     goBack();
   };
@@ -196,18 +311,23 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       doctors,
       medicService,
       loadingMedicService,
+      isPaidPatient,
       isBookingEnabled,
       bookAppointment,
-      isBooking: createAppointmentMutation.isPending,
+      isBooking:
+        createAppointmentMutation.isPending ||
+        initAppointmentPaymentMutation.isPending,
     }),
     [
       formValues,
       createAppointmentMutation.isPending,
+      initAppointmentPaymentMutation.isPending,
       availableSlots,
       specializations,
       doctors,
       medicService,
       loadingMedicService,
+      isPaidPatient,
       isBookingEnabled,
     ],
   );

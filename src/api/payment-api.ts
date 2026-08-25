@@ -1,4 +1,7 @@
-import { HttpClient } from './generated/http-client';
+import { ContentType, HttpClient } from './generated/http-client';
+
+/** What a payment is for — picks the backend handler that runs when it succeeds. */
+export type PaymentPurpose = 'BALANCE_TOPUP' | 'APPOINTMENT';
 
 /** Payment record as returned by `/payment/status/{id}`. */
 export interface PaymentRecord {
@@ -6,9 +9,28 @@ export interface PaymentRecord {
   amount: number;
   description?: string;
   status: 'PENDING' | 'SUCCESS' | 'FAILED';
+  purpose?: PaymentPurpose;
   /** Provider transaction id. */
   pgPaymentId?: string | null;
   createdAt: string;
+}
+
+export interface InitPaymentBody {
+  amount: number;
+  description?: string;
+  purpose?: PaymentPurpose;
+  /**
+   * Payload for the purpose's post-success handler. The backend validates it against the
+   * purpose before the payment is created, so a malformed body fails with 400 here rather
+   * than after the money moved.
+   */
+  metadata?: Record<string, unknown>;
+}
+
+export interface InitPaymentResult {
+  paymentId: string;
+  /** Provider page to open in a WebView. */
+  paymentUrl: string;
 }
 
 /**
@@ -28,6 +50,20 @@ export class PaymentApi extends HttpClient {
       path: `/payment/status/${id}`,
       method: 'GET',
       secure: true,
+      format: 'json',
+    });
+
+  /**
+   * Creates a payment and returns the provider URL to open. `purpose` and `metadata`
+   * decide what the backend does once the payment settles successfully.
+   */
+  initCreate = (body: InitPaymentBody) =>
+    this.request<InitPaymentResult, void>({
+      path: '/payment/init',
+      method: 'POST',
+      body,
+      secure: true,
+      type: ContentType.Json,
       format: 'json',
     });
 }

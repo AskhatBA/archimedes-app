@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { formatPrice } from '@/modules/paid-programs/lib/format-price';
 import { useTranslation } from '@/shared/lib/i18n';
-import { usePrograms } from '@/shared/lib/insurance';
 import { colors, fonts } from '@/shared/theme';
 
 import { useCreateAppointment } from '../../../context/create-appointment-context';
@@ -16,14 +15,9 @@ import { createAppointmentFormStyles } from './styles';
  */
 export const AppointmentPrice: FC = () => {
   const { t } = useTranslation();
-  const { formValues, medicService } = useCreateAppointment();
-  const { programs, loadingPrograms } = usePrograms();
+  const { formValues, medicService, isPaidPatient } = useCreateAppointment();
 
-  const hasProgram = (programs || []).some(
-    program => program.status !== 'EXPIRED',
-  );
-
-  if (loadingPrograms || hasProgram) return null;
+  if (!isPaidPatient) return null;
   if (!formValues.doctorId || !medicService) return null;
 
   return (

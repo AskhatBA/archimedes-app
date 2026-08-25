@@ -27,6 +27,7 @@ export const CreateAppointmentForm: FC = () => {
     bookAppointment,
     isBooking,
     formValues,
+    isPaidPatient,
   } = useCreateAppointment();
   const { programs, loadingPrograms } = usePrograms();
   const { user } = useUser();
@@ -37,9 +38,6 @@ export const CreateAppointmentForm: FC = () => {
     () => programs?.filter(p => p.status !== 'EXPIRED') || [],
     [programs],
   );
-
-  // Пациент без действующих программ — «платный», выбор программы ему не нужен
-  const isPaidPatient = !loadingPrograms && availablePrograms.length === 0;
 
   useEffect(() => {
     if (availablePrograms.length === 1) {
@@ -212,7 +210,11 @@ export const CreateAppointmentForm: FC = () => {
         disabled={!isBookingEnabled}
         onPress={bookAppointment}
       >
-        {t('appointments:create.submit')}
+        {t(
+          isPaidPatient
+            ? 'appointments:create.submitPaid'
+            : 'appointments:create.submit',
+        )}
       </Button>
     </View>
   );
