@@ -16,4 +16,5 @@ export {
 } from './query-keys';
 
 export { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from './agreement-files';
+export { PUBLIC_OFFER_FILES, publicOfferFileFor } from './offer-files';
 export { CALL_CENTER_PHONE } from './support';

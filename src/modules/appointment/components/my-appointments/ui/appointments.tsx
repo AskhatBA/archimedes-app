@@ -4,10 +4,12 @@ import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
 import { MISAppointmentHistory } from '@/api';
 import { useAppointmentsHistory } from '@/modules/appointment';
+import { usePendingAppointments } from '@/modules/appointment/hooks/use-pending-appointments';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
+import { PendingAppointmentCard } from './pending-appointment-card';
 
 interface AppointmentsProps {
   mode?: 'upcoming' | 'past';
@@ -22,6 +24,10 @@ export const Appointments: FC<AppointmentsProps> = ({
   const { t } = useTranslation();
   const { appointmentsHistory, loadingAppointmentsHistory } =
     useAppointmentsHistory();
+  // Appointments whose payment has not settled yet exist nowhere but on the payment, so
+  // they are listed alongside the real ones instead of leaving the screen empty.
+  const { pendingAppointments } = usePendingAppointments();
+  const showPending = mode === 'upcoming' && pendingAppointments.length > 0;
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -44,6 +50,17 @@ export const Appointments: FC<AppointmentsProps> = ({
     return mode === 'past' ? isPast : !isPast;
   });
 
+  const pendingSection = showPending ? (
+    <View style={styles.pendingSection}>
+      {pendingAppointments.map(appointment => (
+        <PendingAppointmentCard
+          key={appointment.paymentId}
+          appointment={appointment}
+        />
+      ))}
+    </View>
+  ) : null;
+
   if (!filtered.length) {
     const fallback =
       emptyText ??
@@ -51,8 +68,13 @@ export const Appointments: FC<AppointmentsProps> = ({
         ? t('appointments:emptyHistory')
         : t('appointments:emptyUpcoming'));
     return (
-      <View style={styles.noAppointmentsContainer}>
-        <Text style={styles.noAppointmentsText}>{fallback}</Text>
+      <View style={styles.container}>
+        {pendingSection}
+        {!showPending && (
+          <View style={styles.noAppointmentsContainer}>
+            <Text style={styles.noAppointmentsText}>{fallback}</Text>
+          </View>
+        )}
       </View>
     );
   }
@@ -71,6 +93,7 @@ export const Appointments: FC<AppointmentsProps> = ({
 
   return (
     <View style={styles.container}>
+      {pendingSection}
       {Object.entries(groupedAppointments)
         .sort(
           ([timeA], [timeB]) =>
@@ -132,6 +155,10 @@ export const Appointments: FC<AppointmentsProps> = ({
 
 const styles = StyleSheet.create({
   container: {},
+  pendingSection: {
+    gap: 8,
+    marginBottom: 16,
+  },
   appointments: {
     gap: 8,
   },

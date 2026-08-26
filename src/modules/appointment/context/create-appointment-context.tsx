@@ -26,6 +26,8 @@ import { useSpecializations } from '@/modules/appointment/hooks/use-specializati
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
 import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
+
+import { PublicOfferDrawer } from '../components/public-offer-drawer';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
@@ -83,6 +85,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const [success, setSuccess] = useState(false);
   /** Payment a paid patient is currently completing, watched until it settles. */
   const [pendingPaymentId, setPendingPaymentId] = useState<string | null>(null);
+  /** The public offer a paid patient has to accept before checkout. */
+  const [isOfferVisible, setIsOfferVisible] = useState(false);
   const [formValues, setFormValues] =
     useState<CreateAppointmentForm>(FORM_INITIAL_VALUES);
 
@@ -107,9 +111,11 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
   const { branches } = useBranches();
 
-  const branchExternalId = branches?.find(
+  const selectedBranch = branches?.find(
     branch => branch.id === formValues.branchId,
-  )?.externalId;
+  );
+
+  const branchExternalId = selectedBranch?.externalId;
 
   const { medicService, isLoading: loadingMedicService } = useMedicService(
     branchExternalId,
@@ -223,6 +229,12 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
           endTime,
           isTelemedicine: !!payload.isTelemedicine,
           ...(payload.patientId ? { familyMemberId: payload.patientId } : {}),
+          // Display-only: MIS knows nothing about this visit until the payment settles,
+          // so the app carries what it needs to describe it in the meantime.
+          doctorName: doctorDetails?.name,
+          branchName: selectedBranch?.name,
+          branchAddress: selectedBranch?.address,
+          serviceName: medicService.service,
         },
       });
 
@@ -240,10 +252,16 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       setPendingPaymentId(data.paymentId);
       navigate(routes.Payment, { paymentUrl: data.paymentUrl });
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      // The backend refuses a payment it could not fulfil (a conflicting slot, say) and
+      // says why — that reason is far more useful than a generic failure.
+      const reason = (
+        error as { response?: { data?: { message?: string } } } | undefined
+      )?.response?.data?.message;
+
       showToast({
         type: 'error',
-        message: t('appointments:create.errorPaymentInit'),
+        message: reason || t('appointments:create.errorPaymentInit'),
       });
     },
   });
@@ -251,28 +269,46 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   // Watches the payment the same way any other flow would; the booking itself already
   // happened on the backend by the time this reports SUCCESS.
   usePaymentStatus(pendingPaymentId, {
-    onSuccess: useCallback(async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['appointments-history'] }),
-        queryClient.invalidateQueries({ queryKey: ['appointment-requests'] }),
-      ]);
-      logAnalyticsEvent(AnalyticsEvents.AppointmentCreated, {
-        branch_id: formValues.branchId,
-        specialization_id: formValues.specializationId,
-        doctor_id: formValues.doctorId,
-        program_id: formValues.programId,
-        is_telemedicine: formValues.isTelemedicine,
-        paid: true,
-      });
-      setSuccess(true);
-    }, [queryClient, formValues]),
+    onSuccess: useCallback(
+      async payment => {
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['appointments-history'] }),
+          queryClient.invalidateQueries({ queryKey: ['appointment-requests'] }),
+          // Drops the "waiting for payment" card now that the booking is real.
+          queryClient.invalidateQueries({ queryKey: ['payment', 'pending'] }),
+        ]);
+
+        // Paid, but the booking itself failed on the backend. Rare — the slot is checked
+        // before checkout — but the money is gone, so it must not look like success.
+        if (payment.postSuccessError) {
+          setPendingPaymentId(null);
+          showToast({
+            type: 'error',
+            message: payment.postSuccessError,
+          });
+          return;
+        }
+
+        logAnalyticsEvent(AnalyticsEvents.AppointmentCreated, {
+          branch_id: formValues.branchId,
+          specialization_id: formValues.specializationId,
+          doctor_id: formValues.doctorId,
+          program_id: formValues.programId,
+          is_telemedicine: formValues.isTelemedicine,
+          paid: true,
+        });
+        setSuccess(true);
+      },
+      [queryClient, formValues, showToast],
+    ),
     onFailure: useCallback(() => {
       setPendingPaymentId(null);
+      queryClient.invalidateQueries({ queryKey: ['payment', 'pending'] });
       showToast({
         type: 'error',
         message: t('appointments:create.errorPaymentFailed'),
       });
-    }, [showToast, t]),
+    }, [queryClient, showToast, t]),
   });
 
   const bookAppointment = () => {
@@ -287,12 +323,19 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       }
     }
 
+    // A paid visit is charged, so the patient accepts the public offer first; checkout
+    // starts from the drawer. An insured visit is covered by the programme's own terms.
     if (isPaidPatient) {
-      initAppointmentPaymentMutation.mutate(formValues);
+      setIsOfferVisible(true);
       return;
     }
 
     createAppointmentMutation.mutate(formValues);
+  };
+
+  const acceptOfferAndPay = () => {
+    setIsOfferVisible(false);
+    initAppointmentPaymentMutation.mutate(formValues);
   };
 
   const finishBooking = () => {
@@ -335,6 +378,12 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   return (
     <CreateAppointmentContext.Provider value={value}>
       {children}
+      <PublicOfferDrawer
+        visible={isOfferVisible}
+        onClose={() => setIsOfferVisible(false)}
+        onAccept={acceptOfferAndPay}
+        isSubmitting={initAppointmentPaymentMutation.isPending}
+      />
       <BookingSuccessPopup
         isOpen={success}
         onClose={finishBooking}

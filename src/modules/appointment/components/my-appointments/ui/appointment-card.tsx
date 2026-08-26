@@ -95,10 +95,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: [
-            t('appointments:cancelAppointment'),
-            t('common:cancel'),
-          ],
+          options: [t('appointments:cancelAppointment'), t('common:cancel')],
           destructiveButtonIndex: 0,
         },
         buttonIndex => {

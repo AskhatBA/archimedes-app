@@ -10,9 +10,19 @@ export interface PaymentRecord {
   description?: string;
   status: 'PENDING' | 'SUCCESS' | 'FAILED';
   purpose?: PaymentPurpose;
+  /**
+   * Set when the payment went through but the thing it paid for could not be done —
+   * a booking whose slot was taken, say. Carries the backend's reason.
+   */
+  postSuccessError?: string | null;
   /** Provider transaction id. */
   pgPaymentId?: string | null;
   createdAt: string;
+}
+
+/** A pending payment plus the payload its purpose stored at init time. */
+export interface PendingPayment extends PaymentRecord {
+  metadata?: Record<string, unknown> | null;
 }
 
 export interface InitPaymentBody {
@@ -49,6 +59,20 @@ export class PaymentApi extends HttpClient {
     this.request<PaymentRecord, void>({
       path: `/payment/status/${id}`,
       method: 'GET',
+      secure: true,
+      format: 'json',
+    });
+
+  /**
+   * Payments the user started but has not finished, newest first. Each row carries the
+   * metadata its purpose stored, which is what lets a screen describe an order that does
+   * not exist anywhere else yet.
+   */
+  pendingList = (query?: { purpose?: PaymentPurpose }) =>
+    this.request<{ payments: PendingPayment[] }, void>({
+      path: '/payment/pending',
+      method: 'GET',
+      query,
       secure: true,
       format: 'json',
     });

@@ -182,6 +182,10 @@
     "requestsTitle": "Appointment requests",
     "upcomingTitle": "Upcoming appointments",
     "emptyUpcoming": "No upcoming appointments",
+    "pendingPayment": {
+      "badge": "Awaiting payment",
+      "hint": "The appointment is confirmed automatically once the payment goes through"
+    },
     "emptyHistory": "Appointment history is empty",
     "completed": "Completed",
     "online": "Online",
@@ -230,6 +234,20 @@
         "subtitle": "Our call center will contact you to confirm",
         "dateLine": "Appointment on {{date}}",
         "button": "Great!"
+      },
+      "offer": {
+        "title": "Public offer agreement",
+        "intro": "By accepting these terms you agree to the rules for paid medical services. Key extracts:",
+        "points": {
+          "priceList": "Services are provided according to the clinic price list.",
+          "confidentiality": "Medical confidentiality and privacy are observed.",
+          "noShowLabel": "PLEASE NOTE: ",
+          "noShow": "if you miss a scheduled appointment without cancelling or rescheduling at least 24 hours in advance, a fee of 30% of the service price is withheld.",
+          "termination": "Terms for amending and terminating the agreement."
+        },
+        "document": "Document",
+        "agree": "I agree to the terms of the public offer",
+        "submit": "Confirm and agree"
       }
     }
   },
