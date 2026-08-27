@@ -39,17 +39,21 @@ export const PaidProgramDetailsDrawer: FC<PaidProgramDetailsDrawerProps> = ({
             </View>
             <View style={styles.headerText}>
               <Text style={styles.title}>{program.title}</Text>
-              <Text style={styles.coverage}>
-                {t(
-                  program.coverage === 'FAMILY'
-                    ? 'paidPrograms:coverage.family'
-                    : 'paidPrograms:coverage.personal',
-                )}
-              </Text>
+              {program.coverage ? (
+                <Text style={styles.coverage}>
+                  {t(
+                    program.coverage === 'FAMILY'
+                      ? 'paidPrograms:coverage.family'
+                      : 'paidPrograms:coverage.personal',
+                  )}
+                </Text>
+              ) : null}
             </View>
           </View>
 
-          <Text style={styles.description}>{program.description}</Text>
+          {program.description ? (
+            <Text style={styles.description}>{program.description}</Text>
+          ) : null}
 
           <View style={styles.metaRow}>
             <View style={styles.metaCard}>
@@ -58,12 +62,14 @@ export const PaidProgramDetailsDrawer: FC<PaidProgramDetailsDrawerProps> = ({
               </Text>
               <Text style={styles.metaValue}>{formatPrice(program.price)}</Text>
             </View>
-            <View style={styles.metaCard}>
-              <Text style={styles.metaLabel}>
-                {t('paidPrograms:details.duration')}
-              </Text>
-              <Text style={styles.metaValue}>{program.duration}</Text>
-            </View>
+            {program.duration ? (
+              <View style={styles.metaCard}>
+                <Text style={styles.metaLabel}>
+                  {t('paidPrograms:details.duration')}
+                </Text>
+                <Text style={styles.metaValue}>{program.duration}</Text>
+              </View>
+            ) : null}
           </View>
 
           <View style={styles.servicesBlock}>

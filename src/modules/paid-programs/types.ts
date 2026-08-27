@@ -7,14 +7,17 @@ export type PaidProgramCoverage = 'PERSONAL' | 'FAMILY';
 export interface PaidProgram {
   id: string;
   category: PaidProgramCategory;
-  coverage: PaidProgramCoverage;
+  /** Program code — `M2` for a MIS med plan, a slug like `thyroid` for a check-up. */
+  code?: string;
+  /** Absent when the source has no coverage information — the chip is then hidden. */
+  coverage?: PaidProgramCoverage;
   /** Comes from the backend already localized, so it is not part of the i18n bundles. */
   title: string;
   /** Price in tenge. */
   price: number;
   description: string;
-  /** How long the program stays active, e.g. "12 месяцев". */
-  duration: string;
+  /** How long the program stays active, e.g. "12 месяцев". Hidden when unknown. */
+  duration?: string;
   /** What the program includes — rendered as a checklist in the details drawer. */
   services: string[];
   /** Highlighted with a badge in the list. */

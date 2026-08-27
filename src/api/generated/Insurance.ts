@@ -24,6 +24,7 @@ import {
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
   MedicServiceItem,
+  PayProgramItem,
   PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
@@ -727,6 +728,38 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       path: `/insurance/medic-service`,
       method: 'GET',
       query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * No description
+ *
+ * @tags Insurance
+ * @name PayProgramsList
+ * @summary Get list of paid insurance programs available for purchase
+ * @request GET:/insurance/pay-programs
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    payPrograms?: (PayProgramItem)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  payProgramsList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        payPrograms?: PayProgramItem[];
+      },
+      void
+    >({
+      path: `/insurance/pay-programs`,
+      method: 'GET',
       secure: true,
       format: 'json',
       ...params,

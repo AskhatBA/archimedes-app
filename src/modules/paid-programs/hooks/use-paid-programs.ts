@@ -1,24 +1,30 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 
+import { checkupsApi, insuranceApi } from '@/api';
 import { GET_PAID_PROGRAMS_QUERY } from '@/shared/constants';
 
-import { PAID_PROGRAMS_MOCK } from '../mocks/paid-programs';
+import { mapCheckup } from '../lib/map-checkup';
+import { mapPayProgram } from '../lib/map-pay-program';
 import { PaidProgram, PaidProgramCategory } from '../types';
 
-/** Stands in for the network round-trip so the list renders its loading state honestly. */
-const MOCK_LATENCY_MS = 400;
+const fetchMedPlans = async (): Promise<PaidProgram[]> => {
+  const { data } = await insuranceApi.payProgramsList();
 
-const fetchPaidPrograms = async (): Promise<PaidProgram[]> =>
-  new Promise(resolve => {
-    setTimeout(() => resolve(PAID_PROGRAMS_MOCK), MOCK_LATENCY_MS);
-  });
+  return (data?.payPrograms || []).map(mapPayProgram);
+};
+
+const fetchCheckups = async (): Promise<PaidProgram[]> => {
+  const { data } = await checkupsApi.checkupsList();
+
+  return (data?.checkups || []).map(mapCheckup);
+};
 
 /**
- * Catalogue of paid programs, filtered by tab.
+ * Catalogue of paid programs for one tab.
  *
- * Backed by front-end mocks — swapping `queryFn` for the real client is the only
- * change needed once the endpoint ships.
+ * `MED_PLAN` is proxied from the MIS by `GET /insurance/pay-programs`; `CHECKUP` comes
+ * from our own catalogue at `GET /checkups`. The two tabs are cached separately so
+ * switching between them does not refetch the other one.
  */
 export const usePaidPrograms = (category: PaidProgramCategory) => {
   const {
@@ -27,18 +33,13 @@ export const usePaidPrograms = (category: PaidProgramCategory) => {
     isFetching: fetchingPrograms,
     refetch: refetchPrograms,
   } = useQuery({
-    queryKey: [GET_PAID_PROGRAMS_QUERY],
-    queryFn: fetchPaidPrograms,
-    staleTime: Infinity,
+    queryKey: [GET_PAID_PROGRAMS_QUERY, category],
+    queryFn: category === 'MED_PLAN' ? fetchMedPlans : fetchCheckups,
+    staleTime: 1000 * 60 * 10,
   });
 
-  const programs = useMemo(
-    () => (data || []).filter(program => program.category === category),
-    [data, category],
-  );
-
   return {
-    programs,
+    programs: data || [],
     loadingPrograms,
     fetchingPrograms,
     refetchPrograms,

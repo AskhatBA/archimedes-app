@@ -24,6 +24,7 @@ import {
   LocalInsuranceRefundRequestsResponse,
   MedicalNetworkClinics,
   MedicServiceItem,
+  PayProgramItem,
   PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
@@ -622,6 +623,34 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       medicService?: MedicServiceItem;
+    };
+  }
+
+  /**
+ * No description
+ * @tags Insurance
+ * @name PayProgramsList
+ * @summary Get list of paid insurance programs available for purchase
+ * @request GET:/insurance/pay-programs
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    payPrograms?: (PayProgramItem)[],
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace PayProgramsList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      payPrograms?: PayProgramItem[];
     };
   }
 

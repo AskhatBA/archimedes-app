@@ -20,7 +20,7 @@ export namespace Payment {
    * @request POST:/payment/init
    * @secure
    * @response `200` `InitPaymentResponse` Payment initiated successfully
-   * @response `400` `void` Invalid amount
+   * @response `400` `void` Invalid amount, unknown purpose, or metadata the purpose rejects
    * @response `401` `void` Unauthorized
    * @response `502` `void` FreedomPay rejected the payment request
    */
@@ -135,6 +135,38 @@ export namespace Payment {
     export type ResponseBody = {
       /** @example 15000 */
       balance?: number;
+    };
+  }
+
+  /**
+ * @description Everything still PENDING and still inside the provider's payment window, newest first. Each row carries the `metadata` its purpose stored at init time, which is what lets a client describe an order that does not exist anywhere else yet — an appointment being paid for is not in MIS until the payment settles.
+ * @tags Payment
+ * @name PendingList
+ * @summary Payments the user started but has not finished
+ * @request GET:/payment/pending
+ * @secure
+ * @response `200` `{
+    payments?: ((Payment & {
+    metadata?: object | null,
+
+}))[],
+
+}` Pending payments
+ * @response `400` `void` Invalid payment purpose
+ * @response `401` `void` Unauthorized
+*/
+  export namespace PendingList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /** Return only payments made for this purpose. */
+      purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      payments?: (Payment & {
+        metadata?: object | null;
+      })[];
     };
   }
 

@@ -54,7 +54,9 @@ export const PaidProgramCard: FC<PaidProgramCardProps> = ({
           ) : null}
         </View>
         <Text style={styles.price}>{formatPrice(program.price)}</Text>
-        <Text style={styles.duration}>{program.duration}</Text>
+        {program.duration ? (
+          <Text style={styles.duration}>{program.duration}</Text>
+        ) : null}
       </View>
 
       {/* Details open by tapping the card itself. */}

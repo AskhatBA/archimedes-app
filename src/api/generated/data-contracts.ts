@@ -288,6 +288,26 @@ export interface AdminUser {
   role?: string;
 }
 
+export interface CheckupItem {
+  /** @format uuid */
+  id?: string;
+  /** @example "thyroid" */
+  code?: string;
+  /** @example "Чек-ап «Щитовидка без сюрпризов»" */
+  title?: string;
+  description?: string | null;
+  /**
+   * Price in tenge
+   * @example 25300
+   */
+  price?: number;
+  /** @example "1 день" */
+  duration?: string | null;
+  coverage?: 'PERSONAL' | 'FAMILY';
+  services?: string[];
+  popular?: boolean;
+}
+
 export interface InsuranceVerifyOtpBody {
   otp?: string;
 }
@@ -640,6 +660,27 @@ export interface MedicServiceItem {
   service: string;
   /** @example 12000 */
   price: number;
+}
+
+export interface PayProgramItem {
+  /**
+   * @format uuid
+   * @example "01a03c50-7c95-7677-9777-003122ff2a12"
+   */
+  oid: string;
+  /** @example "M2" */
+  code: string;
+  /** @example "Ақбота-1" */
+  name: string;
+  /** @example 180000 */
+  price: number;
+  /** Multi-line program description */
+  description: string;
+  /**
+   * @format uri
+   * @example "https://mobileapi.archimedes.kz/v3/client/productdescription/01a03c50-da52-7d18-b67f-db619f845796"
+   */
+  programUrl: string;
 }
 
 export interface CreateMeetingBody {
@@ -1064,6 +1105,19 @@ export interface InitPaymentBody {
    * @example "Balance replenishment"
    */
   description?: string;
+  /**
+   * What the payment is for. Selects the handler that runs when the payment
+   * settles successfully — `APPOINTMENT` books the visit described in `metadata`.
+   * @default "BALANCE_TOPUP"
+   */
+  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+  /**
+   * Payload for the purpose's post-success handler, validated here at init time.
+   * For `APPOINTMENT`: `doctorId`, `branchId`, `startTime`, `endTime`,
+   * `isTelemedicine` and an optional `familyMemberId`.
+   * @example {"doctorId":"0a4c1e2b-6c1f-4a52-9d0e-7b1d2c3f4a5b","branchId":"5f2a9c31-8de4-4b77-9a10-2c3d4e5f6a7b","startTime":"2026-08-27T09:30:00+05:00","endTime":"2026-08-27T10:00:00+05:00","isTelemedicine":false}
+   */
+  metadata?: object;
 }
 
 export interface InitPaymentResponse {
@@ -1082,6 +1136,7 @@ export interface Payment {
   amount?: number;
   description?: string;
   status?: 'PENDING' | 'SUCCESS' | 'FAILED';
+  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
   /** FreedomPay transaction ID */
   pgPaymentId?: string | null;
   /** @format date-time */
