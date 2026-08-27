@@ -382,6 +382,7 @@
       "open": "Open",
       "barLabel": "In cart",
       "removeA11y": "Remove program from cart",
+      "checkoutError": "Could not start the payment. Please try again.",
       "paymentDescription_one": "Payment for {{count}} program",
       "paymentDescription_other": "Payment for {{count}} programs"
     },

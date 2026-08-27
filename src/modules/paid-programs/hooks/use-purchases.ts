@@ -11,7 +11,6 @@ import { usePurchasesStore } from '../store/use-purchases-store';
 export const usePurchases = () => {
   const purchases = usePurchasesStore(state => state.purchases);
   const createPurchase = usePurchasesStore(state => state.createPurchase);
-  const settlePurchase = usePurchasesStore(state => state.settlePurchase);
   const setStatus = usePurchasesStore(state => state.setStatus);
   const removePurchase = usePurchasesStore(state => state.removePurchase);
 
@@ -55,7 +54,6 @@ export const usePurchases = () => {
     isEmpty: purchases.length === 0,
     isRefreshing,
     createPurchase,
-    settlePurchase,
     removePurchase,
     refreshPending,
   };

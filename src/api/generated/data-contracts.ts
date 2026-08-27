@@ -308,6 +308,40 @@ export interface CheckupItem {
   popular?: boolean;
 }
 
+export type CheckupAdminItem = CheckupItem & {
+  isActive?: boolean;
+  /** @example 10 */
+  sortOrder?: number;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+};
+
+export interface CheckupWriteBody {
+  /**
+   * Lowercase slug, unique across the catalogue
+   * @example "womens-health"
+   */
+  code: string;
+  /** @example "Чек-ап «Женское здоровье»" */
+  title: string;
+  /**
+   * Price in tenge
+   * @example 20100
+   */
+  price: number;
+  /** @minItems 1 */
+  services: string[];
+  description?: string | null;
+  /** @example "1 день" */
+  duration?: string | null;
+  coverage?: 'PERSONAL' | 'FAMILY';
+  popular?: boolean;
+  isActive?: boolean;
+  sortOrder?: number;
+}
+
 export interface InsuranceVerifyOtpBody {
   otp?: string;
 }
@@ -1107,14 +1141,18 @@ export interface InitPaymentBody {
   description?: string;
   /**
    * What the payment is for. Selects the handler that runs when the payment
-   * settles successfully — `APPOINTMENT` books the visit described in `metadata`.
+   * settles successfully — `APPOINTMENT` books the visit described in `metadata`,
+   * `PAID_PROGRAM` records the paid-programs order described in `metadata`.
    * @default "BALANCE_TOPUP"
    */
-  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
   /**
    * Payload for the purpose's post-success handler, validated here at init time.
    * For `APPOINTMENT`: `doctorId`, `branchId`, `startTime`, `endTime`,
    * `isTelemedicine` and an optional `familyMemberId`.
+   * For `PAID_PROGRAM`: `items` (each with `category`, `id`/`externalId`, `code`,
+   * `title`, `price`) plus optional `contactPhone` and `comment`. The item prices
+   * must add up to `amount`, and check-up prices must match the catalogue.
    * @example {"doctorId":"0a4c1e2b-6c1f-4a52-9d0e-7b1d2c3f4a5b","branchId":"5f2a9c31-8de4-4b77-9a10-2c3d4e5f6a7b","startTime":"2026-08-27T09:30:00+05:00","endTime":"2026-08-27T10:00:00+05:00","isTelemedicine":false}
    */
   metadata?: object;
@@ -1136,9 +1174,46 @@ export interface Payment {
   amount?: number;
   description?: string;
   status?: 'PENDING' | 'SUCCESS' | 'FAILED';
-  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+  purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
   /** FreedomPay transaction ID */
   pgPaymentId?: string | null;
   /** @format date-time */
   createdAt?: string;
 }
+
+export interface ProgramOrderItem {
+  /** @format uuid */
+  id?: string;
+  category?: 'MED_PLAN' | 'CHECKUP';
+  /** MIS `oid` for a med plan, `Checkup.id` for a check-up */
+  externalId?: string;
+  /** @example "thyroid" */
+  code?: string | null;
+  title?: string;
+  /** Price in tenge at purchase time */
+  price?: number;
+}
+
+export interface ProgramOrder {
+  /** @format uuid */
+  id?: string;
+  status?: 'NEW' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  total?: number;
+  contactPhone?: string | null;
+  comment?: string | null;
+  /** @format uuid */
+  paymentId?: string;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+  items?: ProgramOrderItem[];
+}
+
+export type ProgramOrderAdminItem = ProgramOrder & {
+  /** @format uuid */
+  userId?: string;
+  patientName?: string | null;
+  patientIin?: string | null;
+  patientPhone?: string;
+};

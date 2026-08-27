@@ -15,12 +15,15 @@ interface CartDrawerProps {
   visible: boolean;
   onClose: () => void;
   onCheckout: () => void;
+  /** The backend is creating the payment — the cart cannot be submitted twice. */
+  isSubmitting?: boolean;
 }
 
 export const CartDrawer: FC<CartDrawerProps> = ({
   visible,
   onClose,
   onCheckout,
+  isSubmitting,
 }) => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -72,7 +75,11 @@ export const CartDrawer: FC<CartDrawerProps> = ({
               <Text style={styles.totalValue}>{formatPrice(total)}</Text>
             </View>
 
-            <Button onPress={onCheckout}>
+            <Button
+              onPress={onCheckout}
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+            >
               {t('paidPrograms:cart.checkout')}
             </Button>
           </>

@@ -17,8 +17,8 @@ import {
   PaidProgramCard,
   PaidProgramDetailsDrawer,
   useCart,
+  useCheckout,
   usePaidPrograms,
-  usePurchases,
   type PaidProgram,
   type PaidProgramCategory,
 } from '@/modules/paid-programs';
@@ -48,7 +48,20 @@ export const PaidProgramsScreen: FC = () => {
     usePaidPrograms(category);
   const { items, count, total, hasItem, addItem, removeItem, clearCart } =
     useCart();
-  const { createPurchase } = usePurchases();
+
+  const { checkout, isCheckingOut } = useCheckout({
+    onReady: ({ paymentUrl }) => {
+      navigate(routes.Payment, { paymentUrl });
+      // The catalogue is a one-shot purchase flow: leaving the cart filled after handing
+      // off to payment would re-add the same programs on the next visit.
+      clearCart();
+    },
+    onError: reason =>
+      showToast({
+        type: 'error',
+        message: reason || t('paidPrograms:cart.checkoutError'),
+      }),
+  });
 
   // A program is bought once, so the cart button is a toggle rather than a counter.
   const handleToggleCart = useCallback(
@@ -72,21 +85,19 @@ export const PaidProgramsScreen: FC = () => {
     [addItem, hasItem, removeItem, showToast, t],
   );
 
+  /**
+   * Hands the cart to the backend rather than opening a bare payment form: the payment
+   * carries the cart as its metadata, so the order is written to our database the
+   * moment the payment settles — the app does not have to be around for it.
+   */
   const handleCheckout = () => {
     setCartVisible(false);
 
-    // Recorded before the hand-off: the payment page reports back with a payment id,
-    // which is attached to this record so history can follow the payment's status.
-    const purchase = createPurchase(items, total);
-
-    navigate(routes.Payment, {
-      amount: total,
+    checkout({
+      items,
+      total,
       description: t('paidPrograms:cart.paymentDescription', { count }),
-      purchaseId: purchase.id,
     });
-    // The catalogue is a one-shot purchase flow: leaving the cart filled after
-    // handing off to payment would re-add the same programs on the next visit.
-    clearCart();
   };
 
   const renderHeader = () => (
@@ -165,6 +176,7 @@ export const PaidProgramsScreen: FC = () => {
         visible={cartVisible}
         onClose={() => setCartVisible(false)}
         onCheckout={handleCheckout}
+        isSubmitting={isCheckingOut}
       />
     </View>
   );

@@ -1,7 +1,7 @@
 import { ContentType, HttpClient } from './generated/http-client';
 
 /** What a payment is for — picks the backend handler that runs when it succeeds. */
-export type PaymentPurpose = 'BALANCE_TOPUP' | 'APPOINTMENT';
+export type PaymentPurpose = 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
 
 /** Payment record as returned by `/payment/status/{id}`. */
 export interface PaymentRecord {

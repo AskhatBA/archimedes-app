@@ -394,6 +394,7 @@
       "open": "Открыть",
       "barLabel": "В корзине",
       "removeA11y": "Удалить программу из корзины",
+      "checkoutError": "Не удалось перейти к оплате. Попробуйте ещё раз.",
       "paymentDescription_one": "Оплата {{count}} программы",
       "paymentDescription_few": "Оплата {{count}} программ",
       "paymentDescription_many": "Оплата {{count}} программ",

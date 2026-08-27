@@ -159,7 +159,7 @@ export namespace Payment {
     export type RequestParams = {};
     export type RequestQuery = {
       /** Return only payments made for this purpose. */
-      purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+      purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
     };
     export type RequestBody = never;
     export type RequestHeaders = {};

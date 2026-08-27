@@ -382,6 +382,7 @@
       "open": "Ашу",
       "barLabel": "Себетте",
       "removeA11y": "Бағдарламаны себеттен жою",
+      "checkoutError": "Төлемге өту мүмкін болмады. Қайта көріңіз.",
       "paymentDescription_one": "{{count}} бағдарлама үшін төлем",
       "paymentDescription_other": "{{count}} бағдарлама үшін төлем"
     },

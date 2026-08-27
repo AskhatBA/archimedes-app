@@ -180,7 +180,7 @@ export class Payment<SecurityDataType = unknown> extends HttpClient<SecurityData
   pendingList = (
     query?: {
       /** Return only payments made for this purpose. */
-      purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT';
+      purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
     },
     params: RequestParams = {},
   ) =>

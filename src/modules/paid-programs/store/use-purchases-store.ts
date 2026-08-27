@@ -10,12 +10,11 @@ interface PurchasesState {
 
 interface PurchasesActions {
   /** Records the checkout attempt and returns it, so the caller can pass its id on. */
-  createPurchase: (programs: PaidProgram[], total: number) => Purchase;
-  /** Attaches the backend payment to a purchase once the payment page reports back. */
-  settlePurchase: (
-    purchaseId: string,
-    result: { paymentId?: string; status: PurchaseStatus },
-  ) => void;
+  createPurchase: (
+    programs: PaidProgram[],
+    total: number,
+    paymentId?: string,
+  ) => Purchase;
   setStatus: (purchaseId: string, status: PurchaseStatus) => void;
   removePurchase: (purchaseId: string) => void;
 }
@@ -39,27 +38,22 @@ export const usePurchasesStore = create<PurchasesStore>()(
   persist(
     (set, get) => ({
       purchases: [],
-      createPurchase: (programs, total) => {
+      createPurchase: (programs, total, paymentId) => {
         const purchase: Purchase = {
           id: createId(),
           createdAt: new Date().toISOString(),
           programs,
           total,
           status: 'PENDING',
+          // Known from the start now that checkout creates the payment itself, which is
+          // what lets the history poll for the result the backend acted on.
+          ...(paymentId ? { paymentId } : {}),
         };
 
         set({ purchases: [purchase, ...get().purchases] });
 
         return purchase;
       },
-      settlePurchase: (purchaseId, { paymentId, status }) =>
-        set(state => ({
-          purchases: patch(state.purchases, purchaseId, {
-            status,
-            // A missing payment id means the page never got one; keep whatever we had.
-            ...(paymentId ? { paymentId } : {}),
-          }),
-        })),
       setStatus: (purchaseId, status) =>
         set(state => ({
           purchases: patch(state.purchases, purchaseId, { status }),

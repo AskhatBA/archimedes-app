@@ -5,6 +5,7 @@ export { PurchaseCard } from './components/purchase-card';
 
 export { usePaidPrograms } from './hooks/use-paid-programs';
 export { useCart } from './hooks/use-cart';
+export { useCheckout } from './hooks/use-checkout';
 export { usePurchases } from './hooks/use-purchases';
 
 export { formatPrice } from './lib/format-price';
