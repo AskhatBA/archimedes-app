@@ -1,7 +1,14 @@
-import { FC } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { FC, useState } from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import { formatPrice } from '@/modules/paid-programs/lib/format-price';
+import { CancelPaymentDrawer, useCancelPayment } from '@/modules/payment';
 import {
   ClipboardClockIcon,
   HospitalIcon,
@@ -11,6 +18,7 @@ import {
 } from '@/shared/icons';
 import { formatDate, getTimeOfDay } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
+import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 
 import { PendingAppointment } from '../../../hooks/use-pending-appointments';
@@ -22,17 +30,43 @@ interface PendingAppointmentCardProps {
 /**
  * Stand-in for an appointment whose payment is still being confirmed.
  *
- * Deliberately not tappable and without a cancel action: there is no appointment id yet —
- * the booking is created server-side once the payment settles.
+ * Not tappable — there is no appointment id yet, since the booking is created server-side
+ * once the payment settles. The one thing it does offer is giving up: the provider's page
+ * cannot be reopened once it is off the stack, so without this the card would sit here
+ * until the payment window closed, with nothing the patient could do about it.
  */
 export const PendingAppointmentCard: FC<PendingAppointmentCardProps> = ({
   appointment,
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const { showToast } = useToast();
+  const { cancelPayment, isCancelling } = useCancelPayment();
+
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   const fontColor = colors.gray['600'];
   const mutedColor = colors.gray['500'];
+
+  const confirmCancel = async () => {
+    try {
+      const payment = await cancelPayment(appointment.paymentId);
+
+      // The payment settled while the sheet was open, which means the backend has just
+      // booked the visit. Saying "cancelled" here would be a lie the list then contradicts.
+      showToast({
+        message:
+          payment.status === 'SUCCESS'
+            ? t('payment:cancel.alreadyPaid')
+            : t('payment:cancel.done'),
+        type: payment.status === 'SUCCESS' ? 'success' : 'info',
+      });
+    } catch {
+      showToast({ message: t('payment:cancel.error'), type: 'error' });
+    }
+
+    setIsConfirmVisible(false);
+  };
 
   return (
     <View
@@ -106,7 +140,36 @@ export const PendingAppointmentCard: FC<PendingAppointmentCardProps> = ({
         <Text style={[styles.hint, { color: mutedColor }]}>
           {t('appointments:pendingPayment.hint')}
         </Text>
+
+        <TouchableOpacity
+          onPress={() => setIsConfirmVisible(true)}
+          disabled={isCancelling}
+          style={styles.cancelButton}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Text
+            style={[
+              styles.cancelLabel,
+              { color: isCancelling ? mutedColor : colors.red['500'] },
+            ]}
+          >
+            {t('appointments:pendingPayment.cancel')}
+          </Text>
+        </TouchableOpacity>
       </View>
+
+      <CancelPaymentDrawer
+        visible={isConfirmVisible}
+        onClose={() => setIsConfirmVisible(false)}
+        onConfirm={confirmCancel}
+        isCancelling={isCancelling}
+        title={t('appointments:pendingPayment.cancelTitle')}
+        description={t('appointments:pendingPayment.cancelDescription')}
+        confirmLabel={t('appointments:pendingPayment.cancel')}
+        // Nothing to continue: the provider's page is long gone by the time this card
+        // is on screen, so the safe half is simply leaving the card alone.
+        keepLabel={t('appointments:pendingPayment.cancelKeep')}
+      />
     </View>
   );
 };
@@ -168,5 +231,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 12,
     lineHeight: 16,
+  },
+  cancelButton: {
+    alignSelf: 'flex-start',
+    marginTop: 12,
+  },
+  cancelLabel: {
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

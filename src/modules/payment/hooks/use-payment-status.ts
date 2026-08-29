@@ -7,8 +7,12 @@ import { PaymentStatus } from '../types';
 
 const POLL_INTERVAL_MS = 3000;
 
+/**
+ * `CANCELLED` counts as settled so polling stops, but it fires neither callback: the payer
+ * asked for it and already got their answer from the screen they asked on.
+ */
 const isSettled = (status?: PaymentStatus) =>
-  status === 'SUCCESS' || status === 'FAILED';
+  status === 'SUCCESS' || status === 'FAILED' || status === 'CANCELLED';
 
 interface UsePaymentStatusOptions {
   /** Fires once, when the payment settles as SUCCESS. */
@@ -61,7 +65,7 @@ export const usePaymentStatus = (
     notifiedFor.current = paymentId;
 
     if (payment.status === 'SUCCESS') onSuccess?.(payment);
-    else onFailure?.(payment);
+    else if (payment.status === 'FAILED') onFailure?.(payment);
   }, [payment, paymentId, onSuccess, onFailure]);
 
   return {

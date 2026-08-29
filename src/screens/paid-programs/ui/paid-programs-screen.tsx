@@ -50,8 +50,8 @@ export const PaidProgramsScreen: FC = () => {
     useCart();
 
   const { checkout, isCheckingOut } = useCheckout({
-    onReady: ({ paymentUrl }) => {
-      navigate(routes.Payment, { paymentUrl });
+    onReady: ({ paymentUrl, paymentId }) => {
+      navigate(routes.Payment, { paymentUrl, paymentId });
       // The catalogue is a one-shot purchase flow: leaving the cart filled after handing
       // off to payment would re-add the same programs on the next visit.
       clearCart();

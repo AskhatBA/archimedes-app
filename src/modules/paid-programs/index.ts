@@ -14,6 +14,8 @@ export {
   CATEGORY_HINT_KEYS,
   CATEGORY_LABEL_KEYS,
   PAID_PROGRAM_CATEGORIES,
+  PURCHASE_FILTERS,
+  PURCHASE_FILTER_LABEL_KEYS,
 } from './constants';
 
 export type {
@@ -21,5 +23,6 @@ export type {
   PaidProgramCategory,
   PaidProgramCoverage,
   Purchase,
+  PurchaseFilter,
   PurchaseStatus,
 } from './types';

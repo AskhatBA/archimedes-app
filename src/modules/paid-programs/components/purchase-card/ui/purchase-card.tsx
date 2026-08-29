@@ -25,6 +25,7 @@ const STATUS_STYLE: Record<
   PENDING: { background: colors.orange['100'], text: colors.orange['600'] },
   SUCCESS: { background: colors.green['200'], text: colors.green['600'] },
   FAILED: { background: colors.red['100'], text: colors.red['500'] },
+  CANCELLED: { background: colors.gray['200'], text: colors.gray['600'] },
 };
 
 export const PurchaseCard: FC<PurchaseCardProps> = ({ purchase, onDelete }) => {

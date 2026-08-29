@@ -12,7 +12,11 @@ interface CheckoutInput {
 }
 
 interface CheckoutOptions {
-  onReady: (result: { paymentUrl: string; purchaseId: string }) => void;
+  onReady: (result: {
+    paymentUrl: string;
+    paymentId: string;
+    purchaseId: string;
+  }) => void;
   onError: (message?: string) => void;
 }
 
@@ -53,7 +57,11 @@ export const useCheckout = ({ onReady, onError }: CheckoutOptions) => {
 
       const purchase = createPurchase(items, total, data.paymentId);
 
-      return { paymentUrl: data.paymentUrl, purchaseId: purchase.id };
+      return {
+        paymentUrl: data.paymentUrl,
+        paymentId: data.paymentId,
+        purchaseId: purchase.id,
+      };
     },
     onSuccess: onReady,
     onError: (error: unknown) => {

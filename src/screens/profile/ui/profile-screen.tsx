@@ -26,7 +26,6 @@ export const ProfileScreen: FC = () => {
           <MyTests />
           <AppointmentHistory />
           <PriceListLink />
-          <PaymentLink />
           <SecuritySettings />
           <LanguageSwitcher />
           <View style={{ gap: 8 }}>

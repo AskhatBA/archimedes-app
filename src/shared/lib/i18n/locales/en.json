@@ -184,7 +184,11 @@
     "emptyUpcoming": "No upcoming appointments",
     "pendingPayment": {
       "badge": "Awaiting payment",
-      "hint": "The appointment is confirmed automatically once the payment goes through"
+      "hint": "The appointment is confirmed automatically once the payment goes through",
+      "cancel": "Cancel booking",
+      "cancelTitle": "Cancel this booking?",
+      "cancelDescription": "The payment was never completed, so the visit has not been booked. The slot is released and you can book again.",
+      "cancelKeep": "Keep waiting"
     },
     "emptyHistory": "Appointment history is empty",
     "completed": "Completed",
@@ -393,16 +397,32 @@
     "history": {
       "link": "Purchase history",
       "title": "Purchase history",
+      "filters": {
+        "all": "All"
+      },
       "emptyTitle": "No purchases yet",
       "emptySubtitle": "Programs you buy will show up here along with their payment status.",
+      "filterEmpty": "No purchases in this category yet",
       "total": "Total",
       "paymentId": "Payment: {{id}}",
       "status": {
         "PENDING": "Processing",
         "SUCCESS": "Paid",
-        "FAILED": "Not paid"
+        "FAILED": "Not paid",
+        "CANCELLED": "Cancelled"
       },
       "deleteA11y": "Delete record"
+    }
+  },
+  "payment": {
+    "cancel": {
+      "title": "Leave the payment?",
+      "description": "There is no way back to this payment page later — the unfinished payment will be cancelled.",
+      "keep": "Continue payment",
+      "confirm": "Cancel payment",
+      "done": "Payment cancelled",
+      "alreadyPaid": "The payment already went through — there is nothing to cancel",
+      "error": "Could not cancel the payment. Please try again"
     }
   }
 }

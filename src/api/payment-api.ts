@@ -8,7 +8,12 @@ export interface PaymentRecord {
   id: string;
   amount: number;
   description?: string;
-  status: 'PENDING' | 'SUCCESS' | 'FAILED';
+  /**
+   * `CANCELLED` is the payer giving up on the provider's page. Terminal here, but not at
+   * FreedomPay — a one-step payment has nothing to cancel there, so a card charged just
+   * after the fact still settles this payment as `SUCCESS`.
+   */
+  status: 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
   purpose?: PaymentPurpose;
   /**
    * Set when the payment went through but the thing it paid for could not be done —
@@ -73,6 +78,23 @@ export class PaymentApi extends HttpClient {
       path: '/payment/pending',
       method: 'GET',
       query,
+      secure: true,
+      format: 'json',
+    });
+
+  /**
+   * Gives up on a payment the payer walked away from, so the "waiting for payment" state
+   * it feeds disappears now rather than when the provider's window closes.
+   *
+   * Answers with the payment as it now stands, not an empty 200: the backend asks
+   * FreedomPay first, and a payment that turns out to have been paid comes back `SUCCESS`
+   * — with whatever its purpose booked already done — instead of being cancelled.
+   * Idempotent, so a retried tap lands on the same answer.
+   */
+  cancelCreate = (id: string) =>
+    this.request<PaymentRecord, void>({
+      path: `/payment/${id}/cancel`,
+      method: 'POST',
       secure: true,
       format: 'json',
     });

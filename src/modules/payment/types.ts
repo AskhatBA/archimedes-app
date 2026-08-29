@@ -1,4 +1,4 @@
-export type PaymentStatus = 'PENDING' | 'SUCCESS' | 'FAILED';
+export type PaymentStatus = 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
 
 export interface PaymentResultPayload {
   status: PaymentStatus;

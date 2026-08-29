@@ -28,7 +28,13 @@ export interface PaidProgram {
  * Mirrors the backend's `Payment.status` enum — a purchase is only as settled as the
  * payment behind it.
  */
-export type PurchaseStatus = 'PENDING' | 'SUCCESS' | 'FAILED';
+export type PurchaseStatus = 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
+
+/**
+ * What the purchase history is narrowed to. `ALL` is not a category — it is the absence
+ * of a filter, so it lives here rather than in `PaidProgramCategory`.
+ */
+export type PurchaseFilter = 'ALL' | PaidProgramCategory;
 
 export interface Purchase {
   /** Local record id, created before the payment page hands back a payment id. */

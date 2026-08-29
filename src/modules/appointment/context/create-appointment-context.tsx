@@ -250,7 +250,12 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       }
 
       setPendingPaymentId(data.paymentId);
-      navigate(routes.Payment, { paymentUrl: data.paymentUrl });
+      navigate(routes.Payment, {
+        paymentUrl: data.paymentUrl,
+        // Lets the payment screen offer to drop this payment instead of stranding the
+        // patient with a booking that can never be completed or cleared.
+        paymentId: data.paymentId,
+      });
     },
     onError: (error: unknown) => {
       // The backend refuses a payment it could not fulfil (a conflicting slot, say) and

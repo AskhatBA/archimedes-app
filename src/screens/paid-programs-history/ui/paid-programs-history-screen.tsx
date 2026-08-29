@@ -8,14 +8,24 @@ import { usePageHeader } from '@/shared/hooks';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
+import { PurchaseFilters } from './purchase-filters';
+
 export const PaidProgramsHistoryScreen: FC = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
   usePageHeader({ title: t('paidPrograms:history.title') });
 
-  const { purchases, isEmpty, isRefreshing, refreshPending, removePurchase } =
-    usePurchases();
+  const {
+    visiblePurchases,
+    filter,
+    setFilter,
+    isEmpty,
+    isFilterEmpty,
+    isRefreshing,
+    refreshPending,
+    removePurchase,
+  } = usePurchases();
 
   // Payments settle server-side after the WebView closes, so statuses are re-read
   // every time the screen comes into view.
@@ -25,31 +35,49 @@ export const PaidProgramsHistoryScreen: FC = () => {
     }, [refreshPending]),
   );
 
+  /** The filter chips hide the list, so its own "nothing here" copy has to say why. */
+  const renderEmpty = () => {
+    if (isFilterEmpty) {
+      return (
+        <View style={styles.empty}>
+          <Text style={styles.emptySubtitle}>
+            {t('paidPrograms:history.filterEmpty')}
+          </Text>
+        </View>
+      );
+    }
+
+    if (!isEmpty) return null;
+
+    return (
+      <View style={styles.empty}>
+        <Text style={styles.emptyTitle}>
+          {t('paidPrograms:history.emptyTitle')}
+        </Text>
+        <Text style={styles.emptySubtitle}>
+          {t('paidPrograms:history.emptySubtitle')}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <FlatList
-      data={purchases}
+      data={visiblePurchases}
       keyExtractor={purchase => purchase.id}
       contentContainerStyle={[
         styles.content,
         { paddingBottom: insets.bottom + 16 },
       ]}
+      ListHeaderComponent={
+        isEmpty ? null : <PurchaseFilters value={filter} onChange={setFilter} />
+      }
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={isRefreshing} onRefresh={refreshPending} />
       }
-      ListEmptyComponent={
-        isEmpty ? (
-          <View style={styles.empty}>
-            <Text style={styles.emptyTitle}>
-              {t('paidPrograms:history.emptyTitle')}
-            </Text>
-            <Text style={styles.emptySubtitle}>
-              {t('paidPrograms:history.emptySubtitle')}
-            </Text>
-          </View>
-        ) : null
-      }
+      ListEmptyComponent={renderEmpty()}
       renderItem={({ item }) => (
         <PurchaseCard
           purchase={item}
