@@ -26,8 +26,6 @@ import { useSpecializations } from '@/modules/appointment/hooks/use-specializati
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
 import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
-
-import { PublicOfferDrawer } from '../components/public-offer-drawer';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
@@ -36,6 +34,7 @@ import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 import { routes } from '@/shared/navigation/routes';
 
+import { PublicOfferDrawer } from '../components/public-offer-drawer';
 import { CreateAppointmentForm } from '../types';
 
 const FORM_INITIAL_VALUES: CreateAppointmentForm = {

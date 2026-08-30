@@ -1,5 +1,6 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -8,16 +9,18 @@ import { UserContextProvider } from '@/modules/user';
 import { AuthContextProvider } from '@/shared/lib/auth';
 import { LanguageGate } from '@/shared/lib/i18n';
 import { OneSignalProvider } from '@/shared/lib/one-signal';
-import { queryClient } from '@/shared/lib/query';
+import { queryClient, subscribeQueryFocusToAppState } from '@/shared/lib/query';
 import { ToastProvider } from '@/shared/lib/toast';
 import { NavigationProvider } from '@/shared/navigation';
 import { ThemeProvider } from '@/shared/theme';
 
 import { RootNavigator } from './navigation';
 
-import '@/shared/lib/i18n';
-
 function App() {
+  // Nothing tells TanStack Query that a phone stopped being looked at, so this is what
+  // stops every polling query while the app sits in the background.
+  useEffect(subscribeQueryFocusToAppState, []);
+
   return (
     <SafeAreaProvider>
       <NavigationProvider>
