@@ -10,7 +10,6 @@ import { PaidProgramsBanner } from './paid-programs-banner';
 import { ProfileCard } from './profile-card';
 import { QuickActions } from './quick-actions';
 import { QuickAuthPrompt } from './quick-auth-prompt';
-import { ReferralsBlock } from './referrals-block';
 
 export const HomeScreen: FC = () => {
   const insets = useSafeAreaInsets();
@@ -28,7 +27,6 @@ export const HomeScreen: FC = () => {
         <ProfileCard />
         <QuickActions />
         <PaidProgramsBanner />
-        <ReferralsBlock />
         <News />
       </ScrollView>
       <QuickAuthPrompt />

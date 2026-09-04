@@ -30,6 +30,7 @@
   "tabs": {
     "home": "Home",
     "appointments": "Appointments",
+    "qrReferrals": "QR referrals",
     "programs": "Programs",
     "compensation": "Compensation",
     "profile": "Profile"
@@ -140,6 +141,7 @@
     "profileFallback": "Profile",
     "myAppointments": "My appointments",
     "myPrograms": "My programs",
+    "showAll": "Show all",
     "noAppointments": "No appointments",
     "appointmentsCount_one": "{{count}} appointment",
     "appointmentsCount_other": "{{count}} appointments",
@@ -149,6 +151,7 @@
     "extraPrograms_one": "and {{count}} more program",
     "extraPrograms_other": "and {{count}} more programs",
     "bookAppointment": "Book an appointment",
+    "bookAppointmentSubtitle": "Doctor, date and time — in a couple of minutes",
     "news": "News",
     "noNews": "No news yet",
     "referralsTitle": "Referrals",
@@ -246,7 +249,7 @@
           "priceList": "Services are provided according to the clinic price list.",
           "confidentiality": "Medical confidentiality and privacy are observed.",
           "noShowLabel": "PLEASE NOTE: ",
-          "noShow": "if you miss a scheduled appointment without cancelling or rescheduling at least 24 hours in advance, a fee of 30% of the service price is withheld.",
+          "noShow": "if you miss a scheduled appointment without cancelling or rescheduling at least 12 hours in advance, a fee of 30% of the service price is withheld.",
           "termination": "Terms for amending and terminating the agreement."
         },
         "document": "Document",

@@ -1,120 +1,113 @@
-import { FC, ReactNode } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { FC, useRef } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { StethoscopeIcon } from '@/shared/icons';
+import { SelectCaretIcon, StethoscopeIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
-interface ActionTileProps {
-  title: string;
-  subtitle?: string;
-  icon: ReactNode;
-  backgroundColor: string;
-  titleColor: string;
-  subtitleColor?: string;
-  onPress: () => void;
-  large?: boolean;
-}
-
-const ActionTile: FC<ActionTileProps> = ({
-  title,
-  subtitle,
-  icon,
-  backgroundColor,
-  titleColor,
-  subtitleColor,
-  onPress,
-  large,
-}) => (
-  <TouchableOpacity
-    style={[
-      styles.tile,
-      { backgroundColor },
-      large ? styles.tileLarge : styles.tileSmall,
-    ]}
-    onPress={onPress}
-    activeOpacity={0.9}
-  >
-    <View style={styles.tileText}>
-      <Text style={[styles.tileTitle, { color: titleColor }]}>{title}</Text>
-      {subtitle ? (
-        <Text style={[styles.tileSubtitle, { color: subtitleColor }]}>
-          {subtitle}
-        </Text>
-      ) : null}
-    </View>
-    <View style={large ? styles.iconBoxLarge : styles.iconBoxSmall}>
-      {icon}
-    </View>
-  </TouchableOpacity>
-);
-
 export const QuickActions: FC = () => {
   const { navigate } = useNavigation();
   const { t } = useTranslation();
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const animateTo = (value: number) =>
+    Animated.spring(scale, {
+      toValue: value,
+      useNativeDriver: true,
+      speed: 40,
+      bounciness: 4,
+    }).start();
 
   return (
-    <ActionTile
-      title={t('home:bookAppointment')}
-      icon={
-        <StethoscopeIcon width={48} height={48} color={colors.blue['400']} />
-      }
-      backgroundColor={colors.blue['150']}
-      titleColor={colors.blue['500']}
-      subtitleColor={colors.blue['400']}
-      onPress={() => navigate(routes.CreateAppointment)}
-      large
-    />
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
+        style={styles.card}
+        onPressIn={() => animateTo(0.97)}
+        onPressOut={() => animateTo(1)}
+        onPress={() => navigate(routes.CreateAppointment)}
+        accessibilityRole="button"
+        accessibilityLabel={t('home:bookAppointment')}
+      >
+        <View style={styles.content}>
+          <View style={styles.iconBadge}>
+            <StethoscopeIcon
+              width={28}
+              height={28}
+              color={colors.blue['400']}
+            />
+          </View>
+
+          <View style={styles.textBlock}>
+            <Text style={styles.title}>{t('home:bookAppointment')}</Text>
+            <Text style={styles.subtitle}>
+              {t('home:bookAppointmentSubtitle')}
+            </Text>
+          </View>
+
+          <View style={styles.arrowButton}>
+            <View style={styles.arrowIcon}>
+              <SelectCaretIcon width={14} height={14} color={colors.white} />
+            </View>
+          </View>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    gap: 10,
-    backgroundColor: colors.gray['200'],
+  card: {
+    backgroundColor: colors.blue['100'],
     borderRadius: 24,
-    padding: 12,
   },
-  column: {
-    flex: 1,
-    gap: 10,
-  },
-  tile: {
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    justifyContent: 'space-between',
-  },
-  tileLarge: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  tileSmall: {
-    flex: 1,
+  content: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 80,
+    gap: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 18,
   },
-  tileText: {
-    flexShrink: 1,
+  iconBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.white,
+    shadowColor: colors.blue['500'],
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
   },
-  tileTitle: {
-    fontSize: 16,
-    lineHeight: 20,
+  textBlock: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 18,
+    lineHeight: 22,
     fontWeight: '700',
     fontFamily: fonts.SFPro.Bold,
+    color: colors.blue['500'],
   },
-  tileSubtitle: {
+  subtitle: {
     fontSize: 13,
-    lineHeight: 16,
+    lineHeight: 17,
     marginTop: 4,
-    fontFamily: fonts.SFPro.Medium,
     fontWeight: '500',
+    fontFamily: fonts.SFPro.Medium,
+    color: colors.blue['370'],
   },
-  iconBoxLarge: {},
-  iconBoxSmall: {
-    marginLeft: 'auto',
+  arrowButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.blue['500'],
+  },
+  arrowIcon: {
+    transform: [{ rotate: '-90deg' }],
   },
 });

@@ -1,11 +1,14 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { UserFilledIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
-import { colors, fonts } from '@/shared/theme';
+import { colors } from '@/shared/theme';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const logoImage = require('@/assets/images/main-logo.png');
 
 export const HomeTopbar: FC = () => {
   const insets = useSafeAreaInsets();
@@ -14,10 +17,8 @@ export const HomeTopbar: FC = () => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 6 }]}>
-      <View style={styles.side} />
-
       <View style={styles.titleBlock}>
-        <Text style={styles.title}>{t('home:topbarTitle')}</Text>
+        <Image source={logoImage} style={styles.logo} resizeMode="contain" />
       </View>
 
       <TouchableOpacity
@@ -43,31 +44,13 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: colors.backgroundMain,
   },
-  side: {
-    width: 40,
-  },
   titleBlock: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
-  title: {
-    fontSize: 18,
-    lineHeight: 22,
-    fontWeight: '700',
-    fontFamily: fonts.SFPro.Bold,
-    color: colors.textMain,
-  },
-  cityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginTop: 4,
-  },
-  cityText: {
-    fontSize: 13,
-    lineHeight: 16,
-    color: colors.gray['500'],
-    fontFamily: fonts.SFPro.Medium,
+  logo: {
+    width: 77,
+    height: 32,
   },
   profileButton: {
     width: 40,

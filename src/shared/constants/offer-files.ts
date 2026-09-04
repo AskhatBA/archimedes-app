@@ -5,9 +5,9 @@ import { FALLBACK_LANGUAGE, SupportedLanguage } from '@/shared/lib/i18n';
  * One document per interface language.
  */
 export const PUBLIC_OFFER_FILES: Record<SupportedLanguage, string> = {
-  ru: 'https://drive.google.com/file/d/19Ye3MlvOeoQfe45k0_lSoWBJArqkiH9i/preview',
-  kk: 'https://drive.google.com/file/d/1MIPZbZI24ZQPI-febmBK8KXqP_HQKOHA/preview',
-  en: 'https://drive.google.com/file/d/12zWe7k9eJI8BnY03LMKTN4QyTFC5N09P/preview',
+  ru: 'https://mis.archimedes.kz/mobile-app/v1/api/static/documents/offer-ru.docx',
+  kk: 'https://mis.archimedes.kz/mobile-app/v1/api/static/documents/offer-kk.docx',
+  en: 'https://mis.archimedes.kz/mobile-app/v1/api/static/documents/offer-en.docx',
 };
 
 export const publicOfferFileFor = (language: string): string =>

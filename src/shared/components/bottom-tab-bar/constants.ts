@@ -2,7 +2,6 @@ import {
   TabBarAppointmentsIcon,
   TabBarProfileIcon,
   TabBarHomeIcon,
-  ShieldPlusIcon,
   BanknoteArrowDown,
 } from '@/shared/icons';
 import { routes } from '@/shared/navigation';
@@ -17,10 +16,6 @@ export const navigationItems: Record<string, TabBarItemType> = {
   [routes.AppointmentsMain]: {
     Icon: TabBarAppointmentsIcon,
     labelKey: 'tabs:appointments',
-  },
-  [routes.Programs]: {
-    Icon: ShieldPlusIcon,
-    labelKey: 'tabs:programs',
   },
   [routes.Compensation]: {
     Icon: BanknoteArrowDown,

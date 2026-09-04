@@ -4,7 +4,6 @@ import { AppointmentsScreen } from '@/screens/appointments';
 import { CompensationScreen } from '@/screens/compensation';
 import { HomeScreen } from '@/screens/home';
 import { ProfileScreen } from '@/screens/profile';
-import { ProgramsScreen } from '@/screens/programs';
 import { BottomTabBar } from '@/shared/components/bottom-tab-bar';
 import { TabTopBar } from '@/shared/components/tab-top-bar';
 import { useTranslation } from '@/shared/lib/i18n';
@@ -33,13 +32,6 @@ export const TabNavigator: FC = () => {
         component={AppointmentsScreen}
         options={{
           header: () => <TabTopBar title={t('tabs:appointments')} />,
-        }}
-      />
-      <Tab.Screen
-        name={routes.Programs}
-        component={ProgramsScreen}
-        options={{
-          header: () => <TabTopBar title={t('tabs:programs')} />,
         }}
       />
       <Tab.Screen

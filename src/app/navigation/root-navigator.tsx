@@ -1,4 +1,7 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import { type FC, useMemo } from 'react';
 
 import { AppLockScreen } from '@/screens/app-lock';
@@ -21,6 +24,7 @@ import { PaymentScreen } from '@/screens/payment';
 import { PriceListScreen } from '@/screens/price-list';
 import { ProgramDetailsScreen } from '@/screens/program-details';
 import { ProgramSupportScreen } from '@/screens/program-support';
+import { ProgramsScreen } from '@/screens/programs';
 import { QrReferralsScreen } from '@/screens/qr-referrals';
 import { QrScannerScreen } from '@/screens/qr-scanner';
 import { RegisterScreen } from '@/screens/register';
@@ -33,6 +37,7 @@ import { NewVersionDrawer } from '@/shared/components/new-version-drawer';
 import { SecondaryTopbar } from '@/shared/components/secondary-topbar';
 import { StatusBarUnderlay } from '@/shared/components/status-bar-underlay';
 import { useAuth } from '@/shared/lib/auth';
+import { useTranslation } from '@/shared/lib/i18n';
 import { useNewVersionDrawer } from '@/shared/lib/version';
 import { routes } from '@/shared/navigation';
 
@@ -43,6 +48,7 @@ const RootStack = createStackNavigator();
 export const RootNavigator: FC = () => {
   const { isAuthenticated, isLoading, isLocked } = useAuth();
   const newVersion = useNewVersionDrawer();
+  const { t } = useTranslation();
 
   const initialRoute = useMemo((): string => {
     if (isAuthenticated && !isLoading) {
@@ -111,6 +117,13 @@ export const RootNavigator: FC = () => {
           options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen
+          name={routes.Programs}
+          component={ProgramsScreen}
+          options={{
+            header: () => <SecondaryTopbar title={t('tabs:programs')} />,
+          }}
+        />
+        <RootStack.Screen
           name={routes.ProgramDetails}
           component={ProgramDetailsScreen}
           options={{ header: () => <SecondaryTopbar /> }}
@@ -128,7 +141,10 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.QrScanner}
           component={QrScannerScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
         />
         <RootStack.Screen
           name={routes.QrReferrals}

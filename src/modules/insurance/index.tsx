@@ -15,6 +15,7 @@ export { CompensationRequestForm } from './forms/compensation-request-form';
 
 export { MedicalNetworkResults } from './components/medical-network-results';
 export { ProgramCard } from './components/program-card';
+export { levelColors } from './components/program-card/constants';
 export { FamilyMembers } from './components/family-members';
 export { CompensationHistory } from './components/compensation-history';
 export { ElectronicReferralCard } from './components/electronic-referral-card';

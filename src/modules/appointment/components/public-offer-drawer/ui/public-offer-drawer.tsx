@@ -62,12 +62,15 @@ export const PublicOfferDrawer: FC<PublicOfferDrawerProps> = ({
   /**
    * The document opens as a full screen, so the sheet steps aside instead of staying
    * behind it — coming back from the document lands on the form, not on a stale drawer.
+   *
+   * The offer is a .docx, which Android's WebView cannot render on its own, so the
+   * viewer is asked to wrap it in its document renderer instead of loading the URL raw.
    */
   const openDocument = () => {
     onClose();
     navigate(routes.DocumentViewer, {
       uri: publicOfferFileFor(language),
-      isOnlyUrl: true,
+      isOnlyUrl: false,
     });
   };
 

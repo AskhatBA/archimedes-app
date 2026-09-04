@@ -35,7 +35,7 @@ export const ProgramsScreen: FC = () => {
       <ScrollView
         contentContainerStyle={[
           styles.emptyScroll,
-          { paddingBottom: deviceInsets.bottom + 80 },
+          { paddingBottom: deviceInsets.bottom + 24 },
         ]}
         refreshControl={
           <RefreshControl
@@ -87,7 +87,7 @@ export const ProgramsScreen: FC = () => {
     <ScrollView
       contentContainerStyle={[
         styles.scrollContent,
-        { paddingBottom: deviceInsets.bottom + 80 },
+        { paddingBottom: deviceInsets.bottom + 24 },
       ]}
       refreshControl={
         <RefreshControl
