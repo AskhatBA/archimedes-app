@@ -1,6 +1,7 @@
 export { PaidProgramCard } from './components/paid-program-card';
 export { PaidProgramDetailsDrawer } from './components/paid-program-details';
 export { CartBar, CartDrawer } from './components/paid-programs-cart';
+export { PaidProgramsCatalog } from './components/paid-programs-catalog';
 export { PurchaseCard } from './components/purchase-card';
 
 export { usePaidPrograms } from './hooks/use-paid-programs';

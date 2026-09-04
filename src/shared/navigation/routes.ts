@@ -32,5 +32,6 @@ export const routes = {
   PriceList: 'price-list',
   Payment: 'payment',
   PaidPrograms: 'paid-programs',
+  Checkups: 'checkups',
   PaidProgramsHistory: 'paid-programs-history',
 } as const;

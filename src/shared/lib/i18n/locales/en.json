@@ -163,8 +163,8 @@
     "referralsCount_one": "{{count}} referral",
     "referralsCount_other": "{{count}} referrals",
     "scanQr": "Scan QR",
-    "paidProgramsTitle": "Paid programs",
-    "paidProgramsSubtitle": "Med. plans and check-ups — buy online"
+    "medPlansSubtitle": "Yearly outpatient care",
+    "checkupsSubtitle": "Screening in one visit"
   },
   "qrScanner": {
     "title": "Scan QR",
@@ -374,11 +374,10 @@
     }
   },
   "paidPrograms": {
-    "title": "Paid programs",
     "empty": "No programs in this category yet",
     "categories": {
       "medPlan": "Med. plans",
-      "checkup": "Check-up"
+      "checkup": "Check-ups"
     },
     "hints": {
       "medPlan": "Yearly outpatient care programs for you and your family.",

@@ -1,18 +1,29 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { FC, useCallback } from 'react';
 import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { PurchaseCard, usePurchases } from '@/modules/paid-programs';
+import {
+  PurchaseCard,
+  usePurchases,
+  type PurchaseFilter,
+} from '@/modules/paid-programs';
 import { usePageHeader } from '@/shared/hooks';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
 import { PurchaseFilters } from './purchase-filters';
 
+/** Opened from a catalogue, `filter` pre-selects that catalogue's category. */
+interface RouteParams {
+  filter?: PurchaseFilter;
+}
+
 export const PaidProgramsHistoryScreen: FC = () => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const route = useRoute();
+  const { filter: initialFilter } = (route.params || {}) as RouteParams;
 
   usePageHeader({ title: t('paidPrograms:history.title') });
 
@@ -25,7 +36,7 @@ export const PaidProgramsHistoryScreen: FC = () => {
     isRefreshing,
     refreshPending,
     removePurchase,
-  } = usePurchases();
+  } = usePurchases(initialFilter);
 
   // Payments settle server-side after the WebView closes, so statuses are re-read
   // every time the screen comes into view.

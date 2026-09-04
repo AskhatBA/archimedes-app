@@ -8,6 +8,7 @@ import { AppLockScreen } from '@/screens/app-lock';
 import { AppointmentDetailsScreen } from '@/screens/appointment-details';
 import { AppointmentHistoryScreen } from '@/screens/appointment-history';
 import { BiometricSetupScreen } from '@/screens/biometric-setup';
+import { CheckupsScreen } from '@/screens/checkups';
 import { CompensationRequestScreen } from '@/screens/compensation-request';
 import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
@@ -194,6 +195,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.PaidPrograms}
           component={PaidProgramsScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.Checkups}
+          component={CheckupsScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen

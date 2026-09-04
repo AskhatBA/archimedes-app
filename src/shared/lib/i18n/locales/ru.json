@@ -173,8 +173,8 @@
     "referralsCount_many": "{{count}} направлений",
     "referralsCount_other": "{{count}} направления",
     "scanQr": "Сканировать QR",
-    "paidProgramsTitle": "Платные программы",
-    "paidProgramsSubtitle": "Мед. планы и чек-апы — оформите онлайн"
+    "medPlansSubtitle": "Годовое обслуживание",
+    "checkupsSubtitle": "Обследование за визит"
   },
   "qrScanner": {
     "title": "Сканировать QR",
@@ -386,11 +386,10 @@
     }
   },
   "paidPrograms": {
-    "title": "Платные программы",
     "empty": "В этой категории пока нет программ",
     "categories": {
       "medPlan": "Мед. планы",
-      "checkup": "Чек-ап"
+      "checkup": "Чек-апы"
     },
     "hints": {
       "medPlan": "Годовые программы амбулаторного обслуживания для вас и вашей семьи.",

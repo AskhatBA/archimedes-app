@@ -8,15 +8,18 @@ import { PurchaseFilter } from '../types';
 /**
  * Purchase history kept on the device, with statuses re-checked against the backend
  * payment records.
+ *
+ * `initialFilter` lets a catalogue open the history already narrowed to its own
+ * category — the two catalogues are separate screens, but they share this one history.
  */
-export const usePurchases = () => {
+export const usePurchases = (initialFilter: PurchaseFilter = 'ALL') => {
   const purchases = usePurchasesStore(state => state.purchases);
   const createPurchase = usePurchasesStore(state => state.createPurchase);
   const setStatus = usePurchasesStore(state => state.setStatus);
   const removePurchase = usePurchasesStore(state => state.removePurchase);
 
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [filter, setFilter] = useState<PurchaseFilter>('ALL');
+  const [filter, setFilter] = useState<PurchaseFilter>(initialFilter);
 
   /**
    * One checkout can pay for a mixed cart, so a purchase belongs to a category as soon

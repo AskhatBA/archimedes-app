@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,6 +8,10 @@ import { TrashIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
+import {
+  CATEGORY_LABEL_KEYS,
+  PAID_PROGRAM_CATEGORIES,
+} from '../../../constants';
 import { useCart } from '../../../hooks/use-cart';
 import { formatPrice } from '../../../lib/format-price';
 
@@ -29,6 +33,20 @@ export const CartDrawer: FC<CartDrawerProps> = ({
   const insets = useSafeAreaInsets();
   const { items, total, isEmpty, removeItem, clearCart } = useCart();
 
+  /**
+   * Med plans and check-ups are bought from separate screens but share one cart, so a
+   * cart can hold both. Grouping keeps a mixed one readable; a single-category cart
+   * shows no headings at all.
+   */
+  const groups = useMemo(
+    () =>
+      PAID_PROGRAM_CATEGORIES.map(category => ({
+        category,
+        programs: items.filter(item => item.category === category),
+      })).filter(group => group.programs.length > 0),
+    [items],
+  );
+
   return (
     <BottomDrawer visible={visible} onClose={onClose} scrollable>
       <View style={[styles.content, { paddingBottom: insets.bottom + 24 }]}>
@@ -45,28 +63,40 @@ export const CartDrawer: FC<CartDrawerProps> = ({
           <Text style={styles.empty}>{t('paidPrograms:cart.empty')}</Text>
         ) : (
           <>
-            <View style={styles.list}>
-              {items.map(program => (
-                <View key={program.id} style={styles.item}>
-                  <View style={styles.itemText}>
-                    <Text numberOfLines={2} style={styles.itemTitle}>
-                      {program.title}
-                    </Text>
-                    <Text style={styles.itemPrice}>
-                      {formatPrice(program.price)}
-                    </Text>
-                  </View>
+            {groups.map(group => (
+              <View key={group.category} style={styles.list}>
+                {groups.length > 1 ? (
+                  <Text style={styles.groupTitle}>
+                    {t(CATEGORY_LABEL_KEYS[group.category])}
+                  </Text>
+                ) : null}
 
-                  <TouchableOpacity
-                    onPress={() => removeItem(program.id)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    accessibilityLabel={t('paidPrograms:cart.removeA11y')}
-                  >
-                    <TrashIcon width={18} height={18} color={colors.red[500]} />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
+                {group.programs.map(program => (
+                  <View key={program.id} style={styles.item}>
+                    <View style={styles.itemText}>
+                      <Text numberOfLines={2} style={styles.itemTitle}>
+                        {program.title}
+                      </Text>
+                      <Text style={styles.itemPrice}>
+                        {formatPrice(program.price)}
+                      </Text>
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={() => removeItem(program.id)}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                      accessibilityLabel={t('paidPrograms:cart.removeA11y')}
+                    >
+                      <TrashIcon
+                        width={18}
+                        height={18}
+                        color={colors.red[500]}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            ))}
 
             <View style={styles.totalRow}>
               <Text style={styles.totalLabel}>
@@ -121,6 +151,12 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: 10,
+  },
+  groupTitle: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontFamily: fonts.SFPro.Medium,
+    color: colors.gray['500'],
   },
   item: {
     flexDirection: 'row',

@@ -163,8 +163,8 @@
     "referralsCount_one": "{{count}} жолдама",
     "referralsCount_other": "{{count}} жолдама",
     "scanQr": "QR сканерлеу",
-    "paidProgramsTitle": "Ақылы бағдарламалар",
-    "paidProgramsSubtitle": "Мед. жоспарлар мен чек-аптар — онлайн рәсімдеңіз"
+    "medPlansSubtitle": "Жылдық қызмет көрсету",
+    "checkupsSubtitle": "Бір келуде тексеру"
   },
   "qrScanner": {
     "title": "QR сканерлеу",
@@ -374,11 +374,10 @@
     }
   },
   "paidPrograms": {
-    "title": "Ақылы бағдарламалар",
     "empty": "Бұл санатта әзірге бағдарлама жоқ",
     "categories": {
       "medPlan": "Мед. жоспарлар",
-      "checkup": "Чек-ап"
+      "checkup": "Чек-аптар"
     },
     "hints": {
       "medPlan": "Сізге және отбасыңызға арналған жылдық амбулаториялық қызмет көрсету бағдарламалары.",
