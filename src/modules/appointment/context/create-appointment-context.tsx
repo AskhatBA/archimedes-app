@@ -7,6 +7,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -16,6 +17,7 @@ import {
   MISDoctor,
   MISAvailableSlots,
   MedicServiceItem,
+  InsuranceProgram,
   misApi,
   paymentApi,
 } from '@/api';
@@ -34,6 +36,7 @@ import { useToast } from '@/shared/lib/toast';
 import { useNavigation } from '@/shared/navigation';
 import { routes } from '@/shared/navigation/routes';
 
+import { ProgramChoiceModal } from '../components/program-choice-modal';
 import { PublicOfferDrawer } from '../components/public-offer-drawer';
 import { CreateAppointmentForm } from '../types';
 
@@ -50,8 +53,13 @@ interface CreateAppointmentContextProps {
   availableSlots: MISAvailableSlots | undefined;
   medicService: MedicServiceItem | null;
   loadingMedicService: boolean;
-  /** No active insurance programme — the visit is paid for per booking. */
-  isPaidPatient: boolean;
+  /** Programmes the patient may book under — expired ones cover nothing. */
+  availablePrograms: InsuranceProgram[];
+  loadingPrograms: boolean;
+  /** No programme selected — the visit is paid for per booking. */
+  isPaidVisit: boolean;
+  /** Reopens the programme / paid choice so the patient can switch. */
+  openProgramChoice: () => void;
   isBookingEnabled: boolean;
   bookAppointment: () => void;
   isBooking?: boolean;
@@ -65,7 +73,10 @@ const initialValues: CreateAppointmentContextProps = {
   availableSlots: undefined,
   medicService: null,
   loadingMedicService: false,
-  isPaidPatient: false,
+  availablePrograms: [],
+  loadingPrograms: false,
+  isPaidVisit: false,
+  openProgramChoice: () => {},
   isBookingEnabled: false,
   bookAppointment: () => {},
 };
@@ -86,6 +97,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   const [pendingPaymentId, setPendingPaymentId] = useState<string | null>(null);
   /** The public offer a paid patient has to accept before checkout. */
   const [isOfferVisible, setIsOfferVisible] = useState(false);
+  /** The full-screen programme / paid choice shown to patients who have a programme. */
+  const [isProgramChoiceVisible, setIsProgramChoiceVisible] = useState(false);
+  /** Whether the patient has already answered that choice for this booking. */
+  const [isProgramChosen, setIsProgramChosen] = useState(false);
   const [formValues, setFormValues] =
     useState<CreateAppointmentForm>(FORM_INITIAL_VALUES);
 
@@ -123,19 +138,52 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
   const { programs, loadingPrograms } = usePrograms();
 
-  // An expired programme covers nothing, so it does not make the visit insured.
-  const isPaidPatient =
-    !loadingPrograms &&
-    !(programs || []).some(program => program.status !== 'EXPIRED');
+  // An expired programme covers nothing, so it cannot be booked under.
+  const availablePrograms = useMemo(
+    () => (programs || []).filter(program => program.status !== 'EXPIRED'),
+    [programs],
+  );
+
+  const hasPrograms = availablePrograms.length > 0;
+
+  /**
+   * Having a programme no longer forces the visit to be insured: the patient picks a
+   * programme or a paid visit up front, and "no programme selected" means paid — the
+   * same flow a patient without any programme goes through.
+   */
+  const isPaidVisit = !loadingPrograms && !formValues.programId;
+
+  // A patient with programmes answers the choice before touching the form; one without
+  // has nothing to choose, so their visit is paid from the start.
+  useEffect(() => {
+    if (loadingPrograms || isProgramChosen || !hasPrograms) return;
+    setIsProgramChoiceVisible(true);
+  }, [loadingPrograms, isProgramChosen, hasPrograms]);
+
+  const chooseProgram = (programId?: string) => {
+    // The patient list belongs to the previous programme — a paid visit has none at all.
+    setFormValues(prev => ({ ...prev, programId, patientId: undefined }));
+    setIsProgramChosen(true);
+    setIsProgramChoiceVisible(false);
+  };
+
+  const openProgramChoice = () => setIsProgramChoiceVisible(true);
+
+  // Dismissing the choice before answering it leaves nothing to book under, so the
+  // screen steps back instead of dropping the patient onto a half-configured form.
+  const closeProgramChoice = () => {
+    setIsProgramChoiceVisible(false);
+    if (!isProgramChosen) goBack();
+  };
 
   const isBookingEnabled =
     !!formValues.branchId &&
     !!formValues.specializationId &&
     !!formValues.doctorId &&
-    !!formValues.doctorId &&
     !!formValues.timeSlot &&
-    // A paid patient cannot be sent to checkout before the price is known.
-    (!isPaidPatient || !!medicService);
+    (!hasPrograms || isProgramChosen) &&
+    // A paid visit cannot be sent to checkout before the price is known.
+    (!isPaidVisit || !!medicService);
 
   const resetFormValues = () => {
     setFormValues(FORM_INITIAL_VALUES);
@@ -329,7 +377,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
     // A paid visit is charged, so the patient accepts the public offer first; checkout
     // starts from the drawer. An insured visit is covered by the programme's own terms.
-    if (isPaidPatient) {
+    if (isPaidVisit) {
       setIsOfferVisible(true);
       return;
     }
@@ -358,7 +406,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       doctors,
       medicService,
       loadingMedicService,
-      isPaidPatient,
+      availablePrograms,
+      loadingPrograms,
+      isPaidVisit,
+      openProgramChoice,
       isBookingEnabled,
       bookAppointment,
       isBooking:
@@ -374,7 +425,9 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       doctors,
       medicService,
       loadingMedicService,
-      isPaidPatient,
+      availablePrograms,
+      loadingPrograms,
+      isPaidVisit,
       isBookingEnabled,
     ],
   );
@@ -382,6 +435,14 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
   return (
     <CreateAppointmentContext.Provider value={value}>
       {children}
+      <ProgramChoiceModal
+        visible={isProgramChoiceVisible}
+        programs={availablePrograms}
+        selectedProgramId={formValues.programId}
+        hasChosen={isProgramChosen}
+        onSelect={chooseProgram}
+        onClose={closeProgramChoice}
+      />
       <PublicOfferDrawer
         visible={isOfferVisible}
         onClose={() => setIsOfferVisible(false)}

@@ -11,13 +11,13 @@ import { createAppointmentFormStyles } from './styles';
 
 /**
  * Приём по страховой программе оплачивает страховая, поэтому цена показывается
- * только платным пациентам — тем, у кого нет ни одной действующей программы.
+ * только тогда, когда запись оформляется платно — то есть без выбранной программы.
  */
 export const AppointmentPrice: FC = () => {
   const { t } = useTranslation();
-  const { formValues, medicService, isPaidPatient } = useCreateAppointment();
+  const { formValues, medicService, isPaidVisit } = useCreateAppointment();
 
-  if (!isPaidPatient) return null;
+  if (!isPaidVisit) return null;
   if (!formValues.doctorId || !medicService) return null;
 
   return (

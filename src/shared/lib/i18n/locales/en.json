@@ -219,6 +219,17 @@
       "pageTitle": "Book an appointment",
       "selectProgramLabel": "Select a program",
       "selectProgramPlaceholder": "Program",
+      "programChoice": {
+        "title": "How would you like to book?",
+        "subtitle": "Choose an insurance programme or book a paid appointment",
+        "programsSection": "Under an insurance programme",
+        "paidSection": "Without a programme",
+        "validUntil": "Valid until {{date}}",
+        "paidTitle": "Paid appointment",
+        "paidSubtitle": "Charged at the clinic's price list",
+        "submit": "Continue",
+        "change": "Change"
+      },
       "selectPatientLabel": "Select a patient",
       "selectPatientPlaceholder": "Patient",
       "selfPatient": "Book for myself",
@@ -333,6 +344,8 @@
       "company": "Company",
       "period": "Period",
       "tiles": {
+        "appointment": "Book an appointment",
+        "compensation": "Reimbursement request",
         "certificate": "Certificate",
         "about": "About program",
         "network": "Medical network",

@@ -219,6 +219,17 @@
       "pageTitle": "Қабылдауға жазылу",
       "selectProgramLabel": "Бағдарламаны таңдаңыз",
       "selectProgramPlaceholder": "Бағдарлама",
+      "programChoice": {
+        "title": "Қалай жазылғыңыз келеді?",
+        "subtitle": "Сақтандыру бағдарламасын таңдаңыз немесе ақылы қабылдауға жазылыңыз",
+        "programsSection": "Сақтандыру бағдарламасы бойынша",
+        "paidSection": "Бағдарламасыз",
+        "validUntil": "{{date}} дейін жарамды",
+        "paidTitle": "Ақылы қабылдау",
+        "paidSubtitle": "Клиниканың прайс-парағы бойынша төлем",
+        "submit": "Жалғастыру",
+        "change": "Өзгерту"
+      },
       "selectPatientLabel": "Пациентті таңдаңыз",
       "selectPatientPlaceholder": "Пациент",
       "selfPatient": "Өзіме жазылу",
@@ -333,6 +344,8 @@
       "company": "Компания",
       "period": "Кезең",
       "tiles": {
+        "appointment": "Қабылдауға жазылу",
+        "compensation": "Өтемақыға өтінім",
         "certificate": "Сертификат",
         "about": "Бағдарлама туралы",
         "network": "Мед. желі",

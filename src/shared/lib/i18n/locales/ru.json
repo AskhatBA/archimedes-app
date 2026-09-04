@@ -229,6 +229,17 @@
       "pageTitle": "Запись на прием",
       "selectProgramLabel": "Выберите программу",
       "selectProgramPlaceholder": "Программа",
+      "programChoice": {
+        "title": "Как хотите записаться?",
+        "subtitle": "Выберите программу страхования или запишитесь на платный прием",
+        "programsSection": "По страховой программе",
+        "paidSection": "Без программы",
+        "validUntil": "Действует до {{date}}",
+        "paidTitle": "Платный прием",
+        "paidSubtitle": "Оплата по прайс-листу клиники",
+        "submit": "Продолжить",
+        "change": "Изменить"
+      },
       "selectPatientLabel": "Выберите пациента",
       "selectPatientPlaceholder": "Пациент",
       "selfPatient": "Оформить на себя",
@@ -343,6 +354,8 @@
       "company": "Компания",
       "period": "Период",
       "tiles": {
+        "appointment": "Запись на прием",
+        "compensation": "Заявка на возмещение",
         "certificate": "Сертификат",
         "about": "О программе",
         "network": "Мед. сеть",

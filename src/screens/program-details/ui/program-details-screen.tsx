@@ -29,6 +29,8 @@ import {
   HeartIcon,
   ShieldPlusIcon,
   CalendarIcon,
+  StethoscopeIcon,
+  BanknoteArrowDown,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
@@ -115,6 +117,18 @@ export const ProgramDetailsScreen: FC = () => {
     icon: FC<{ width: number; height: number; color: string }>;
     onPress: () => void;
   }[] = [
+    {
+      key: 'appointment',
+      label: t('programs:details.tiles.appointment'),
+      icon: StethoscopeIcon,
+      onPress: () => navigate(routes.CreateAppointment),
+    },
+    {
+      key: 'compensation',
+      label: t('programs:details.tiles.compensation'),
+      icon: BanknoteArrowDown,
+      onPress: () => navigate(routes.CompensationRequest),
+    },
     {
       key: 'certificate',
       label: t('programs:details.tiles.certificate'),

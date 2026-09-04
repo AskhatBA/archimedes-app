@@ -1,14 +1,15 @@
-import { FC, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { FC, useMemo } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useUser } from '@/modules/user';
 import { Button } from '@/shared/components/button';
 import { SelectField } from '@/shared/components/select-field';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { TimeSlotPicker } from '@/shared/components/time-slot-picker';
+import { SelectCaretIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
-import { useFamily, usePrograms } from '@/shared/lib/insurance';
-import { colors } from '@/shared/theme';
+import { useFamily } from '@/shared/lib/insurance';
+import { colors, fonts } from '@/shared/theme';
 
 import { AppointmentTypeSwitch } from '../../../components/appointment-type-switch';
 import { useCreateAppointment } from '../../../context/create-appointment-context';
@@ -27,29 +28,18 @@ export const CreateAppointmentForm: FC = () => {
     bookAppointment,
     isBooking,
     formValues,
-    isPaidPatient,
+    isPaidVisit,
+    availablePrograms,
+    loadingPrograms,
+    openProgramChoice,
   } = useCreateAppointment();
-  const { programs, loadingPrograms } = usePrograms();
   const { user } = useUser();
   const { family } = useFamily(formValues.programId);
   const { t } = useTranslation();
 
-  const availablePrograms = useMemo(
-    () => programs?.filter(p => p.status !== 'EXPIRED') || [],
-    [programs],
+  const selectedProgram = availablePrograms.find(
+    program => program.id === formValues.programId,
   );
-
-  useEffect(() => {
-    if (availablePrograms.length === 1) {
-      changeFormValues('programId', availablePrograms[0].id);
-    }
-  }, [availablePrograms]);
-
-  useEffect(() => {
-    if (isPaidPatient && formValues.programId) {
-      changeFormValues('programId', undefined);
-    }
-  }, [isPaidPatient, formValues.programId]);
 
   const availableSlotList = useMemo(
     () => Object.values(availableSlots || {}),
@@ -81,7 +71,9 @@ export const CreateAppointmentForm: FC = () => {
         </View>
       )}
 
-      {!loadingPrograms && !isPaidPatient && (
+      {/* Patients without a programme have nothing to choose between: their visit is
+          always paid, so the card would only state the obvious. */}
+      {!loadingPrograms && availablePrograms.length > 0 && (
         <View>
           <Text
             style={[
@@ -91,16 +83,30 @@ export const CreateAppointmentForm: FC = () => {
           >
             {t('appointments:create.selectProgramLabel')}
           </Text>
-          <SelectField
-            value={formValues.programId || ''}
-            onChange={value => changeFormValues('programId', value)}
-            placeholder={t('appointments:create.selectProgramPlaceholder')}
-            options={availablePrograms.map(p => ({
-              value: p.id,
-              label: p.title,
-              subtitle: p.cardNo,
-            }))}
-          />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.programCard}
+            onPress={openProgramChoice}
+          >
+            <View style={styles.programCardBody}>
+              <Text style={styles.programCardTitle} numberOfLines={2}>
+                {selectedProgram
+                  ? selectedProgram.title
+                  : t('appointments:create.programChoice.paidTitle')}
+              </Text>
+              <Text style={styles.programCardSubtitle} numberOfLines={1}>
+                {selectedProgram
+                  ? selectedProgram.cardNo
+                  : t('appointments:create.programChoice.paidSubtitle')}
+              </Text>
+            </View>
+            <Text style={styles.programCardAction}>
+              {t('appointments:create.programChoice.change')}
+            </Text>
+            <View style={styles.programCardCaret}>
+              <SelectCaretIcon color={colors.blue['400']} />
+            </View>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -211,7 +217,7 @@ export const CreateAppointmentForm: FC = () => {
         onPress={bookAppointment}
       >
         {t(
-          isPaidPatient
+          isPaidVisit
             ? 'appointments:create.submitPaid'
             : 'appointments:create.submit',
         )}
@@ -226,6 +232,44 @@ const styles = StyleSheet.create({
   },
   programTitleSkeleton: {
     marginBottom: 11,
+  },
+  programCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.blue['100'],
+    borderWidth: 1,
+    borderColor: colors.blue['200'],
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  programCardBody: {
+    flex: 1,
+    gap: 2,
+  },
+  programCardTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+    color: colors.textMain,
+  },
+  programCardSubtitle: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontFamily: fonts.SFPro.Regular,
+    color: colors.gray['500'],
+  },
+  programCardAction: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+    color: colors.blue['400'],
+  },
+  programCardCaret: {
+    transform: [{ rotate: '-90deg' }],
   },
   noSlots: {
     marginVertical: 8,
