@@ -145,6 +145,9 @@
     "profileFallback": "Профиль",
     "myAppointments": "Мои записи",
     "myPrograms": "Мои программы",
+    "medAccountTitle": "Медсчет",
+    "medAccountSubtitle": "Баланс для оплаты услуг",
+    "medAccountUnavailable": "Недоступно",
     "showAll": "Показать все",
     "noAppointments": "Нет записей",
     "appointmentsCount_one": "{{count}} запись",
@@ -353,6 +356,10 @@
     "details": {
       "company": "Компания",
       "period": "Период",
+      "callCenter": {
+        "title": "Колл-центр",
+        "subtitle": "Нажмите, чтобы позвонить"
+      },
       "tiles": {
         "appointment": "Запись на прием",
         "compensation": "Заявка на возмещение",

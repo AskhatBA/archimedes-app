@@ -22,6 +22,7 @@ import {
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
+  MedAccount,
   MedicalNetworkClinics,
   MedicServiceItem,
   PayProgramItem,
@@ -759,6 +760,38 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       void
     >({
       path: `/insurance/pay-programs`,
+      method: 'GET',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * @description Proxies the insurance API's `/v3/getMedAccount` for the beneficiary behind the caller's account. A beneficiary the insurance API does not know is not an error there — it answers `errorCode: 0` with a zero balance.
+ *
+ * @tags Insurance
+ * @name MedAccountList
+ * @summary Get the balance of the caller's medical account
+ * @request GET:/insurance/med-account
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    medAccount?: MedAccount,
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  medAccountList = (params: RequestParams = {}) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        medAccount?: MedAccount;
+      },
+      void
+    >({
+      path: `/insurance/med-account`,
       method: 'GET',
       secure: true,
       format: 'json',

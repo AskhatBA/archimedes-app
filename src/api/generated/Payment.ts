@@ -238,4 +238,24 @@ export class Payment<SecurityDataType = unknown> extends HttpClient<SecurityData
       format: 'json',
       ...params,
     });
+  /**
+   * @description Ends the wait for a payment the user started and abandoned, so the client can drop the "waiting for payment" state instead of showing it until the provider's window closes. Nothing is cancelled at FreedomPay: our payments are one-step, and their `cancel` method only voids the hold of a two-step one. The provider is asked for the authoritative state first, so a payment that was in fact paid comes back `SUCCESS` (with whatever its purpose booked already done) rather than being cancelled. A cancelled payment also stays reconcilable, so a card charged just after this request still settles as `SUCCESS` later. Idempotent: cancelling an already settled payment returns it unchanged.
+   *
+   * @tags Payment
+   * @name CancelCreate
+   * @summary Give up on a payment the payer walked away from
+   * @request POST:/payment/{id}/cancel
+   * @secure
+   * @response `200` `Payment` The payment as it stands after the request — check `status`
+   * @response `401` `void` Unauthorized
+   * @response `404` `void` Payment not found, or it belongs to someone else
+   */
+  cancelCreate = (id: string, params: RequestParams = {}) =>
+    this.request<Payment, void>({
+      path: `/payment/${id}/cancel`,
+      method: 'POST',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
 }

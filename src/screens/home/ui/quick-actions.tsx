@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.blue['100'],
     borderRadius: 24,
+    borderWidth: 1,
+    borderColor: colors.blue['200'],
   },
   content: {
     flexDirection: 'row',

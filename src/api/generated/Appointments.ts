@@ -75,6 +75,121 @@ export class Appointments<SecurityDataType = unknown> extends HttpClient<Securit
       ...params,
     });
   /**
+ * @description Admin-only. Paginated and filtered server-side; day filters are read in clinic time (Asia/Almaty).
+ *
+ * @tags Appointments
+ * @name AdminList
+ * @summary Clinic-wide appointment listing (dashboard)
+ * @request GET:/appointments/admin
+ * @secure
+ * @response `200` `{
+    success?: boolean,
+    items?: (Appointment)[],
+    total?: number,
+    page?: number,
+    limit?: number,
+    totalPages?: number,
+
+}` Page of appointments
+ * @response `401` `void` Unauthorized
+ * @response `403` `void` Not an admin
+ */
+  adminList = (
+    query?: {
+      /** @default 1 */
+      page?: number;
+      /**
+       * @max 100
+       * @default 20
+       */
+      limit?: number;
+      /** Patient name, IIN or phone — or a MIS appointment/patient/doctor id. */
+      search?: string;
+      status?: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+      telemedicine?: boolean;
+      /** @format date */
+      dateFrom?: string;
+      /** @format date */
+      dateTo?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        success?: boolean;
+        items?: Appointment[];
+        total?: number;
+        page?: number;
+        limit?: number;
+        totalPages?: number;
+      },
+      void
+    >({
+      path: `/appointments/admin`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * @description Runs the same sweep as the background schedule, on demand. Answers with what the sweep did — how many local appointments were checked and how many changed.
+ *
+ * @tags Appointments
+ * @name AdminSyncCreate
+ * @summary Pull appointment statuses from MIS now (dashboard)
+ * @request POST:/appointments/admin/sync
+ * @secure
+ * @response `200` `{
+    success?: boolean,
+    checked?: number,
+    patients?: number,
+    updated?: number,
+    notFound?: number,
+    failedPatients?: number,
+
+}` Sweep result
+ * @response `401` `void` Unauthorized
+ * @response `403` `void` Not an admin
+ */
+  adminSyncCreate = (params: RequestParams = {}) =>
+    this.request<
+      {
+        success?: boolean;
+        checked?: number;
+        patients?: number;
+        updated?: number;
+        notFound?: number;
+        failedPatients?: number;
+      },
+      void
+    >({
+      path: `/appointments/admin/sync`,
+      method: 'POST',
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+   * No description
+   *
+   * @tags Appointments
+   * @name AdminDetail
+   * @summary One appointment, unscoped (dashboard)
+   * @request GET:/appointments/admin/{id}
+   * @secure
+   * @response `200` `void` Appointment
+   * @response `403` `void` Not an admin
+   * @response `404` `void` Appointment not found
+   */
+  adminDetail = (id: string, params: RequestParams = {}) =>
+    this.request<void, void>({
+      path: `/appointments/admin/${id}`,
+      method: 'GET',
+      secure: true,
+      ...params,
+    });
+  /**
  * No description
  *
  * @tags Appointments

@@ -717,6 +717,19 @@ export interface PayProgramItem {
   programUrl: string;
 }
 
+export interface MedAccount {
+  /**
+   * 0 when the insurance API served the balance
+   * @example 0
+   */
+  errorCode: number;
+  /**
+   * Balance of the medical account, in KZT
+   * @example 0
+   */
+  totalBalance: number;
+}
+
 export interface CreateMeetingBody {
   /** @example "Patient Consultation" */
   topic: string;
@@ -1173,7 +1186,12 @@ export interface Payment {
   id?: string;
   amount?: number;
   description?: string;
-  status?: 'PENDING' | 'SUCCESS' | 'FAILED';
+  /**
+   * `CANCELLED` is set when the payer gave up on the provider's page. It is
+   * terminal for us but not for FreedomPay — a payment that settles afterwards
+   * is still honoured and becomes `SUCCESS`.
+   */
+  status?: 'PENDING' | 'SUCCESS' | 'FAILED' | 'CANCELLED';
   purpose?: 'BALANCE_TOPUP' | 'APPOINTMENT' | 'PAID_PROGRAM';
   /** FreedomPay transaction ID */
   pgPaymentId?: string | null;

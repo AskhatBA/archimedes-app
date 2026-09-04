@@ -6,6 +6,7 @@ import { News } from '@/modules/insurance';
 import { colors } from '@/shared/theme';
 
 import { HomeTopbar } from './home-topbar';
+import { MedAccountCard } from './med-account-card';
 import { PaidProgramsBanner } from './paid-programs-banner';
 import { ProfileCard } from './profile-card';
 import { QuickActions } from './quick-actions';
@@ -25,6 +26,7 @@ export const HomeScreen: FC = () => {
         showsVerticalScrollIndicator={false}
       >
         <ProfileCard />
+        <MedAccountCard />
         <QuickActions />
         <PaidProgramsBanner />
         <News />

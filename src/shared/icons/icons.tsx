@@ -39,6 +39,7 @@ import UploadFileIcon from '@/assets/icons/upload-file.svg';
 import UserFilledIcon from '@/assets/icons/user-filled.svg';
 import UserOutlinedIcon from '@/assets/icons/user-outlined.svg';
 import VideoIcon from '@/assets/icons/video.svg';
+import WalletIcon from '@/assets/icons/wallet.svg';
 import WhatsAppIcon from '@/assets/icons/whatsapp.svg';
 
 export {
@@ -84,4 +85,5 @@ export {
   FolderPlusIcon,
   TrashIcon,
   CheckCircleIcon,
+  WalletIcon,
 };

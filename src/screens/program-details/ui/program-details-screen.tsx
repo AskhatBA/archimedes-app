@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -19,7 +20,7 @@ import {
 } from '@/modules/insurance';
 import { useUser } from '@/modules/user';
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
-import { GET_PROGRAM_QUERY } from '@/shared/constants';
+import { CALL_CENTER_PHONE, GET_PROGRAM_QUERY } from '@/shared/constants';
 import { usePageHeader } from '@/shared/hooks';
 import {
   ClipIcon,
@@ -31,6 +32,7 @@ import {
   CalendarIcon,
   StethoscopeIcon,
   BanknoteArrowDown,
+  PhoneIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
@@ -87,6 +89,10 @@ export const ProgramDetailsScreen: FC = () => {
 
   const openSupport = async () => {
     navigate(routes.ProgramSupport);
+  };
+
+  const callCallCenter = () => {
+    Linking.openURL(`tel:${CALL_CENTER_PHONE}`).catch(() => {});
   };
 
   if (loadingProgram) {
@@ -287,6 +293,49 @@ export const ProgramDetailsScreen: FC = () => {
             )}
           </View>
         </View>
+
+        {/* CALL CENTER */}
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={callCallCenter}
+          style={[
+            styles.callCard,
+            {
+              backgroundColor: colors.blue['100'],
+              borderColor: colors.blue['200'],
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.callIconWrap,
+              { backgroundColor: colors.blue['400'] },
+            ]}
+          >
+            <PhoneIcon width={22} height={22} color={colors.white} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.callTitle, { color: colors.blue['400'] }]}>
+              {t('programs:details.callCenter.title')}
+            </Text>
+            <Text style={[styles.callSubtitle, { color: colors.gray['500'] }]}>
+              {t('programs:details.callCenter.subtitle')}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.callNumberPill,
+              {
+                backgroundColor: colors.white,
+                borderColor: colors.blue['200'],
+              },
+            ]}
+          >
+            <Text style={[styles.callNumber, { color: colors.blue['400'] }]}>
+              {CALL_CENTER_PHONE}
+            </Text>
+          </View>
+        </TouchableOpacity>
 
         {/* QUICK ACTIONS */}
         <View style={styles.tilesGrid}>
@@ -523,6 +572,44 @@ const styles = StyleSheet.create({
   heroChipValue: {
     fontSize: 14,
     fontWeight: '700',
+  },
+  // Call center
+  callCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+  },
+  callIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  callTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
+  },
+  callSubtitle: {
+    marginTop: 2,
+    fontSize: 12,
+    fontFamily: fonts.SFPro.Regular,
+  },
+  callNumberPill: {
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  callNumber: {
+    fontSize: 20,
+    fontWeight: '700',
+    fontFamily: fonts.SFPro.Bold,
+    fontVariant: ['tabular-nums'],
   },
   // Tiles grid
   tilesGrid: {

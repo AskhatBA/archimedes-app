@@ -22,6 +22,7 @@ import {
   InsuranceRefundRequestsResponse,
   InsuranceVerifyOtpBody,
   LocalInsuranceRefundRequestsResponse,
+  MedAccount,
   MedicalNetworkClinics,
   MedicServiceItem,
   PayProgramItem,
@@ -651,6 +652,34 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       payPrograms?: PayProgramItem[];
+    };
+  }
+
+  /**
+ * @description Proxies the insurance API's `/v3/getMedAccount` for the beneficiary behind the caller's account. A beneficiary the insurance API does not know is not an error there — it answers `errorCode: 0` with a zero balance.
+ * @tags Insurance
+ * @name MedAccountList
+ * @summary Get the balance of the caller's medical account
+ * @request GET:/insurance/med-account
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    medAccount?: MedAccount,
+
+}` Response
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace MedAccountList {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      medAccount?: MedAccount;
     };
   }
 

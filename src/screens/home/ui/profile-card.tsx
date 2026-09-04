@@ -302,6 +302,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.blue['100'],
     borderRadius: 24,
+    borderWidth: 1,
+    borderColor: colors.blue['200'],
     padding: 14,
   },
   userRow: {
