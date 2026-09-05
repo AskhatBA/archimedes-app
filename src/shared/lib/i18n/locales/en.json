@@ -164,7 +164,8 @@
     "referralsCount_other": "{{count}} referrals",
     "scanQr": "Scan QR",
     "medPlansSubtitle": "Yearly outpatient care",
-    "checkupsSubtitle": "Screening in one visit"
+    "checkupsSubtitle": "Screening in one visit",
+    "medAccountOpenA11y": "Open medical account top-up"
   },
   "qrScanner": {
     "title": "Scan QR",
@@ -445,6 +446,32 @@
       "done": "Payment cancelled",
       "alreadyPaid": "The payment already went through — there is nothing to cancel",
       "error": "Could not cancel the payment. Please try again"
+    }
+  },
+  "medAccount": {
+    "topup": {
+      "title": "Medical account",
+      "hint": "Pick a top-up amount — your card is charged right away, and the money stays on the medical account until you visit a clinic.",
+      "selected": "Top-up amount",
+      "submit": "Top up",
+      "paymentDescription": "Medical account top-up of {{amount}}",
+      "empty": "No top-up amounts are set up yet. Please try again later.",
+      "error": "Could not start the payment. Please try again."
+    },
+    "card": {
+      "popular": "Best value"
+    },
+    "info": {
+      "link": "What is a medical account?",
+      "openA11y": "More about the medical account",
+      "title": "Medical account",
+      "intro": "The medical account is your balance across the Archimedes clinic network. Top it up in advance and get care without paying by card on the spot.",
+      "points": {
+        "network": "Valid across the whole Archimedes clinic network.",
+        "noCard": "No card payment at the visit — the service is paid from the medical account.",
+        "priceList": "The balance is drawn down after the service is provided, at the clinics' price list."
+      },
+      "close": "Got it"
     }
   }
 }

@@ -17,6 +17,8 @@ interface PurchasesActions {
   ) => Purchase;
   setStatus: (purchaseId: string, status: PurchaseStatus) => void;
   removePurchase: (purchaseId: string) => void;
+  /** Drops the whole history — the list belongs to one signed-in user. */
+  clearPurchases: () => void;
 }
 
 type PurchasesStore = PurchasesState & PurchasesActions;
@@ -64,6 +66,7 @@ export const usePurchasesStore = create<PurchasesStore>()(
             purchase => purchase.id !== purchaseId,
           ),
         })),
+      clearPurchases: () => set({ purchases: [] }),
     }),
     {
       // Purchases live only on the device until the backend owns this list.

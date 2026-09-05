@@ -10,6 +10,7 @@ export { useCheckout } from './hooks/use-checkout';
 export { usePurchases } from './hooks/use-purchases';
 
 export { formatPrice } from './lib/format-price';
+export { resetPaidProgramsState } from './lib/reset-paid-programs-state';
 
 export {
   CATEGORY_HINT_KEYS,

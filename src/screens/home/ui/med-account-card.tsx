@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useMedAccount } from '@/modules/insurance';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { WalletIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
+import { routes, useNavigation } from '@/shared/navigation';
 import { colors, fonts } from '@/shared/theme';
 
 /**
@@ -18,12 +19,26 @@ const formatBalance = (value: number): string => {
   return `${value < 0 ? '-' : ''}${grouped},${cents} ₸`;
 };
 
+/**
+ * The medical-account balance on the home screen, and the way in to topping it up.
+ *
+ * The whole card is the entry point rather than a separate button: the balance is exactly
+ * what makes someone want to top up, so tapping the number they just read is the gesture
+ * they already reach for.
+ */
 export const MedAccountCard: FC = () => {
   const { balance, isLoading } = useMedAccount();
+  const { navigate } = useNavigation();
   const { t } = useTranslation();
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={styles.card}
+      onPress={() => navigate(routes.MedAccountTopup)}
+      accessibilityRole="button"
+      accessibilityLabel={t('home:medAccountOpenA11y')}
+    >
       <View style={styles.iconBadge}>
         <WalletIcon width={24} height={24} color={colors.blue['400']} />
       </View>
@@ -49,7 +64,7 @@ export const MedAccountCard: FC = () => {
           </Text>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

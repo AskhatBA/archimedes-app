@@ -11,3 +11,4 @@ export const GET_COMPENSATION_REQUESTS_QUERY = 'compensation-requests';
 export const GET_APP_VERSION_QUERY = 'app-version';
 export const GET_INSURANCE_NEWS_QUERY = 'insurance-news';
 export const GET_PAID_PROGRAMS_QUERY = 'paid-programs';
+export const GET_MED_ACCOUNT_OPTIONS_QUERY = 'med-account-options';

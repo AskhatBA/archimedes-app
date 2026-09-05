@@ -730,6 +730,61 @@ export interface MedAccount {
   totalBalance: number;
 }
 
+export interface MedAccountOptionItem {
+  /** @format uuid */
+  id?: string;
+  /**
+   * Amount in tenge
+   * @example 100000
+   */
+  amount?: number;
+  /** @example "Хватит на приём терапевта" */
+  label?: string | null;
+  popular?: boolean;
+}
+
+export type MedAccountOptionAdminItem = MedAccountOptionItem & {
+  isActive?: boolean;
+  /** @example 10 */
+  sortOrder?: number;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+};
+
+export interface MedAccountOptionWriteBody {
+  /**
+   * Amount in tenge, unique across the list
+   * @example 100000
+   */
+  amount: number;
+  label?: string | null;
+  popular?: boolean;
+  isActive?: boolean;
+  sortOrder?: number;
+}
+
+export interface MedAccountTopup {
+  /** @format uuid */
+  id?: string;
+  /** @example 100000 */
+  amount?: number;
+  status?: 'PENDING' | 'CREDITED' | 'FAILED';
+  /** @format uuid */
+  paymentId?: string;
+  /** @format uuid */
+  optionId?: string | null;
+  externalRef?: string | null;
+  comment?: string | null;
+  /** @format date-time */
+  creditedAt?: string | null;
+  /** @format date-time */
+  createdAt?: string;
+  /** @format date-time */
+  updatedAt?: string;
+}
+
 export interface CreateMeetingBody {
   /** @example "Patient Consultation" */
   topic: string;

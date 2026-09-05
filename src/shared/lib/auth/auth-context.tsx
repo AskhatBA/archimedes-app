@@ -11,6 +11,7 @@ import {
 } from 'react';
 
 import { VerifyOTPResponse, setApiErrorHandler } from '@/api';
+import { resetPaidProgramsState } from '@/modules/paid-programs';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { isBiometricAvailable, promptBiometric } from '@/shared/lib/biometrics';
 import { queryClient } from '@/shared/lib/query';
@@ -149,6 +150,15 @@ export const AuthContextProvider: FC<{ children: ReactNode }> = ({
     setIsLocked(false);
     setIsAuthenticated(false);
     resetNavigation(routes.SignIn);
+
+    // Every cached response belongs to the account that just signed out: the query keys
+    // are not scoped by user, so without this the next account to sign in on the same
+    // phone is served the previous user's programs, appointments and profile from cache
+    // while the refetch is still in flight. Cleared after the navigation reset so the
+    // screens holding those queries are already unmounting and nothing refetches without
+    // a token.
+    queryClient.clear();
+    await resetPaidProgramsState();
   };
 
   // Called by the API layer when a request 401s because the access token

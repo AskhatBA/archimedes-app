@@ -35,7 +35,27 @@ bundle exec pod install
 
 ### Module structure
 
-Feature code lives in `src/modules/` and is organized by domain: `appointment`, `auth`, `insurance`, `medbot`, `medical-tests`, `notifications`, `user`. Each module owns its hooks, components, context, and types. Screens in `src/screens/` are thin — they import from modules and wire up navigation/layout.
+Feature code lives in `src/modules/` and is organized by domain: `appointment`, `auth`, `insurance`, `med-account`, `medbot`, `medical-tests`, `notifications`, `paid-programs`, `payment`, `user`. Each module owns its hooks, components, context, and types. Screens in `src/screens/` are thin — they import from modules and wire up navigation/layout.
+
+### Medical account top-up
+
+The balance card on the home screen (`MedAccountCard`) is itself the way in to topping the
+account up — the balance is what makes someone want to, so the whole card navigates to
+`routes.MedAccountTopup`. The balance is read from the insurer through
+`useMedAccount` in `@/modules/insurance`; the top-up flow is `@/modules/med-account`.
+
+`MedAccountTopup` is deliberately **not** the paid-programs cart. A top-up is one sum paid
+once, so the list is a radio group with a single confirm bar — picking a second amount
+replaces the first, and there is nothing to add up. The amounts come from our own backend
+(`GET /med-account/options`) and are editable in the dashboard, so the screen never
+hard-codes them; free-form amounts are not offered.
+
+Checkout posts `POST /payment/init` with `purpose: 'MED_ACCOUNT_TOPUP'` and only
+`{ optionId }` as metadata — the amount charged is verified against the catalogue
+server-side, so an amount that went stale on the device is refused before the payer is sent
+to the provider, and the reason is surfaced in the toast. The top-up itself is recorded by
+the backend when the payment settles, so it lands even if the app is closed on the
+provider's page.
 
 ### API layer (`src/api/`)
 

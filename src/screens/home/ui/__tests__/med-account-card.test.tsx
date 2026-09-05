@@ -4,6 +4,7 @@ import ReactTestRenderer from 'react-test-renderer';
 import { MedAccountCard } from '../med-account-card';
 
 const mockMedAccountList = jest.fn();
+const mockNavigate = jest.fn();
 
 jest.mock('@/api', () => ({
   insuranceApi: {
@@ -11,8 +12,17 @@ jest.mock('@/api', () => ({
   },
 }));
 
+// The card is the way in to topping the account up, so it needs a navigator. Mocked at
+// the React Navigation level rather than at `@/shared/navigation`, so the wrapper the card
+// actually calls stays under test.
 jest.mock('@react-navigation/native', () => ({
   useIsFocused: () => true,
+  useNavigation: () => ({
+    navigate: mockNavigate,
+    canGoBack: () => true,
+    reset: jest.fn(),
+    goBack: jest.fn(),
+  }),
 }));
 
 // The real hook, without the module barrel: importing it pulls in the whole insurance
@@ -88,7 +98,10 @@ const textsOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
     .filter(Boolean);
 
 describe('MedAccountCard', () => {
-  beforeEach(() => mockMedAccountList.mockReset());
+  beforeEach(() => {
+    mockMedAccountList.mockReset();
+    mockNavigate.mockReset();
+  });
 
   afterEach(() => {
     ReactTestRenderer.act(() => rendered?.unmount());
@@ -125,5 +138,19 @@ describe('MedAccountCard', () => {
 
     expect(texts).toContain('Недоступно');
     expect(texts).not.toContain('0,00 ₸');
+  });
+
+  it('opens the top-up screen when tapped', async () => {
+    mockMedAccountList.mockResolvedValue({
+      data: { success: true, medAccount: { errorCode: 0, totalBalance: 5000 } },
+    });
+
+    const tree = await render();
+
+    ReactTestRenderer.act(() => {
+      tree.root.findByProps({ accessibilityRole: 'button' }).props.onPress();
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('med-account-topup', undefined);
   });
 });

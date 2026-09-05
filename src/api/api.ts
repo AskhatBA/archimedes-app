@@ -3,6 +3,7 @@ import { App } from './generated/App';
 import { Auth } from './generated/Auth';
 import { Checkups } from './generated/Checkups';
 import { Insurance } from './generated/Insurance';
+import { MedAccount } from './generated/MedAccount';
 import { Meetings } from './generated/Meetings';
 import { Mis } from './generated/Mis';
 import { Notifications } from './generated/Notifications';
@@ -17,6 +18,7 @@ const misApi = new Mis(apiConfig);
 const patientApi = new Patient(apiConfig);
 const insuranceApi = new Insurance(apiConfig);
 const checkupsApi = new Checkups(apiConfig);
+const medAccountApi = new MedAccount(apiConfig);
 const meetingsApi = new Meetings(apiConfig);
 const notificationsApi = new Notifications(apiConfig);
 const userApi = new User(apiConfig);
@@ -30,6 +32,7 @@ export {
   patientApi,
   insuranceApi,
   checkupsApi,
+  medAccountApi,
   meetingsApi,
   notificationsApi,
   userApi,
@@ -43,6 +46,7 @@ const misUtils = new AuthUtils(misApi);
 const patientUtils = new AuthUtils(patientApi);
 const insuranceUtils = new AuthUtils(insuranceApi);
 const checkupsUtils = new AuthUtils(checkupsApi);
+const medAccountUtils = new AuthUtils(medAccountApi);
 const meetingsUtils = new AuthUtils(meetingsApi);
 const notificationsUtils = new AuthUtils(notificationsApi);
 const userUtils = new AuthUtils(userApi);
@@ -56,6 +60,7 @@ export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   patientUtils.setUnauthorizedErrorHandler(handlers);
   insuranceUtils.setUnauthorizedErrorHandler(handlers);
   checkupsUtils.setUnauthorizedErrorHandler(handlers);
+  medAccountUtils.setUnauthorizedErrorHandler(handlers);
   meetingsUtils.setUnauthorizedErrorHandler(handlers);
   notificationsUtils.setUnauthorizedErrorHandler(handlers);
   userUtils.setUnauthorizedErrorHandler(handlers);
@@ -69,6 +74,7 @@ misUtils.initToken();
 patientUtils.initToken();
 insuranceUtils.initToken();
 checkupsUtils.initToken();
+medAccountUtils.initToken();
 meetingsUtils.initToken();
 notificationsUtils.initToken();
 userUtils.initToken();

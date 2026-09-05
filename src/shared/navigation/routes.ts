@@ -34,4 +34,5 @@ export const routes = {
   PaidPrograms: 'paid-programs',
   Checkups: 'checkups',
   PaidProgramsHistory: 'paid-programs-history',
+  MedAccountTopup: 'med-account-topup',
 } as const;
