@@ -472,6 +472,23 @@
         "priceList": "The balance is drawn down after the service is provided, at the clinics' price list."
       },
       "close": "Got it"
+    },
+    "history": {
+      "title": "Top-up history",
+      "link": "Top-up history",
+      "emptyTitle": "No top-ups yet",
+      "emptySubtitle": "Every top-up of your medical account and its status will appear here.",
+      "status": {
+        "PENDING": "Being credited",
+        "CREDITED": "Credited",
+        "FAILED": "Not credited"
+      },
+      "hint": {
+        "PENDING": "Payment went through. The money reaches your medical account once the clinic posts the top-up.",
+        "CREDITED": "The money is on your medical account and can be spent on clinic services.",
+        "CREDITED_ON": "Credited to your medical account on {{date}} — ready to spend on clinic services.",
+        "FAILED": "The top-up could not be posted. You have been charged, so please contact the clinic's support — they will sort it out manually."
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ import { CreateAppointmentScreen } from '@/screens/create-appointment';
 import { CreateUserScreen } from '@/screens/create-user';
 import { DocumentViewerScreen } from '@/screens/document-viewer';
 import { ElectronicReferralsScreen } from '@/screens/electronic-referrals';
+import { MedAccountHistoryScreen } from '@/screens/med-account-history';
 import { MedAccountTopupScreen } from '@/screens/med-account-topup';
 import { MedbotChatScreen } from '@/screens/medbot-chat';
 import { MedicalNetworkScreen } from '@/screens/medical-network';
@@ -211,6 +212,11 @@ export const RootNavigator: FC = () => {
         <RootStack.Screen
           name={routes.MedAccountTopup}
           component={MedAccountTopupScreen}
+          options={{ header: () => <SecondaryTopbar /> }}
+        />
+        <RootStack.Screen
+          name={routes.MedAccountHistory}
+          component={MedAccountHistoryScreen}
           options={{ header: () => <SecondaryTopbar /> }}
         />
         <RootStack.Screen

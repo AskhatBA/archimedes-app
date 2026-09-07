@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/shared/components/button';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
-import { InfoIcon } from '@/shared/icons';
+import { ArrowBackIcon, HistoryIcon, InfoIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -73,6 +73,26 @@ export const MedAccountTopup: FC = () => {
   const renderHeader = () => (
     <View style={styles.header}>
       <Text style={styles.hint}>{t('medAccount:topup.hint')}</Text>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => navigate(routes.MedAccountHistory)}
+        style={styles.historyButton}
+        accessibilityRole="button"
+        accessibilityLabel={t('medAccount:history.link')}
+      >
+        <View style={styles.historyIconBadge}>
+          <HistoryIcon width={20} height={20} color={colors.blue['400']} />
+        </View>
+        <Text style={styles.historyLabel}>{t('medAccount:history.link')}</Text>
+        {/* The icon set has no right chevron; the back arrow turned around is one. */}
+        <ArrowBackIcon
+          width={16}
+          height={16}
+          color={colors.blue['370']}
+          style={styles.historyChevron}
+        />
+      </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => setInfoVisible(true)}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -171,6 +191,41 @@ const styles = StyleSheet.create({
   header: {
     gap: 10,
     paddingBottom: 16,
+  },
+  /**
+   * A full-width row rather than a text link next to the info one: history is the second
+   * reason to open this screen at all, and as inline text it read as a footnote to the
+   * hint above it. The chevron is what makes it a place to go rather than a label.
+   */
+  historyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.blue['200'],
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  historyIconBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.blue['100'],
+  },
+  historyChevron: {
+    transform: [{ rotate: '180deg' }],
+  },
+  historyLabel: {
+    flex: 1,
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '600',
+    fontFamily: fonts.SFPro.Semibold,
+    color: colors.blue['500'],
   },
   hint: {
     fontSize: 14,
