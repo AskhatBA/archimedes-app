@@ -1,9 +1,21 @@
 import { useRoute } from '@react-navigation/native';
-import { FC, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Linking } from 'react-native';
+import { FC, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Linking,
+  TouchableOpacity,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useAppointmentDetails } from '@/modules/appointment';
+import {
+  CancelAppointmentDrawer,
+  cancellationErrorCode,
+  useAppointmentDetails,
+  useCancelAppointment,
+} from '@/modules/appointment';
 import { Button } from '@/shared/components/button';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { usePageHeader } from '@/shared/hooks';
@@ -19,11 +31,30 @@ import {
   MapPinnedIcon,
 } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
+import { useTranslation } from '@/shared/lib/i18n';
+import { useToast } from '@/shared/lib/toast';
+import { useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
   appointmentId: string;
 }
+
+/** MIS statuses that still describe a visit somebody could turn up to. */
+const CANCELLABLE_MIS_STATUSES = [
+  'scheduled',
+  'confirmed',
+  'approved',
+  'pending',
+  'new',
+];
+
+/** Refusals the backend can answer a cancellation with, and how each is worded. */
+const CANCEL_ERROR_KEYS: Record<string, string> = {
+  APPOINTMENT_ALREADY_STARTED: 'appointments:cancel.errorAlreadyStarted',
+  APPOINTMENT_NOT_CANCELLABLE: 'appointments:cancel.errorNotCancellable',
+  APPOINTMENT_NOT_FOUND: 'appointments:cancel.errorNotFound',
+};
 
 export const AppointmentDetailsScreen: FC = () => {
   usePageHeader({ title: 'Детали записи' });
@@ -31,10 +62,47 @@ export const AppointmentDetailsScreen: FC = () => {
   const route = useRoute();
   const { appointmentId } = route.params as RouteParams;
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { showToast } = useToast();
+  const { goBack } = useNavigation();
   const deviceInsets = useSafeAreaInsets();
 
   const { appointment, isAppointmentLoading } =
     useAppointmentDetails(appointmentId);
+  const { cancelAppointment, isCancelling } = useCancelAppointment();
+
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+
+  /**
+   * Leaves the screen once the visit is gone: staying on the details of an appointment
+   * that no longer exists is worse than landing back on the list that now reflects it.
+   */
+  const confirmCancel = async () => {
+    try {
+      const result = await cancelAppointment(appointmentId);
+
+      showToast({
+        type: 'success',
+        message: result.refund
+          ? t('appointments:cancel.successWithRefund', {
+              amount: Math.round(result.refund.amount),
+            })
+          : t('appointments:cancelSuccess'),
+      });
+
+      setIsConfirmVisible(false);
+      goBack();
+    } catch (error) {
+      const key = CANCEL_ERROR_KEYS[cancellationErrorCode(error) ?? ''];
+
+      showToast({
+        type: 'error',
+        message: key ? t(key) : t('appointments:cancelError'),
+      });
+
+      if (key) setIsConfirmVisible(false);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -63,6 +131,14 @@ export const AppointmentDetailsScreen: FC = () => {
         return colors.gray['200'];
     }
   };
+
+  // Hidden rather than disabled for a visit that has been and gone: the backend refuses
+  // those anyway, and offering the action would only produce an error. The sheet still
+  // re-checks with the backend, which owns the rule.
+  const canCancel =
+    CANCELLABLE_MIS_STATUSES.includes(
+      (appointment.status ?? '').toLowerCase(),
+    ) && new Date(appointment.start_time) > new Date();
 
   return (
     <ScrollView
@@ -245,9 +321,15 @@ export const AppointmentDetailsScreen: FC = () => {
           </View>
           {appointment.branch?.address && (
             <View style={[styles.detailRow, { marginTop: 12 }]}>
-              <MapPinnedIcon width={20} height={20} color={colors.blue['370']} />
+              <MapPinnedIcon
+                width={20}
+                height={20}
+                color={colors.blue['370']}
+              />
               <View style={styles.detailContent}>
-                <Text style={[styles.detailLabel, { color: colors.blue['370'] }]}>
+                <Text
+                  style={[styles.detailLabel, { color: colors.blue['370'] }]}
+                >
                   Адрес
                 </Text>
                 <Text style={[styles.detailValue, { color: colors.textMain }]}>
@@ -278,6 +360,35 @@ export const AppointmentDetailsScreen: FC = () => {
           </View>
         )}
       </View>
+
+      {canCancel && (
+        <View style={styles.actions}>
+          <TouchableOpacity
+            onPress={() => setIsConfirmVisible(true)}
+            disabled={isCancelling}
+            style={[styles.cancelButton, { borderColor: colors.red['300'] }]}
+          >
+            <Text
+              style={[
+                styles.cancelLabel,
+                {
+                  color: isCancelling ? colors.gray['500'] : colors.red['500'],
+                },
+              ]}
+            >
+              {t('appointments:cancelAppointment')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <CancelAppointmentDrawer
+        visible={isConfirmVisible}
+        onClose={() => setIsConfirmVisible(false)}
+        onConfirm={confirmCancel}
+        appointmentId={appointmentId}
+        isCancelling={isCancelling}
+      />
     </ScrollView>
   );
 };
@@ -374,7 +485,18 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: 12,
-    marginTop: 24,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  cancelButton: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  cancelLabel: {
+    fontSize: 15,
+    fontWeight: '600',
   },
   zoomButton: {
     marginBottom: 24,

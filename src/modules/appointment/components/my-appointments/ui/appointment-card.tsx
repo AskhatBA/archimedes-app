@@ -1,16 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { FC } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActionSheetIOS,
-  Alert,
-  Platform,
-} from 'react-native';
+import { FC, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { misApi } from '@/api';
 import {
   ThreeDotsIcon,
   ClipboardClockIcon,
@@ -25,6 +15,12 @@ import { useToast } from '@/shared/lib/toast';
 import { routes, useNavigation } from '@/shared/navigation';
 import { useTheme } from '@/shared/theme';
 
+import {
+  cancellationErrorCode,
+  useCancelAppointment,
+} from '../../../hooks/use-appointment-cancellation';
+import { CancelAppointmentDrawer } from '../../cancel-appointment-drawer';
+
 export type AppointmentCardColors = 'blue' | 'green' | 'orange';
 
 interface AppointmentCardProps {
@@ -38,6 +34,13 @@ interface AppointmentCardProps {
   isPast?: boolean;
 }
 
+/** Refusals the backend can answer a cancellation with, and how each is worded. */
+const CANCEL_ERROR_KEYS: Record<string, string> = {
+  APPOINTMENT_ALREADY_STARTED: 'appointments:cancel.errorAlreadyStarted',
+  APPOINTMENT_NOT_CANCELLABLE: 'appointments:cancel.errorNotCancellable',
+  APPOINTMENT_NOT_FOUND: 'appointments:cancel.errorNotFound',
+};
+
 export const AppointmentCard: FC<AppointmentCardProps> = ({
   color = 'blue',
   doctorName,
@@ -50,26 +53,11 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const { navigate } = useNavigation();
   const { showToast } = useToast();
+  const { cancelAppointment, isCancelling } = useCancelAppointment();
 
-  const cancelAppointmentMutation = useMutation({
-    mutationFn: () => misApi.appointmentsDelete(appointmentId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appointments-history'] });
-      showToast({
-        type: 'success',
-        message: t('appointments:cancelSuccess'),
-      });
-    },
-    onError: () => {
-      showToast({
-        type: 'error',
-        message: t('appointments:cancelError'),
-      });
-    },
-  });
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
   const backgrounds = {
     blue: colors.blue['100'],
@@ -91,35 +79,35 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 
   const isTelemedicine = appointmentType === 'telemedicine';
 
-  const onCancelAppointment = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [t('appointments:cancelAppointment'), t('common:cancel')],
-          destructiveButtonIndex: 0,
-        },
-        buttonIndex => {
-          if (buttonIndex === 0) {
-            cancelAppointmentMutation.mutate();
-          }
-        },
-      );
-    } else {
-      Alert.alert(
-        t('appointments:cancelAppointment'),
-        t('appointments:cancelConfirm'),
-        [
-          {
-            text: t('common:cancel'),
-            style: 'cancel',
-          },
-          {
-            text: t('appointments:cancelAppointment'),
-            style: 'destructive',
-            onPress: () => cancelAppointmentMutation.mutate(),
-          },
-        ],
-      );
+  /**
+   * The refund is only queued server-side, so the toast reports what was actually agreed
+   * — the sum coming back — rather than claiming the money has already arrived.
+   */
+  const confirmCancel = async () => {
+    try {
+      const result = await cancelAppointment(appointmentId);
+
+      showToast({
+        type: 'success',
+        message: result.refund
+          ? t('appointments:cancel.successWithRefund', {
+              amount: Math.round(result.refund.amount),
+            })
+          : t('appointments:cancelSuccess'),
+      });
+
+      setIsConfirmVisible(false);
+    } catch (error) {
+      // The backend refuses before touching anything, so the visit is still booked and
+      // the reason is worth showing instead of a generic failure.
+      const key = CANCEL_ERROR_KEYS[cancellationErrorCode(error) ?? ''];
+
+      showToast({
+        type: 'error',
+        message: key ? t(key) : t('appointments:cancelError'),
+      });
+
+      if (key) setIsConfirmVisible(false);
     }
   };
 
@@ -135,7 +123,9 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
       {!isPast && (
         <TouchableOpacity
           style={styles.moreButton}
-          onPress={onCancelAppointment}
+          onPress={() => setIsConfirmVisible(true)}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityLabel={t('appointments:cancelAppointment')}
         >
           <ThreeDotsIcon color={moreButtonColor[color]} />
         </TouchableOpacity>
@@ -199,6 +189,14 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
           </Text>
         </View>
       </View>
+
+      <CancelAppointmentDrawer
+        visible={isConfirmVisible}
+        onClose={() => setIsConfirmVisible(false)}
+        onConfirm={confirmCancel}
+        appointmentId={appointmentId}
+        isCancelling={isCancelling}
+      />
     </TouchableOpacity>
   );
 };

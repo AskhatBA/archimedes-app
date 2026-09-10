@@ -410,6 +410,11 @@ export interface InsuranceProgram {
    * @example "2025-12-31"
    */
   dateEnd: string;
+  /**
+   * The program that carries the patient's medical account (медсчёт)
+   * @example false
+   */
+  isMedAccount: boolean;
 }
 
 export interface InsuranceProgramsResponse {
@@ -694,6 +699,19 @@ export interface MedicServiceItem {
   service: string;
   /** @example 12000 */
   price: number;
+}
+
+export interface ServicePrice {
+  /**
+   * Full price of the service, in KZT
+   * @example 9500
+   */
+  price: number;
+  /**
+   * Price when paid from the medical account (медсчёт), in KZT. `null` when the insurer has no such price for the service — the full `price` applies.
+   * @example 8075
+   */
+  priceMedAccount: number | null;
 }
 
 export interface PayProgramItem {

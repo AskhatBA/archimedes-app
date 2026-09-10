@@ -206,6 +206,23 @@
     "cancelConfirm": "Are you sure?",
     "cancelSuccess": "Appointment cancelled successfully",
     "cancelError": "Couldn't cancel the appointment. Please try again",
+    "cancel": {
+      "title": "Cancel this appointment?",
+      "keep": "Keep appointment",
+      "confirm": "Cancel appointment",
+      "programDescription": "This visit is covered by your insurance programme — nothing was charged. The slot is freed up and you can book again.",
+      "fullDescription": "Cancelling is free: until {{date}} the full amount is refunded.",
+      "lateDescription": "Less than 12 hours are left before the visit, so a {{percent}}% compensation is kept.",
+      "paidLabel": "Paid",
+      "feeLabel": "Compensation {{percent}}%",
+      "refundLabel": "Refund",
+      "refundNote": "The money goes back to the card it was paid with. It can take a few business days to arrive.",
+      "successWithRefund": "Appointment cancelled. {{amount}} ₸ will be refunded",
+      "errorAlreadyStarted": "The visit has already started — only the front desk can cancel it now",
+      "errorNotCancellable": "This appointment is already cancelled or completed",
+      "errorNotFound": "Appointment not found",
+      "errorPreview": "Could not work out the refund. Please try again"
+    },
     "statuses": {
       "pending": "Pending",
       "processing": "Processing",

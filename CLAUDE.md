@@ -57,6 +57,59 @@ to the provider, and the reason is surfaced in the toast. The top-up itself is r
 the backend when the payment settles, so it lands even if the app is closed on the
 provider's page.
 
+### Cancelling an appointment
+
+Every appointment list on screen is proxied live from MIS, so what the app holds is a MIS
+id, not ours. Both cancellation endpoints accept either, which is why nothing here has to
+resolve one into the other.
+
+The entry points are the ⋯ button on `AppointmentCard` and a destructive button at the
+bottom of `AppointmentDetailsScreen` (shown only for a future visit in a live MIS status —
+the backend refuses the rest anyway, and offering a button that cannot work is worse than
+not offering it). Both open `CancelAppointmentDrawer`.
+
+The drawer is a sheet rather than an alert because of the money. Cancelling a paid visit at
+least 12 hours ahead refunds everything; later than that the clinic keeps 30%, and the
+patient has to see which of the two applies **before** tapping, not in the receipt
+afterwards. The figures are never computed on the device: the split moves with the clock, so
+opening the sheet reads `GET /appointments/{id}/cancellation` (`useCancellationPreview`,
+`staleTime: 0`) and renders the backend's own `paidAmount` / `feeAmount` / `amount`. A visit
+booked through an insurance programme comes back with `refund: null` and gets a plain
+confirmation — the insurer paid, so there is nothing to return.
+
+Keeping the appointment is the primary button and cancelling is a plain text action, the
+same stance as `CancelPaymentDrawer`: the sheet makes a destructive tap deliberate rather
+than pushing it.
+
+`useCancelAppointment` calls `PATCH /appointments/{id}/cancel`. Two things shape how the
+result is worded:
+
+- The backend removes the visit in MIS **first**, so a rejection means nothing changed —
+  the visit is still booked and no money moved. `APPOINTMENT_ALREADY_STARTED`,
+  `APPOINTMENT_NOT_CANCELLABLE` and `APPOINTMENT_NOT_FOUND` arrive as
+  `response.data.message` (read with `cancellationErrorCode`) and each gets its own
+  wording — a patient told "try again" about a visit that has already started will just
+  try again.
+- The refund comes back `PENDING`, because it is only *queued* for FreedomPay. The toast
+  therefore reports the sum agreed, not money that has arrived, and the sheet says
+  crediting takes a few business days.
+
+`appointmentApi` (`src/api/appointment-api.ts`) is hand-written for the same reason as
+`payment-api.ts`: the generated `Appointments` client needs `npm run generate-api` against a
+running backend and is not wired into `api.ts` at all. Re-running the generator makes it
+redundant.
+
+### Med-account visit price
+
+The booking form shows a price for a paid visit (`/insurance/medic-service`) and for a
+visit under the programme flagged `isMedAccount` — that one is paid from the медсчёт, while
+every other programme is paid by the insurer and shows none. For the med-account visit
+`useServicePrice` reads `GET /insurance/service-price` with the branch's `externalId` and
+the medic-service `oid`, and `AppointmentPrice` strikes the full `price` out next to
+`priceMedAccount` when the latter is set, or shows the full price alone when it is `null`
+(the backend folds an empty or zero one into `null`). The price is informational: nothing
+is charged in the app, so unlike a paid visit's it does not gate booking.
+
 ### API layer (`src/api/`)
 
 All API clients are **auto-generated** from Swagger via `npm run generate-api` (hits `localhost:4000/api-docs.json` and writes to `src/api/generated/`). Never hand-edit files in `src/api/generated/`.

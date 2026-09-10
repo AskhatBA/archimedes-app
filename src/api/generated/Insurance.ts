@@ -29,6 +29,7 @@ import {
   PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
+  ServicePrice,
   UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
 import { ContentType, HttpClient, RequestParams } from './http-client';
@@ -727,6 +728,54 @@ export class Insurance<SecurityDataType = unknown> extends HttpClient<SecurityDa
       void
     >({
       path: `/insurance/medic-service`,
+      method: 'GET',
+      query: query,
+      secure: true,
+      format: 'json',
+      ...params,
+    });
+  /**
+ * @description Proxies the insurance API's `/v3/getServicePrice`. The app shows it for a visit booked under the program flagged `isMedAccount`: the full `price` struck out next to `priceMedAccount` when the latter is set, the full `price` alone otherwise. An empty or zero `priceMedAccount` comes back as `null`, and a service with no price at that clinic comes back as `servicePrice: null`.
+ *
+ * @tags Insurance
+ * @name ServicePriceList
+ * @summary Get the price of a service at a clinic, with its medical-account price
+ * @request GET:/insurance/service-price
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    servicePrice?: (ServicePrice | null),
+
+}` Response
+ * @response `400` `void` clinicId or serviceId is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+ */
+  servicePriceList = (
+    query: {
+      /**
+       * Clinic OID (from getClinicsMO — the branch's externalId)
+       * @format uuid
+       */
+      clinicId: string;
+      /**
+       * Service OID (`oid` from /insurance/medic-service)
+       * @format uuid
+       */
+      serviceId: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        /** @example true */
+        success?: boolean;
+        servicePrice?: ServicePrice | null;
+      },
+      void
+    >({
+      path: `/insurance/service-price`,
       method: 'GET',
       query: query,
       secure: true,

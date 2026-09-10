@@ -18,6 +18,7 @@ import {
   MISAvailableSlots,
   MedicServiceItem,
   InsuranceProgram,
+  ServicePrice,
   misApi,
   paymentApi,
 } from '@/api';
@@ -26,6 +27,7 @@ import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
+import { useServicePrice } from '@/modules/insurance/hooks/use-service-price';
 import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
@@ -58,6 +60,10 @@ interface CreateAppointmentContextProps {
   loadingPrograms: boolean;
   /** No programme selected — the visit is paid for per booking. */
   isPaidVisit: boolean;
+  /** Booked under the `isMedAccount` programme — the visit is paid from the медсчёт. */
+  isMedAccountVisit: boolean;
+  /** The insurer's price for a med-account visit; `null` for any other visit. */
+  servicePrice: ServicePrice | null;
   /** Reopens the programme / paid choice so the patient can switch. */
   openProgramChoice: () => void;
   isBookingEnabled: boolean;
@@ -76,6 +82,8 @@ const initialValues: CreateAppointmentContextProps = {
   availablePrograms: [],
   loadingPrograms: false,
   isPaidVisit: false,
+  isMedAccountVisit: false,
+  servicePrice: null,
   openProgramChoice: () => {},
   isBookingEnabled: false,
   bookAppointment: () => {},
@@ -152,6 +160,21 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
    * same flow a patient without any programme goes through.
    */
   const isPaidVisit = !loadingPrograms && !formValues.programId;
+
+  /**
+   * The medical-account programme is the one programme whose visit still has a price for
+   * the patient: it is paid from the медсчёт, at the insurer's med-account price for the
+   * doctor's service. Every other programme is paid by the insurer and shows none.
+   */
+  const isMedAccountVisit = !!availablePrograms.find(
+    program => program.id === formValues.programId,
+  )?.isMedAccount;
+
+  const { servicePrice } = useServicePrice(
+    branchExternalId,
+    medicService?.oid,
+    isMedAccountVisit,
+  );
 
   // A patient with programmes answers the choice before touching the form; one without
   // has nothing to choose, so their visit is paid from the start.
@@ -409,6 +432,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       availablePrograms,
       loadingPrograms,
       isPaidVisit,
+      isMedAccountVisit,
+      // A disabled query still hands back its cache, so without this the med-account
+      // price would outlive switching to another programme or to a paid visit.
+      servicePrice: isMedAccountVisit ? servicePrice : null,
       openProgramChoice,
       isBookingEnabled,
       bookAppointment,
@@ -428,6 +455,8 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       availablePrograms,
       loadingPrograms,
       isPaidVisit,
+      isMedAccountVisit,
+      servicePrice,
       isBookingEnabled,
     ],
   );

@@ -29,6 +29,7 @@ import {
   PriceListItem,
   QrAppointmentItem,
   RefundRequestBody,
+  ServicePrice,
   UpdateElectronicReferralServiceStatusBody,
 } from './data-contracts';
 
@@ -624,6 +625,46 @@ export namespace Insurance {
       /** @example true */
       success?: boolean;
       medicService?: MedicServiceItem;
+    };
+  }
+
+  /**
+ * @description Proxies the insurance API's `/v3/getServicePrice`. The app shows it for a visit booked under the program flagged `isMedAccount`: the full `price` struck out next to `priceMedAccount` when the latter is set, the full `price` alone otherwise. An empty or zero `priceMedAccount` comes back as `null`, and a service with no price at that clinic comes back as `servicePrice: null`.
+ * @tags Insurance
+ * @name ServicePriceList
+ * @summary Get the price of a service at a clinic, with its medical-account price
+ * @request GET:/insurance/service-price
+ * @secure
+ * @response `200` `{
+  \** @example true *\
+    success?: boolean,
+    servicePrice?: (ServicePrice | null),
+
+}` Response
+ * @response `400` `void` clinicId or serviceId is required
+ * @response `401` `void` Unauthorized
+ * @response `404` `void` Insurance not found in MIS
+*/
+  export namespace ServicePriceList {
+    export type RequestParams = {};
+    export type RequestQuery = {
+      /**
+       * Clinic OID (from getClinicsMO — the branch's externalId)
+       * @format uuid
+       */
+      clinicId: string;
+      /**
+       * Service OID (`oid` from /insurance/medic-service)
+       * @format uuid
+       */
+      serviceId: string;
+    };
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = {
+      /** @example true */
+      success?: boolean;
+      servicePrice?: ServicePrice | null;
     };
   }
 

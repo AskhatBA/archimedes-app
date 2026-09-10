@@ -1,3 +1,4 @@
+import { AppointmentApi } from './appointment-api';
 import { apiConfig } from './config';
 import { App } from './generated/App';
 import { Auth } from './generated/Auth';
@@ -24,6 +25,7 @@ const notificationsApi = new Notifications(apiConfig);
 const userApi = new User(apiConfig);
 const appApi = new App(apiConfig);
 const paymentApi = new PaymentApi(apiConfig);
+const appointmentApi = new AppointmentApi(apiConfig);
 const programOrdersApi = new ProgramOrders(apiConfig);
 
 export {
@@ -38,6 +40,7 @@ export {
   userApi,
   appApi,
   paymentApi,
+  appointmentApi,
   programOrdersApi,
 };
 
@@ -52,6 +55,7 @@ const notificationsUtils = new AuthUtils(notificationsApi);
 const userUtils = new AuthUtils(userApi);
 const appUtils = new AuthUtils(appApi);
 const paymentUtils = new AuthUtils(paymentApi);
+const appointmentUtils = new AuthUtils(appointmentApi);
 const programOrdersUtils = new AuthUtils(programOrdersApi);
 
 export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
@@ -66,6 +70,7 @@ export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   userUtils.setUnauthorizedErrorHandler(handlers);
   appUtils.setUnauthorizedErrorHandler(handlers);
   paymentUtils.setUnauthorizedErrorHandler(handlers);
+  appointmentUtils.setUnauthorizedErrorHandler(handlers);
   programOrdersUtils.setUnauthorizedErrorHandler(handlers);
 };
 
@@ -80,4 +85,5 @@ notificationsUtils.initToken();
 userUtils.initToken();
 appUtils.initToken();
 paymentUtils.initToken();
+appointmentUtils.initToken();
 programOrdersUtils.initToken();

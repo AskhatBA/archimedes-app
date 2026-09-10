@@ -11,14 +11,50 @@ import { createAppointmentFormStyles } from './styles';
 
 /**
  * Приём по страховой программе оплачивает страховая, поэтому цена показывается
- * только тогда, когда запись оформляется платно — то есть без выбранной программы.
+ * только тогда, когда запись оформляется платно — то есть без выбранной программы, —
+ * или по программе медсчёта (`isMedAccount`): такой приём списывается с медсчёта по
+ * цене страховой. Если у услуги есть цена по медсчёту, полная цена зачёркивается
+ * рядом с ней, иначе показывается одна полная.
  */
 export const AppointmentPrice: FC = () => {
-  const { t } = useTranslation();
-  const { formValues, medicService, isPaidVisit } = useCreateAppointment();
+  const {
+    formValues,
+    medicService,
+    isPaidVisit,
+    isMedAccountVisit,
+    servicePrice,
+  } = useCreateAppointment();
 
-  if (!isPaidVisit) return null;
   if (!formValues.doctorId || !medicService) return null;
+
+  if (isPaidVisit) {
+    return (
+      <PriceCard service={medicService.service} price={medicService.price} />
+    );
+  }
+
+  if (isMedAccountVisit && servicePrice) {
+    return (
+      <PriceCard
+        service={medicService.service}
+        price={servicePrice.price}
+        discountedPrice={servicePrice.priceMedAccount}
+      />
+    );
+  }
+
+  return null;
+};
+
+const PriceCard: FC<{
+  service: string;
+  price: number;
+  /** Цена со скидкой; полная цена показывается зачёркнутой рядом с ней. */
+  discountedPrice?: number | null;
+}> = ({ service, price, discountedPrice }) => {
+  const { t } = useTranslation();
+
+  const hasDiscount = discountedPrice != null && discountedPrice > 0;
 
   return (
     <View>
@@ -32,9 +68,16 @@ export const AppointmentPrice: FC = () => {
       </Text>
       <View style={styles.card}>
         <Text style={styles.service} numberOfLines={2}>
-          {medicService.service}
+          {service}
         </Text>
-        <Text style={styles.price}>{formatPrice(medicService.price)}</Text>
+        {hasDiscount ? (
+          <View style={styles.prices}>
+            <Text style={styles.fullPrice}>{formatPrice(price)}</Text>
+            <Text style={styles.price}>{formatPrice(discountedPrice)}</Text>
+          </View>
+        ) : (
+          <Text style={styles.price}>{formatPrice(price)}</Text>
+        )}
       </View>
     </View>
   );
@@ -59,6 +102,16 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: fonts.SFPro.Regular,
     color: colors.textMain,
+  },
+  prices: {
+    alignItems: 'flex-end',
+  },
+  fullPrice: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontFamily: fonts.SFPro.Regular,
+    color: colors.gray['500'],
+    textDecorationLine: 'line-through',
   },
   price: {
     fontSize: 17,

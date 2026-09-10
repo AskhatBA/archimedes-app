@@ -8,3 +8,11 @@ export type {
   PaymentRecord,
   PendingPayment,
 } from './payment-api';
+export { APPOINTMENT_CANCELLATION_ERRORS } from './appointment-api';
+export type {
+  AppointmentCancellationPreview,
+  AppointmentCancellationResult,
+  AppointmentRefund,
+  AppointmentRefundPlan,
+  AppointmentRefundStatus,
+} from './appointment-api';
