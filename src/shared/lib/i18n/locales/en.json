@@ -151,6 +151,8 @@
     "noActivePrograms": "No active programs",
     "connectProgram": "Connect",
     "programValidUntil": "Valid until {{date}}",
+    "programBalance": "Balance: {{amount}}",
+    "programBalanceUnavailable": "Balance unavailable",
     "extraPrograms_one": "and {{count}} more program",
     "extraPrograms_other": "and {{count}} more programs",
     "bookAppointment": "Book an appointment",
@@ -246,6 +248,8 @@
         "programsSection": "Under an insurance programme",
         "paidSection": "Without a programme",
         "validUntil": "Valid until {{date}}",
+        "balance": "Balance: {{amount}}",
+        "balanceUnavailable": "Balance unavailable",
         "paidTitle": "Paid appointment",
         "paidSubtitle": "Charged at the clinic's price list",
         "submit": "Continue",
@@ -268,6 +272,7 @@
       "errorTooLate": "You cannot book less than 1 hour before the appointment",
       "errorPaymentInit": "Could not open the payment page. Please try again",
       "errorPaymentFailed": "The payment did not go through, the appointment was not booked",
+      "errorInsuranceLimitExceeded": "Your insurance programme's limit does not cover this service. Choose another programme or book a paid appointment",
       "success": {
         "title": "Appointment booked with",
         "subtitle": "Our call center will contact you to confirm",
@@ -288,6 +293,26 @@
         "agree": "I agree to the terms of the public offer",
         "submit": "Confirm and agree"
       }
+    },
+    "bookingHistory": {
+      "status": {
+        "SCHEDULED": "Scheduled",
+        "PAST": "Time has passed",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled"
+      },
+      "unknownDoctor": "Doctor not specified",
+      "online": "Online consultation",
+      "familyMember": "Booked for a family member",
+      "paid": "Paid by card: {{amount}}",
+      "program": "Covered by insurance programme",
+      "refund": {
+        "PENDING": "Refund of {{amount}} is being processed",
+        "COMPLETED": "Refund of {{amount}} sent to your card",
+        "FAILED": "Refund of {{amount}} is delayed — please contact the call centre"
+      },
+      "emptySubtitle": "Visits you book in the app will appear here",
+      "error": "Could not load the history. Pull down to refresh"
     }
   },
   "compensation": {
@@ -359,6 +384,8 @@
       "eyebrow": "Program",
       "cardNumber": "Card №",
       "activeUntil": "Active until",
+      "balance": "Balance",
+      "balanceUnavailable": "Unavailable",
       "details": "Details"
     },
     "details": {

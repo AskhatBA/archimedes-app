@@ -50,6 +50,34 @@ export interface AppointmentCancellationResult {
   refund: AppointmentRefund | null;
 }
 
+/** Our own status of a visit, kept in step with MIS by the backend's status sweep. */
+export type AppointmentHistoryStatus = 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+
+/** One visit in the patient's booking history — a row of our table, not the MIS proxy. */
+export interface AppointmentHistoryItem {
+  id: string;
+  /** MIS id the visit is known by. */
+  externalId: string;
+  dateTime: string;
+  status: AppointmentHistoryStatus;
+  isTelemedicine: boolean;
+  /** Doctor and branch are resolved from MIS and come back `null` when it is down. */
+  doctorName: string | null;
+  doctorSpecialty: string | null;
+  branchName: string | null;
+  branchAddress: string | null;
+  isForFamilyMember: boolean;
+  /** What was paid by card; `null` for a visit covered by an insurance programme. */
+  paidAmount: number | null;
+  /** Set for a cancelled paid visit. */
+  refund: Pick<
+    AppointmentRefund,
+    'amount' | 'feeAmount' | 'status' | 'refundedAt'
+  > | null;
+  cancelledAt: string | null;
+  createdAt: string;
+}
+
 /**
  * Backend error codes this flow can come back with, as `response.data.message`.
  *
@@ -70,10 +98,25 @@ export const APPOINTMENT_CANCELLATION_ERRORS = {
  * running, and it is not wired into `api.ts` at all — the app talks to the MIS proxy
  * routes instead. Re-running the generator makes this file redundant.
  *
- * Both endpoints accept **either** our appointment id or the MIS id the app knows the
+ * The cancellation endpoints accept **either** our appointment id or the MIS id the app knows the
  * visit by, which matters because every list on screen is proxied live from MIS.
  */
 export class AppointmentApi extends HttpClient {
+  /**
+   * Every visit booked through the app, newest first, cancelled ones included — read from
+   * our own table, so it survives what MIS forgets.
+   */
+  historyList = () =>
+    this.request<
+      { success: boolean; appointments: AppointmentHistoryItem[] },
+      void
+    >({
+      path: '/appointments/history',
+      method: 'GET',
+      secure: true,
+      format: 'json',
+    });
+
   /**
    * What cancelling would cost, without cancelling anything.
    *

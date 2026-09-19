@@ -99,16 +99,41 @@ result is worded:
 running backend and is not wired into `api.ts` at all. Re-running the generator makes it
 redundant.
 
+### Appointment history
+
+"История записей" (`AppointmentHistoryScreen`, opened from the appointments tab) lists our
+own backend's rows — `GET /appointments/history` via `appointmentApi.historyList`
+(`useBookingHistory`, rendered by `BookingHistory` / `BookingHistoryCard`) — not the MIS
+proxy the upcoming list and the profile's completed-visits block still use. So it shows
+cancelled visits, what was paid and where the refund is. The cards are read-only: the row's
+`externalId` can be a MIS booking *request*, which `AppointmentDetails` cannot open. A
+`SCHEDULED` visit whose time has passed is badged "Время прошло", since the backend's status
+sweep stops re-checking old rows. A cancellation invalidates `GET_BOOKING_HISTORY_QUERY`.
+
 ### Med-account visit price
 
-The booking form shows a price for a paid visit (`/insurance/medic-service`) and for a
-visit under the programme flagged `isMedAccount` — that one is paid from the медсчёт, while
-every other programme is paid by the insurer and shows none. For the med-account visit
-`useServicePrice` reads `GET /insurance/service-price` with the branch's `externalId` and
-the medic-service `oid`, and `AppointmentPrice` strikes the full `price` out next to
+The booking form shows a price for a paid visit and for a visit under the programme flagged
+`isMedAccount` — that one is paid from the медсчёт, while every other programme is paid by
+the insurer and shows none. Both read the med-account discount from
+`GET /insurance/service-price` (`useServicePrice`, with the branch's `externalId` and the
+medic-service `oid`), and `AppointmentPrice` strikes the full price out next to
 `priceMedAccount` when the latter is set, or shows the full price alone when it is `null`
-(the backend folds an empty or zero one into `null`). The price is informational: nothing
-is charged in the app, so unlike a paid visit's it does not gate booking.
+(the backend folds an empty or zero one into `null`). The full price is the insurer's
+`price` for a med-account visit and the doctor's `/insurance/medic-service` price for a paid
+one; the two agree in practice.
+
+The card renders `visitPrice` from `CreateAppointmentContext`, and a paid visit is charged
+exactly that — `discountedPrice ?? price` — so the patient never pays other than what they
+were shown. The paid booking button therefore waits for the discount lookup to settle, and
+a failed lookup costs the patient the discount, never the booking. A med-account visit is
+charged nothing in the app, so its price does not gate booking.
+
+Wherever a programme is listed — `ProgramCard` on the programmes tab, `ProgramChoiceModal`
+and the selected-programme card in the booking form, the programme tile in the home
+`ProfileCard` — the `isMedAccount` one shows the медсчёт balance (`useMedAccount`,
+`formatBalance`) in place of its card number and end date. Those screens pass
+`useMedAccount({ enabled })` so the balance is only requested when such a programme is
+actually on screen.
 
 ### API layer (`src/api/`)
 

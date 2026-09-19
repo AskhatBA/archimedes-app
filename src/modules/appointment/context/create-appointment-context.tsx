@@ -18,7 +18,6 @@ import {
   MISAvailableSlots,
   MedicServiceItem,
   InsuranceProgram,
-  ServicePrice,
   misApi,
   paymentApi,
 } from '@/api';
@@ -27,7 +26,10 @@ import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
-import { useServicePrice } from '@/modules/insurance/hooks/use-service-price';
+import {
+  discountedPriceOf,
+  useServicePrice,
+} from '@/modules/insurance/hooks/use-service-price';
 import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
@@ -40,7 +42,13 @@ import { routes } from '@/shared/navigation/routes';
 
 import { ProgramChoiceModal } from '../components/program-choice-modal';
 import { PublicOfferDrawer } from '../components/public-offer-drawer';
-import { CreateAppointmentForm } from '../types';
+import { CreateAppointmentForm, VisitPrice } from '../types';
+
+/** Backend codes the booking form has its own wording for, instead of showing the code. */
+const CREATE_ERROR_KEYS: Record<string, string> = {
+  MIS_INSURANCE_LIMIT_EXCEEDED: 'appointments:create.errorInsuranceLimitExceeded',
+  UNKNOWN_ERROR: 'appointments:create.errorUnknown',
+};
 
 const FORM_INITIAL_VALUES: CreateAppointmentForm = {
   date: formatDate(new Date()),
@@ -62,8 +70,11 @@ interface CreateAppointmentContextProps {
   isPaidVisit: boolean;
   /** Booked under the `isMedAccount` programme — the visit is paid from the медсчёт. */
   isMedAccountVisit: boolean;
-  /** The insurer's price for a med-account visit; `null` for any other visit. */
-  servicePrice: ServicePrice | null;
+  /**
+   * What the price card shows and a paid visit is charged. `null` until it is known, and
+   * for a visit under a programme the insurer pays for.
+   */
+  visitPrice: VisitPrice | null;
   /** Reopens the programme / paid choice so the patient can switch. */
   openProgramChoice: () => void;
   isBookingEnabled: boolean;
@@ -83,7 +94,7 @@ const initialValues: CreateAppointmentContextProps = {
   loadingPrograms: false,
   isPaidVisit: false,
   isMedAccountVisit: false,
-  servicePrice: null,
+  visitPrice: null,
   openProgramChoice: () => {},
   isBookingEnabled: false,
   bookAppointment: () => {},
@@ -170,11 +181,48 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     program => program.id === formValues.programId,
   )?.isMedAccount;
 
-  const { servicePrice } = useServicePrice(
+  // A paid visit shows the same med-account discount, so it reads the same price.
+  const { servicePrice, isLoading: loadingServicePrice } = useServicePrice(
     branchExternalId,
     medicService?.oid,
-    isMedAccountVisit,
+    isPaidVisit || isMedAccountVisit,
   );
+
+  /**
+   * One value for the price card and for what a paid visit is charged, so the patient is
+   * never charged anything but what they were shown.
+   *
+   * A paid visit costs the doctor's own price, less the med-account discount when the
+   * insurer gives one for the service. It waits for that lookup to settle, and a failed
+   * one costs the patient the discount, never the booking. A med-account visit shows the
+   * insurer's price for the service. Any other programme is paid by the insurer.
+   */
+  const visitPrice = useMemo((): VisitPrice | null => {
+    if (!medicService) return null;
+
+    if (isPaidVisit) {
+      if (loadingServicePrice) return null;
+      return {
+        price: medicService.price,
+        discountedPrice: discountedPriceOf(servicePrice),
+      };
+    }
+
+    if (isMedAccountVisit && servicePrice) {
+      return {
+        price: servicePrice.price,
+        discountedPrice: discountedPriceOf(servicePrice),
+      };
+    }
+
+    return null;
+  }, [
+    medicService,
+    isPaidVisit,
+    isMedAccountVisit,
+    loadingServicePrice,
+    servicePrice,
+  ]);
 
   // A patient with programmes answers the choice before touching the form; one without
   // has nothing to choose, so their visit is paid from the start.
@@ -205,8 +253,9 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     !!formValues.doctorId &&
     !!formValues.timeSlot &&
     (!hasPrograms || isProgramChosen) &&
-    // A paid visit cannot be sent to checkout before the price is known.
-    (!isPaidVisit || !!medicService);
+    // A paid visit cannot be sent to checkout before the price is known — including
+    // whether the discount applies, or the patient would be charged the full price.
+    (!isPaidVisit || !!visitPrice);
 
   const resetFormValues = () => {
     setFormValues(FORM_INITIAL_VALUES);
@@ -240,6 +289,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         endTime,
         insuranceProgramId: payload.programId,
         isTelemedicine: payload.isTelemedicine,
+        medicServiceOid: medicService?.oid,
       });
     },
     onSuccess: async (_data, variables) => {
@@ -257,6 +307,11 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       setSuccess(true);
     },
     onError: (error: any) => {
+      const key = CREATE_ERROR_KEYS[error.response?.data?.message ?? ''];
+      if (key) {
+        showToast({ type: 'error', message: t(key) });
+        return;
+      }
       if (error.response?.data?.message) {
         console.log('error.response.data.message', error.response.data.message);
         showToast({
@@ -282,14 +337,14 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
    */
   const initAppointmentPaymentMutation = useMutation({
     mutationFn: async (payload: CreateAppointmentForm) => {
-      if (!medicService) {
+      if (!medicService || !visitPrice) {
         throw new Error('Missing appointment price');
       }
 
       const { startTime, endTime } = slotTimesOf(payload);
 
       const { data } = await paymentApi.initCreate({
-        amount: medicService.price,
+        amount: visitPrice.discountedPrice ?? visitPrice.price,
         description: medicService.service,
         purpose: 'APPOINTMENT',
         metadata: {
@@ -299,6 +354,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
           endTime,
           isTelemedicine: !!payload.isTelemedicine,
           ...(payload.patientId ? { familyMemberId: payload.patientId } : {}),
+          medicServiceOid: medicService.oid,
           // Display-only: MIS knows nothing about this visit until the payment settles,
           // so the app carries what it needs to describe it in the meantime.
           doctorName: doctorDetails?.name,
@@ -433,9 +489,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       loadingPrograms,
       isPaidVisit,
       isMedAccountVisit,
-      // A disabled query still hands back its cache, so without this the med-account
-      // price would outlive switching to another programme or to a paid visit.
-      servicePrice: isMedAccountVisit ? servicePrice : null,
+      visitPrice,
       openProgramChoice,
       isBookingEnabled,
       bookAppointment,
@@ -456,7 +510,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
       loadingPrograms,
       isPaidVisit,
       isMedAccountVisit,
-      servicePrice,
+      visitPrice,
       isBookingEnabled,
     ],
   );

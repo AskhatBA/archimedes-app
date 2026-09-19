@@ -30,6 +30,8 @@ jest.mock('@react-navigation/native', () => ({
 jest.mock('@/modules/insurance', () => ({
   useMedAccount: jest.requireActual('@/modules/insurance/hooks/use-med-account')
     .useMedAccount,
+  formatBalance: jest.requireActual('@/modules/insurance/lib/format-balance')
+    .formatBalance,
 }));
 
 jest.mock('@/shared/icons', () => ({

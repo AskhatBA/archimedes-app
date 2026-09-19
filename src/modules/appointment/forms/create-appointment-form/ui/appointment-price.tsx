@@ -14,47 +14,31 @@ import { createAppointmentFormStyles } from './styles';
  * только тогда, когда запись оформляется платно — то есть без выбранной программы, —
  * или по программе медсчёта (`isMedAccount`): такой приём списывается с медсчёта по
  * цене страховой. Если у услуги есть цена по медсчёту, полная цена зачёркивается
- * рядом с ней, иначе показывается одна полная.
+ * рядом с ней — и у платного приёма тоже, который тогда по ней и оплачивается, —
+ * иначе показывается одна полная. Что показывать, решает контекст (`visitPrice`):
+ * из того же значения берётся сумма оплаты.
  */
 export const AppointmentPrice: FC = () => {
-  const {
-    formValues,
-    medicService,
-    isPaidVisit,
-    isMedAccountVisit,
-    servicePrice,
-  } = useCreateAppointment();
+  const { formValues, medicService, visitPrice } = useCreateAppointment();
 
-  if (!formValues.doctorId || !medicService) return null;
+  if (!formValues.doctorId || !medicService || !visitPrice) return null;
 
-  if (isPaidVisit) {
-    return (
-      <PriceCard service={medicService.service} price={medicService.price} />
-    );
-  }
-
-  if (isMedAccountVisit && servicePrice) {
-    return (
-      <PriceCard
-        service={medicService.service}
-        price={servicePrice.price}
-        discountedPrice={servicePrice.priceMedAccount}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <PriceCard
+      service={medicService.service}
+      price={visitPrice.price}
+      discountedPrice={visitPrice.discountedPrice}
+    />
+  );
 };
 
 const PriceCard: FC<{
   service: string;
   price: number;
   /** Цена со скидкой; полная цена показывается зачёркнутой рядом с ней. */
-  discountedPrice?: number | null;
+  discountedPrice: number | null;
 }> = ({ service, price, discountedPrice }) => {
   const { t } = useTranslation();
-
-  const hasDiscount = discountedPrice != null && discountedPrice > 0;
 
   return (
     <View>
@@ -70,7 +54,7 @@ const PriceCard: FC<{
         <Text style={styles.service} numberOfLines={2}>
           {service}
         </Text>
-        {hasDiscount ? (
+        {discountedPrice !== null ? (
           <View style={styles.prices}>
             <Text style={styles.fullPrice}>{formatPrice(price)}</Text>
             <Text style={styles.price}>{formatPrice(discountedPrice)}</Text>

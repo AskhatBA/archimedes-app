@@ -5,7 +5,10 @@ import {
   AppointmentCancellationPreview,
   AppointmentCancellationResult,
 } from '@/api';
-import { GET_APPOINTMENT_DETAILS_QUERY } from '@/shared/constants';
+import {
+  GET_APPOINTMENT_DETAILS_QUERY,
+  GET_BOOKING_HISTORY_QUERY,
+} from '@/shared/constants';
 
 /** Backend error code carried in `response.data.message`, if this was an API refusal. */
 export const cancellationErrorCode = (error: unknown): string | undefined =>
@@ -64,6 +67,8 @@ export const useCancelAppointment = () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
       queryClient.invalidateQueries({ queryKey: ['appointments-history'] });
       queryClient.invalidateQueries({ queryKey: ['appointment-requests'] });
+      // The booking history is ours, and the row has just moved to CANCELLED with a refund.
+      queryClient.invalidateQueries({ queryKey: [GET_BOOKING_HISTORY_QUERY] });
       queryClient.invalidateQueries({
         queryKey: [GET_APPOINTMENT_DETAILS_QUERY, appointmentId],
       });

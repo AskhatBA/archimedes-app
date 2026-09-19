@@ -13,6 +13,7 @@ import { colors, fonts } from '@/shared/theme';
 
 import { AppointmentTypeSwitch } from '../../../components/appointment-type-switch';
 import { useCreateAppointment } from '../../../context/create-appointment-context';
+import { useMedAccountBalanceLabel } from '../../../hooks/use-med-account-balance-label';
 
 import { AppointmentPrice } from './appointment-price';
 import { ChooseBranch } from './choose-branch';
@@ -29,6 +30,7 @@ export const CreateAppointmentForm: FC = () => {
     isBooking,
     formValues,
     isPaidVisit,
+    isMedAccountVisit,
     availablePrograms,
     loadingPrograms,
     openProgramChoice,
@@ -36,10 +38,20 @@ export const CreateAppointmentForm: FC = () => {
   const { user } = useUser();
   const { family } = useFamily(formValues.programId);
   const { t } = useTranslation();
+  const medAccountBalance = useMedAccountBalanceLabel(isMedAccountVisit);
 
   const selectedProgram = availablePrograms.find(
     program => program.id === formValues.programId,
   );
+
+  const programSubtitle = () => {
+    if (!selectedProgram) {
+      return t('appointments:create.programChoice.paidSubtitle');
+    }
+    return selectedProgram.isMedAccount
+      ? medAccountBalance
+      : selectedProgram.cardNo;
+  };
 
   const availableSlotList = useMemo(
     () => Object.values(availableSlots || {}),
@@ -95,9 +107,7 @@ export const CreateAppointmentForm: FC = () => {
                   : t('appointments:create.programChoice.paidTitle')}
               </Text>
               <Text style={styles.programCardSubtitle} numberOfLines={1}>
-                {selectedProgram
-                  ? selectedProgram.cardNo
-                  : t('appointments:create.programChoice.paidSubtitle')}
+                {programSubtitle()}
               </Text>
             </View>
             <Text style={styles.programCardAction}>

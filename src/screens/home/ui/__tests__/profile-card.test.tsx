@@ -7,6 +7,12 @@ const mockNavigate = jest.fn();
 
 let mockPrograms: unknown[] = [];
 let mockAppointments: unknown[] = [];
+let mockMedAccount: { balance: number | null; isLoading: boolean } = {
+  balance: null,
+  isLoading: false,
+};
+/** Records what the card asked for — the balance is only read for a med-account programme. */
+const mockUseMedAccount = jest.fn();
 
 jest.mock('@/shared/icons', () => ({
   ClipboardListIcon: () => null,
@@ -71,6 +77,12 @@ jest.mock('@/modules/insurance', () => ({
     '@/modules/insurance/components/program-card/constants',
   ).levelColors,
   usePrograms: () => ({ programs: mockPrograms }),
+  useMedAccount: (options?: { enabled?: boolean }) => {
+    mockUseMedAccount(options);
+    return mockMedAccount;
+  },
+  formatBalance: jest.requireActual('@/modules/insurance/lib/format-balance')
+    .formatBalance,
 }));
 
 const program = (
@@ -78,6 +90,7 @@ const program = (
   cardNo: string,
   dateEnd: string,
   status = 'ACTIVE',
+  isMedAccount = false,
 ) => ({
   id: title,
   code: title,
@@ -86,6 +99,7 @@ const program = (
   dateEnd,
   dateStart: '',
   status,
+  isMedAccount,
 });
 
 const appointment = (
@@ -129,6 +143,8 @@ describe('ProfileCard stat cards', () => {
   beforeEach(() => {
     mockPrograms = [];
     mockAppointments = [];
+    mockMedAccount = { balance: null, isLoading: false };
+    mockUseMedAccount.mockClear();
     mockNavigate.mockClear();
   });
 
@@ -188,6 +204,37 @@ describe('ProfileCard stat cards', () => {
       'Ахметов Д. С.',
       'Клиника на Сейфуллина',
     ]);
+  });
+
+  it('shows the med-account balance instead of the card number and end date', () => {
+    mockPrograms = [
+      program('Медсчет', 'S134286014284810', '2027-08-02', 'ACTIVE', true),
+    ];
+    mockMedAccount = { balance: 12500, isLoading: false };
+
+    const texts = renderTexts();
+
+    expect(texts).toContain('Баланс: 12 500,00 ₸');
+    expect(texts).not.toContain('S134286014284810');
+    expect(texts).not.toContain('Действует до 02.08.2027');
+    expect(texts).toContain('Показать все');
+    expect(mockUseMedAccount).toHaveBeenLastCalledWith({ enabled: true });
+  });
+
+  it('says the balance is unavailable when the insurer did not serve one', () => {
+    mockPrograms = [
+      program('Медсчет', 'S134286014284810', '2027-08-02', 'ACTIVE', true),
+    ];
+
+    expect(renderTexts()).toContain('Баланс недоступен');
+  });
+
+  it('does not read the balance for an ordinary programme', () => {
+    mockPrograms = [program('Gold', 'S134286014284810', '2027-08-02')];
+
+    renderTexts();
+
+    expect(mockUseMedAccount).toHaveBeenLastCalledWith({ enabled: false });
   });
 
   it('falls back to empty states with CTAs', () => {

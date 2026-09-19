@@ -12,6 +12,8 @@ export { APPOINTMENT_CANCELLATION_ERRORS } from './appointment-api';
 export type {
   AppointmentCancellationPreview,
   AppointmentCancellationResult,
+  AppointmentHistoryItem,
+  AppointmentHistoryStatus,
   AppointmentRefund,
   AppointmentRefundPlan,
   AppointmentRefundStatus,

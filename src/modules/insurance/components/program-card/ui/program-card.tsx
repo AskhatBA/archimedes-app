@@ -1,26 +1,77 @@
 import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { CalendarIcon, ShieldPlusIcon } from '@/shared/icons';
+import { SkeletonElement } from '@/shared/components/skeleton-element';
+import { CalendarIcon, ShieldPlusIcon, WalletIcon } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
 import { fonts, useTheme } from '@/shared/theme';
 
+import { useMedAccount } from '../../../hooks/use-med-account';
+import { formatBalance } from '../../../lib/format-balance';
 import { levelColors } from '../constants';
+
+interface Palette {
+  background: string;
+  button: string;
+  text: string;
+}
 
 interface InsuranceCardProps {
   level: string;
   price: string;
   programId: string;
   dateEnd: string;
+  /** The programme carrying the медсчёт — shows its balance instead of card and date. */
+  isMedAccount?: boolean;
 }
+
+/**
+ * What the med-account programme shows in place of the card number and the end date: the
+ * money on the медсчёт is what the patient opens it for. Same balance, and the same
+ * "unavailable" fallback, as the card on the home screen.
+ */
+const MedAccountBalanceChip: FC<{ palette: Palette }> = ({ palette }) => {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const { balance, isLoading } = useMedAccount();
+
+  return (
+    <View
+      style={[
+        styles.chip,
+        { backgroundColor: colors.white, borderColor: palette.button },
+      ]}
+    >
+      <View style={styles.chipHeader}>
+        <WalletIcon width={12} height={12} color={colors.gray['500']} />
+        <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
+          {t('programs:card.balance')}
+        </Text>
+      </View>
+      {isLoading ? (
+        <SkeletonElement width={96} height={18} borderRadius={6} />
+      ) : (
+        <Text
+          numberOfLines={1}
+          style={[styles.chipValue, styles.balance, { color: palette.text }]}
+        >
+          {balance === null
+            ? t('programs:card.balanceUnavailable')
+            : formatBalance(balance)}
+        </Text>
+      )}
+    </View>
+  );
+};
 
 export const ProgramCard: FC<InsuranceCardProps> = ({
   level,
   price,
   programId,
   dateEnd,
+  isMedAccount = false,
 }) => {
   const { colors } = useTheme();
   const { navigate } = useNavigation();
@@ -62,38 +113,48 @@ export const ProgramCard: FC<InsuranceCardProps> = ({
       <View style={[styles.divider, { backgroundColor: palette.button }]} />
 
       <View style={styles.chipsRow}>
-        <View
-          style={[
-            styles.chip,
-            { backgroundColor: colors.white, borderColor: palette.button },
-          ]}
-        >
-          <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-            {t('programs:card.cardNumber')}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={[styles.chipValue, { color: palette.text }]}
-          >
-            {price}
-          </Text>
-        </View>
-        <View
-          style={[
-            styles.chip,
-            { backgroundColor: colors.white, borderColor: palette.button },
-          ]}
-        >
-          <View style={styles.chipHeader}>
-            <CalendarIcon width={12} height={12} color={colors.gray['500']} />
-            <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-              {t('programs:card.activeUntil')}
-            </Text>
-          </View>
-          <Text style={[styles.chipValue, { color: palette.text }]}>
-            {formatDate(dateEnd, 'DD.MM.YYYY')}
-          </Text>
-        </View>
+        {isMedAccount ? (
+          <MedAccountBalanceChip palette={palette} />
+        ) : (
+          <>
+            <View
+              style={[
+                styles.chip,
+                { backgroundColor: colors.white, borderColor: palette.button },
+              ]}
+            >
+              <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
+                {t('programs:card.cardNumber')}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={[styles.chipValue, { color: palette.text }]}
+              >
+                {price}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.chip,
+                { backgroundColor: colors.white, borderColor: palette.button },
+              ]}
+            >
+              <View style={styles.chipHeader}>
+                <CalendarIcon
+                  width={12}
+                  height={12}
+                  color={colors.gray['500']}
+                />
+                <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
+                  {t('programs:card.activeUntil')}
+                </Text>
+              </View>
+              <Text style={[styles.chipValue, { color: palette.text }]}>
+                {formatDate(dateEnd, 'DD.MM.YYYY')}
+              </Text>
+            </View>
+          </>
+        )}
       </View>
 
       <View style={styles.ctaRow}>
@@ -169,6 +230,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     fontFamily: fonts.SFPro.Semibold,
+  },
+  balance: {
+    fontVariant: ['tabular-nums'],
   },
   ctaRow: {
     flexDirection: 'row',

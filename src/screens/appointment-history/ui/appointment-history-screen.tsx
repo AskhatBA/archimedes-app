@@ -1,35 +1,17 @@
-import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
-import { ScrollView, StyleSheet, RefreshControl, View } from 'react-native';
 
-import { Appointments } from '@/modules/appointment';
+import { BookingHistory } from '@/modules/appointment';
 import { usePageHeader } from '@/shared/hooks';
-import { MainLayout } from '@/shared/layout/main-layout';
+import { useTranslation } from '@/shared/lib/i18n';
 
+/**
+ * Every visit booked through the app, read from our own backend (`GET /appointments/history`)
+ * rather than the MIS proxy — cancelled visits and their refunds included.
+ */
 export const AppointmentHistoryScreen: FC = () => {
-  usePageHeader({ title: 'История записей' });
+  const { t } = useTranslation();
 
-  const queryClient = useQueryClient();
-  const isFetchingAppointments = useIsFetching({
-    queryKey: ['appointments-history'],
-  });
+  usePageHeader({ title: t('appointments:history') });
 
-  const onRefresh = () => {
-    queryClient.refetchQueries({ queryKey: ['appointments-history'] });
-  };
-
-  return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl
-          refreshing={!!isFetchingAppointments}
-          onRefresh={onRefresh}
-        />
-      }
-    >
-      <MainLayout>
-        <Appointments mode="past" />
-      </MainLayout>
-    </ScrollView>
-  );
+  return <BookingHistory />;
 };

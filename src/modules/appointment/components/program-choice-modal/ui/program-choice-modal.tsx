@@ -16,6 +16,8 @@ import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
 
+import { useMedAccountBalanceLabel } from '../../../hooks/use-med-account-balance-label';
+
 /** Marks the paid option apart from the programme ids it sits next to. */
 const PAID_OPTION = 'PAID';
 
@@ -49,6 +51,9 @@ export const ProgramChoiceModal: FC<ProgramChoiceModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const medAccountBalance = useMedAccountBalanceLabel(
+    programs.some(program => program.isMedAccount),
+  );
 
   /**
    * What the dialog opens on: the programme the booking already uses, the paid option
@@ -93,9 +98,11 @@ export const ProgramChoiceModal: FC<ProgramChoiceModalProps> = ({
           <Text style={styles.optionTitle} numberOfLines={2}>
             {title}
           </Text>
-          <Text style={styles.optionSubtitle} numberOfLines={2}>
-            {subtitle}
-          </Text>
+          {!!subtitle && (
+            <Text style={styles.optionSubtitle} numberOfLines={2}>
+              {subtitle}
+            </Text>
+          )}
           {!!caption && <Text style={styles.optionCaption}>{caption}</Text>}
         </View>
         <View
@@ -153,8 +160,9 @@ export const ProgramChoiceModal: FC<ProgramChoiceModalProps> = ({
                   color={colors.blue['400']}
                 />,
                 program.title,
-                program.cardNo,
-                program.dateEnd
+                // The медсчёт has a balance to show, not a card and an end date.
+                program.isMedAccount ? medAccountBalance : program.cardNo,
+                !program.isMedAccount && program.dateEnd
                   ? t('appointments:create.programChoice.validUntil', {
                       date: formatDate(program.dateEnd, 'DD.MM.YYYY'),
                     })

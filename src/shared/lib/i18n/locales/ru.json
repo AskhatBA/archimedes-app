@@ -157,6 +157,8 @@
     "noActivePrograms": "Нет активных программ",
     "connectProgram": "Подключить",
     "programValidUntil": "Действует до {{date}}",
+    "programBalance": "Баланс: {{amount}}",
+    "programBalanceUnavailable": "Баланс недоступен",
     "extraPrograms_one": "и ещё {{count}} программа",
     "extraPrograms_few": "и ещё {{count}} программы",
     "extraPrograms_many": "и ещё {{count}} программ",
@@ -256,6 +258,8 @@
         "programsSection": "По страховой программе",
         "paidSection": "Без программы",
         "validUntil": "Действует до {{date}}",
+        "balance": "Баланс: {{amount}}",
+        "balanceUnavailable": "Баланс недоступен",
         "paidTitle": "Платный прием",
         "paidSubtitle": "Оплата по прайс-листу клиники",
         "submit": "Продолжить",
@@ -278,6 +282,7 @@
       "errorTooLate": "Нельзя записаться менее чем за 1 час до приема",
       "errorPaymentInit": "Не удалось перейти к оплате. Попробуйте еще раз",
       "errorPaymentFailed": "Оплата не прошла, запись не создана",
+      "errorInsuranceLimitExceeded": "Лимита по страховой программе не хватает на эту услугу. Выберите другую программу или запишитесь на платный прием",
       "success": {
         "title": "Запись на прием к",
         "subtitle": "Колл-центр свяжется с Вами для подтверждения записи",
@@ -298,6 +303,26 @@
         "agree": "Я согласен с условиями публичной оферты",
         "submit": "Подтвердить и согласиться"
       }
+    },
+    "bookingHistory": {
+      "status": {
+        "SCHEDULED": "Запланирована",
+        "PAST": "Время прошло",
+        "COMPLETED": "Завершена",
+        "CANCELLED": "Отменена"
+      },
+      "unknownDoctor": "Врач не указан",
+      "online": "Онлайн-консультация",
+      "familyMember": "Запись для члена семьи",
+      "paid": "Оплачено картой: {{amount}}",
+      "program": "По страховой программе",
+      "refund": {
+        "PENDING": "Возврат {{amount}} — в обработке",
+        "COMPLETED": "Возврат {{amount}} отправлен на карту",
+        "FAILED": "Возврат {{amount}} задерживается — обратитесь в колл-центр"
+      },
+      "emptySubtitle": "Здесь появятся приёмы, на которые вы записались через приложение",
+      "error": "Не удалось загрузить историю. Потяните вниз, чтобы обновить"
     }
   },
   "compensation": {
@@ -369,6 +394,8 @@
       "eyebrow": "Программа",
       "cardNumber": "Карта №",
       "activeUntil": "Активен до",
+      "balance": "Баланс",
+      "balanceUnavailable": "Недоступно",
       "details": "Подробнее"
     },
     "details": {

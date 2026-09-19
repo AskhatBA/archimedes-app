@@ -2,7 +2,12 @@ import { FC } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useAppointments } from '@/modules/appointment/hooks/use-appointments';
-import { levelColors, usePrograms } from '@/modules/insurance';
+import {
+  formatBalance,
+  levelColors,
+  useMedAccount,
+  usePrograms,
+} from '@/modules/insurance';
 import { useUser } from '@/modules/user';
 import {
   ClipboardListIcon,
@@ -60,10 +65,25 @@ export const ProfileCard: FC = () => {
   const activeProgram = activePrograms[0];
   const extraProgramsCount = Math.max(0, activePrograms.length - 1);
   const activeProgramTitle = getProgramTitle(activeProgram?.title);
-  const activeProgramCardNo = getProgramCardNo(
-    activeProgram?.title,
-    activeProgram?.cardNo,
-  );
+  const isMedAccountProgram = !!activeProgram?.isMedAccount;
+  const { balance, isLoading: loadingBalance } = useMedAccount({
+    enabled: isMedAccountProgram,
+  });
+
+  /**
+   * The line under the programme title: its card number, or — for the programme carrying
+   * the медсчёт — the balance on it instead, the same as in the programmes list.
+   */
+  const getActiveProgramSubtitle = () => {
+    if (!isMedAccountProgram) {
+      return getProgramCardNo(activeProgram?.title, activeProgram?.cardNo);
+    }
+    if (loadingBalance) return '';
+    return balance === null
+      ? t('home:programBalanceUnavailable')
+      : t('home:programBalance', { amount: formatBalance(balance) });
+  };
+  const activeProgramSubtitle = getActiveProgramSubtitle();
   const programPalette =
     levelColors[activeProgramTitle as keyof typeof levelColors] ||
     levelColors.Standard;
@@ -152,13 +172,13 @@ export const ProfileCard: FC = () => {
                 {activeProgramTitle}
               </Text>
 
-              {activeProgramCardNo ? (
+              {activeProgramSubtitle ? (
                 <Text
                   style={[styles.cardNoValue, { color: programPalette.text }]}
                   numberOfLines={1}
                   ellipsizeMode="middle"
                 >
-                  {activeProgramCardNo}
+                  {activeProgramSubtitle}
                 </Text>
               ) : null}
 
@@ -170,15 +190,17 @@ export const ProfileCard: FC = () => {
               />
 
               <View style={styles.cardFooter}>
-                <Text
-                  style={[styles.cardMeta, { color: programPalette.text }]}
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {t('home:programValidUntil', {
-                    date: formatDate(activeProgram.dateEnd, 'DD.MM.YYYY'),
-                  })}
-                </Text>
+                {isMedAccountProgram ? null : (
+                  <Text
+                    style={[styles.cardMeta, { color: programPalette.text }]}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {t('home:programValidUntil', {
+                      date: formatDate(activeProgram.dateEnd, 'DD.MM.YYYY'),
+                    })}
+                  </Text>
+                )}
                 <TouchableOpacity
                   style={styles.showAllRow}
                   hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
@@ -439,6 +461,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    // Stays on the right when the med-account programme has no end date beside it.
+    marginLeft: 'auto',
   },
   showAllText: {
     fontSize: 12,

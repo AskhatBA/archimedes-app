@@ -24,6 +24,7 @@ export { ElectronicReferralCard } from './components/electronic-referral-card';
 export { News } from './components/news';
 
 export { INSURANCE_CERTIFICATE_URL } from './constants';
+export { formatBalance } from './lib/format-balance';
 
 export {
   type CompensationRequestFormValues,

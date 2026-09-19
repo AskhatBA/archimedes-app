@@ -108,6 +108,7 @@ export const ProgramsScreen: FC = () => {
                 programId={program.id}
                 price={program.cardNo}
                 level={program.title}
+                isMedAccount={program.isMedAccount}
               />
             );
           })}

@@ -967,6 +967,12 @@ export interface CreateMISAppointmentBody {
   insuranceProgramId?: string;
   /** @example false */
   isTelemedicine: boolean;
+  /**
+   * `oid` of the doctor's service from /insurance/medic-service, sent to MIS as `booked_service`.
+   * @format uuid
+   * @example "128e28d0-7431-4300-8592-71def440f16e"
+   */
+  medicServiceOid?: string;
 }
 
 export interface MISAppointment {
@@ -1235,7 +1241,7 @@ export interface InitPaymentBody {
   /**
    * Payload for the purpose's post-success handler, validated here at init time.
    * For `APPOINTMENT`: `doctorId`, `branchId`, `startTime`, `endTime`,
-   * `isTelemedicine` and an optional `familyMemberId`.
+   * `isTelemedicine`, plus optional `familyMemberId` and `medicServiceOid`.
    * For `PAID_PROGRAM`: `items` (each with `category`, `id`/`externalId`, `code`,
    * `title`, `price`) plus optional `contactPhone` and `comment`. The item prices
    * must add up to `amount`, and check-up prices must match the catalogue.

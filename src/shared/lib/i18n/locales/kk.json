@@ -151,6 +151,8 @@
     "noActivePrograms": "Белсенді бағдарламалар жоқ",
     "connectProgram": "Қосылу",
     "programValidUntil": "{{date}} дейін жарамды",
+    "programBalance": "Баланс: {{amount}}",
+    "programBalanceUnavailable": "Баланс қолжетімсіз",
     "extraPrograms_one": "және тағы {{count}} бағдарлама",
     "extraPrograms_other": "және тағы {{count}} бағдарлама",
     "bookAppointment": "Қабылдауға жазылу",
@@ -246,6 +248,8 @@
         "programsSection": "Сақтандыру бағдарламасы бойынша",
         "paidSection": "Бағдарламасыз",
         "validUntil": "{{date}} дейін жарамды",
+        "balance": "Баланс: {{amount}}",
+        "balanceUnavailable": "Баланс қолжетімсіз",
         "paidTitle": "Ақылы қабылдау",
         "paidSubtitle": "Клиниканың прайс-парағы бойынша төлем",
         "submit": "Жалғастыру",
@@ -268,6 +272,7 @@
       "errorTooLate": "Қабылдауға 1 сағаттан аз қалғанда жазылу мүмкін емес",
       "errorPaymentInit": "Төлемге өту мүмкін болмады. Қайталап көріңіз",
       "errorPaymentFailed": "Төлем өтпеді, жазылу жасалмады",
+      "errorInsuranceLimitExceeded": "Сақтандыру бағдарламасының лимиті бұл қызметке жетпейді. Басқа бағдарламаны таңдаңыз немесе ақылы қабылдауға жазылыңыз",
       "success": {
         "title": "Қабылдауға жазылу:",
         "subtitle": "Растау үшін колл-орталық сізбен хабарласады",
@@ -288,6 +293,26 @@
         "agree": "Мен жария оферта шарттарымен келісемін",
         "submit": "Растау және келісу"
       }
+    },
+    "bookingHistory": {
+      "status": {
+        "SCHEDULED": "Жоспарланған",
+        "PAST": "Уақыты өтті",
+        "COMPLETED": "Аяқталды",
+        "CANCELLED": "Болдырылмады"
+      },
+      "unknownDoctor": "Дәрігер көрсетілмеген",
+      "online": "Онлайн-кеңес",
+      "familyMember": "Отбасы мүшесіне жазба",
+      "paid": "Картамен төленді: {{amount}}",
+      "program": "Сақтандыру бағдарламасы бойынша",
+      "refund": {
+        "PENDING": "{{amount}} қайтарылуы өңделуде",
+        "COMPLETED": "{{amount}} картаға қайтарылды",
+        "FAILED": "{{amount}} қайтарылуы кешігуде — колл-орталыққа хабарласыңыз"
+      },
+      "emptySubtitle": "Қосымша арқылы жазылған қабылдаулар осында көрінеді",
+      "error": "Тарихты жүктеу мүмкін болмады. Жаңарту үшін төмен тартыңыз"
     }
   },
   "compensation": {
@@ -359,6 +384,8 @@
       "eyebrow": "Бағдарлама",
       "cardNumber": "Карта №",
       "activeUntil": "Дейін белсенді",
+      "balance": "Баланс",
+      "balanceUnavailable": "Қолжетімсіз",
       "details": "Толығырақ"
     },
     "details": {
