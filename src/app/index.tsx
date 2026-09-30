@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { UserContextProvider } from '@/modules/user';
+import { initAnalytics } from '@/shared/lib/analytics';
 import { AuthContextProvider } from '@/shared/lib/auth';
 import { LanguageGate } from '@/shared/lib/i18n';
 import { OneSignalProvider } from '@/shared/lib/one-signal';
@@ -20,6 +21,10 @@ function App() {
   // Nothing tells TanStack Query that a phone stopped being looked at, so this is what
   // stops every polling query while the app sits in the background.
   useEffect(subscribeQueryFocusToAppState, []);
+
+  useEffect(() => {
+    initAnalytics();
+  }, []);
 
   return (
     <SafeAreaProvider>

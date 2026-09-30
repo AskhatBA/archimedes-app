@@ -12,6 +12,16 @@ export interface CreateAppointmentForm {
 }
 
 /**
+ * Whose appointments a list shows. No `familyMemberId` — the account owner's own; with
+ * one — that relative's, found on the owner's programme `programId`. The backend only
+ * accepts the pair when the insurer lists the relative in that programme's family.
+ */
+export interface AppointmentsPatient {
+  programId?: string;
+  familyMemberId?: string;
+}
+
+/**
  * The price the booking form shows for a visit. A paid visit is charged exactly this —
  * `discountedPrice ?? price` — so the patient pays what they were shown.
  */

@@ -7,8 +7,10 @@ import {
 } from '@/shared/hooks';
 
 import { APPOINTMENTS_REFRESH_INTERVAL_MS } from '../constants';
+import { appointmentsPatientQuery } from '../lib/appointments-patient';
+import { AppointmentsPatient } from '../types';
 
-export const useAppointmentsHistory = () => {
+export const useAppointmentsHistory = (patient?: AppointmentsPatient) => {
   const refetchInterval = useScreenRefetchInterval(
     APPOINTMENTS_REFRESH_INTERVAL_MS,
   );
@@ -18,9 +20,11 @@ export const useAppointmentsHistory = () => {
     isLoading: loadingAppointmentsHistory,
     refetch,
   } = useQuery({
-    queryKey: ['appointments-history'],
+    queryKey: ['appointments-history', patient?.familyMemberId ?? null],
     queryFn: async () => {
-      const data = await misApi.appointmentHistoryList();
+      const data = await misApi.appointmentHistoryList(
+        appointmentsPatientQuery(patient),
+      );
       return data.data?.appointmentHistory || [];
     },
     // MIS owns the status of a visit and never tells us when it changes, so the list is

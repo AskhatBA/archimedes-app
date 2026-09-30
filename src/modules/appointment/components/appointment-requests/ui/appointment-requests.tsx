@@ -8,14 +8,22 @@ import {
 } from 'react-native';
 
 import { useAppointmentRequests } from '@/modules/appointment/hooks/use-appointment-requests';
+import { AppointmentsPatient } from '@/modules/appointment/types';
 import { SelectCaretIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors } from '@/shared/theme';
 
 import { AppointmentRequestCard } from './appointment-request-card';
 
-export const AppointmentRequests: FC = () => {
-  const { appointmentRequests, isLoading } = useAppointmentRequests();
+interface AppointmentRequestsProps {
+  /** Whose requests to list; the account owner's own when omitted. */
+  patient?: AppointmentsPatient;
+}
+
+export const AppointmentRequests: FC<AppointmentRequestsProps> = ({
+  patient,
+}) => {
+  const { appointmentRequests, isLoading } = useAppointmentRequests(patient);
   const [isOpen, setIsOpen] = useState(true);
   const { t } = useTranslation();
 

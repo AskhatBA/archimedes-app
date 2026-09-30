@@ -38,6 +38,9 @@ import { useTheme } from '@/shared/theme';
 
 interface RouteParams {
   appointmentId: string;
+  /** Set when the visit was opened from a relative's list; see `AppointmentsPatient`. */
+  familyMemberId?: string;
+  programId?: string;
 }
 
 /** MIS statuses that still describe a visit somebody could turn up to. */
@@ -60,15 +63,18 @@ export const AppointmentDetailsScreen: FC = () => {
   usePageHeader({ title: 'Детали записи' });
 
   const route = useRoute();
-  const { appointmentId } = route.params as RouteParams;
+  const { appointmentId, familyMemberId, programId } =
+    route.params as RouteParams;
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { showToast } = useToast();
   const { goBack } = useNavigation();
   const deviceInsets = useSafeAreaInsets();
 
-  const { appointment, isAppointmentLoading } =
-    useAppointmentDetails(appointmentId);
+  const { appointment, isAppointmentLoading } = useAppointmentDetails(
+    appointmentId,
+    { familyMemberId, programId },
+  );
   const { cancelAppointment, isCancelling } = useCancelAppointment();
 
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);

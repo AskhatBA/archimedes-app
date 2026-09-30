@@ -1,5 +1,5 @@
 import { useIsFetching, useQueryClient } from '@tanstack/react-query';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -9,7 +9,12 @@ import {
   Text,
 } from 'react-native';
 
-import { AppointmentRequests, MyAppointments } from '@/modules/appointment';
+import {
+  AppointmentRequests,
+  AppointmentsPatientFilter,
+  MyAppointments,
+  type AppointmentsPatient,
+} from '@/modules/appointment';
 import { Button } from '@/shared/components/button';
 import {
   ClipboardClockIcon,
@@ -27,6 +32,9 @@ export const AppointmentsScreen: FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const isFetchingAppointments = useIsFetching({ queryKey: ['appointments'] });
+  // Whose appointments are listed. The patient's own by default; a relative booked for
+  // under a programme is only visible by picking them here.
+  const [patient, setPatient] = useState<AppointmentsPatient>({});
 
   const onRefresh = () => {
     queryClient.refetchQueries({ queryKey: ['appointments-history'] });
@@ -79,8 +87,9 @@ export const AppointmentsScreen: FC = () => {
               <SelectCaretIcon color={themeColors.blue['400']} />
             </View>
           </TouchableOpacity>
-          <AppointmentRequests />
-          <MyAppointments />
+          <AppointmentsPatientFilter value={patient} onChange={setPatient} />
+          <AppointmentRequests patient={patient} />
+          <MyAppointments patient={patient} />
         </MainLayout>
       </ScrollView>
       <View style={styles.createAppointmentButton}>

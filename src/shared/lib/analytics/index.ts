@@ -1,1 +1,6 @@
-export { logAnalyticsEvent, AnalyticsEvents } from './analytics';
+export {
+  AnalyticsEvents,
+  initAnalytics,
+  logAnalyticsEvent,
+  logScreenView,
+} from './analytics';

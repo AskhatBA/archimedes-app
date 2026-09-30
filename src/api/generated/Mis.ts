@@ -307,7 +307,15 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
 }` Appointments fetched successfully
  * @response `401` `void` User not found or unauthorized
  */
-  appointmentsList = (params: RequestParams = {}) =>
+  appointmentsList = (
+    query?: {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<
       {
         /** @example true */
@@ -318,6 +326,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/appointments`,
       method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,
@@ -338,7 +347,15 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
 }` Appointment history fetched successfully
  * @response `401` `void` User not found or unauthorized
  */
-  appointmentHistoryList = (params: RequestParams = {}) =>
+  appointmentHistoryList = (
+    query?: {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<
       {
         /** @example true */
@@ -349,6 +366,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/appointment-history`,
       method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,
@@ -430,7 +448,16 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
  * @response `400` `void` Validation error
  * @response `401` `void` User not found or unauthorized
  */
-  appointmentsDetail = (appointmentId: string, params: RequestParams = {}) =>
+  appointmentsDetail = (
+    appointmentId: string,
+    query?: {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<
       {
         /** @example true */
@@ -441,6 +468,7 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
     >({
       path: `/mis/appointments/${appointmentId}`,
       method: 'GET',
+      query: query,
       secure: true,
       format: 'json',
       ...params,
@@ -468,6 +496,10 @@ export class Mis<SecurityDataType = unknown> extends HttpClient<SecurityDataType
       include_past?: boolean;
       /** Filter by request status (e.g. rejected) */
       status?: string;
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
     },
     params: RequestParams = {},
   ) =>

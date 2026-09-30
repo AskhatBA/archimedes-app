@@ -136,8 +136,13 @@ export const CreateAppointmentForm: FC = () => {
             placeholder={t('appointments:create.selectPatientPlaceholder')}
             options={[
               { value: '', label: t('appointments:create.selfPatient') },
+              // "Оформить на себя" above is the patient; `benId` can differ from
+              // `misPatientId`, so the backend's `isSelf` is what finds their row.
               ...family
-                .filter(member => member.benId !== user.misPatientId)
+                .filter(
+                  member =>
+                    !member.isSelf && member.benId !== user.misPatientId,
+                )
                 .map(member => ({
                   value: member.benId,
                   label: member.fullName,

@@ -191,6 +191,16 @@
     "requestsTitle": "Appointment requests",
     "upcomingTitle": "Upcoming appointments",
     "emptyUpcoming": "No upcoming appointments",
+    "patientFilter": {
+      "title": "Whose appointments",
+      "subtitle": "Your family's appointments under your insurance programmes",
+      "self": "My appointments",
+      "selfHint": "See your family's appointments",
+      "selfDescription": "Your own appointments",
+      "relativeHint": "Family member's appointments",
+      "reset": "Back to my appointments",
+      "programs": "Programmes: {{list}}"
+    },
     "pendingPayment": {
       "badge": "Awaiting payment",
       "hint": "The appointment is confirmed automatically once the payment goes through",

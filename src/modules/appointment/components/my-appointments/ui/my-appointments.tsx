@@ -4,9 +4,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
+import { AppointmentsPatient } from '../../../types';
+
 import { Appointments } from './appointments';
 
-export const MyAppointments: FC = () => {
+interface MyAppointmentsProps {
+  /** Whose appointments to list; the account owner's own when omitted. */
+  patient?: AppointmentsPatient;
+}
+
+export const MyAppointments: FC<MyAppointmentsProps> = ({ patient }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
 
@@ -18,7 +25,7 @@ export const MyAppointments: FC = () => {
         </Text>
       </View>
       <View style={styles.appointments}>
-        <Appointments mode="upcoming" />
+        <Appointments mode="upcoming" patient={patient} />
       </View>
     </View>
   );

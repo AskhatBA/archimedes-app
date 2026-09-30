@@ -8,26 +8,36 @@ import { usePendingAppointments } from '@/modules/appointment/hooks/use-pending-
 import { useTranslation } from '@/shared/lib/i18n';
 import { useTheme } from '@/shared/theme';
 
+import { AppointmentsPatient } from '../../../types';
+
 import { AppointmentCard, AppointmentCardColors } from './appointment-card';
 import { PendingAppointmentCard } from './pending-appointment-card';
 
 interface AppointmentsProps {
   mode?: 'upcoming' | 'past';
   emptyText?: string;
+  /** Whose appointments to list; the account owner's own when omitted. */
+  patient?: AppointmentsPatient;
 }
 
 export const Appointments: FC<AppointmentsProps> = ({
   mode = 'upcoming',
   emptyText,
+  patient,
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const { appointmentsHistory, loadingAppointmentsHistory } =
-    useAppointmentsHistory();
+    useAppointmentsHistory(patient);
   // Appointments whose payment has not settled yet exist nowhere but on the payment, so
-  // they are listed alongside the real ones instead of leaving the screen empty.
+  // they are listed alongside the real ones instead of leaving the screen empty. Only a
+  // visit without a programme is paid for, and only an insured one can be booked for a
+  // relative, so they all belong to the owner's own list.
   const { pendingAppointments } = usePendingAppointments();
-  const showPending = mode === 'upcoming' && pendingAppointments.length > 0;
+  const showPending =
+    mode === 'upcoming' &&
+    !patient?.familyMemberId &&
+    pendingAppointments.length > 0;
 
   const separatorColors = {
     blue: colors.blue['500'],
@@ -142,6 +152,7 @@ export const Appointments: FC<AppointmentsProps> = ({
                       branchAddress={appointment.branch?.address}
                       appointmentType={appointment.appointmentType}
                       isPast={isAppointmentPast}
+                      patient={patient}
                     />
                   );
                 })}

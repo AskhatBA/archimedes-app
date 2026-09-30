@@ -110,6 +110,42 @@ cancelled visits, what was paid and where the refund is. The cards are read-only
 `SCHEDULED` visit whose time has passed is badged "Время прошло", since the backend's status
 sweep stops re-checking old rows. A cancellation invalidates `GET_BOOKING_HISTORY_QUERY`.
 
+### A relative's appointments
+
+The booking form can book for a relative on the patient's programme, but the upcoming
+list, the requests and the details are MIS proxies read by patient, so a relative's visits
+only show up when the patient picks them. `AppointmentsPatientFilter` at the top of the
+appointments tab does that.
+
+It is one collapsed row by default — most visits are the patient's own. On the patient's own
+list the row reads "Мои записи" with the family as a stack of initials (three, then "+N");
+once a relative is picked it becomes that relative (avatar, "ЗАПИСИ БЛИЗКОГО", short name)
+with a cross straight back, so a list that is not the patient's own never passes for it.
+Relatives are drawn in warm tones and the patient in blue, the app's own colour. Tapping the
+row opens a sheet with one row per person, and a single tap picks both the relative and the
+programme they are on. It is hidden when there is nobody to pick.
+
+There is no separate programme step. The insurer keeps the family per programme, and a
+household on two programmes comes back twice with the same people, so `useFamilyMembers`
+reads the family of every live programme (`useQueries` over `familyQueryOptions`, the same
+cache as `useFamily`) and `collectFamilyMembers` lists each person once, carrying the first
+programme that has them — which is all the backend needs. The patient is in their own
+family too; the backend marks that row `isSelf`, because `benId` is the insurer's id and
+need not equal `misPatientId` (the booking form's patient list filters on it for the same
+reason). A person's line shows the relationship and the birth date rather than an age: the
+app has no `Intl.PluralRules`, so a plural like "3 года" would render as "3 лет".
+
+The pick is an `AppointmentsPatient` (`{ programId, familyMemberId }`) held in
+`AppointmentsScreen` state and passed down to `AppointmentRequests`, `MyAppointments` →
+`Appointments` → `AppointmentCard`, and on into `AppointmentDetails` as route params.
+`useAppointmentsHistory`, `useAppointmentRequests` and `useAppointmentDetails` send it as
+`?familyMemberId=&programId=` (only when a relative is picked — `appointmentsPatientQuery`)
+and key their cache on `familyMemberId`, so invalidating by the bare key still refreshes
+every patient's list. The backend refuses a pair the insurer does not confirm, so a stale
+pick shows an empty list, not someone else's. Pending-payment cards stay on the patient's
+own list: only a paid visit is pending, and only an insured one can be for a relative.
+Cancelling a relative's visit needs nothing extra — the backend finds it by the MIS id.
+
 ### Med-account visit price
 
 The booking form shows a price for a paid visit and for a visit under the programme flagged

@@ -261,7 +261,12 @@ export namespace Mis {
 */
   export namespace AppointmentsList {
     export type RequestParams = {};
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = {
@@ -288,7 +293,12 @@ export namespace Mis {
 */
   export namespace AppointmentHistoryList {
     export type RequestParams = {};
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = {
@@ -374,7 +384,12 @@ export namespace Mis {
       /** Appointment ID to get details for */
       appointmentId: string;
     };
-    export type RequestQuery = {};
+    export type RequestQuery = {
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
+    };
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = {
@@ -407,6 +422,10 @@ export namespace Mis {
       include_past?: boolean;
       /** Filter by request status (e.g. rejected) */
       status?: string;
+      /** `benId` of a family member (from `/insurance/family`) whose appointments to read instead of the caller's own. Requires `programId`; refused with 403 `INSURANCE_FAMILY_MEMBER_NOT_FOUND` unless the insurer lists them in the family of that programme and the programme is the caller's. */
+      familyMemberId?: string;
+      /** The caller's programme the family member is on. Required with `familyMemberId`. */
+      programId?: string;
     };
     export type RequestBody = never;
     export type RequestHeaders = {};

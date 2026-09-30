@@ -19,6 +19,7 @@ import {
   cancellationErrorCode,
   useCancelAppointment,
 } from '../../../hooks/use-appointment-cancellation';
+import { AppointmentsPatient } from '../../../types';
 import { CancelAppointmentDrawer } from '../../cancel-appointment-drawer';
 
 export type AppointmentCardColors = 'blue' | 'green' | 'orange';
@@ -32,6 +33,8 @@ interface AppointmentCardProps {
   branchName?: string;
   branchAddress: string;
   isPast?: boolean;
+  /** Whose list the card is on — the details are read as the same patient. */
+  patient?: AppointmentsPatient;
 }
 
 /** Refusals the backend can answer a cancellation with, and how each is worded. */
@@ -50,6 +53,7 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
   branchName,
   branchAddress,
   isPast = false,
+  patient,
 }) => {
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -113,7 +117,9 @@ export const AppointmentCard: FC<AppointmentCardProps> = ({
 
   return (
     <TouchableOpacity
-      onPress={() => navigate(routes.AppointmentDetails, { appointmentId })}
+      onPress={() =>
+        navigate(routes.AppointmentDetails, { appointmentId, ...patient })
+      }
       style={[
         styles.container,
         { backgroundColor: backgrounds[color] },

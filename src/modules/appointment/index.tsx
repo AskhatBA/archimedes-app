@@ -13,6 +13,7 @@ export {
 
 export { MyAppointments, Appointments } from './components/my-appointments';
 export { AppointmentRequests } from './components/appointment-requests';
+export { AppointmentsPatientFilter } from './components/patient-filter';
 export {
   BookingHistory,
   BookingHistoryCard,
@@ -22,3 +23,5 @@ export { CancelAppointmentDrawer } from './components/cancel-appointment-drawer'
 export { CreateAppointmentContextProvider } from './context/create-appointment-context';
 
 export { CreateAppointmentForm } from './forms/create-appointment-form';
+
+export type { AppointmentsPatient } from './types';
