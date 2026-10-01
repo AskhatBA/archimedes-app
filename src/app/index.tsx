@@ -17,14 +17,14 @@ import { ThemeProvider } from '@/shared/theme';
 
 import { RootNavigator } from './navigation';
 
+// Not in an effect: children's effects run before the root's, and they already report
+// (the first screen view, the signed-in user).
+initAnalytics();
+
 function App() {
   // Nothing tells TanStack Query that a phone stopped being looked at, so this is what
   // stops every polling query while the app sits in the background.
   useEffect(subscribeQueryFocusToAppState, []);
-
-  useEffect(() => {
-    initAnalytics();
-  }, []);
 
   return (
     <SafeAreaProvider>

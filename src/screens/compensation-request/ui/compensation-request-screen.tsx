@@ -45,10 +45,8 @@ export const CompensationRequestScreen: FC = () => {
     onSuccess: (_data, variables) => {
       logAnalyticsEvent(AnalyticsEvents.CompensationRequestCreated, {
         program_id: variables.programId,
-        person_id: variables.personId,
         category: variables.category,
-        amount: variables.amount,
-        files_count: variables.files?.length,
+        files_count: variables.files?.length ?? 0,
       });
       setIsSuccess(true);
     },

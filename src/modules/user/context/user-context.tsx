@@ -12,6 +12,7 @@ import {
 import { patientApi, GetPatientProfileResponse } from '@/api';
 import { ScreenLoader } from '@/shared/components/screen-loader';
 import { GET_USER_INFO_QUERY } from '@/shared/constants';
+import { setAnalyticsUser } from '@/shared/lib/analytics';
 import { useAuth } from '@/shared/lib/auth';
 import { useTranslation } from '@/shared/lib/i18n';
 import { routes, useNavigation } from '@/shared/navigation';
@@ -48,6 +49,13 @@ export const UserContextProvider: FC<{ children: ReactNode }> = ({
     queryFn: async () => (await patientApi.profileList()).data,
     enabled: isAuthenticated,
   });
+
+  // Signing out drops `isAuthenticated` first, which clears the id everywhere.
+  const analyticsUserId = isAuthenticated ? user?.user?.id : undefined;
+
+  useEffect(() => {
+    setAnalyticsUser(analyticsUserId ?? null);
+  }, [analyticsUserId]);
 
   useEffect(() => {
     if (user !== undefined && !user.isProfileComplete) {
