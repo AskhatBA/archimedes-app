@@ -177,7 +177,8 @@
     "scanQr": "Сканировать QR",
     "medPlansSubtitle": "Годовое обслуживание",
     "checkupsSubtitle": "Обследование за визит",
-    "medAccountOpenA11y": "Открыть пополнение медсчёта"
+    "medAccountOpenA11y": "Открыть пополнение медсчёта",
+    "medAccountRefreshA11y": "Обновить баланс медсчёта"
   },
   "qrScanner": {
     "title": "Сканировать QR",

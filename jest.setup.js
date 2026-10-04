@@ -10,6 +10,14 @@ jest.mock('@appmetrica/react-native-analytics', () => ({
   },
 }));
 
+jest.mock('@microsoft/react-native-clarity', () => ({
+  LogLevel: { None: 'None' },
+  initialize: jest.fn(),
+  pause: jest.fn(() => Promise.resolve(true)),
+  resume: jest.fn(() => Promise.resolve(true)),
+  setCurrentScreenName: jest.fn(() => Promise.resolve(true)),
+}));
+
 jest.mock('@react-native-firebase/app', () => ({
   getApp: jest.fn(),
 }));
@@ -28,6 +36,16 @@ jest.mock('@react-native-firebase/crashlytics', () => ({
 
 jest.mock('@react-native-firebase/perf', () => ({
   initializePerformance: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('@react-native-firebase/messaging', () => ({
+  AuthorizationStatus: { AUTHORIZED: 1, PROVISIONAL: 2 },
+  deleteToken: jest.fn(() => Promise.resolve()),
+  getMessaging: jest.fn(),
+  getToken: jest.fn(() => Promise.resolve('fcm-token')),
+  onMessage: jest.fn(() => jest.fn()),
+  onTokenRefresh: jest.fn(() => jest.fn()),
+  requestPermission: jest.fn(() => Promise.resolve(1)),
 }));
 
 // Read by the analytics layer for the app version it reports to AppMetrica.

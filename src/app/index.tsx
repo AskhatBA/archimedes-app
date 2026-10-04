@@ -9,7 +9,7 @@ import { UserContextProvider } from '@/modules/user';
 import { initAnalytics } from '@/shared/lib/analytics';
 import { AuthContextProvider } from '@/shared/lib/auth';
 import { LanguageGate } from '@/shared/lib/i18n';
-import { OneSignalProvider } from '@/shared/lib/one-signal';
+import { PushNotificationsProvider } from '@/shared/lib/push-notifications';
 import { queryClient, subscribeQueryFocusToAppState } from '@/shared/lib/query';
 import { ToastProvider } from '@/shared/lib/toast';
 import { NavigationProvider } from '@/shared/navigation';
@@ -37,14 +37,14 @@ function App() {
                   <AuthContextProvider>
                     <UserContextProvider>
                       <BottomSheetModalProvider>
-                        <OneSignalProvider>
+                        <PushNotificationsProvider>
                           <StatusBar
                             barStyle="dark-content"
                             backgroundColor="white"
                             translucent={false}
                           />
                           <RootNavigator />
-                        </OneSignalProvider>
+                        </PushNotificationsProvider>
                       </BottomSheetModalProvider>
                     </UserContextProvider>
                   </AuthContextProvider>

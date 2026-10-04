@@ -167,7 +167,8 @@
     "scanQr": "Scan QR",
     "medPlansSubtitle": "Yearly outpatient care",
     "checkupsSubtitle": "Screening in one visit",
-    "medAccountOpenA11y": "Open medical account top-up"
+    "medAccountOpenA11y": "Open medical account top-up",
+    "medAccountRefreshA11y": "Refresh medical account balance"
   },
   "qrScanner": {
     "title": "Scan QR",

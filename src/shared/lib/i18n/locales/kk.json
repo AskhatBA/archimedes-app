@@ -167,7 +167,8 @@
     "scanQr": "QR сканерлеу",
     "medPlansSubtitle": "Жылдық қызмет көрсету",
     "checkupsSubtitle": "Бір келуде тексеру",
-    "medAccountOpenA11y": "Медшотты толтыруды ашу"
+    "medAccountOpenA11y": "Медшотты толтыруды ашу",
+    "medAccountRefreshA11y": "Медшот балансын жаңарту"
   },
   "qrScanner": {
     "title": "QR сканерлеу",

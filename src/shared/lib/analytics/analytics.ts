@@ -15,6 +15,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import { APPMETRICA_API_KEY } from '@/shared/config';
 
+import { recordScreen } from './clarity';
 import {
   AnalyticsEventName,
   AnalyticsEventParams,
@@ -101,14 +102,18 @@ export const logAnalyticsEvent = async <E extends AnalyticsEventName>(
 };
 
 // Only the route name is sent — never its params, which can carry ids and personal data.
-// It goes to Firebase alone: AppMetrica has no notion of a screen, and a screen_view
-// event there would only drown the product events the Tracking Plan asks for.
+// The screen view goes to Firebase alone: AppMetrica has no notion of a screen, and a
+// screen_view event there would only drown the product events the Tracking Plan asks for.
+// Clarity is told too, since it may only record some screens.
 export const logScreenView = async (screenName: string): Promise<void> => {
   try {
-    await logEvent(getAnalytics(), 'screen_view', {
-      screen_name: screenName,
-      screen_class: screenName,
-    });
+    await Promise.all([
+      recordScreen(screenName),
+      logEvent(getAnalytics(), 'screen_view', {
+        screen_name: screenName,
+        screen_class: screenName,
+      }),
+    ]);
   } catch (error) {
     warn('failed to log a screen view', error);
   }

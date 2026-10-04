@@ -18,7 +18,7 @@ import { useRefetchOnScreenFocus } from '@/shared/hooks';
 export const useMedAccount = ({
   enabled = true,
 }: { enabled?: boolean } = {}) => {
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['insurance', 'med-account'],
     queryFn: async () =>
       (await insuranceApi.medAccountList()).data?.medAccount ?? null,
@@ -34,5 +34,7 @@ export const useMedAccount = ({
   return {
     balance: data && data.errorCode === 0 ? data.totalBalance : null,
     isLoading,
+    isFetching,
+    refetch,
   };
 };
