@@ -197,8 +197,8 @@ type. The app only keeps its own always-on exclusions (УЗИ, выездная 
 Switching the visit type resets the specialty, the doctor and the slot.
 
 Wherever a programme is listed — `ProgramCard` on the programmes tab, `ProgramChoiceModal`
-and the selected-programme card in the booking form, the programme tile in the home
-`ProfileCard` — the `isMedAccount` one shows the медсчёт balance (`useMedAccount`,
+and the selected-programme card in the booking form, the home screen's
+`ProgramsCard` — the `isMedAccount` one shows the медсчёт balance (`useMedAccount`,
 `formatBalance`) in place of its card number and end date. Those screens pass
 `useMedAccount({ enabled })` so the balance is only requested when such a programme is
 actually on screen.

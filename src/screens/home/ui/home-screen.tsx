@@ -5,11 +5,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { News } from '@/modules/insurance';
 import { colors } from '@/shared/theme';
 
+import { AppointmentsCard } from './appointments-card';
 import { CallCenterCard } from './call-center-card';
 import { CatalogBanners } from './catalog-banners';
 import { HomeTopbar } from './home-topbar';
 import { MedAccountCard } from './med-account-card';
 import { ProfileCard } from './profile-card';
+import { ProgramsCard } from './programs-card';
 import { QuickActions } from './quick-actions';
 import { QuickAuthPrompt } from './quick-auth-prompt';
 
@@ -27,6 +29,8 @@ export const HomeScreen: FC = () => {
         showsVerticalScrollIndicator={false}
       >
         <ProfileCard />
+        <ProgramsCard />
+        <AppointmentsCard />
         <MedAccountCard />
         <QuickActions />
         <CallCenterCard />

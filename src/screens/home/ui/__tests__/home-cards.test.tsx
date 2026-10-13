@@ -1,7 +1,10 @@
+import { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 import ReactTestRenderer from 'react-test-renderer';
 
+import { AppointmentsCard } from '../appointments-card';
 import { ProfileCard } from '../profile-card';
+import { ProgramsCard } from '../programs-card';
 
 const mockNavigate = jest.fn();
 
@@ -113,10 +116,10 @@ const appointment = (
   branch_name: branchName,
 });
 
-const render = () => {
+const render = (Card: FC) => {
   let tree: ReactTestRenderer.ReactTestRenderer | undefined;
   ReactTestRenderer.act(() => {
-    tree = ReactTestRenderer.create(<ProfileCard />);
+    tree = ReactTestRenderer.create(<Card />);
   });
 
   return tree!;
@@ -132,77 +135,59 @@ const textsOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
     )
     .filter(Boolean);
 
-const renderTexts = () => textsOf(render());
+const renderTexts = (Card: FC) => textsOf(render(Card));
 
 const press = (tree: ReactTestRenderer.ReactTestRenderer, index: number) =>
   ReactTestRenderer.act(() => {
     tree.root.findAllByType(TouchableOpacity)[index].props.onPress();
   });
 
-describe('ProfileCard stat cards', () => {
-  beforeEach(() => {
-    mockPrograms = [];
-    mockAppointments = [];
-    mockMedAccount = { balance: null, isLoading: false };
-    mockUseMedAccount.mockClear();
-    mockNavigate.mockClear();
+beforeEach(() => {
+  mockPrograms = [];
+  mockAppointments = [];
+  mockMedAccount = { balance: null, isLoading: false };
+  mockUseMedAccount.mockClear();
+  mockNavigate.mockClear();
+});
+
+describe('ProfileCard', () => {
+  it('shows only the user and opens the profile', () => {
+    const tree = render(ProfileCard);
+
+    expect(textsOf(tree)).toEqual(['Асхат', '900101300123']);
+
+    press(tree, 0);
+    expect(mockNavigate).toHaveBeenLastCalledWith('profile');
   });
+});
 
-  it('shows a single program and a single appointment without counters', () => {
+describe('ProgramsCard', () => {
+  it('shows a single program without a counter', () => {
     mockPrograms = [program('Standard (S134286014284810)', '', '2027-08-02')];
-    mockAppointments = [
-      appointment('2026-09-10T14:30:00', 'Ахметов Д. С.', 'Клиника на Абая'),
-    ];
 
-    const texts = renderTexts();
-
-    expect(texts).toEqual([
-      'Асхат',
-      '900101300123',
+    expect(renderTexts(ProgramsCard)).toEqual([
       'Мои программы',
       'Standard',
       'S134286014284810',
       'Действует до 02.08.2027',
       'Показать все',
-      'Мои записи',
-      '10 сентября, 14:30',
-      'Ахметов Д. С.',
-      'Клиника на Абая',
     ]);
   });
 
-  it('shows the first program and the nearest appointment with +N counters', () => {
+  it('shows the first active program with a +N counter', () => {
     mockPrograms = [
       program('Gold', 'S134286014284810', '2027-08-02'),
       program('Silver', 'S998877665544332', '2026-12-31'),
       program('Standard', 'S111122223333444', '2026-01-01', 'EXPIRED'),
     ];
-    mockAppointments = [
-      appointment('2026-09-21T09:00:00', 'Сериков Б. К.', 'Клиника на Абая'),
-      appointment(
-        '2026-09-10T14:30:00',
-        'Ахметов Д. С.',
-        'Клиника на Сейфуллина',
-      ),
-      appointment('2026-10-02T11:15:00', 'Нурланова А. М.', 'Клиника на Абая'),
-    ];
 
-    const texts = renderTexts();
-
-    expect(texts).toEqual([
-      'Асхат',
-      '900101300123',
+    expect(renderTexts(ProgramsCard)).toEqual([
       'Мои программы',
       '+1',
       'Gold',
       'S134286014284810',
       'Действует до 02.08.2027',
       'Показать все',
-      'Мои записи',
-      '+2',
-      '10 сентября, 14:30',
-      'Ахметов Д. С.',
-      'Клиника на Сейфуллина',
     ]);
   });
 
@@ -212,7 +197,7 @@ describe('ProfileCard stat cards', () => {
     ];
     mockMedAccount = { balance: 12500, isLoading: false };
 
-    const texts = renderTexts();
+    const texts = renderTexts(ProgramsCard);
 
     expect(texts).toContain('Баланс: 12 500,00 ₸');
     expect(texts).not.toContain('S134286014284810');
@@ -226,29 +211,22 @@ describe('ProfileCard stat cards', () => {
       program('Медсчет', 'S134286014284810', '2027-08-02', 'ACTIVE', true),
     ];
 
-    expect(renderTexts()).toContain('Баланс недоступен');
+    expect(renderTexts(ProgramsCard)).toContain('Баланс недоступен');
   });
 
   it('does not read the balance for an ordinary programme', () => {
     mockPrograms = [program('Gold', 'S134286014284810', '2027-08-02')];
 
-    renderTexts();
+    renderTexts(ProgramsCard);
 
     expect(mockUseMedAccount).toHaveBeenLastCalledWith({ enabled: false });
   });
 
-  it('falls back to empty states with CTAs', () => {
-    const texts = renderTexts();
-
-    expect(texts).toEqual([
-      'Асхат',
-      '900101300123',
+  it('falls back to an empty state with a CTA', () => {
+    expect(renderTexts(ProgramsCard)).toEqual([
       'Мои программы',
       'Нет активных программ',
       'Подключить',
-      'Мои записи',
-      'Нет записей',
-      'Записаться на прием',
     ]);
   });
 
@@ -258,23 +236,76 @@ describe('ProfileCard stat cards', () => {
       program('Silver', 'S998877665544332', '2026-12-31'),
     ];
 
-    const tree = render();
-    const [, programCard, showAllLink] =
-      tree.root.findAllByType(TouchableOpacity);
+    const tree = render(ProgramsCard);
 
-    ReactTestRenderer.act(() => programCard.props.onPress());
+    press(tree, 0);
     expect(mockNavigate).toHaveBeenLastCalledWith('program-details', {
       programId: 'Gold',
     });
 
-    ReactTestRenderer.act(() => showAllLink.props.onPress());
+    press(tree, 1);
     expect(mockNavigate).toHaveBeenLastCalledWith('programs');
   });
 
   it('offers paid programs when there is no active program', () => {
-    const tree = render();
-    press(tree, 1);
+    press(render(ProgramsCard), 0);
 
     expect(mockNavigate).toHaveBeenLastCalledWith('paid-programs');
+  });
+});
+
+describe('AppointmentsCard', () => {
+  it('shows a single appointment without a counter', () => {
+    mockAppointments = [
+      appointment('2026-09-10T14:30:00', 'Ахметов Д. С.', 'Клиника на Абая'),
+    ];
+
+    expect(renderTexts(AppointmentsCard)).toEqual([
+      'Мои записи',
+      '10 сентября, 14:30',
+      'Ахметов Д. С.',
+      'Клиника на Абая',
+    ]);
+  });
+
+  it('shows the nearest appointment with a +N counter', () => {
+    mockAppointments = [
+      appointment('2026-09-21T09:00:00', 'Сериков Б. К.', 'Клиника на Абая'),
+      appointment(
+        '2026-09-10T14:30:00',
+        'Ахметов Д. С.',
+        'Клиника на Сейфуллина',
+      ),
+      appointment('2026-10-02T11:15:00', 'Нурланова А. М.', 'Клиника на Абая'),
+    ];
+
+    expect(renderTexts(AppointmentsCard)).toEqual([
+      'Мои записи',
+      '+2',
+      '10 сентября, 14:30',
+      'Ахметов Д. С.',
+      'Клиника на Сейфуллина',
+    ]);
+  });
+
+  it('falls back to an empty state that books an appointment', () => {
+    const tree = render(AppointmentsCard);
+
+    expect(textsOf(tree)).toEqual([
+      'Мои записи',
+      'Нет записей',
+      'Записаться на прием',
+    ]);
+
+    press(tree, 0);
+    expect(mockNavigate).toHaveBeenLastCalledWith('create-appointment');
+  });
+
+  it('opens the appointments tab when there is a visit', () => {
+    mockAppointments = [appointment('2026-09-10T14:30:00', 'Ахметов Д. С.')];
+
+    press(render(AppointmentsCard), 0);
+
+    expect(mockNavigate).toHaveBeenLastCalledWith('appointments-main');
   });
 });
