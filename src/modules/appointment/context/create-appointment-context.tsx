@@ -25,11 +25,9 @@ import { useAvailableSlots } from '@/modules/appointment/hooks/use-available-slo
 import { useBranches } from '@/modules/appointment/hooks/use-branches';
 import { useDoctors } from '@/modules/appointment/hooks/use-doctors';
 import { useSpecializations } from '@/modules/appointment/hooks/use-specializations';
+import { useTelemedicineOffer } from '@/modules/appointment/hooks/use-telemedicine-offer';
 import { useMedicService } from '@/modules/insurance/hooks/use-medic-service';
-import {
-  discountedPriceOf,
-  useServicePrice,
-} from '@/modules/insurance/hooks/use-service-price';
+import { useServicePrice } from '@/modules/insurance/hooks/use-service-price';
 import { usePaymentStatus } from '@/modules/payment';
 import { BookingSuccessPopup } from '@/shared/components/booking-success-popup';
 import { AnalyticsEvents, logAnalyticsEvent } from '@/shared/lib/analytics';
@@ -42,6 +40,7 @@ import { routes } from '@/shared/navigation/routes';
 
 import { ProgramChoiceModal } from '../components/program-choice-modal';
 import { PublicOfferDrawer } from '../components/public-offer-drawer';
+import { visitPriceOf } from '../lib/visit-price';
 import { CreateAppointmentForm, VisitPrice } from '../types';
 
 /** Backend codes the booking form has its own wording for, instead of showing the code. */
@@ -150,10 +149,15 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
   const branchExternalId = selectedBranch?.externalId;
 
-  const { medicService, isLoading: loadingMedicService } = useMedicService(
-    branchExternalId,
-    doctorDetails?.iin,
-  );
+  // Telemedicine is one service of its own whichever doctor holds it, so the doctor's
+  // in-person service is neither requested nor used for it — not even from the cache.
+  const { medicService: doctorService, isLoading: loadingMedicService } =
+    useMedicService(
+      branchExternalId,
+      doctorDetails?.iin,
+      !formValues.isTelemedicine,
+    );
+  const medicService = formValues.isTelemedicine ? null : doctorService;
 
   const { programs, loadingPrograms } = usePrograms();
 
@@ -181,48 +185,57 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     program => program.id === formValues.programId,
   )?.isMedAccount;
 
-  // A paid visit shows the same med-account discount, so it reads the same price.
+  // A paid in-person visit shows the same med-account discount, so it reads the same
+  // price. Telemedicine has a price of its own and no discount.
   const { servicePrice, isLoading: loadingServicePrice } = useServicePrice(
     branchExternalId,
     medicService?.oid,
-    isPaidVisit || isMedAccountVisit,
+    !formValues.isTelemedicine && (isPaidVisit || isMedAccountVisit),
   );
+
+  // A paid online consultation and a med-account one show its price; under any other
+  // programme the insurer pays for it.
+  const isPaidTelemedicine = formValues.isTelemedicine && isPaidVisit;
+  const { telemedicineOffer, isError: telemedicineOfferFailed } =
+    useTelemedicineOffer(
+      formValues.isTelemedicine && (isPaidVisit || isMedAccountVisit),
+    );
+
+  // Without the price a paid online consultation cannot be checked out, so the patient is
+  // told why the button stays disabled. A med-account one is booked without it.
+  useEffect(() => {
+    if (!isPaidTelemedicine || !telemedicineOfferFailed) return;
+    showToast({
+      type: 'error',
+      message: t('appointments:create.errorTelemedicineOffer'),
+    });
+  }, [isPaidTelemedicine, telemedicineOfferFailed, showToast, t]);
 
   /**
    * One value for the price card and for what a paid visit is charged, so the patient is
-   * never charged anything but what they were shown.
-   *
-   * A paid visit costs the doctor's own price, less the med-account discount when the
-   * insurer gives one for the service. It waits for that lookup to settle, and a failed
-   * one costs the patient the discount, never the booking. A med-account visit shows the
-   * insurer's price for the service. Any other programme is paid by the insurer.
+   * never charged anything but what they were shown. The rules are in `visitPriceOf`.
    */
-  const visitPrice = useMemo((): VisitPrice | null => {
-    if (!medicService) return null;
-
-    if (isPaidVisit) {
-      if (loadingServicePrice) return null;
-      return {
-        price: medicService.price,
-        discountedPrice: discountedPriceOf(servicePrice),
-      };
-    }
-
-    if (isMedAccountVisit && servicePrice) {
-      return {
-        price: servicePrice.price,
-        discountedPrice: discountedPriceOf(servicePrice),
-      };
-    }
-
-    return null;
-  }, [
-    medicService,
-    isPaidVisit,
-    isMedAccountVisit,
-    loadingServicePrice,
-    servicePrice,
-  ]);
+  const visitPrice = useMemo(
+    (): VisitPrice | null =>
+      visitPriceOf({
+        isTelemedicine: formValues.isTelemedicine,
+        isPaidVisit,
+        isMedAccountVisit,
+        telemedicineOffer,
+        medicService,
+        servicePrice,
+        loadingServicePrice,
+      }),
+    [
+      formValues.isTelemedicine,
+      isPaidVisit,
+      isMedAccountVisit,
+      telemedicineOffer,
+      medicService,
+      servicePrice,
+      loadingServicePrice,
+    ],
+  );
 
   // A patient with programmes answers the choice before touching the form; one without
   // has nothing to choose, so their visit is paid from the start.
@@ -289,7 +302,10 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
         endTime,
         insuranceProgramId: payload.programId,
         isTelemedicine: payload.isTelemedicine,
-        medicServiceOid: medicService?.oid,
+        // Telemedicine is booked under the clinic's own service code, set by the backend.
+        ...(!payload.isTelemedicine && medicService
+          ? { medicServiceOid: medicService.oid }
+          : {}),
       });
     },
     onSuccess: async (_data, variables) => {
@@ -337,7 +353,9 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
    */
   const initAppointmentPaymentMutation = useMutation({
     mutationFn: async (payload: CreateAppointmentForm) => {
-      if (!medicService || !visitPrice) {
+      // An in-person visit also needs the doctor's service, whose `oid` MIS books it under;
+      // telemedicine is booked under the backend's own code and needs only its price.
+      if (!visitPrice || (!payload.isTelemedicine && !medicService)) {
         throw new Error('Missing appointment price');
       }
 
@@ -345,7 +363,7 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
 
       const { data } = await paymentApi.initCreate({
         amount: visitPrice.discountedPrice ?? visitPrice.price,
-        description: medicService.service,
+        description: visitPrice.serviceName,
         purpose: 'APPOINTMENT',
         metadata: {
           doctorId: payload.doctorId,
@@ -354,13 +372,15 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
           endTime,
           isTelemedicine: !!payload.isTelemedicine,
           ...(payload.patientId ? { familyMemberId: payload.patientId } : {}),
-          medicServiceOid: medicService.oid,
+          ...(!payload.isTelemedicine && medicService
+            ? { medicServiceOid: medicService.oid }
+            : {}),
           // Display-only: MIS knows nothing about this visit until the payment settles,
           // so the app carries what it needs to describe it in the meantime.
           doctorName: doctorDetails?.name,
           branchName: selectedBranch?.name,
           branchAddress: selectedBranch?.address,
-          serviceName: medicService.service,
+          serviceName: visitPrice.serviceName,
         },
       });
 

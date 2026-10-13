@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { News } from '@/modules/insurance';
 import { colors } from '@/shared/theme';
 
+import { CallCenterCard } from './call-center-card';
 import { CatalogBanners } from './catalog-banners';
 import { HomeTopbar } from './home-topbar';
 import { MedAccountCard } from './med-account-card';
@@ -28,6 +29,7 @@ export const HomeScreen: FC = () => {
         <ProfileCard />
         <MedAccountCard />
         <QuickActions />
+        <CallCenterCard />
         <CatalogBanners />
         <News />
       </ScrollView>

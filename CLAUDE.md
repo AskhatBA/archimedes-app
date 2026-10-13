@@ -110,6 +110,16 @@ cancelled visits, what was paid and where the refund is. The cards are read-only
 `SCHEDULED` visit whose time has passed is badged "Время прошло", since the backend's status
 sweep stops re-checking old rows. A cancellation invalidates `GET_BOOKING_HISTORY_QUERY`.
 
+### Fiscal receipts
+
+Receipts are issued by the backend through Webkassa; the app only links to them. A history
+item from `GET /appointments/history` carries `receiptUrl` (the payment) and
+`refund.receiptUrl` (the refund), and a top-up from `GET /med-account/topups` carries
+`receiptUrl` — each the OFD page of an issued receipt, `null` until then. `BookingHistoryCard`
+and `TopupHistoryCard` render `ReceiptLink` (`@/shared/components/receipt-link`) only when the
+link is there; it opens the page with `Linking.openURL` and toasts
+`common:receipt.openFailed` if that is refused. We never draw a receipt of our own.
+
 ### A relative's appointments
 
 The booking form can book for a relative on the patient's programme, but the upcoming
@@ -163,6 +173,28 @@ exactly that — `discountedPrice ?? price` — so the patient never pays other 
 were shown. The paid booking button therefore waits for the discount lookup to settle, and
 a failed lookup costs the patient the discount, never the booking. A med-account visit is
 charged nothing in the app, so its price does not gate booking.
+
+Telemedicine ("Телемедицина" in `AppointmentTypeSwitch`) is one clinic service at one price,
+whichever doctor holds it, so none of the above applies to it. Its price and name come from
+our backend — `GET /appointments/telemedicine` (`appointmentApi.telemedicineDetail`,
+`useTelemedicineOffer`, `staleTime: 0`) — and are shown for a paid visit and for an
+`isMedAccount` one, without the med-account discount; under any other programme there is no
+price card and the offer is not requested. Only the paid visit is charged it in the app, so
+only the paid one waits for it. `/insurance/medic-service` and
+`/insurance/service-price` are not requested for telemedicine at all, and `medicServiceOid`
+is not sent: the backend books every telemedicine visit in MIS under its own service code.
+A paid telemedicine visit is charged exactly the offer's `price` and `/payment/init` refuses
+any other sum (the 409's `message` is toasted as is); the paid button waits for the offer,
+and a failed load toasts `appointments:create.errorTelemedicineOffer` and keeps it disabled.
+The rules for every case live in one pure function, `visitPriceOf`
+(`src/modules/appointment/lib/visit-price.ts`), which also carries the `serviceName` the
+price card and the payment description use.
+
+The telemedicine specialty filter is the backend's: `useSpecializations` sends
+`isTelemedicine=true` (through `appointmentApi.specializationsList`, until the generated
+`misApi.specializationsList` is regenerated with the flag) and keys its cache on the visit
+type. The app only keeps its own always-on exclusions (УЗИ, выездная служба, массаж).
+Switching the visit type resets the specialty, the doctor and the slot.
 
 Wherever a programme is listed — `ProgramCard` on the programmes tab, `ProgramChoiceModal`
 and the selected-programme card in the booking form, the programme tile in the home

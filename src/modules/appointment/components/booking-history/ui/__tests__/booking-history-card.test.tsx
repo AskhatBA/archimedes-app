@@ -1,3 +1,4 @@
+import { Linking } from 'react-native';
 import ReactTestRenderer from 'react-test-renderer';
 
 import { BookingHistoryCard } from '../booking-history-card';
@@ -34,6 +35,12 @@ jest.mock('@/modules/med-account', () =>
   jest.requireActual('@/modules/med-account/lib/format-amount'),
 );
 
+const mockShowToast = jest.fn();
+
+jest.mock('@/shared/lib/toast', () => ({
+  useToast: () => ({ showToast: mockShowToast }),
+}));
+
 jest.mock('@/shared/icons', () => ({
   HospitalIcon: () => null,
   MapPinnedIcon: () => null,
@@ -58,6 +65,7 @@ const booking = (
   branchAddress: 'пр. Достык, 1',
   isForFamilyMember: false,
   paidAmount: null,
+  receiptUrl: null,
   refund: null,
   cancelledAt: null,
   createdAt: '2026-09-01T10:00:00.000Z',
@@ -74,12 +82,41 @@ const textsOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
     )
     .filter(Boolean);
 
-const render = (item: AppointmentHistoryItem) => {
+const mount = (item: AppointmentHistoryItem) => {
   let tree: ReactTestRenderer.ReactTestRenderer | undefined;
   ReactTestRenderer.act(() => {
     tree = ReactTestRenderer.create(<BookingHistoryCard booking={item} />);
   });
-  return textsOf(tree!);
+  return tree!;
+};
+
+const render = (item: AppointmentHistoryItem) => textsOf(mount(item));
+
+/** The pressable receipt links, in the order they are drawn. */
+const linksOf = (tree: ReactTestRenderer.ReactTestRenderer) =>
+  tree.root.findAll(
+    node =>
+      node.props.accessibilityRole === 'link' &&
+      typeof node.props.onPress === 'function' &&
+      typeof node.type !== 'string',
+    { deep: false },
+  );
+
+const SALE_URL =
+  'https://ofd.example/consumer?i=1&f=2&s=10000.00&t=20261007T120000';
+const RETURN_URL =
+  'https://ofd.example/consumer?i=3&f=2&s=7000.00&t=20261008T120000';
+
+const PAID_CANCELLED: Partial<AppointmentHistoryItem> = {
+  status: 'CANCELLED',
+  paidAmount: 10000,
+  refund: {
+    amount: 7000,
+    feeAmount: 3000,
+    status: 'COMPLETED',
+    refundedAt: '2026-10-08T12:00:00.000Z',
+    receiptUrl: null,
+  },
 };
 
 describe('BookingHistoryCard', () => {
@@ -119,6 +156,7 @@ describe('BookingHistoryCard', () => {
           feeAmount: 3000,
           status: 'PENDING',
           refundedAt: null,
+          receiptUrl: null,
         },
       }),
     );
@@ -139,6 +177,7 @@ describe('BookingHistoryCard', () => {
           feeAmount: 0,
           status: 'FAILED',
           refundedAt: null,
+          receiptUrl: null,
         },
       }),
     );
@@ -163,5 +202,76 @@ describe('BookingHistoryCard', () => {
     const texts = render(booking({ isForFamilyMember: true }));
 
     expect(texts).toContain('Запись для члена семьи');
+  });
+
+  describe('fiscal receipts', () => {
+    beforeEach(() => {
+      mockShowToast.mockClear();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    // A receipt that is not issued yet comes back as null — nothing is drawn, so the card
+    // looks exactly as it did before receipts existed.
+    it('draws no receipt link while there is no issued receipt', () => {
+      const tree = mount(booking({ paidAmount: 10000 }));
+
+      expect(textsOf(tree)).not.toContain('Чек об оплате');
+      expect(textsOf(tree)).not.toContain('Чек возврата');
+      expect(linksOf(tree)).toHaveLength(0);
+    });
+
+    it('opens the payment receipt in the browser', () => {
+      const openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+      const tree = mount(booking({ paidAmount: 10000, receiptUrl: SALE_URL }));
+
+      expect(textsOf(tree)).toContain('Чек об оплате');
+
+      ReactTestRenderer.act(() => {
+        linksOf(tree)[0].props.onPress();
+      });
+
+      expect(openURL).toHaveBeenCalledWith(SALE_URL);
+    });
+
+    it('shows the refund receipt of a cancelled paid visit next to the payment one', () => {
+      const openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+      const tree = mount(
+        booking({
+          ...PAID_CANCELLED,
+          receiptUrl: SALE_URL,
+          refund: { ...PAID_CANCELLED.refund!, receiptUrl: RETURN_URL },
+        }),
+      );
+
+      expect(textsOf(tree)).toEqual(
+        expect.arrayContaining(['Чек об оплате', 'Чек возврата']),
+      );
+
+      const links = linksOf(tree);
+      expect(links).toHaveLength(2);
+
+      ReactTestRenderer.act(() => {
+        links[1].props.onPress();
+      });
+
+      expect(openURL).toHaveBeenCalledWith(RETURN_URL);
+    });
+
+    it('says so when the receipt cannot be opened', async () => {
+      jest.spyOn(Linking, 'openURL').mockRejectedValue(new Error('no handler'));
+      const tree = mount(booking({ paidAmount: 10000, receiptUrl: SALE_URL }));
+
+      await ReactTestRenderer.act(async () => {
+        linksOf(tree)[0].props.onPress();
+      });
+
+      expect(mockShowToast).toHaveBeenCalledWith({
+        type: 'error',
+        message: 'Не удалось открыть чек',
+      });
+    });
   });
 });

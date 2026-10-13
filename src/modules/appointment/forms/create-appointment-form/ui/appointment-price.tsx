@@ -12,20 +12,21 @@ import { createAppointmentFormStyles } from './styles';
 /**
  * Приём по страховой программе оплачивает страховая, поэтому цена показывается
  * только тогда, когда запись оформляется платно — то есть без выбранной программы, —
- * или по программе медсчёта (`isMedAccount`): такой приём списывается с медсчёта по
- * цене страховой. Если у услуги есть цена по медсчёту, полная цена зачёркивается
+ * или по программе медсчёта (`isMedAccount`): такой очный приём списывается с медсчёта
+ * по цене страховой. Если у услуги есть цена по медсчёту, полная цена зачёркивается
  * рядом с ней — и у платного приёма тоже, который тогда по ней и оплачивается, —
- * иначе показывается одна полная. Что показывать, решает контекст (`visitPrice`):
- * из того же значения берётся сумма оплаты.
+ * иначе показывается одна полная. Телемедицина — одна услуга по цене бэкенда без
+ * скидки, и показывается только при платном приёме. Что показывать, решает контекст
+ * (`visitPrice`, включая название услуги): из того же значения берётся сумма оплаты.
  */
 export const AppointmentPrice: FC = () => {
-  const { formValues, medicService, visitPrice } = useCreateAppointment();
+  const { formValues, visitPrice } = useCreateAppointment();
 
-  if (!formValues.doctorId || !medicService || !visitPrice) return null;
+  if (!formValues.doctorId || !visitPrice) return null;
 
   return (
     <PriceCard
-      service={medicService.service}
+      service={visitPrice.serviceName}
       price={visitPrice.price}
       discountedPrice={visitPrice.discountedPrice}
     />

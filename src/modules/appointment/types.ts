@@ -30,4 +30,9 @@ export interface VisitPrice {
   price: number;
   /** The med-account price, when the insurer gives one for the service. */
   discountedPrice: number | null;
+  /**
+   * What the price card and the payment call the service: the doctor's own service for an
+   * in-person visit, the backend's online consultation for telemedicine.
+   */
+  serviceName: string;
 }

@@ -67,7 +67,11 @@ export const CreateAppointmentForm: FC = () => {
           }
           changeAppointmentType={value => {
             changeFormValues('isTelemedicine', value === 'telemedicine');
+            // The specialty list differs per visit type, and a doctor or slot picked for
+            // the other type would otherwise keep the booking button enabled.
             changeFormValues('specializationId', undefined);
+            changeFormValues('doctorId', undefined);
+            changeFormValues('timeSlot', undefined);
           }}
         />
       </View>

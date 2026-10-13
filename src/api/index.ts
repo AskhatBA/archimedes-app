@@ -17,4 +17,5 @@ export type {
   AppointmentRefund,
   AppointmentRefundPlan,
   AppointmentRefundStatus,
+  TelemedicineOffer,
 } from './appointment-api';

@@ -1,19 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { misApi } from '@/api';
+import { appointmentApi } from '@/api';
 
 const EXCLUDED_SPECIALIZATIONS = ['УЗИ', 'ВЫЕЗДНАЯ СЛУЖБА', 'МАССАЖ'];
 
+/**
+ * Specialties of a branch. For a telemedicine visit the backend itself drops the ones that
+ * cannot be held online (`isTelemedicine=true`), so the list is cached per visit type.
+ */
 export const useSpecializations = (
   branchId?: string,
   isTelemedicine?: boolean,
 ) => {
   const { data: specializations, isLoading: loadingSpecializations } = useQuery(
     {
-      queryKey: ['specializations', branchId],
+      queryKey: ['specializations', branchId, !!isTelemedicine],
       queryFn: async () =>
-        (await misApi.specializationsList({ branchId })).data
-          ?.specializations || [],
+        (
+          await appointmentApi.specializationsList({
+            branchId: branchId!,
+            ...(isTelemedicine ? { isTelemedicine: true } : {}),
+          })
+        ).data?.specializations || [],
       enabled: !!branchId,
     },
   );
@@ -22,17 +30,12 @@ export const useSpecializations = (
   const availableSpecializations = (specializations || []).filter(
     spec =>
       !EXCLUDED_SPECIALIZATIONS.some(excluded =>
-        spec.name.toUpperCase().includes(excluded),
+        (spec.name ?? '').toUpperCase().includes(excluded),
       ),
   );
 
-  // Оставить только терапевтов если выбрана телемедицина
-  const filteredSpecializations = isTelemedicine
-    ? availableSpecializations.filter(spec => spec.name.includes('Терапевт'))
-    : availableSpecializations;
-
   return {
-    specializations: filteredSpecializations,
+    specializations: availableSpecializations,
     loadingSpecializations,
   };
 };

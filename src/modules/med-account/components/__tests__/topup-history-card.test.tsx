@@ -4,6 +4,10 @@ import { TopupHistoryCard } from '../topup-history-card';
 
 import type { Topup } from '../../types';
 
+jest.mock('@/shared/lib/toast', () => ({
+  useToast: () => ({ showToast: jest.fn() }),
+}));
+
 // The real ru locale, resolved down a dotted path so nested keys like
 // `medAccount:history.status.PENDING` come back as the strings a patient actually reads.
 jest.mock('@/shared/lib/i18n', () => {
@@ -34,6 +38,7 @@ const topup = (over: Partial<Topup>): Topup => ({
   amount: 100000,
   status: 'PENDING',
   creditedAt: null,
+  receiptUrl: null,
   createdAt: '2026-09-05T10:15:00.000Z',
   ...over,
 });
@@ -87,6 +92,13 @@ describe('TopupHistoryCard', () => {
 
     expect(texts).toContain('Не зачислено');
     expect(texts.join(' ')).toContain('поддержку');
+  });
+
+  it('links the payment receipt once it is issued, and draws nothing before', () => {
+    expect(render(topup({}))).not.toContain('Чек об оплате');
+    expect(
+      render(topup({ receiptUrl: 'https://ofd.example/consumer?i=1' })),
+    ).toContain('Чек об оплате');
   });
 
   it('falls back to the generic credited copy when the date is missing', () => {

@@ -18,7 +18,12 @@
     "no": "No",
     "today": "today",
     "tomorrow": "tomorrow",
-    "other": "Other"
+    "other": "Other",
+    "receipt": {
+      "sale": "Payment receipt",
+      "return": "Refund receipt",
+      "openFailed": "Couldn't open the receipt"
+    }
   },
   "errors": {
     "title": "Error",
@@ -282,6 +287,7 @@
       "errorUnknown": "Unknown error. Please try again in a minute",
       "errorTooLate": "You cannot book less than 1 hour before the appointment",
       "errorPaymentInit": "Could not open the payment page. Please try again",
+      "errorTelemedicineOffer": "Could not load the price of the online consultation. Please try again later.",
       "errorPaymentFailed": "The payment did not go through, the appointment was not booked",
       "errorInsuranceLimitExceeded": "Your insurance programme's limit does not cover this service. Choose another programme or book a paid appointment",
       "success": {

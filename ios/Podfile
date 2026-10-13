@@ -48,5 +48,21 @@ target 'archimedesapp' do
         end
       end
     end
+
+    # Apple clang in Xcode 26.4+ rejects fmt 11.0.2's consteval format-string checks
+    # ("call to consteval function ... is not a constant expression"). fmt only opts
+    # out for Apple clang < 14, so widen that guard to every Apple clang.
+    fmt_base = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      contents = File.read(fmt_base)
+      patched = contents.sub(
+        'defined(__apple_build_version__) && __apple_build_version__ < 14000029L',
+        'defined(__apple_build_version__)'
+      )
+      if patched != contents
+        File.chmod(0644, fmt_base)
+        File.write(fmt_base, patched)
+      end
+    end
   end
 end

@@ -25,6 +25,10 @@ export const useTopupHistory = () => {
         amount: topup.amount ?? 0,
         status: (topup.status ?? 'PENDING') as TopupStatus,
         creditedAt: topup.creditedAt ?? null,
+        // Not in the generated contract yet — `npm run generate-api` against a backend with
+        // fiscal receipts adds it and makes this cast redundant.
+        receiptUrl:
+          (topup as { receiptUrl?: string | null }).receiptUrl ?? null,
         createdAt: topup.createdAt as string,
       }));
     },

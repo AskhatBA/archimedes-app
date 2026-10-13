@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { formatAmount } from '@/modules/med-account';
+import { ReceiptLink } from '@/shared/components/receipt-link';
 import {
   HospitalIcon,
   MapPinnedIcon,
@@ -47,6 +48,7 @@ interface BookingHistoryCardProps {
  * an appointment, which the details screen cannot open, and cancelling belongs to the
  * upcoming list. What a patient comes here for is what happened and what it cost — so the
  * money line is always there, and a cancelled paid visit says where its refund has got to.
+ * Once the payment (or the refund) has its fiscal receipt, a link to it sits under that line.
  */
 export const BookingHistoryCard: FC<BookingHistoryCardProps> = ({
   booking,
@@ -111,6 +113,8 @@ export const BookingHistoryCard: FC<BookingHistoryCardProps> = ({
           : t('appointments:bookingHistory.program')}
       </Text>
 
+      {!!booking.receiptUrl && <ReceiptLink url={booking.receiptUrl} />}
+
       {!!booking.refund && (
         <Text
           style={[
@@ -122,6 +126,10 @@ export const BookingHistoryCard: FC<BookingHistoryCardProps> = ({
             amount: formatAmount(booking.refund.amount),
           })}
         </Text>
+      )}
+
+      {!!booking.refund?.receiptUrl && (
+        <ReceiptLink url={booking.refund.receiptUrl} kind="return" />
       )}
     </View>
   );

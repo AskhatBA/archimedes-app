@@ -1,4 +1,17 @@
+import { MISSpecialization } from './generated/data-contracts';
 import { HttpClient } from './generated/http-client';
+
+/**
+ * The online consultation as the backend sells it: one service at one price, whichever
+ * doctor holds it. A paid telemedicine visit is charged exactly `price` — the backend
+ * refuses `/payment/init` at any other sum.
+ */
+export interface TelemedicineOffer {
+  /** In tenge. */
+  price: number;
+  /** What the price card and the payment call the service. */
+  serviceName: string;
+}
 
 /** How a cancellation right now would split the money. */
 export interface AppointmentRefundPlan {
@@ -69,11 +82,21 @@ export interface AppointmentHistoryItem {
   isForFamilyMember: boolean;
   /** What was paid by card; `null` for a visit covered by an insurance programme. */
   paidAmount: number | null;
+  /**
+   * Link to the fiscal receipt for the payment (the OFD page Webkassa returns). `null`
+   * until the receipt is issued — and always for a visit covered by a programme.
+   */
+  receiptUrl: string | null;
   /** Set for a cancelled paid visit. */
-  refund: Pick<
-    AppointmentRefund,
-    'amount' | 'feeAmount' | 'status' | 'refundedAt'
-  > | null;
+  refund:
+    | (Pick<
+        AppointmentRefund,
+        'amount' | 'feeAmount' | 'status' | 'refundedAt'
+      > & {
+        /** Link to the refund's fiscal receipt; `null` until it is issued. */
+        receiptUrl: string | null;
+      })
+    | null;
   cancelledAt: string | null;
   createdAt: string;
 }
@@ -102,6 +125,39 @@ export const APPOINTMENT_CANCELLATION_ERRORS = {
  * visit by, which matters because every list on screen is proxied live from MIS.
  */
 export class AppointmentApi extends HttpClient {
+  /**
+   * Price and name of a paid online consultation. Not part of any doctor's service list —
+   * the backend owns the figure, so changing it needs no app release.
+   */
+  telemedicineDetail = () =>
+    this.request<{ success: boolean; telemedicine: TelemedicineOffer }, void>({
+      path: '/appointments/telemedicine',
+      method: 'GET',
+      secure: true,
+      format: 'json',
+    });
+
+  /**
+   * `GET /mis/specializations` with the `isTelemedicine` flag, which drops the specialties
+   * that cannot be held online. Stands in for the generated `misApi.specializationsList`,
+   * whose query type predates the flag; `npm run generate-api` against the updated backend
+   * makes this redundant.
+   */
+  specializationsList = (query: {
+    branchId: string;
+    isTelemedicine?: boolean;
+  }) =>
+    this.request<
+      { success?: boolean; specializations?: MISSpecialization[] },
+      void
+    >({
+      path: '/mis/specializations',
+      method: 'GET',
+      query,
+      secure: true,
+      format: 'json',
+    });
+
   /**
    * Every visit booked through the app, newest first, cancelled ones included — read from
    * our own table, so it survives what MIS forgets.

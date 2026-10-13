@@ -24,5 +24,7 @@ export interface Topup {
   status: TopupStatus;
   /** When the money reached the medical account; null until it has. */
   creditedAt: string | null;
+  /** Link to the payment's fiscal receipt (OFD page); null until it is issued. */
+  receiptUrl: string | null;
   createdAt: string;
 }

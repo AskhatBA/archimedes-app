@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { ReceiptLink } from '@/shared/components/receipt-link';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
 import { colors, fonts } from '@/shared/theme';
@@ -56,6 +57,8 @@ export const TopupHistoryCard: FC<TopupHistoryCardProps> = ({ topup }) => {
             })
           : t(`medAccount:history.hint.${topup.status}`)}
       </Text>
+
+      {!!topup.receiptUrl && <ReceiptLink url={topup.receiptUrl} />}
     </View>
   );
 };
