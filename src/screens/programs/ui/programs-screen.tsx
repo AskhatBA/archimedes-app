@@ -11,16 +11,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProgramCard } from '@/modules/insurance';
 import { ScreenLoader } from '@/shared/components/screen-loader';
-import { CALL_CENTER_PHONE } from '@/shared/constants';
 import { ShieldX } from '@/shared/icons';
 import { Trans, useTranslation } from '@/shared/lib/i18n';
-import { usePrograms } from '@/shared/lib/insurance';
+import { useCallCenterPhone, usePrograms } from '@/shared/lib/insurance';
 import { colors } from '@/shared/theme';
 
 export const ProgramsScreen: FC = () => {
   const { programs, loadingPrograms, refetchPrograms } = usePrograms();
   const deviceInsets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const callCenterPhone = useCallCenterPhone();
 
   if (loadingPrograms) {
     return <ScreenLoader text={t('programs:loading')} />;
@@ -67,12 +67,12 @@ export const ProgramsScreen: FC = () => {
           <Text style={[styles.emptySubtitle, { color: colors.gray['500'] }]}>
             <Trans
               i18nKey="programs:emptySubtitle"
-              values={{ phone: CALL_CENTER_PHONE }}
+              values={{ phone: callCenterPhone }}
               components={{
                 phone: (
                   <Text
                     style={[styles.emptyPhone, { color: colors.blue['400'] }]}
-                    onPress={() => Linking.openURL(`tel:${CALL_CENTER_PHONE}`)}
+                    onPress={() => Linking.openURL(`tel:${callCenterPhone}`)}
                   />
                 ),
               }}
@@ -104,10 +104,10 @@ export const ProgramsScreen: FC = () => {
             return (
               <ProgramCard
                 key={program.id}
-                dateEnd={program.dateEnd}
+                title={program.title}
+                cardNo={program.cardNo}
                 programId={program.id}
-                price={program.cardNo}
-                level={program.title}
+                dateEnd={program.dateEnd}
                 isMedAccount={program.isMedAccount}
               />
             );
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   cards: {
     marginTop: 20,
-    gap: 16,
+    gap: 14,
   },
   noInsuranceText: {
     fontSize: 14,

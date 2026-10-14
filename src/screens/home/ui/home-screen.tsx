@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -17,11 +17,16 @@ import { QuickAuthPrompt } from './quick-auth-prompt';
 
 export const HomeScreen: FC = () => {
   const insets = useSafeAreaInsets();
+  const [scrolled, setScrolled] = useState(false);
 
   return (
     <View style={styles.wrapper}>
-      <HomeTopbar />
+      <HomeTopbar scrolled={scrolled} />
       <ScrollView
+        onScroll={({ nativeEvent }) =>
+          setScrolled(nativeEvent.contentOffset.y > 4)
+        }
+        scrollEventThrottle={32}
         contentContainerStyle={[
           styles.scrollContent,
           { paddingBottom: insets.bottom + 24 },

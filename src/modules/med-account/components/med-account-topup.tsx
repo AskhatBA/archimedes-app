@@ -9,6 +9,9 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// Straight from the component, not the module barrel: appointment already imports from
+// med-account, and the barrel would close the loop.
+import { PublicOfferDrawer } from '@/modules/appointment/components/public-offer-drawer';
 import { Button } from '@/shared/components/button';
 import { SkeletonElement } from '@/shared/components/skeleton-element';
 import { ArrowBackIcon, HistoryIcon, InfoIcon } from '@/shared/icons';
@@ -39,6 +42,7 @@ export const MedAccountTopup: FC = () => {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [infoVisible, setInfoVisible] = useState(false);
+  const [offerVisible, setOfferVisible] = useState(false);
 
   const { options, loadingOptions, fetchingOptions, refetchOptions } =
     useTopupOptions();
@@ -59,7 +63,15 @@ export const MedAccountTopup: FC = () => {
       }),
   });
 
+  // A top-up is a paid service like a paid visit, so the payer accepts the same public
+  // offer first; checkout starts from the drawer.
   const handleSubmit = () => {
+    if (!selected) return;
+    setOfferVisible(true);
+  };
+
+  const acceptOfferAndPay = () => {
+    setOfferVisible(false);
     if (!selected) return;
 
     startTopup({
@@ -173,6 +185,14 @@ export const MedAccountTopup: FC = () => {
       <TopupInfoDrawer
         visible={infoVisible}
         onClose={() => setInfoVisible(false)}
+      />
+
+      <PublicOfferDrawer
+        visible={offerVisible}
+        onClose={() => setOfferVisible(false)}
+        onAccept={acceptOfferAndPay}
+        isSubmitting={isStartingTopup}
+        showNoShowWarning={false}
       />
     </View>
   );

@@ -12,6 +12,7 @@ export const usePrograms = () => {
     data: programs,
     isLoading: loadingPrograms,
     isFetching: fetchingPrograms,
+    isSuccess: loadedPrograms,
     refetch: refetchPrograms,
     error,
   } = useQuery({
@@ -23,6 +24,7 @@ export const usePrograms = () => {
   return {
     programs: programs || [],
     loadingPrograms,
+    loadedPrograms,
     fetchingPrograms,
     refetchPrograms,
     isNotAuthorized:

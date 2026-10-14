@@ -17,6 +17,11 @@ interface PublicOfferDrawerProps {
   /** Called once the patient has ticked the box and confirmed. */
   onAccept: () => void;
   isSubmitting?: boolean;
+  /**
+   * The no-show penalty only means something for a booked visit; a med-account top-up
+   * accepts the same offer without it.
+   */
+  showNoShowWarning?: boolean;
 }
 
 /** Fallback bottom inset for devices (or contexts) that report none. */
@@ -32,16 +37,17 @@ const SUMMARY_KEYS = [
 ] as const;
 
 /**
- * Public offer a paid patient accepts before checkout.
+ * Public offer a patient accepts before checkout.
  *
- * Only shown for patients without an insurance programme — an insured visit is covered
- * by their programme's own terms, so nothing is charged and nothing is accepted here.
+ * Shown before a paid visit — an insured one is covered by the programme's own terms, so
+ * nothing is charged and nothing is accepted — and before a med-account top-up.
  */
 export const PublicOfferDrawer: FC<PublicOfferDrawerProps> = ({
   visible,
   onClose,
   onAccept,
   isSubmitting = false,
+  showNoShowWarning = true,
 }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -54,7 +60,7 @@ export const PublicOfferDrawer: FC<PublicOfferDrawerProps> = ({
   // button ends up flush against the bottom edge of the sheet.
   const bottomInset = Math.max(insets.bottom, MIN_BOTTOM_INSET);
 
-  // A fresh consent every time: the previous tick belongs to the previous booking.
+  // A fresh consent every time: the previous tick belongs to the previous checkout.
   useEffect(() => {
     if (!visible) setAccepted(false);
   }, [visible]);
@@ -101,14 +107,16 @@ export const PublicOfferDrawer: FC<PublicOfferDrawerProps> = ({
             </View>
           ))}
 
-          <View style={styles.warning}>
-            <Text style={styles.warningText}>
-              <Text style={styles.warningLabel}>
-                {t('appointments:create.offer.points.noShowLabel')}
+          {showNoShowWarning ? (
+            <View style={styles.warning}>
+              <Text style={styles.warningText}>
+                <Text style={styles.warningLabel}>
+                  {t('appointments:create.offer.points.noShowLabel')}
+                </Text>
+                {t('appointments:create.offer.points.noShow')}
               </Text>
-              {t('appointments:create.offer.points.noShow')}
-            </Text>
-          </View>
+            </View>
+          ) : null}
 
           <View style={styles.pointRow}>
             <View style={styles.bullet} />

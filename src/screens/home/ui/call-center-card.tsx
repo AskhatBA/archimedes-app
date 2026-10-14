@@ -7,16 +7,17 @@ import {
   View,
 } from 'react-native';
 
-import { CALL_CENTER_PHONE } from '@/shared/constants';
 import { PhoneIcon } from '@/shared/icons';
 import { useTranslation } from '@/shared/lib/i18n';
+import { useCallCenterPhone } from '@/shared/lib/insurance';
 import { colors, fonts } from '@/shared/theme';
 
 export const CallCenterCard: FC = () => {
   const { t } = useTranslation();
+  const phone = useCallCenterPhone();
 
   const callCallCenter = () => {
-    Linking.openURL(`tel:${CALL_CENTER_PHONE}`).catch(() => {});
+    Linking.openURL(`tel:${phone}`).catch(() => {});
   };
 
   return (
@@ -39,7 +40,7 @@ export const CallCenterCard: FC = () => {
         </Text>
       </View>
       <View style={styles.numberPill}>
-        <Text style={styles.number}>{CALL_CENTER_PHONE}</Text>
+        <Text style={styles.number}>{phone}</Text>
       </View>
     </TouchableOpacity>
   );

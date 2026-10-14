@@ -50,6 +50,9 @@ replaces the first, and there is nothing to add up. The amounts come from our ow
 (`GET /med-account/options`) and are editable in the dashboard, so the screen never
 hard-codes them; free-form amounts are not offered.
 
+Before checkout the payer accepts the public offer in the booking form's `PublicOfferDrawer`
+(imported from its folder, not the `@/modules/appointment` barrel, which would be a cycle),
+with `showNoShowWarning={false}` — the no-show penalty is about visits, not top-ups.
 Checkout posts `POST /payment/init` with `purpose: 'MED_ACCOUNT_TOPUP'` and only
 `{ optionId }` as metadata — the amount charged is verified against the catalogue
 server-side, so an amount that went stale on the device is refused before the payer is sent
@@ -155,6 +158,17 @@ every patient's list. The backend refuses a pair the insurer does not confirm, s
 pick shows an empty list, not someone else's. Pending-payment cards stay on the patient's
 own list: only a paid visit is pending, and only an insured one can be for a relative.
 Cancelling a relative's visit needs nothing extra — the backend finds it by the MIS id.
+
+### Pediatric doctors
+
+MIS flags children's doctors `is_pediatric`. The backend's `GET /mis/doctors` filters by the
+age of whoever the visit is for: under 16 only those doctors, from 16 everyone else (an
+unreadable birth date leaves the list whole). The age is the backend's to work out — the
+patient's from our DB, a relative's from the insurer's family — so the booking form only
+passes the picked relative (`appointmentApi.doctorsList` with `familyMemberId` + `programId`,
+until `misApi.doctorsList` is regenerated); `useDoctors` keys its cache on them. Picking
+another patient can take the chosen doctor off the list, so `CreateAppointmentContext`
+then drops the doctor and the slot.
 
 ### Med-account visit price
 

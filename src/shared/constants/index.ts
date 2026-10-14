@@ -20,4 +20,4 @@ export {
 
 export { PRIVACY_POLICY_FILE, USER_AGREEMENT_FILE } from './agreement-files';
 export { PUBLIC_OFFER_FILES, publicOfferFileFor } from './offer-files';
-export { CALL_CENTER_PHONE } from './support';
+export { CALL_CENTER_PHONE, NO_PROGRAMS_CALL_CENTER_PHONE } from './support';

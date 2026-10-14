@@ -410,9 +410,6 @@
     "card": {
       "eyebrow": "Программа",
       "cardNumber": "Карта №",
-      "activeUntil": "Активен до",
-      "balance": "Баланс",
-      "balanceUnavailable": "Недоступно",
       "details": "Подробнее"
     },
     "details": {

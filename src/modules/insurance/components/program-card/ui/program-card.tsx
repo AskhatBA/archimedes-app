@@ -1,15 +1,17 @@
 import { FC } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { SkeletonElement } from '@/shared/components/skeleton-element';
-import { CalendarIcon, ShieldPlusIcon, WalletIcon } from '@/shared/icons';
+import { SelectCaretIcon, ShieldPlusIcon } from '@/shared/icons';
 import { formatDate } from '@/shared/lib/date';
 import { useTranslation } from '@/shared/lib/i18n';
 import { useNavigation, routes } from '@/shared/navigation';
-import { fonts, useTheme } from '@/shared/theme';
+import { fonts } from '@/shared/theme';
 
 import { useMedAccount } from '../../../hooks/use-med-account';
 import { formatBalance } from '../../../lib/format-balance';
+import { getProgramCardNo, getProgramTitle } from '../../../lib/program-title';
 import { levelColors } from '../constants';
 
 interface Palette {
@@ -18,9 +20,10 @@ interface Palette {
   text: string;
 }
 
-interface InsuranceCardProps {
-  level: string;
-  price: string;
+interface ProgramCardProps {
+  /** The insurer's programme name, possibly with the card number in parentheses. */
+  title: string;
+  cardNo?: string;
   programId: string;
   dateEnd: string;
   /** The programme carrying the медсчёт — shows its balance instead of card and date. */
@@ -28,233 +31,212 @@ interface InsuranceCardProps {
 }
 
 /**
- * What the med-account programme shows in place of the card number and the end date: the
- * money on the медсчёт is what the patient opens it for. Same balance, and the same
- * "unavailable" fallback, as the card on the home screen.
+ * The card's background, as on the home screen: the level's tint in the top-left corner,
+ * deepening diagonally towards its accent colour. The id is per card, since the list
+ * draws several gradients at once.
  */
-const MedAccountBalanceChip: FC<{ palette: Palette }> = ({ palette }) => {
-  const { colors } = useTheme();
+const ProgramGradient: FC<{ id: string; palette: Palette }> = ({
+  id,
+  palette,
+}) => (
+  <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+    <Defs>
+      <LinearGradient id={id} x1="0" y1="0" x2="1" y2="1">
+        <Stop offset="0" stopColor={palette.background} />
+        <Stop offset="1" stopColor={palette.button} stopOpacity={0.75} />
+      </LinearGradient>
+    </Defs>
+    <Rect width="100%" height="100%" fill={`url(#${id})`} />
+  </Svg>
+);
+
+/**
+ * What the med-account programme shows in place of the card number: the money on the
+ * медсчёт is what the patient opens it for. Same wording as the card on the home screen.
+ */
+const MedAccountBalance: FC<{ palette: Palette }> = ({ palette }) => {
   const { t } = useTranslation();
   const { balance, isLoading } = useMedAccount();
 
+  if (isLoading) {
+    return <SkeletonElement width={140} height={18} borderRadius={6} />;
+  }
+
   return (
-    <View
-      style={[
-        styles.chip,
-        { backgroundColor: colors.white, borderColor: palette.button },
-      ]}
+    <Text
+      style={[styles.subtitle, styles.tabularNums, { color: palette.text }]}
+      numberOfLines={1}
     >
-      <View style={styles.chipHeader}>
-        <WalletIcon width={12} height={12} color={colors.gray['500']} />
-        <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-          {t('programs:card.balance')}
-        </Text>
-      </View>
-      {isLoading ? (
-        <SkeletonElement width={96} height={18} borderRadius={6} />
-      ) : (
-        <Text
-          numberOfLines={1}
-          style={[styles.chipValue, styles.balance, { color: palette.text }]}
-        >
-          {balance === null
-            ? t('programs:card.balanceUnavailable')
-            : formatBalance(balance)}
-        </Text>
-      )}
-    </View>
+      {balance === null
+        ? t('home:programBalanceUnavailable')
+        : t('home:programBalance', { amount: formatBalance(balance) })}
+    </Text>
   );
 };
 
-export const ProgramCard: FC<InsuranceCardProps> = ({
-  level,
-  price,
+export const ProgramCard: FC<ProgramCardProps> = ({
+  title,
+  cardNo,
   programId,
   dateEnd,
   isMedAccount = false,
 }) => {
-  const { colors } = useTheme();
   const { navigate } = useNavigation();
   const { t } = useTranslation();
 
-  const palette = levelColors[level] || levelColors.Standard;
-
-  const openDetails = () => navigate(routes.ProgramDetails, { programId });
+  const programTitle = getProgramTitle(title);
+  const programCardNo = getProgramCardNo(title, cardNo);
+  const palette =
+    levelColors[programTitle as keyof typeof levelColors] ||
+    levelColors.Standard;
 
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={openDetails}
+      onPress={() => navigate(routes.ProgramDetails, { programId })}
       style={[
         styles.card,
-        {
-          backgroundColor: palette.background,
-          borderColor: palette.button,
-        },
+        { backgroundColor: palette.background, borderColor: palette.button },
       ]}
     >
-      <View style={styles.topRow}>
-        <View style={[styles.badge, { backgroundColor: palette.button }]}>
-          <ShieldPlusIcon width={18} height={18} color={palette.text} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.eyebrow, { color: palette.text, opacity: 0.7 }]}>
-            {t('programs:card.eyebrow')}
-          </Text>
+      <ProgramGradient id={`programGradient-${programId}`} palette={palette} />
+
+      <View style={styles.header}>
+        <ShieldPlusIcon width={18} height={18} color={palette.text} />
+        <Text style={[styles.label, { color: palette.text }]}>
+          {t('programs:card.eyebrow')}
+        </Text>
+      </View>
+
+      <View style={styles.body}>
+        <Text
+          style={[styles.title, { color: palette.text }]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {programTitle}
+        </Text>
+
+        {isMedAccount ? <MedAccountBalance palette={palette} /> : null}
+
+        {!isMedAccount && programCardNo ? (
           <Text
+            style={[
+              styles.subtitle,
+              styles.tabularNums,
+              { color: palette.text },
+            ]}
             numberOfLines={1}
-            style={[styles.title, { color: palette.text }]}
+            ellipsizeMode="middle"
           >
-            {level}
+            {programCardNo}
           </Text>
-        </View>
-      </View>
+        ) : null}
 
-      <View style={[styles.divider, { backgroundColor: palette.button }]} />
+        <View style={[styles.divider, { backgroundColor: palette.button }]} />
 
-      <View style={styles.chipsRow}>
-        {isMedAccount ? (
-          <MedAccountBalanceChip palette={palette} />
-        ) : (
-          <>
-            <View
-              style={[
-                styles.chip,
-                { backgroundColor: colors.white, borderColor: palette.button },
-              ]}
+        <View style={styles.footer}>
+          {isMedAccount ? null : (
+            <Text
+              style={[styles.meta, { color: palette.text }]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
-              <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-                {t('programs:card.cardNumber')}
-              </Text>
-              <Text
-                numberOfLines={1}
-                style={[styles.chipValue, { color: palette.text }]}
-              >
-                {price}
-              </Text>
+              {t('home:programValidUntil', {
+                date: formatDate(dateEnd, 'DD.MM.YYYY'),
+              })}
+            </Text>
+          )}
+          <View style={styles.detailsRow}>
+            <Text style={[styles.detailsText, { color: palette.text }]}>
+              {t('programs:card.details')}
+            </Text>
+            <View style={styles.chevron}>
+              <SelectCaretIcon width={12} height={12} color={palette.text} />
             </View>
-            <View
-              style={[
-                styles.chip,
-                { backgroundColor: colors.white, borderColor: palette.button },
-              ]}
-            >
-              <View style={styles.chipHeader}>
-                <CalendarIcon
-                  width={12}
-                  height={12}
-                  color={colors.gray['500']}
-                />
-                <Text style={[styles.chipLabel, { color: colors.gray['500'] }]}>
-                  {t('programs:card.activeUntil')}
-                </Text>
-              </View>
-              <Text style={[styles.chipValue, { color: palette.text }]}>
-                {formatDate(dateEnd, 'DD.MM.YYYY')}
-              </Text>
-            </View>
-          </>
-        )}
-      </View>
-
-      <View style={styles.ctaRow}>
-        <View style={[styles.cta, { backgroundColor: palette.button }]}>
-          <Text style={[styles.ctaText, { color: palette.text }]}>
-            {t('programs:card.details')}
-          </Text>
-          <Text style={[styles.ctaArrow, { color: palette.text }]}>›</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
+/** Mirrors the home screen's `statCardStyles`, so the list reads as the same card. */
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 20,
-    padding: 18,
-    gap: 14,
+    borderRadius: 24,
     borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 8,
+    // Clips the gradient to the card's rounded corners.
     overflow: 'hidden',
   },
-  topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  badge: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  eyebrow: {
-    fontSize: 11,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    lineHeight: 28,
-    fontFamily: fonts.SFPro.Bold,
-    marginTop: 2,
-  },
-  divider: {
-    height: 1,
-    opacity: 0.6,
-  },
-  chipsRow: {
-    gap: 10,
-  },
-  chip: {
-    flex: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    gap: 4,
-    borderWidth: 1,
-  },
-  chipHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  chipLabel: {
-    fontSize: 11,
-    fontWeight: '500',
-  },
-  chipValue: {
-    fontSize: 14,
-    fontWeight: '700',
-    fontFamily: fonts.SFPro.Semibold,
-  },
-  balance: {
-    fontVariant: ['tabular-nums'],
-  },
-  ctaRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  cta: {
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 999,
   },
-  ctaText: {
-    fontSize: 13,
-    fontWeight: '600',
+  label: {
+    fontSize: 11,
+    lineHeight: 16,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    opacity: 0.6,
     fontFamily: fonts.SFPro.Semibold,
+    fontWeight: '600',
   },
-  ctaArrow: {
-    fontSize: 18,
-    lineHeight: 18,
+  body: {
+    gap: 6,
+  },
+  title: {
+    fontSize: 20,
+    lineHeight: 24,
+    fontFamily: fonts.SFPro.Bold,
     fontWeight: '700',
-    marginTop: -2,
+  },
+  subtitle: {
+    fontSize: 14,
+    lineHeight: 18,
+    opacity: 0.75,
+    fontFamily: fonts.SFPro.Medium,
+    fontWeight: '500',
+  },
+  tabularNums: {
+    fontVariant: ['tabular-nums'],
+  },
+  divider: {
+    height: 1,
+    marginTop: 4,
+    opacity: 0.7,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  meta: {
+    flexShrink: 1,
+    fontSize: 12,
+    lineHeight: 16,
+    opacity: 0.65,
+    fontFamily: fonts.SFPro.Regular,
+  },
+  detailsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    // Stays on the right when the med-account programme has no end date beside it.
+    marginLeft: 'auto',
+  },
+  detailsText: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontFamily: fonts.SFPro.Semibold,
+    fontWeight: '600',
+  },
+  chevron: {
+    transform: [{ rotate: '-90deg' }],
   },
 });

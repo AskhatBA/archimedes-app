@@ -400,9 +400,6 @@
     "card": {
       "eyebrow": "Program",
       "cardNumber": "Card №",
-      "activeUntil": "Active until",
-      "balance": "Balance",
-      "balanceUnavailable": "Unavailable",
       "details": "Details"
     },
     "details": {

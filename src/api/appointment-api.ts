@@ -1,4 +1,4 @@
-import { MISSpecialization } from './generated/data-contracts';
+import { MISDoctor, MISSpecialization } from './generated/data-contracts';
 import { HttpClient } from './generated/http-client';
 
 /**
@@ -152,6 +152,33 @@ export class AppointmentApi extends HttpClient {
       void
     >({
       path: '/mis/specializations',
+      method: 'GET',
+      query,
+      secure: true,
+      format: 'json',
+    });
+
+  /**
+   * Doctors of a branch for a specialty, narrowed by the age of whoever the visit is for:
+   * under 16 only the pediatric ones, from 16 everyone else. The patient themself by
+   * default; a relative with `familyMemberId` + `programId`. Stands in for the generated
+   * `misApi.doctorsList`, whose query type predates the relative; `npm run generate-api`
+   * against the updated backend makes this redundant.
+   */
+  doctorsList = (query: {
+    branchId: string;
+    specializationId: string;
+    familyMemberId?: string;
+    programId?: string;
+  }) =>
+    this.request<
+      {
+        success?: boolean;
+        doctors?: (MISDoctor & { isPediatric?: boolean })[];
+      },
+      void
+    >({
+      path: '/mis/doctors',
       method: 'GET',
       query,
       secure: true,

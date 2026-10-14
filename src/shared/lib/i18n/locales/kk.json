@@ -400,9 +400,6 @@
     "card": {
       "eyebrow": "Бағдарлама",
       "cardNumber": "Карта №",
-      "activeUntil": "Дейін белсенді",
-      "balance": "Баланс",
-      "balanceUnavailable": "Қолжетімсіз",
       "details": "Толығырақ"
     },
     "details": {

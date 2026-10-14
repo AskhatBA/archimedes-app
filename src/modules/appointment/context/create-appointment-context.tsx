@@ -127,10 +127,25 @@ export const CreateAppointmentContextProvider: FC<{ children: ReactNode }> = ({
     formValues.isTelemedicine,
   );
 
-  const { doctors } = useDoctors(
+  // `patientId` is the relative's `benId` — empty when booking for oneself.
+  const { doctors, loadingDoctors } = useDoctors(
     formValues.branchId,
     formValues.specializationId,
+    { familyMemberId: formValues.patientId, programId: formValues.programId },
   );
+
+  // The list depends on the patient's age, so picking someone else can take the chosen
+  // doctor off it — and their slot with them, or booking would stay enabled for a doctor
+  // the patient cannot see.
+  useEffect(() => {
+    if (loadingDoctors || !formValues.doctorId) return;
+    if (doctors.some(doctor => doctor.id === formValues.doctorId)) return;
+    setFormValues(prev => ({
+      ...prev,
+      doctorId: undefined,
+      timeSlot: undefined,
+    }));
+  }, [loadingDoctors, doctors, formValues.doctorId]);
 
   const { availableSlots } = useAvailableSlots(
     formValues.doctorId,
