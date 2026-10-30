@@ -159,6 +159,20 @@ pick shows an empty list, not someone else's. Pending-payment cards stay on the 
 own list: only a paid visit is pending, and only an insured one can be for a relative.
 Cancelling a relative's visit needs nothing extra — the backend finds it by the MIS id.
 
+### A relative's clinic-QR referrals
+
+The QR at a clinic (scanned from the tab bar, `QrScannerScreen`) holds only the clinic's
+GUID; `QrReferralsScreen` lists the insurer's referrals to that clinic
+(`GET /insurance/qr/appointments`) and confirms one (`/insurance/qr/submit-appointment`).
+The insurer answers for whoever the backend asks as, and an item carries no beneficiary or
+programme — only `name` — so a relative's referrals are a separate request, not a filter.
+The screen therefore reuses `AppointmentsPatientFilter` (with
+`i18nPrefix="qrScanner:patientFilter"` for the wording) and sends the pick as
+`?familyMemberId=&programId=`, through `insuranceQrApi` (`src/api/insurance-qr-api.ts`, hand
+written until `npm run generate-api` picks up the parameters). `useQrAppointments` keys its
+cache on `familyMemberId`, and a referral is confirmed for the same person it was listed for.
+A referral has a date of issue, diagnosis and services, but no doctor or visit time.
+
 ### Pediatric doctors
 
 MIS flags children's doctors `is_pediatric`. The backend's `GET /mis/doctors` filters by the

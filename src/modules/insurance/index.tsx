@@ -9,7 +9,11 @@ export { useMedicalNetworkReducer } from './hooks/use-medical-network-reducer';
 export { useProgramById, usePrograms } from './hooks/use-programs';
 export { useElectronicReferrals } from './hooks/use-electronic-referrals';
 export { useReferralsSummary } from './hooks/use-referrals-summary';
-export { useQrAppointments } from './hooks/use-qr-appointments';
+export {
+  useQrAppointments,
+  qrReferralsPatientQuery,
+} from './hooks/use-qr-appointments';
+export type { QrReferralsPatient } from './hooks/use-qr-appointments';
 export { useContacts } from './hooks/use-contacts';
 export { useNews, getNewsKey } from './hooks/use-news';
 

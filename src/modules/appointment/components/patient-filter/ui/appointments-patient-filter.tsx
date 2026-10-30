@@ -1,10 +1,12 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 
 import { BottomDrawer } from '@/shared/components/bottom-drawer';
@@ -30,6 +32,13 @@ import { AppointmentsPatient } from '../../../types';
 interface AppointmentsPatientFilterProps {
   value: AppointmentsPatient;
   onChange: (value: AppointmentsPatient) => void;
+  /**
+   * Where the wording comes from — the same keys under another prefix, for a list that is
+   * not appointments (the clinic-QR referrals reuse the filter as is).
+   */
+  i18nPrefix?: string;
+  /** Overrides the row's outer spacing — full bleed by default, as on the appointments tab. */
+  style?: StyleProp<ViewStyle>;
 }
 
 /**
@@ -152,8 +161,12 @@ const PatientOption: FC<{
 export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
   value,
   onChange,
+  i18nPrefix = 'appointments:patientFilter',
+  style,
 }) => {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
+  const t = (key: string, options?: Record<string, unknown>) =>
+    translate(`${i18nPrefix}.${key}`, options);
   const { members, programTitles, isLoading } = useFamilyMembers();
   const [isOpen, setIsOpen] = useState(false);
   const fade = useRef(new Animated.Value(0)).current;
@@ -201,19 +214,19 @@ export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
 
   return (
     <>
-      <Animated.View style={[styles.container, { opacity: fade }]}>
+      <Animated.View style={[styles.container, style, { opacity: fade }]}>
         {picked ? (
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={() => setIsOpen(true)}
             style={[styles.trigger, styles.triggerRelative]}
             accessibilityRole="button"
-            accessibilityHint={t('appointments:patientFilter.title')}
+            accessibilityHint={t('title')}
           >
             <Avatar member={picked} index={pickedIndex} size={40} />
             <View style={styles.triggerText}>
               <Text style={styles.eyebrow} numberOfLines={1}>
-                {t('appointments:patientFilter.relativeHint')}
+                {t('relativeHint')}
               </Text>
               <Text style={styles.triggerTitle} numberOfLines={1}>
                 {shortNameOf(picked.fullName)}
@@ -224,7 +237,7 @@ export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               style={styles.reset}
               accessibilityRole="button"
-              accessibilityLabel={t('appointments:patientFilter.reset')}
+              accessibilityLabel={t('reset')}
             >
               <CloseIcon width={16} height={16} color={colors.gold['700']} />
             </TouchableOpacity>
@@ -235,14 +248,12 @@ export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
             onPress={() => setIsOpen(true)}
             style={[styles.trigger, styles.triggerOwn]}
             accessibilityRole="button"
-            accessibilityHint={t('appointments:patientFilter.title')}
+            accessibilityHint={t('title')}
           >
             <View style={styles.triggerText}>
-              <Text style={styles.triggerTitle}>
-                {t('appointments:patientFilter.self')}
-              </Text>
+              <Text style={styles.triggerTitle}>{t('self')}</Text>
               <Text style={styles.triggerHint} numberOfLines={1}>
-                {t('appointments:patientFilter.selfHint')}
+                {t('selfHint')}
               </Text>
             </View>
             <View style={styles.facepile}>
@@ -281,18 +292,14 @@ export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
           <View style={styles.sheetIcon}>
             <FamilyIcon width={24} height={24} color={colors.gold['700']} />
           </View>
-          <Text style={styles.sheetTitle}>
-            {t('appointments:patientFilter.title')}
-          </Text>
-          <Text style={styles.sheetSubtitle}>
-            {t('appointments:patientFilter.subtitle')}
-          </Text>
+          <Text style={styles.sheetTitle}>{t('title')}</Text>
+          <Text style={styles.sheetSubtitle}>{t('subtitle')}</Text>
 
           <View style={styles.options}>
             <PatientOption
               avatar={<OwnAvatar size={44} />}
-              title={t('appointments:patientFilter.self')}
-              meta={t('appointments:patientFilter.selfDescription')}
+              title={t('self')}
+              meta={t('selfDescription')}
               selected={!picked}
               onPress={() => pick({})}
             />
@@ -315,7 +322,7 @@ export const AppointmentsPatientFilter: FC<AppointmentsPatientFilterProps> = ({
 
           {programTitles.length > 0 && (
             <Text style={styles.footnote}>
-              {t('appointments:patientFilter.programs', {
+              {t('programs', {
                 list: programTitles.join(', '),
               })}
             </Text>

@@ -2,8 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FC } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { insuranceApi, resolveErrorMessage } from '@/api';
+import { insuranceQrApi, resolveErrorMessage } from '@/api';
 import { QrAppointmentItem } from '@/api/generated/data-contracts';
+import {
+  QrReferralsPatient,
+  qrReferralsPatientQuery,
+} from '@/modules/insurance';
 import { Button } from '@/shared/components/button';
 import {
   CalendarIcon,
@@ -19,6 +23,8 @@ import { useTheme } from '@/shared/theme';
 interface QrReferralCardProps {
   item: QrAppointmentItem;
   clinicId: string;
+  /** Whose referral it is — confirmed as that person, not the account owner. */
+  patient: QrReferralsPatient;
   isExpanded: boolean;
   onPress: (id: number) => void;
 }
@@ -33,6 +39,7 @@ const formatAmount = (amount?: number, currency?: string) => {
 export const QrReferralCard: FC<QrReferralCardProps> = ({
   item,
   clinicId,
+  patient,
   isExpanded,
   onPress,
 }) => {
@@ -42,9 +49,10 @@ export const QrReferralCard: FC<QrReferralCardProps> = ({
 
   const { mutate: submitAppointment, isPending } = useMutation({
     mutationFn: () =>
-      insuranceApi.qrSubmitAppointmentList({
+      insuranceQrApi.submitAppointment({
         clinicId,
         appCode: item.id!,
+        ...qrReferralsPatientQuery(patient),
       }),
     onSuccess: () => {
       showToast({ message: 'Направление подтверждено', type: 'success' });

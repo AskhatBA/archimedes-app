@@ -92,13 +92,20 @@ const wife = member(
 );
 const mother = member('mother', 'Ахметова Сауле Касымовна', null, 'Мать');
 
-const render = (value: AppointmentsPatient = {}) => {
+const render = (
+  value: AppointmentsPatient = {},
+  i18nPrefix: string | undefined = undefined,
+) => {
   const onChange = jest.fn();
   let tree: ReactTestRenderer.ReactTestRenderer | undefined;
 
   ReactTestRenderer.act(() => {
     tree = ReactTestRenderer.create(
-      <AppointmentsPatientFilter value={value} onChange={onChange} />,
+      <AppointmentsPatientFilter
+        value={value}
+        onChange={onChange}
+        i18nPrefix={i18nPrefix}
+      />,
     );
   });
 
@@ -151,6 +158,15 @@ describe('AppointmentsPatientFilter', () => {
       'СА',
     ]);
     expect(options(tree)).toHaveLength(0);
+  });
+
+  it('speaks of referrals when reused on the clinic-QR screen', () => {
+    const { tree } = render({}, 'qrScanner:patientFilter');
+
+    expect(textsOf(tree).slice(0, 2)).toEqual([
+      'Мои направления',
+      'Посмотреть направления близких',
+    ]);
   });
 
   it('folds a big family into +N after three faces', () => {

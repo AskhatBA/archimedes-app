@@ -186,7 +186,17 @@
     "scannedTitle": "QR code scanned",
     "rescan": "Scan again",
     "invalidQr": "Unrecognized QR code",
-    "invalidQrMessage": "This QR code does not contain referral data. Please try again."
+    "invalidQrMessage": "This QR code does not contain referral data. Please try again.",
+    "patientFilter": {
+      "title": "Whose referrals",
+      "subtitle": "Your family's referrals under your insurance programmes",
+      "self": "My referrals",
+      "selfHint": "See your family's referrals",
+      "selfDescription": "Your own referrals",
+      "relativeHint": "Family member's referrals",
+      "reset": "Back to my referrals",
+      "programs": "Programmes: {{list}}"
+    }
   },
   "user": {
     "loading": "Loading your data..."

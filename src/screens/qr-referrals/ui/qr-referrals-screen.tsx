@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/native';
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,6 +8,10 @@ import {
   View,
 } from 'react-native';
 
+import {
+  AppointmentsPatientFilter,
+  type AppointmentsPatient,
+} from '@/modules/appointment';
 import { useQrAppointments } from '@/modules/insurance';
 import { usePageHeader } from '@/shared/hooks';
 import { HospitalIcon } from '@/shared/icons';
@@ -27,72 +31,86 @@ export const QrReferralsScreen: FC = () => {
 
   usePageHeader({ title: 'Направления' });
 
-  const { appointments, isLoading } = useQrAppointments(clinicId);
+  // The scanned clinic serves the whole family, so the patient can switch to a relative on
+  // their programme and see — and confirm — that relative's referrals here.
+  const [patient, setPatient] = useState<AppointmentsPatient>({});
+  const { appointments, isLoading } = useQrAppointments(clinicId, patient);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const clinicName = appointments?.length
     ? appointments[0].medical_institution
     : '';
 
+  const handlePatientChange = useCallback((next: AppointmentsPatient) => {
+    setExpandedId(null);
+    setPatient(next);
+  }, []);
+
   const handleCardPress = (id: number) => {
     setExpandedId(prev => (prev === id ? null : id));
   };
 
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={colors.primary} size="large" />
-      </View>
-    );
-  }
-
-  if (!appointments.length) {
-    return (
-      <View style={styles.centered}>
-        <Text style={[styles.emptyText, { color: colors.gray['500'] }]}>
-          Направления не найдены
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <FlatList
-      data={appointments}
+      data={isLoading ? [] : appointments}
       keyExtractor={item => String(item.id)}
       contentContainerStyle={styles.container}
       ListHeaderComponent={
-        clinicName ? (
-          <View
-            style={[
-              styles.clinicHeader,
-              {
-                backgroundColor: colors.blue['100'],
-                borderColor: colors.blue['200'],
-              },
-            ]}
-          >
+        <>
+          <AppointmentsPatientFilter
+            value={patient}
+            onChange={handlePatientChange}
+            i18nPrefix="qrScanner:patientFilter"
+            style={styles.patientFilter}
+          />
+          {!isLoading && !!clinicName && (
             <View
               style={[
-                styles.clinicIconWrap,
-                { backgroundColor: colors.blue['150'] },
+                styles.clinicHeader,
+                {
+                  backgroundColor: colors.blue['100'],
+                  borderColor: colors.blue['200'],
+                },
               ]}
             >
-              <HospitalIcon width={20} height={20} color={colors.blue['400']} />
+              <View
+                style={[
+                  styles.clinicIconWrap,
+                  { backgroundColor: colors.blue['150'] },
+                ]}
+              >
+                <HospitalIcon
+                  width={20}
+                  height={20}
+                  color={colors.blue['400']}
+                />
+              </View>
+              <Text
+                style={[styles.clinicName, { color: colors.blue['400'] }]}
+                numberOfLines={2}
+              >
+                {clinicName}
+              </Text>
             </View>
-            <Text
-              style={[styles.clinicName, { color: colors.blue['400'] }]}
-              numberOfLines={2}
-            >
-              {clinicName}
+          )}
+        </>
+      }
+      ListEmptyComponent={
+        <View style={styles.centered}>
+          {isLoading ? (
+            <ActivityIndicator color={colors.primary} size="large" />
+          ) : (
+            <Text style={[styles.emptyText, { color: colors.gray['500'] }]}>
+              Направления не найдены
             </Text>
-          </View>
-        ) : null
+          )}
+        </View>
       }
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       renderItem={({ item }) => (
         <QrReferralCard
           item={item}
           clinicId={clinicId}
+          patient={patient}
           isExpanded={expandedId === item.id}
           onPress={handleCardPress}
         />
@@ -104,6 +122,10 @@ export const QrReferralsScreen: FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    flexGrow: 1,
+  },
+  patientFilter: {
+    marginHorizontal: 0,
   },
   separator: {
     height: 12,

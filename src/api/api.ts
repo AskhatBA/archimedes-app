@@ -11,6 +11,7 @@ import { Notifications } from './generated/Notifications';
 import { Patient } from './generated/Patient';
 import { ProgramOrders } from './generated/ProgramOrders';
 import { User } from './generated/User';
+import { InsuranceQrApi } from './insurance-qr-api';
 import { PaymentApi } from './payment-api';
 import { AuthUtils, UnauthorizedHandlers } from './utils';
 
@@ -27,6 +28,7 @@ const appApi = new App(apiConfig);
 const paymentApi = new PaymentApi(apiConfig);
 const appointmentApi = new AppointmentApi(apiConfig);
 const programOrdersApi = new ProgramOrders(apiConfig);
+const insuranceQrApi = new InsuranceQrApi(apiConfig);
 
 export {
   authApi,
@@ -42,6 +44,7 @@ export {
   paymentApi,
   appointmentApi,
   programOrdersApi,
+  insuranceQrApi,
 };
 
 const authUtils = new AuthUtils(authApi);
@@ -57,6 +60,7 @@ const appUtils = new AuthUtils(appApi);
 const paymentUtils = new AuthUtils(paymentApi);
 const appointmentUtils = new AuthUtils(appointmentApi);
 const programOrdersUtils = new AuthUtils(programOrdersApi);
+const insuranceQrUtils = new AuthUtils(insuranceQrApi);
 
 export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   authUtils.setUnauthorizedErrorHandler(handlers);
@@ -72,6 +76,7 @@ export const setApiErrorHandler = (handlers: UnauthorizedHandlers) => {
   paymentUtils.setUnauthorizedErrorHandler(handlers);
   appointmentUtils.setUnauthorizedErrorHandler(handlers);
   programOrdersUtils.setUnauthorizedErrorHandler(handlers);
+  insuranceQrUtils.setUnauthorizedErrorHandler(handlers);
 };
 
 authUtils.initToken();
@@ -87,3 +92,4 @@ appUtils.initToken();
 paymentUtils.initToken();
 appointmentUtils.initToken();
 programOrdersUtils.initToken();
+insuranceQrUtils.initToken();
