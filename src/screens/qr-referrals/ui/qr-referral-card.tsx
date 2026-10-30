@@ -20,6 +20,8 @@ import { formatDate } from '@/shared/lib/date';
 import { useToast } from '@/shared/lib/toast';
 import { useTheme } from '@/shared/theme';
 
+import { referralTitleOf } from '../lib/referral-title';
+
 interface QrReferralCardProps {
   item: QrAppointmentItem;
   clinicId: string;
@@ -85,14 +87,12 @@ export const QrReferralCard: FC<QrReferralCardProps> = ({
           />
         </View>
         <View style={styles.headerTexts}>
-          {!!item.diagnosis && (
-            <Text
-              numberOfLines={isExpanded ? undefined : 2}
-              style={[styles.diagnosis, { color: colors.blue['400'] }]}
-            >
-              {item.diagnosis}
-            </Text>
-          )}
+          <Text
+            numberOfLines={isExpanded ? undefined : 2}
+            style={[styles.diagnosis, { color: colors.blue['400'] }]}
+          >
+            {referralTitleOf(item)}
+          </Text>
         </View>
         <View style={[styles.chevron, isExpanded && styles.chevronExpanded]}>
           <SelectCaretIcon color={colors.blue['400']} />
