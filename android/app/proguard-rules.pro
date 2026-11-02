@@ -17,3 +17,10 @@
 # Hermes / React Native bridge classes looked up from native code.
 -keep class com.facebook.hermes.unicode.** { *; }
 -keep class com.facebook.jni.** { *; }
+
+# libreact_devsupportjni registers natives on these classes by name in JNI_OnLoad, even in
+# release. Nothing in Java references them there, so R8 drops them and startup crashes with
+# ClassNotFoundException: com.facebook.react.devsupport.CxxInspectorPackagerConnection.
+-keep class com.facebook.react.devsupport.CxxInspectorPackagerConnection { *; }
+-keep class com.facebook.react.devsupport.CxxInspectorPackagerConnection$* { *; }
+-keep class com.facebook.react.devsupport.InspectorFlags { *; }
