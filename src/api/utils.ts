@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-underscore-dangle */
 import { AxiosError } from 'axios';
+import { Platform } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import { getAuthToken } from '@/shared/lib/auth';
 
@@ -8,6 +10,10 @@ import { errorMap } from './constants';
 import { HttpClient } from './generated/http-client';
 
 type Api = HttpClient;
+
+// The User-Agent carries only the build number, which restarts every release — the
+// backend's logs and audit trail need the version itself to tell builds apart.
+const APP_VERSION = `${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()}) ${Platform.OS}`;
 
 export interface UnauthorizedHandlers {
   // Access token expired: lock the session and let the user re-auth with
@@ -27,6 +33,8 @@ export class AuthUtils {
   async initToken(): Promise<void> {
     this.api.instance.interceptors.request.use(
       async request => {
+        request.headers['X-App-Version'] = APP_VERSION;
+
         const token = await getAuthToken();
 
         if (token) {
