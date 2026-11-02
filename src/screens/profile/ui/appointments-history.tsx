@@ -55,7 +55,9 @@ export const AppointmentHistory: FC = () => {
 
   const openUrl = async (url?: string) => {
     if (!url) return;
-    const documentUrl = `https://misapi.archimedes.kz/${url}`;
+    // MIS returns fileUrl as an absolute path ("/v1/media/..."), so drop its leading
+    // slash rather than doubling it after the host.
+    const documentUrl = `https://misapi.archimedes.kz/${url.replace(/^\/+/, '')}`;
     const supported = await Linking.canOpenURL(documentUrl);
     if (supported) await Linking.openURL(documentUrl);
   };
