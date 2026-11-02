@@ -28,6 +28,11 @@ export const useOtp = () => {
           'Вы указали неверный номер телефона. Проверьте правильность введённых данных.';
       }
 
+      if (code === 'INSURANCE_UNAVAILABLE') {
+        errorMessage =
+          'Страховая компания сейчас не отвечает. Попробуйте войти через несколько минут.';
+      }
+
       // Backstop for older builds without client-side IIN validation.
       if (code === 'INVALID_IIN') {
         errorMessage =
